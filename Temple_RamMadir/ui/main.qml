@@ -8,14 +8,16 @@ ApplicationWindow {
     id :_root
     visible: true
     property var styles : MyStyles{}
+    signal errorOccur(string errorMsg);
     width: styles.screenWidth
     height: styles.screenHeight
     property var constant: Constants{}
     title: constant.addressText1
     color: "black"
     flags: Qt.Dialog
+    
     Component.onCompleted: {
-//        console.log("=====" + confApp.appPath + "/" + confApp.welcomescreenImg );
+        //        console.log("=====" + confApp.appPath + "/" + confApp.welcomescreenImg );
         //        console.log( confApp.welcomescreenImg);
 
         console.log("screen height= " + Screen.height)
@@ -29,6 +31,18 @@ ApplicationWindow {
         anchors.fill: parent
         source: "WelcomeToAppScreen.qml"
     }
+    DisplayDialog {
+        id :_errorDialog
+        visible: false
+
+        function showError(message){
+            _errorDialog.visible = true;
+            _errorDialog.text2Display = message
+            _errorDialog.open();
+            //_errorDialog.visible = false;
+        }
+    }
+
     Connections{
         target: loader.item
         ignoreUnknownSignals: true
@@ -39,7 +53,7 @@ ApplicationWindow {
                 console.log("trustListModel.getTrustListSize()"+trustListModel.getTrustListSize())
                 loader.source= "MainTrust.qml"
             }
-            else{
+            if(trustListModel.getTrustListSize()===1){
                 console.log("in else--------------");
                 var trust= trustListModel.trustList[0];
                 var trustName = trust.trustName;
@@ -53,9 +67,19 @@ ApplicationWindow {
                 var str2 =trustListModel.getDataLocation();
                 console.log("str1 = --" + str1);
                 console.log("str2 = --" + str2);
-//                loader.source = "WelcomeScreen.qml"
-                loader.source= "SevaBookingView.qml"
+                loader.source = "WelcomeScreen.qml"
+                //        loader.source= "SevaBookingView.qml"
             }
+            if(trustListModel.getTrustListSize()===0){
+                console.log("trustListModel.getTrustList===0");
+                // loader.source= "MainTrust.qml"
+                errorOccur("Trust not present");
+            }
+
+            //            function onLoadWelcome() {
+            //                console.log("Correct credentials")
+            //                loader.source = "WelcomeScreen.qml"
+            //            }
         }
         function onTimerTriggered() {
             console.log("Welcome screen TimeTriggered");
@@ -65,8 +89,14 @@ ApplicationWindow {
         {
             console.log("date clicked " +date )
             //            sevaDetailsonDateCount.onDateSelected(date)
-            sevaProxy.sevaReport.onDateSelected(date)
-            loader.source = "SevaReportOnDateView.qml"
+            var b = sevaProxy.sevaReport.onDateSelected(date)
+            if(b===false)
+            {
+                errorOccur("date selected failed");
+            }
+            else{
+                loader.source = "SevaReportOnDateView.qml"
+            }
         }
         function onSendReportImput(obj)
         {
@@ -91,7 +121,6 @@ ApplicationWindow {
             console.log("clicked on Sevabooking")
             //            loader.source= "SelectSevaTypeMenu.qml"
             loader.source= "SevaBookingView.qml"
-
         }
         function onAccountDetails() {
             console.log("Clicked on AccountDetails")
@@ -123,6 +152,20 @@ ApplicationWindow {
             console.log("closing add seva page")
             loader.source = "MainTrust.qml"
         }
-
+        function onErrorOccur(errorMsg)
+        {
+            console.log("In onErrorOccured of main")
+            _errorDialog.showError(errorMsg);
+            console.log("In onErrorOccured of main2222")
+        }
+    }
+    Connections{
+        target: _root
+        function onErrorOccur(errorMsg)
+        {
+            console.log("In onErrorOccured of main")
+            _errorDialog.showError(errorMsg);
+            console.log("In onErrorOccured of main2222")
+        }
     }
 }

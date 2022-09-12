@@ -111,7 +111,12 @@ Rectangle{
         model: sevaProxy.sevaReport.reportOnDateModel
         spacing: 2
         delegate:_comp2
-
+Component.onCompleted: {
+    if(sevaProxy.sevaReport.reportOnDateModel===null)
+    {
+        errorOccur("seva details on date model not found");
+    }
+}
 
     }
 

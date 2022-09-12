@@ -125,9 +125,9 @@ bool SevaViewProxy::saveReceiptDetails(QString recNumber, QString devName, QStri
 bool SevaViewProxy::saveReceipt(MySevaReceipt *receipt)
 {
     qDebug() << Q_FUNC_INFO <<  Qt::endl;
-    m_sevaBookingModelData->saveReceipt(receipt);
+    return m_sevaBookingModelData->saveReceipt(receipt);
     //receipt->print();
-    return true;
+  //  return true;
 }
 
 bool SevaViewProxy::addSevaOnly(int sevaType,int sevaId,QString sevaName,
@@ -159,8 +159,8 @@ bool SevaViewProxy::deleteSeva(int sevaid, QString sevaname){
 
 bool SevaViewProxy::printReceipt()
 {
-    m_sevaBookingModelData->printReceipt();
-    return true;
+    return m_sevaBookingModelData->printReceipt();
+    //return true;
 }
 
 QString SevaViewProxy::getReceiptNumber() const
@@ -188,7 +188,11 @@ bool SevaViewProxy::showAllData()
 {
     qDebug() << Q_FUNC_INFO << Qt::endl;
     m_allView->clearModel();
-    DBInterface::getInstance()->dbtable_view();
+    bool b = DBInterface::getInstance()->dbtable_view();
+    if(b==false)
+    {
+        return false;
+    }
     QScreen *screen = qApp->primaryScreen();
     int w = screen->availableSize().width();
     int h = screen->availableSize().height()-30;
@@ -222,9 +226,14 @@ int SevaViewProxy::getNextSevaId()
 
 void SevaViewProxy::addNewSevaType(QString sevaTypeName, QString personName)
 {
+    qDebug() << Q_FUNC_INFO << Qt::endl;
 
 }
-
+QAbstractItemModel *SevaViewProxy::getSevaModelForErrorHandling()
+{
+    qDebug() << Q_FUNC_INFO << Qt::endl;
+    return m_currentSevaModel;
+}
 void SevaViewProxy::generateCSV()
 {
     if(m_csvReceipt!=nullptr)

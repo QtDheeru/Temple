@@ -49,6 +49,16 @@ bool SevaTypeViewModel::init()
     return true;
 }
 
+const QList<SevaType *> &SevaTypeViewModel::sevaTypes() const
+{
+    return m_sevaTypes;
+}
+
+void SevaTypeViewModel::setSevaTypes(const QList<SevaType *> &newSevaTypes)
+{
+    m_sevaTypes = newSevaTypes;
+}
+
 
 QHash<int, QByteArray> SevaTypeViewModel::roleNames() const
 {
@@ -56,4 +66,11 @@ QHash<int, QByteArray> SevaTypeViewModel::roleNames() const
     roles[1] = "sevaTypeId";
     roles[2] = "sevaTypeName";
     return roles;
+}
+
+int SevaTypeViewModel::getSevaTypeListSize()
+{
+    qDebug() << Q_FUNC_INFO << Qt::endl;
+    return m_sevaTypes.size();
+
 }

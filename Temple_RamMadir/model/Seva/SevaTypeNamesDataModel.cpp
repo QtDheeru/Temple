@@ -104,10 +104,11 @@ bool SevaTypeNamesDataModel::addSevaOnly(SevaName *s)
      }
 }
 
-void SevaTypeNamesDataModel::deleteSeva(SevaName *s)
+bool SevaTypeNamesDataModel::deleteSeva(SevaName *s)
 {
-     this->m_sevaBookingModel->deleteSeva(s);
-     this->m_sevaBookingProgress->deleteSeva(s);
+    bool b1 = this->m_sevaBookingModel->deleteSeva(s);
+    bool b2 = this->m_sevaBookingProgress->deleteSeva(s);
+    return b1||b2;
 }
 
 QStringList SevaTypeNamesDataModel::getNakshatras()

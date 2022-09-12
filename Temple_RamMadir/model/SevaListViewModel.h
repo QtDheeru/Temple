@@ -26,6 +26,7 @@ public:
     QHash<int, QByteArray> roleNames() const override;
     void initSevaList(int sevaType);
     SevaName* getSevaByIndex(int index);
+    Q_INVOKABLE int getSevaListViewSize();
 
 private:
     QList<SevaName*> m_sevaList;

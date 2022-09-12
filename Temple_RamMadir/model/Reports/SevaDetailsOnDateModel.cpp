@@ -69,7 +69,7 @@ bool SevaDetailsOnDateModel::insertSevaRow(SevaBookingElement *elm)
 
 
 
-void SevaDetailsOnDateModel::onDateSelected(QString date)
+bool SevaDetailsOnDateModel::onDateSelected(QString date)
 {
     qDebug()<<Q_FUNC_INFO<<date<<Qt::endl;
     DBInterface::getInstance()->qrySevabookingBySevaDate(date);

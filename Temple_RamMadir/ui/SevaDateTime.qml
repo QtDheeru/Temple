@@ -10,7 +10,7 @@ Rectangle {
     height: styles.firstRowHeight;//150
     property int subComponentHeight : height/8
     property int subComponentPixelSize : styles.fontSize
-
+    signal errorOccur(string errorMsg);
     color: "lightblue"
     property alias receiptdate : r1.selecteddate
     property alias sevadate : r2.selecteddate
@@ -75,5 +75,30 @@ Rectangle {
     Component.onCompleted: {
         console.log(" Trying to get the list category")
         _momento._dataModel = sevaProxy.getMomentoCategory();
+        if(momento.length===0)
+        {
+            console.log("********* In if of momento.length===0  *********** = 0")
+            errorOccur("momentos not found");
+        }
+       defaultDates(receiptdate,sevadate);
+    }
+    Connections{
+        target: r1
+        onDateChanged:{
+              console.log("In Connections of r1 of SDT"+date+receiptdate);
+        }
+    }
+    Connections{
+        target: r2
+        onDateChanged:{
+            console.log("In Connections of r2 of SDT"+date+sevadate)
+        }
+    }
+    Connections{
+        target: _rootSevaDateTime
+        onDefaultDates:{
+              console.log("In Connections of onDefaultDates of SDT"+receiptdate);
+             console.log("In Connections of onDefaultDates of SDT"+sevadate);
+        }
     }
 }

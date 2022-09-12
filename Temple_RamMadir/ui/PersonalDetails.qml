@@ -11,6 +11,7 @@ Rectangle {
     property int subComponentHeight : height/8
     property int subComponentPixelSize : styles.fontSize
     color: "lightblue"
+    signal errorOccur(string errorMsg);
     property alias receiptNumber :_receipt._data
     property alias devoteeName : _name._data
     property alias mobileNo : _mobile._data
@@ -25,10 +26,26 @@ Rectangle {
     clip: true
 
     function setGothras(gothraList){
+         console.log("********* In setGothras function  *********** = 0")
+        if(gothraList.length===0)
+        {
+              console.log("********* In if of setGothras function  *********** = 0")
+            errorOccur("gothras not found");
+        }
+        else{
         _gotra._dataModel = gothraList;
+        }
     }
     function setNakshatras(nakshatraList){
+           console.log("********* In set nakshatra function  *********** = 0")
+        if(nakshatraList.length===0)
+        {
+              console.log("********* In if of set nakshatra function  *********** = 0")
+            errorOccur("Nakshtras not found");
+        }
+else{
         _nakshatra._dataModel = nakshatraList;
+        }
     }
     ColumnLayout {
         Layout.leftMargin: 10

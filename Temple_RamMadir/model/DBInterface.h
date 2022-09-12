@@ -75,7 +75,7 @@ public slots:
     void modify_db_seva(int,QString,int,QString,QString,QString,int,QString,int);
     void delete_sevadb(QString, QString);
     //void sevabookingdb(QString , QString , QString , QString , QString , QString , QString , QString , QString , QString , QString , int, int , QString , QString , QString);
-    void insertSevaBooked(QString , QString , QString , QString , QString , QString , QString , QString , QString , QString , QString , int, int , QString , QString , QString, QString sevaType,QString reference="ref",QString address="RR nagar",QString momento="momento");
+    bool insertSevaBooked(QString , QString , QString , QString , QString , QString , QString , QString , QString , QString , QString , int, int , QString , QString , QString, QString sevaType,QString reference="ref",QString address="RR nagar",QString momento="momento");
 
     bool check_name_db(int,QString,int,QString,QString,int,QString,int);
     bool check_db(QString, int, QString seva_adder_name);
@@ -85,7 +85,7 @@ public slots:
     void seva_modification_testing(int, int, QString, int, QString, QString, int, QString, int, QString, QString );
     void combobox_sevatype();
     void getdata();
-    void dbtable_view();
+    bool dbtable_view();
     void getDbData();
     void getpersondetails(QString);
     void getsevadetails(QString);
@@ -123,7 +123,7 @@ public slots:
     bool checkCredentials(QString userID, QString pass);
     int getNextSevaId();
     QStringList qrySevaDates();
-    void qrySevabookingBySevaDate(QString);
+    bool qrySevabookingBySevaDate(QString);
     void qrySevabookingByDateRange(QString,QString);
 
     // Dheerendra added

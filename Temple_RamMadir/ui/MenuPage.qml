@@ -15,6 +15,8 @@ Rectangle {
     signal admin();
     signal closeProject();
     signal voucher();
+    signal errorOccur(string errorMsg);
+    property int countIfSevaNamesPresentInSevaTypes:0;
     Grid{
         id:grid
         columns: 3
@@ -33,7 +35,34 @@ Rectangle {
             buttonText: "SEVA BOOKING"
             onButtonClikcked: {
                 console.log("Seva Booking Button Clicked");
-                sevabooking();
+                if(sevaProxy.getSevaTypeModel().getSevaTypeListSize()===0)
+                {
+                    console.log("clicked on Sevabooking if(sevaTypeModel===0)")
+                    errorOccur("seva types not present");
+                }
+                for(var i=0;i<sevaProxy.getSevaTypeModel().getSevaTypeListSize();i++)
+                {
+                    if((sevaProxy.getSevaModel(sevaProxy.getSevaTypeModel().sevaTypes[i].sevaTypeId).getSevaListViewSize()===0))
+                    {
+                        console.log("seveListModel  for if((sevaProxy.getSevaModel(100).getSevaListViewModel/*.getSevaListViewModel*/===0))")
+                        // errorOccur("SevaNames not present");
+                        countIfSevaNamesPresentInSevaTypes++;
+                        console.log(" countIfSevaNamesPresentInSevaTypes++ "+countIfSevaNamesPresentInSevaTypes)
+                    }
+                }
+                if(countIfSevaNamesPresentInSevaTypes===sevaProxy.getSevaTypeModel().getSevaTypeListSize())
+                {
+                    console.log(" if of === countIfSevaNamesPresentInSevaTypes++ "+countIfSevaNamesPresentInSevaTypes)
+                    errorOccur("SevaNames not present for any seva types");
+                }
+                if(countIfSevaNamesPresentInSevaTypes<sevaProxy.getSevaTypeModel().getSevaTypeListSize())
+                {
+                    console.log(" if of <<< countIfSevaNamesPresentInSevaTypes++ "+countIfSevaNamesPresentInSevaTypes)
+                    sevabooking();
+                }
+                else{
+                    sevabooking();
+                }
             }
         }
         TempleButton{

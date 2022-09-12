@@ -513,7 +513,7 @@ void DBInterface::delete_db(int d_sno)
 }
 
 //void DBInterface::sevabookingdb(QString devoteMobile, QString devoteName, QString devoteNakshatra, QString devoteGotra, QString devoteSevacharge, QString devoteAdditionalcharges, QString devoteCount, QString devotereceiptdate, QString devoteSevadate, QString devoteNote, QString devoteSevaName, int cost, int rspt_no, QString cash, QString bank_ref, QString bank_name)
-void DBInterface::insertSevaBooked(QString devoteMobile, QString devoteName, QString devoteNakshatra, QString devoteGotra, QString devoteSevacharge, QString devoteAdditionalcharges, QString devoteCount, QString devotereceiptdate, QString devoteSevadate, QString devoteNote, QString devoteSevaName, int cost, int rspt_no, QString cash, QString bank_ref, QString bank_name,
+bool DBInterface::insertSevaBooked(QString devoteMobile, QString devoteName, QString devoteNakshatra, QString devoteGotra, QString devoteSevacharge, QString devoteAdditionalcharges, QString devoteCount, QString devotereceiptdate, QString devoteSevadate, QString devoteNote, QString devoteSevaName, int cost, int rspt_no, QString cash, QString bank_ref, QString bank_name,
                                    QString sevaType,QString reference,QString address,QString momento)
 {
     qDebug()<<Q_FUNC_INFO << " Mobile number is "<<devoteMobile<<"\n";
@@ -578,8 +578,10 @@ void DBInterface::insertSevaBooked(QString devoteMobile, QString devoteName, QSt
     bool retVal = qry.exec();
     if (!retVal){
         qDebug() << Q_FUNC_INFO << " Query Failed " << qry.lastError().text() <<Qt::endl;
+        return false;
     }
     qDebug()<<Q_FUNC_INFO<<"  exiting...\n";
+    return true;
 }
 
 int DBInterface::insertPersonDetails(QString devoteMobile,QString devoteName,QString devoteNakshatra,QString devoteGotra)
@@ -853,7 +855,7 @@ void DBInterface::getdata()
     }
 }
 
-void DBInterface::dbtable_view()
+bool DBInterface::dbtable_view()
 {
     qDebug()<<Q_FUNC_INFO<<"^^^^^^^^^^^^^^^1111111^^^^^^^^^^^^^^^^^^"<<Qt::endl;
 
@@ -865,7 +867,11 @@ void DBInterface::dbtable_view()
     str = ("select SNO,PERSONID,SEVATYPE,SEVANAME,QUANTITY,S_DATE,S_MONTH,S_YEAR,SEVA_DATE,R_DATE,R_MONTH,R_YEAR,RECEIPT_DATE,SEVACOST,ADDITIONALCOST,SEVATOTALPRICE,NOTE,CASH,BANK,BANKDETAILS,REFERENCE,ADDRESS,MOMENTO from sevabooking;" );
     QSqlQuery query_other1;
     query_other1.prepare(str);
-    query_other1.exec();
+    bool b = query_other1.exec();
+    if(b==false)
+    {
+        return false;
+    }
     qDebug()<<Q_FUNC_INFO<<"^^^^^^^^^^^^^^^3333333^^^^^^^^^^^^^^^^^^  " << query_other1.size() <<Qt::endl;
 
     while(query_other1.next()){
@@ -951,6 +957,7 @@ void DBInterface::dbtable_view()
         emit sendOneSevaBooking(elem);
     }
     qDebug()<<Q_FUNC_INFO<<"^^^^^^^^^^^^^^^3333333^^^^^^^^^^^^^^^^^^"<<Qt::endl;
+    return true;
 }
 
 void DBInterface::getDbData()
@@ -1132,6 +1139,7 @@ DevotePersnalDetails* DBInterface::getPersonDetails(QString person_id)
 bool DBInterface::saveData(QObject *obj)
 {
     qDebug() << Q_FUNC_INFO << " Inserting the data into DB"<<Qt::endl;
+     bool b = false;
     SevaBookingConformationDataModel *sevaData = qobject_cast<SevaBookingConformationDataModel*>(obj);
     MySevaReceipt *rec = sevaData->sevaReceipt();
     qDebug() << Q_FUNC_INFO << " ****8888 NOte =" << rec->note() <<Qt::endl;
@@ -1141,7 +1149,7 @@ bool DBInterface::saveData(QObject *obj)
     for(int i=0;i<sevas.size();i++){
         SevaName *seva = sevas.at(i);
         qDebug() << Q_FUNC_INFO <<  "Add ############ ="<< seva->additionalCost() << Qt::endl;
-        this->insertSevaBooked(rec->mobilenumber(),rec->devoteeName(),
+     b =   this->insertSevaBooked(rec->mobilenumber(),rec->devoteeName(),
                                rec->nakshtra(),rec->gothra(),
                                QString::number(seva->sevaCost()),QString::number(seva->additionalCost()),
                                QString::number(seva->count()),rec->receiptDate(),
@@ -1151,8 +1159,10 @@ bool DBInterface::saveData(QObject *obj)
                                rec->bank(),rec->checkOrTranscationId(),
                                QString("%1").arg(seva->sevaType()),
                                rec->reference(),rec->address(),rec->momento());
+       qDebug() << Q_FUNC_INFO << " Inserting the data in for loop into DB b is "<<b<<Qt::endl;
     }
-    return true;
+     qDebug() << Q_FUNC_INFO << " Inserting the data into DB b is "<<b<<Qt::endl;
+    return b;
 }
 
 void DBInterface::getsevadetails(QString sevaname)
@@ -2189,7 +2199,7 @@ QStringList DBInterface::qrySevaDates()
     return l_sevaDateList;
 }
 
-void DBInterface::qrySevabookingBySevaDate(QString formatchangedcalendar_str)
+bool DBInterface::qrySevabookingBySevaDate(QString formatchangedcalendar_str)
 {
 
     QSqlQuery query;
@@ -2201,7 +2211,11 @@ void DBInterface::qrySevabookingBySevaDate(QString formatchangedcalendar_str)
     que = ("select SNO,PERSONID,SEVANAME,SEVA_DATE,RECEIPT_DATE,SEVATOTALPRICE,CASH,BANK,reference,address,momento from sevabooking where sevabooking.SEVA_DATE='%1';");
     que = que.arg(formatchangedcalendar_str);
     query.prepare(que);
-    query.exec();
+   bool b = query.exec();
+   if(b==false)
+   {
+       return false;
+   }
     while(query.next())
     {
         SevaBookingElement *elem = new SevaBookingElement;
@@ -2234,7 +2248,11 @@ void DBInterface::qrySevabookingBySevaDate(QString formatchangedcalendar_str)
         que_1 = que_1.arg(personid);
 
         qury.prepare(que_1);
-        qury.exec();
+        bool c = qury.exec();
+        if(c==false)
+        {
+            return false;
+        }
         while(qury.next()){
             person->setDevoteeName(qury.value(0).toString());
             person->setMobileNumber(qury.value(1).toString());
@@ -2245,7 +2263,7 @@ void DBInterface::qrySevabookingBySevaDate(QString formatchangedcalendar_str)
         }
         emit sendOneSevaBooking(elem);
     }
-
+    return true;
 
 }
 

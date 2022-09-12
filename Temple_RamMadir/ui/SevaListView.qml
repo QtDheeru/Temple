@@ -9,6 +9,7 @@ Rectangle {
     height:parent.height
     color: "transparent"
     anchors.margins: 20
+    signal errorOccur(string errorMsg);
     property int sevaType :-1
     border.width: 0.5;border.color: "#00A2ED"
     property alias currentIndex: _listView.currentIndex
@@ -75,12 +76,34 @@ Rectangle {
                 textRole: "sevaTypeName"
                 font.pixelSize: _root.fontPixelSize
                 onCurrentIndexChanged: {
-                    console.log(" Index =" + currentIndex)
-                    console.log(" Current Text =" + sevaProxy.getSevaTypeModel())
                     var currentItem = delegateModel.items.get(currentIndex)
+                    console.log("--------------- onCurrentIndexChanged: of combo box sevaListView"+sevaProxy.getSevaModel(currentItem.model.sevaTypeId).getSevaListViewSize());
+                    console.log(" Index =" + currentIndex)
+                    if(sevaProxy.getSevaModel(currentItem.model.sevaTypeId).getSevaListViewSize()===0)
+                    {
+                        console.log("if of onCurrentIndexChanged: of combo box sevaListView");
+                        console.log("before ---------------   errorOccur");
+                        errorOccur("Sevas not present for "+currentItem.model.sevaTypeName);
+                        console.log("after ---------------   errorOccur");
+                    }
+                    else{
+                        _root.sevaType = currentItem.model.sevaTypeId;
+                    }
+                    console.log("Current Text =" + sevaProxy.getSevaTypeModel())
+                    console.log("Model SevaType--------: "+currentItem);
                     console.log("Model SevaType: " + currentItem.model.sevaTypeName);
                     console.log("Model SevaType: " + currentItem.model.sevaTypeId);
-                    _root.sevaType = currentItem.model.sevaTypeId;
+                }
+                Component.onCompleted: {
+                    var currentItem = delegateModel.items.get(currentIndex)
+                    console.log("Component.onCompleted of combo box sevaListView current index ="+currentIndex+" "+sevaProxy.getSevaModel(currentItem.model.sevaTypeId).getSevaListViewSize());
+//                    if(sevaProxy.getSevaModel(currentItem.model.sevaTypeId).getSevaListViewSize()===0)
+//                    {
+//                        console.log("if of Component.onCompleted of combo box sevaListView");
+//                        console.log("before ---------------   errorOccur");
+//                        errorOccur("Sevas not present for "+currentItem.model.sevaTypeName);
+//                        console.log("after ---------------   errorOccur");
+//                    }
                 }
             }
         }
@@ -138,6 +161,10 @@ Rectangle {
             color: Qt.rgba(0,0.0,1,0.5)
             z:5
         }
+    }
+    Component.onCompleted: {
+        console.log("Component.onCompleted: of seva list view")
+
     }
 }
 

@@ -17,7 +17,7 @@ Dialog {
     signal paymentComplete();
     signal closeClicked();
     signal printClicked();
-
+    signal errorOccur(string errorMsg);
     function clearData() {
         console.log(" ")
         _sevaPayment.clearData()
@@ -107,5 +107,43 @@ Dialog {
     DisplayDialog{
         id :_display
         visible: false
+    }
+    DisplayDialog {
+        id :_errorDialog
+        visible: false
+
+        function showError(message){
+            console.log("Dialog object is ccreated in SPCD1111");
+            _errorDialog.parent= root.parent
+            _errorDialog.visible = true;
+            _errorDialog.text2Display = message
+            _errorDialog.open();
+            console.log("Dialog object is ccreated in SPCD2222");
+        }
+        Component.onCompleted: {
+            console.log("Dialog object is ccreated in SPCD");
+        }
+    }
+    Connections{
+        target:root
+        function onErrorOccur(errorMsg)
+        {
+            console.log("In connections of on error occur of seva paymen confirmation dialog")
+            _errorDialog.showError(errorMsg);
+        }
+    }
+    onOpened: {
+        console.log("********* In onOpened: of spcd  *********** ")
+        var bankList =  sevaProxy.getBankList();
+        console.log("********* In onOpened: of spcd  **bankList.length********* "+bankList.length)
+        if(bankList.length===0)
+        {
+            console.log("********* In if of  onOpened: of spcd  *********** ")
+            errorOccur("Banks not found continue with cash");
+        }
+    }
+
+    Component.onCompleted: {
+        console.log("In Component.onCompleted: of SevaPaymenConfirmationDialog");
     }
 }

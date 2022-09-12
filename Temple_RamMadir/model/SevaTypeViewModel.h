@@ -10,6 +10,7 @@
 class SevaTypeViewModel : public QAbstractListModel
 {
     Q_OBJECT
+    Q_PROPERTY(QList<SevaType *> sevaTypes READ sevaTypes CONSTANT)
 
 public:
     explicit SevaTypeViewModel(QObject *parent = nullptr);
@@ -20,6 +21,10 @@ public:
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
     QHash<int, QByteArray> roleNames() const override;
+    Q_INVOKABLE int getSevaTypeListSize();
+
+    const QList<SevaType *> &sevaTypes() const;
+    void setSevaTypes(const QList<SevaType *> &newSevaTypes);
 
 private :
     bool init();

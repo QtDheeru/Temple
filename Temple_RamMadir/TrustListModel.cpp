@@ -34,7 +34,7 @@ void TrustListModel::init()
 int TrustListModel::rowCount(const QModelIndex &parent) const
 {
     qDebug()<<Q_FUNC_INFO<<Qt::endl;
-    m_trustList.size();
+   return m_trustList.size();
 }
 
 QVariant TrustListModel::data(const QModelIndex &index, int role) const

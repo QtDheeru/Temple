@@ -68,6 +68,12 @@ SevaName *SevaListViewModel::getSevaByIndex(int index)
     qDebug() << Q_FUNC_INFO << " Index requested 2=" << index << Qt::endl;
 }
 
+int SevaListViewModel::getSevaListViewSize()
+{
+ qDebug() << Q_FUNC_INFO << Qt::endl;
+ return m_sevaList.size();
+}
+
 QHash<int, QByteArray> SevaListViewModel::roleNames() const
 {
     QHash<int, QByteArray> roles;

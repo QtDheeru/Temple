@@ -283,11 +283,17 @@ Rectangle {
     }
     Component.onCompleted: {
         console.log(" Trying to get the list category")
+        if( sevaProxy.getSevaTypeModel()===null)
+        {
+            errorOccur("seva type model not found");
+        }
+        else{
         _sevaType._dataModel = sevaProxy.getSevaTypeModel()
         _sevaType._dataModelRole = "sevaTypeName"
 
         _sevaName._dataModel = sevaProxy.getSevaModel(0);
         _sevaName._dataModelRole = "SevaName"
+        }
     }
     DisplayDialog {
         id :_errorDialog

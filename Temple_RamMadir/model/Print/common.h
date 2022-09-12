@@ -58,7 +58,9 @@ struct SevaNameDetails{
     int teerthaPrasada;
     QString sevaDate;
 };
-
+enum Error{
+    CANNOTPRINT = 10
+};
 namespace PRINT_HEADER {
 //#ifdef HUBBALLI
 //    const QString HEADER_1="Kuberapuram Rayaramutt";

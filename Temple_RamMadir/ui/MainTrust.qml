@@ -7,6 +7,7 @@ import "./components"
 Rectangle{
     id:win
     property var styles: MyStyles{}
+    signal errorOccur(string errorMsg);
     width: styles.screenWidth
     height: styles.screenHeight
     visible: true
@@ -40,6 +41,13 @@ Rectangle{
                 id:tstDel
                 Component.onCompleted: {
                     tstDel.loadLoginPage.connect(abhishek)
+                }
+            }
+            Component.onCompleted: {
+                console.log("Repeater of Grid LayOut of Main Trust");
+                if(trustListModel.getTrustListSize()===0)
+                {
+                    errorOccur("Trusts not present");
                 }
             }
         }

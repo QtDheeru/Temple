@@ -39,8 +39,14 @@ Rectangle {
 
     function deleteSeva(idx,sevaid,sevaName1){
         console.log(" Deleting the seva. Please confirm Index ="+idx +  "Seva Name ="+sevaName1 + " Seva Id="+sevaid)
+       var b = sevaProxy.deleteSeva(sevaid,sevaName1);
+        if(b===true)
+        {
         _deleteDialog.deleteConfirm("Seva Deleted")
-         sevaProxy.deleteSeva(sevaid,sevaName1);
+        }
+        else{
+            errorOccur("seva not deleted")
+        }
     }
 
     Rectangle{
@@ -124,7 +130,11 @@ Rectangle {
     }
 
     function clearData(){
-        sevaProxy.resetBookView();
+       var b = sevaProxy.resetBookView();
+        if(b===false)
+        {
+            errorOccur("Data not cleared")
+        }
     }
 }
 

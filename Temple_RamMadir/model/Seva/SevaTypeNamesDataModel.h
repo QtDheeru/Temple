@@ -47,7 +47,7 @@ public:
     bool resetBookingProgressModel();
 
     bool printReceipt();
-    void deleteSeva(SevaName *s);
+    bool deleteSeva(SevaName *s);
 
 public slots:
     bool processSevaTypes(SevaType *);

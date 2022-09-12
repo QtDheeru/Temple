@@ -11,6 +11,7 @@ Rectangle {
     signal nextReceipt();
     signal clearReceipt();
     signal showAllData();
+    signal errorOccur(string errorMsg);
     signal showLast10Transaction();
     property bool enablePaymentButton: false
      property alias nextButtonFocus:_next.focus
@@ -30,7 +31,16 @@ Rectangle {
             font.pixelSize: fontSize
             onClicked: {
                 console.log(" Adding Seva")//SevaBookingControl.qml
-                addMoreSeva()
+                var s1 = selectedReceiptDate.split("-")
+                var s2 = selectedSevaDate.split("-");
+                if((s1[0]>s2[0])||(s1[1]>s2[1])||(s1[2]>s2[2]))
+                {
+                    errorOccur("select proper seva date");
+                }
+                else
+                {
+                    addMoreSeva()
+                }
             }
         }
         Button {

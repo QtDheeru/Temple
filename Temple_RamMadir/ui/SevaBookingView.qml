@@ -13,13 +13,19 @@ Rectangle{
     property int sevaType :-1
     property int myHeight : 30
     property int fontPixelSize : 20
-
+    property alias selectedReceiptDate: _sevaDate.receiptdate
+    property alias selectedSevaDate: _sevaDate.sevadate
+    //    modal: true
+    //    closePolicy: Popup.CloseOnEscape
     signal loadMenuPage()
     focus: true
     property string sevaname
     property string sevatype
     property string sevaid
     property var sevaObject
+  
+    signal errorOccur(string errorMsg);
+   
 
     onSevaTypeChanged: {
         console.log(" Popup - Seva Type ="+sevaType)
@@ -111,6 +117,12 @@ Rectangle{
         function onSevaSelected(idx, sevaType, sevaId){
             console.log(" SBV - Index =" + idx + " SevaType =" + sevaType + " SevaID=" + sevaId)
             sevaObject = sevaProxy.getSeva(sevaType,sevaId);
+            console.log(" Seva Object = "+sevaObject)
+            if(sevaObject === null)
+            {
+                console.log("Inside if of seva object")
+                errorOccur("seva not found")
+            }
             _sevaD.setSevaDetails(sevaObject)
             _personal.setGothras(sevaProxy.getGothras());
             _personal.setNakshatras(sevaProxy.getNakshatras());
@@ -120,6 +132,11 @@ Rectangle{
             console.log(" Seva Selected ="+idx)
             if (idx < 0 ) idx = 0;
             sevaObject = sevaProxy.getSevaByIndex(idx);
+            if(sevaObject === null)
+            {
+                console.log("Inside if of seva object")
+                errorOccur("seva not found")
+            }
             _sevaD.setSevaDetails(sevaObject)
             console.log("seva name  = " + sevaObject.sevaName + " Seva cost = " + sevaObject.sevaCost)
             _personal.setGothras(sevaProxy.getGothras());
@@ -192,7 +209,12 @@ Rectangle{
         }
         function onShowAllData(){
             console.log("Show all Data")
-            sevaProxy.showAllData();
+            var b = sevaProxy.showAllData();
+            if(b===false)
+            {
+                errorOccur("cannot fetch data")
+            }
+
             //_ld.source = "SevaBookedDetailView.qml";
         }
         function onNextReceipt() {
@@ -223,7 +245,11 @@ Rectangle{
         console.log(" Nakshatra ="+_personal.nakshatra)
         console.log(" Gotra ="+_personal.gotra)
         buildSevaReceipt();
-        sevaProxy.saveReceipt(_sevaReceipt);
+        var b = sevaProxy.saveReceipt(_sevaReceipt);
+        if(b===false)
+        {
+            errorOccur("cannot store seva receipt details into db");
+        }
     }
 
     function saveOnlySeva() {
@@ -319,5 +345,49 @@ Rectangle{
         console.log(" Seva    Date ="+_sevaDate.sevadate)
         console.log(" Seva sevatime ="+_sevaDate.sevatime)
         console.log(" Seva bookedby ="+_sevaDate.bookedby)
+    }
+
+    Connections{
+        target:_sevaListView
+        function onErrorOccur(errorMsg)
+        {
+            console.log("In connections of on error occur of seva booking view")
+            // errorMessage = errorMsg;
+            _errorDialog.showError(errorMsg);
+        }
+    }
+    Connections{
+        //  target:_sevaListView
+        target:_personal
+        function onErrorOccur(errorMsg)
+        {
+            console.log("In connections of on error occur of seva booking view")
+            // errorMessage = errorMsg;
+            _errorDialog.showError(errorMsg);
+        }
+    }
+    Connections{
+        target:_sevaDate
+        function onErrorOccur(errorMsg)
+        {
+            console.log("In connections of on error occur of seva booking view")
+            // errorMessage = errorMsg;
+            _errorDialog.showError(errorMsg);
+        }
+    }
+    Connections{
+        //  target:_sevaListView
+        target:_sevaContoller
+        function onErrorOccur(errorMsg)
+        {
+            console.log("In connections of on error occur of seva booking view")
+            //    errorMessage = errorMsg;
+            _errorDialog.showError(errorMsg);
+
+        }
+    }
+
+    Component.onCompleted: {
+        console.log("Component.onCompleted: of seva booking view")
     }
 }

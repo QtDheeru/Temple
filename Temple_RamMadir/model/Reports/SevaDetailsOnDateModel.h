@@ -21,7 +21,7 @@ public:
      QHash<int, QByteArray> roleNames() const override;
 
     bool insertSevaRow(SevaBookingElement *elm);
-     void onDateSelected(QString);
+     bool onDateSelected(QString);
      void onDateRangeSelected(QString,QString);
 
 private:

@@ -62,7 +62,7 @@ public:
     Q_INVOKABLE void addNewSeva(int sevaID,QString sevaName, int cost);
     Q_INVOKABLE int getNextSevaId();
     Q_INVOKABLE void addNewSevaType(QString sevaTypeName,QString personName);
-
+    Q_INVOKABLE QAbstractItemModel* getSevaModelForErrorHandling();
     SevaReport *reportOnDateModel() const;
     void setReportOnDateModel(SevaReport *newReportOnDateModel);
 
