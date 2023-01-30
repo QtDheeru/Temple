@@ -52,7 +52,9 @@ void SevaListViewModel::init()
 
 void SevaListViewModel::initSevaList(int sevaType)
 {
+    qDebug() << Q_FUNC_INFO <<  "hello 1 " << Qt::endl;
     SevaTypeNamesDataModel *dataModel = SevaTypeNamesDataModel::self();
+    qDebug() << Q_FUNC_INFO <<  "hello 2" <<  Qt::endl;
     qDebug() << Q_FUNC_INFO <<  "data model object == " << dataModel <<  Qt::endl;
     Q_ASSERT(dataModel != nullptr);
     qDebug() << Q_FUNC_INFO << dataModel->getSevaList(sevaType) << Qt::endl;
@@ -70,8 +72,8 @@ SevaName *SevaListViewModel::getSevaByIndex(int index)
 
 int SevaListViewModel::getSevaListViewSize()
 {
- qDebug() << Q_FUNC_INFO << Qt::endl;
- return m_sevaList.size();
+    qDebug() << Q_FUNC_INFO << Qt::endl;
+    return m_sevaList.size();
 }
 
 QHash<int, QByteArray> SevaListViewModel::roleNames() const

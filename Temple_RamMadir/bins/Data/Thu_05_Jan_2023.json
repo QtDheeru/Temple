@@ -1,0 +1,58 @@
+{
+    "6524": {
+        "Abhisheka Madhu/Panchamrutha": {
+            "Number": 0,
+            "additionalCost": 0,
+            "count": 1,
+            "sevaCost": 100,
+            "sevaId": 70,
+            "sevaName": "Abhisheka Madhu/Panchamrutha",
+            "sevaTime": "08:00 AM",
+            "sevaType": 4,
+            "teerthaPrasada": 0
+        },
+        "Annadhana ": {
+            "Number": 1065353216,
+            "additionalCost": 0,
+            "count": 1,
+            "sevaCost": 0,
+            "sevaId": 14,
+            "sevaName": "Annadhana ",
+            "sevaTime": "08:00 AM",
+            "sevaType": 4,
+            "teerthaPrasada": 1065353216
+        },
+        "Aradhna Kanike": {
+            "Number": 0,
+            "additionalCost": 0,
+            "count": 1,
+            "sevaCost": 0,
+            "sevaId": 13,
+            "sevaName": "Aradhna Kanike",
+            "sevaTime": "08:00 AM",
+            "sevaType": 4,
+            "teerthaPrasada": 4
+        },
+        "Ashtottara": {
+            "Number": 1684086881,
+            "additionalCost": 0,
+            "count": 1,
+            "sevaCost": 0,
+            "sevaId": 71,
+            "sevaName": "Ashtottara",
+            "sevaTime": "08:00 AM",
+            "sevaType": 4,
+            "teerthaPrasada": 0
+        },
+        "address": "",
+        "bookedBy": "",
+        "devoteeName": "",
+        "gothra": "Kashyapa",
+        "mobilenumber": "",
+        "momento": "Category-1",
+        "nakshtra": "Ashwini",
+        "receiptDate": "05-01-2023",
+        "receiptNo": "6524",
+        "reference": ""
+    }
+}

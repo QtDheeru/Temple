@@ -1,7 +1,7 @@
 QT += quick widgets sql printsupport xml
 
 CONFIG += c++11
-
+#CONFIG += plugin c++11
 # The following define makes your compiler emit warnings if you use
 # any Qt feature that has been marked deprecated (the exact warnings
 # depend on your compiler). Refer to the documentation for the
@@ -68,6 +68,7 @@ HEADERS += \
 include(model/Print/Print.pri)
 include(model/Seva/seva.pri)
 include(model/DataSave/DataSave.pri)
+include(model/voucher/voucher.pri)
 
 #Reports integrated for all views
 #

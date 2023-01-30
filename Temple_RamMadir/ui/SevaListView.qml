@@ -5,7 +5,7 @@ import QtQuick.Layouts 1.3
 
 Rectangle {
     id:_root
-    width: 250;
+    width: 200;
     height:parent.height
     color: "transparent"
     anchors.margins: 20
@@ -21,7 +21,7 @@ Rectangle {
     signal sevaSelectedByIndex(int index)
 
     onSevaTypeChanged: {
-        console.log(" Seva Type Changed ")
+        console.log(" Seva Type Changed: " +sevaType)
         _listView.model = sevaProxy.getSevaModel(sevaType);
     }
 
@@ -83,7 +83,9 @@ Rectangle {
                     {
                         console.log("if of onCurrentIndexChanged: of combo box sevaListView");
                         console.log("before ---------------   errorOccur");
-                        errorOccur("Sevas not present for "+currentItem.model.sevaTypeName);
+                        errorOccur("  Sevas not present for
+     "+currentItem.model.sevaTypeName);
+                        _listView.model = 0;
                         console.log("after ---------------   errorOccur");
                     }
                     else{
@@ -97,13 +99,13 @@ Rectangle {
                 Component.onCompleted: {
                     var currentItem = delegateModel.items.get(currentIndex)
                     console.log("Component.onCompleted of combo box sevaListView current index ="+currentIndex+" "+sevaProxy.getSevaModel(currentItem.model.sevaTypeId).getSevaListViewSize());
-//                    if(sevaProxy.getSevaModel(currentItem.model.sevaTypeId).getSevaListViewSize()===0)
-//                    {
-//                        console.log("if of Component.onCompleted of combo box sevaListView");
-//                        console.log("before ---------------   errorOccur");
-//                        errorOccur("Sevas not present for "+currentItem.model.sevaTypeName);
-//                        console.log("after ---------------   errorOccur");
-//                    }
+                    //                    if(sevaProxy.getSevaModel(currentItem.model.sevaTypeId).getSevaListViewSize()===0)
+                    //                    {
+                    //                        console.log("if of Component.onCompleted of combo box sevaListView");
+                    //                        console.log("before ---------------   errorOccur");
+                    //                        errorOccur("Sevas not present for "+currentItem.model.sevaTypeName);
+                    //                        console.log("after ---------------   errorOccur");
+                    //                    }
                 }
             }
         }

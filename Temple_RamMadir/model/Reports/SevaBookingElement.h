@@ -7,6 +7,17 @@
 class SevaBookingElement : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(QString sno READ sno WRITE setSno CONSTANT)
+    Q_PROPERTY(QString person_id READ person_id WRITE setPerson_id CONSTANT)
+    Q_PROPERTY(DevotePersnalDetails* person READ person WRITE setPerson CONSTANT)
+    Q_PROPERTY(QString sevatype READ sevatype WRITE setSevatype CONSTANT)
+    Q_PROPERTY(QString sevaname READ sevaname WRITE setSevaname CONSTANT)
+    Q_PROPERTY(QString quantity READ quantity WRITE setQuantity CONSTANT)
+    Q_PROPERTY(QString receiptDate READ receiptDate WRITE setReceiptDate CONSTANT)
+    Q_PROPERTY(QString sevaDate READ sevaDate WRITE setSevaDate CONSTANT)
+    Q_PROPERTY(QString totalCost READ totalCost WRITE setTotalCost CONSTANT)
+    Q_PROPERTY(QString cash READ cash WRITE setCash CONSTANT)
+    Q_PROPERTY(QString bank READ bank WRITE setBank CONSTANT)
 public:
     explicit SevaBookingElement(QObject *parent = nullptr);
 

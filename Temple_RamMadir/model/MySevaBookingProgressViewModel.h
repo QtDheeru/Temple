@@ -22,7 +22,7 @@ public:
 
     bool addSeva(SevaName *s);
 
-    bool resetModel();
+    Q_INVOKABLE bool resetModel();
     bool deleteSeva(SevaName *s);
 
 private:

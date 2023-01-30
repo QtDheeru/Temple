@@ -1,0 +1,117 @@
+{
+    "6503": {
+        "Nithya Archane": {
+            "Number": 0,
+            "additionalCost": 0,
+            "count": 1,
+            "sevaCost": 0,
+            "sevaId": 102,
+            "sevaName": "Nithya Archane",
+            "sevaTime": "08:00 AM",
+            "sevaType": 0,
+            "teerthaPrasada": 0
+        },
+        "address": "a",
+        "bookedBy": "",
+        "devoteeName": "San",
+        "gothra": "Jamadagni",
+        "mobilenumber": "1111111111",
+        "momento": "Category-1",
+        "nakshtra": "Ashlesha",
+        "receiptDate": "16-11-2022",
+        "receiptNo": "6503",
+        "reference": ""
+    },
+    "6504": {
+        "Nithya Archane": {
+            "Number": 0,
+            "additionalCost": 0,
+            "count": 1,
+            "sevaCost": 0,
+            "sevaId": 102,
+            "sevaName": "Nithya Archane",
+            "sevaTime": "08:00 AM",
+            "sevaType": 0,
+            "teerthaPrasada": 0
+        },
+        "address": "",
+        "bookedBy": "",
+        "devoteeName": "",
+        "gothra": "Jamadagni",
+        "mobilenumber": "",
+        "momento": "Category-1",
+        "nakshtra": "Ashlesha",
+        "receiptDate": "16-11-2022",
+        "receiptNo": "6504",
+        "reference": ""
+    },
+    "6505": {
+        "Nithya Archane": {
+            "Number": 0,
+            "additionalCost": 0,
+            "count": 1,
+            "sevaCost": 0,
+            "sevaId": 102,
+            "sevaName": "Nithya Archane",
+            "sevaTime": "08:00 AM",
+            "sevaType": 0,
+            "teerthaPrasada": 0
+        },
+        "address": "a",
+        "bookedBy": "",
+        "devoteeName": "San",
+        "gothra": "Jamadagni",
+        "mobilenumber": "1111111111",
+        "momento": "Category-1",
+        "nakshtra": "Ashlesha",
+        "receiptDate": "16-11-2022",
+        "receiptNo": "6505",
+        "reference": ""
+    },
+    "6506": {
+        "Nithya Archane": {
+            "Number": 0,
+            "additionalCost": 0,
+            "count": 1,
+            "sevaCost": 0,
+            "sevaId": 102,
+            "sevaName": "Nithya Archane",
+            "sevaTime": "08:00 AM",
+            "sevaType": 0,
+            "teerthaPrasada": 0
+        },
+        "address": "a",
+        "bookedBy": "",
+        "devoteeName": "San",
+        "gothra": "Jamadagni",
+        "mobilenumber": "1111111111",
+        "momento": "Category-1",
+        "nakshtra": "Ashlesha",
+        "receiptDate": "16-11-2022",
+        "receiptNo": "6506",
+        "reference": ""
+    },
+    "6507": {
+        "Nithya Archane": {
+            "Number": 0,
+            "additionalCost": 0,
+            "count": 1,
+            "sevaCost": 0,
+            "sevaId": 102,
+            "sevaName": "Nithya Archane",
+            "sevaTime": "08:00 AM",
+            "sevaType": 0,
+            "teerthaPrasada": 0
+        },
+        "address": "sjjjmm",
+        "bookedBy": "",
+        "devoteeName": "gh",
+        "gothra": "Jamadagni",
+        "mobilenumber": "3636363636",
+        "momento": "Category-1",
+        "nakshtra": "Ashlesha",
+        "receiptDate": "16-11-2022",
+        "receiptNo": "6507",
+        "reference": ""
+    }
+}

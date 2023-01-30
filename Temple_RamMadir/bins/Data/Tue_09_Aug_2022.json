@@ -1,0 +1,71 @@
+{
+    "0": {
+        "Ondu Dinada Sampurna Seva": {
+            "Number": 7209070,
+            "additionalCost": 0,
+            "count": 1,
+            "sevaCost": 25001,
+            "sevaId": 2001,
+            "sevaName": "Ondu Dinada Sampurna Seva",
+            "sevaTime": "08:00 AM",
+            "sevaType": 2000,
+            "teerthaPrasada": 7471216
+        },
+        "address": "rr nagar",
+        "bookedBy": "",
+        "devoteeName": "Raj",
+        "gothra": "Gothra1",
+        "mobilenumber": "9911223344",
+        "momento": "Category-1",
+        "nakshtra": "Ashwini",
+        "receiptDate": "09-08-2022",
+        "receiptNo": "0",
+        "reference": ""
+    },
+    "1": {
+        "PhalaPanchamrutha Seva": {
+            "Number": 1702043745,
+            "additionalCost": 0,
+            "count": 1,
+            "sevaCost": 150,
+            "sevaId": 2015,
+            "sevaName": "PhalaPanchamrutha Seva",
+            "sevaTime": "08:00 AM",
+            "sevaType": 1000,
+            "teerthaPrasada": 0
+        },
+        "address": "rr nagar",
+        "bookedBy": "",
+        "devoteeName": "Raj",
+        "gothra": "Gothra1",
+        "mobilenumber": "9911223344",
+        "momento": "Category-1",
+        "nakshtra": "Ashwini",
+        "receiptDate": "09-08-2022",
+        "receiptNo": "1",
+        "reference": ""
+    },
+    "2": {
+        "PhalaPanchamrutha Seva": {
+            "Number": 0,
+            "additionalCost": 0,
+            "count": 1,
+            "sevaCost": 150,
+            "sevaId": 2015,
+            "sevaName": "PhalaPanchamrutha Seva",
+            "sevaTime": "08:00 AM",
+            "sevaType": 1000,
+            "teerthaPrasada": 0
+        },
+        "address": "RR nagar",
+        "bookedBy": "",
+        "devoteeName": "Raj",
+        "gothra": "Gothra1",
+        "mobilenumber": "9911223344",
+        "momento": "Category-1",
+        "nakshtra": "Ashwini",
+        "receiptDate": "09-08-2022",
+        "receiptNo": "2",
+        "reference": ""
+    }
+}

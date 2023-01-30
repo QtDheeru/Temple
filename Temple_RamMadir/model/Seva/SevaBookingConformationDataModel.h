@@ -55,7 +55,7 @@ public:
     Q_INVOKABLE bool addSeva(SevaName *s);
     Q_INVOKABLE bool deleteSeva(SevaName *s);
 
-    bool reset();
+   Q_INVOKABLE bool reset();
     bool clearSevaList();
 
     void print();

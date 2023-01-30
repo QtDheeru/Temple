@@ -43,5 +43,26 @@
         <file>ui/TrustDelegate.qml</file>
         <file>ui/MainTrust.qml</file>
         <file>ui/WelcomeToAppScreen.qml</file>
+        <file>ui/BookingReportPage.qml</file>
+        <file>ui/voucherPage.qml</file>
+        <file>ui/assets/Images/voucher.jpg</file>
+        <file>ui/components/MyVoucherFilter.qml</file>
+        <file>ui/VoucherReportPage.qml</file>
+        <file>ui/SevaAllViewPage.qml</file>
+        <file>ui/components/SevaComboBox.qml</file>
+        <file>ui/components/SevaSearchBar.qml</file>
+        <file>ui/components/ShowPrintDetails.qml</file>
+        <file>ui/AllDataView.qml</file>
+        <file>ui/VoucherReceiptDialog.qml</file>
+        <file>ui/VoucherReceiptDetails.qml</file>
+        <file>ui/SevaAccountReportOnDateRange.qml</file>
+        <file>ui/SevaAccountReportForSingleDate.qml</file>
+        <file>ui/SevaAccountReportMonthWise.qml</file>
+        <file>ui/SevaBookingReportForSingleDate.qml</file>
+        <file>ui/SevaBookingReportOnDateRange.qml</file>
+        <file>ui/SevaBookingReportMonthWise.qml</file>
+        <file>ui/components/MyBookingFilter.qml</file>
+        <file>ui/AllViewDataDialog.qml</file>
+        <file>ui/AllViewDataDetails.qml</file>
     </qresource>
 </RCC>

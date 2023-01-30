@@ -17,6 +17,15 @@
 #include "SevaTypeJsonProcessor.h"
 #include "Reports/SevaBookingElement.h"
 #include "Reports/AccountReportElement.h"
+#include "Reports/BookingReportElement.h"
+#include "voucher/VoucherElement.h"
+#include "AccountReportDateRangeElement.h"
+#include"AccountReportMonthRangeElement.h"
+#include"BookingReportDateRangeElement.h"
+#include"BookingReportMonthRangeElement.h"
+#include<QQmlEngine>
+
+//#include "voucher/VoucherFilterElements.h"
 
 #include "IDataWriter.h"
 #include "TrustListModel.h"
@@ -32,7 +41,7 @@ public:
     static DBInterface* getInstance();
 
     QSqlDatabase db;
-    ~ DBInterface(); 
+    ~ DBInterface();
 
 signals:
     void send_seva_details(QString,int);
@@ -58,9 +67,15 @@ signals:
     void fixed_sevacharge(int);
     void setting_fixed_seva_charge(QString);
     void get_receiptnumber(int);
-    void booking_report(QList<QString>,QList<int>,QList<int>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>);
+    // void booking_report(QList<QString>,QList<int>,QList<int>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>);
+    void booking_report(BookingReportElement*);
     //void account_report(QList<QString>,QList<int>,QList<float>,QList<float>,QString);
     void account_report(AccountReportElement*);
+    void account_report_Date_Range(AccountReportDateRangeElement*);
+    void booking_report_Date_Range(BookingReportDateRangeElement*);
+    void account_report_Month_Range(AccountReportMonthRangeElement*);
+    void booking_report_Month_Range(BookingReportMonthRangeElement*);
+    void voucher_report(VoucherElement*);
     void correct_password(QString);
     void success();
     void wrongCred();
@@ -76,7 +91,7 @@ public slots:
     void delete_sevadb(QString, QString);
     //void sevabookingdb(QString , QString , QString , QString , QString , QString , QString , QString , QString , QString , QString , int, int , QString , QString , QString);
     bool insertSevaBooked(QString , QString , QString , QString , QString , QString , QString , QString , QString , QString , QString , int, int , QString , QString , QString, QString sevaType,QString reference="ref",QString address="RR nagar",QString momento="momento");
-
+    void insertVoucherIssued(VoucherElement*);
     bool check_name_db(int,QString,int,QString,QString,int,QString,int);
     bool check_db(QString, int, QString seva_adder_name);
     void addsevaname(int, QString, int, QString, QString, int , QString,int );
@@ -100,11 +115,25 @@ public slots:
     void Checking_sevacharge(QString);
     void receipt_no_printing();
     void booking_report_cdate_function(QString,QString,int);
-    void booking_report_cmonth_function(QString,int,int,int);
     void booking_report_dataRange_function(QString,int,QString,QString);
+    void booking_report_cmonth_function(QString,int,int,int);
+    void booking_report_eachDateDataRange_function(QString,int,QString,QString);
+    void booking_report_eachDateDataRangeForMonth_function(QString,int,int,int);
+    void booking_report_eachMonth_function(QString SEVA,int TYPE,int month,int year);
+
     void account_report_cdate_function(QString, int, QString);
     void account_report_dataRange_function(QString,int,QString,QString);
+    void account_report_eachDateDataRange_function(QString,int,QString,QString);
     void account_report_cmonth_function(QString ,int ,int ,int );
+    void account_report_eachMonth_function(QString SEVA,int TYPE,int month,int year);
+    void account_report_eachDateDataRangeForMonth_function(QString,int,int,int);
+    void account_report_eachDateDataRangeForWholeMonth_function(QString,int,int,int);
+
+
+    void voucher_report_cdate_function(QString,QString,QString);
+    void voucher_report_cmonth_function(int, int, QString, QString);
+    void voucher_report_dataRange_function(QString,QString,QString,QString);
+
     void signin_clicked(QString, QString, int);
     void old_password(QString l_userfirstname, QString l_userlastname);
     void add_new_signin_details(QString, QString, QString, QString, QString);
@@ -141,12 +170,15 @@ public slots:
     int insertPersonDetails(QString devoteMobile, QString devoteName, QString devoteNakshatra, QString devoteGotra);
 
     int getLastReceiptNumber();
+    int getLastVoucherNumber();
 
 signals :
     void sendSevaType(SevaType *);
     void sendSevaName(SevaName *);
     void sendOneSevaBooking(SevaBookingElement*);
     void sendoneByoneSevaBooking(SevaBookingElement*);
+    void setGrandTotalToZero();
+
 
 private:
     explicit DBInterface(QObject *parent = nullptr);

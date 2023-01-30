@@ -14,7 +14,7 @@ Rectangle {
     signal errorOccur(string errorMsg);
     signal showLast10Transaction();
     property bool enablePaymentButton: false
-     property alias nextButtonFocus:_next.focus
+    property alias nextButtonFocus:_next.focus
     GridLayout{
         anchors.fill: parent
         columns: 3
@@ -48,6 +48,7 @@ Rectangle {
             Layout.fillWidth: true;text : "Payment"
             Layout.maximumHeight: 40
             font.pixelSize: fontSize
+            //enabled: false
             onClicked: {
                 startPayment();
             }
@@ -76,6 +77,7 @@ Rectangle {
             Layout.maximumHeight: 40
             font.pixelSize: fontSize
             onClicked: {
+                console.log("show all button clicked")
                 showAllData();
             }
         }
@@ -91,9 +93,9 @@ Rectangle {
         }
     }
     function setButtons(val){
-//        _addMoreSevabutton.enabled = val
-//        _payButton.enabled = val
-//        _next.enabled = !val;
+        //        _addMoreSevabutton.enabled = val
+        //        _payButton.enabled = val
+        //        _next.enabled = !val;
     }
 
     onEnablePaymentButtonChanged: {
@@ -118,36 +120,37 @@ Rectangle {
 
     state : "initial"
     states:[
-      State{
+        State{
             name:"initial";
             PropertyChanges{target: _addMoreSevabutton;enabled : false}
             PropertyChanges{target: _payButton;enabled : true}
             PropertyChanges{target: _next;enabled : false}
-      },
-      State{
-              name:"sevaBookCompleted";
-              PropertyChanges{target: _addMoreSevabutton;enabled : false}
-              PropertyChanges{target: _payButton;enabled : true}
-              PropertyChanges{target: _next;enabled : true}
-      },
-      State{
-           name:"payOrAddSeva";
-           PropertyChanges{target: _addMoreSevabutton;enabled : true}
-           PropertyChanges{target: _payButton;enabled : true}
-           PropertyChanges{target: _next;enabled : false}
-      },
-      State{
-            name:"next";
+        },
+        State{
+            name:"sevaBookCompleted";
+            PropertyChanges{target: _addMoreSevabutton;enabled : false}
+            PropertyChanges{target: _payButton;enabled : true}
+            PropertyChanges{target: _next;enabled : true}
+        },
+        State{
+            name:"payOrAddSeva";
             PropertyChanges{target: _addMoreSevabutton;enabled : true}
             PropertyChanges{target: _payButton;enabled : true}
             PropertyChanges{target: _next;enabled : false}
-      },
-      State{
-              name:"paymentComplete";
-              PropertyChanges{target: _addMoreSevabutton;enabled : false}
-              PropertyChanges{target: _payButton;enabled : false}
-              PropertyChanges{target: _next;enabled : true}
-      }
+        },
+        State{
+            name:"next";
+          /*  PropertyChanges{target: _addMoreSevabutton;enabled : true} revert if nece*/
+            PropertyChanges{target: _addMoreSevabutton;enabled : false}
+            PropertyChanges{target: _payButton;enabled : true}
+            PropertyChanges{target: _next;enabled : false}
+        },
+        State{
+            name:"paymentComplete";
+            PropertyChanges{target: _addMoreSevabutton;enabled : false}
+            PropertyChanges{target: _payButton;enabled : false}
+            PropertyChanges{target: _next;enabled : true}
+        }
     ]
 
 }

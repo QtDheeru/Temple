@@ -37,11 +37,12 @@ Rectangle {
         MyRowEntry {
             id: _bankReference
             Layout.topMargin: 5
-            Layout.leftMargin: 50;_labelText :qsTr("ChequeNo/TranscationID");
+            _labelText :qsTr("ChequeNo/TranscationID");
+            myWidth: parent.width/1.4
             myHeight:10
             _labelFontSize:15
         }
-        MyRowEntry {id:_note;Layout.leftMargin: 20;_labelText :qsTr("Note")}
+        MyRowEntry {id:_note;_labelText :qsTr("Note");myWidth: parent.width/1.4}
     }
     Component.onCompleted: {
         //setBankList(["UPI","GPay","PonePe","SBI", "CanaraBank", "Karnataka","HDFC","ICICI"]);

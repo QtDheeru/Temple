@@ -1,10 +1,11 @@
 #include "SevaViewProxy.h"
 #include "./model/SevaListViewModel.h"
 #include "./model/SevaTypeViewModel.h"
+#include  "model/common.h"
 #include "SevaTypeNamesDataModel.h"
 #include <AllViewReports.h>
 #include <QScreen>
-
+#include "print_file.h"
 SevaViewProxy::SevaViewProxy(QObject *parent) : QObject(parent)
   ,m_sevaBookingModelData(SevaTypeNamesDataModel::self())
   ,m_receiptNumber("-1")
@@ -13,14 +14,19 @@ SevaViewProxy::SevaViewProxy(QObject *parent) : QObject(parent)
     m_allView = new AllViewReports;
     m_ReportOnDateModel = new SevaReport;
     m_csvReceipt = nullptr;
-
+    m_sevaBookingTV = new SevaBookingTableModel;
+    m_sevaBSearchModel = new SevaBookingSearchModel;
+    m_sevaBSearchModel->setSourceModel(m_sevaBookingTV);
     this->getNextReceiptNumber();
 
     QObject::connect(DBInterface::getInstance(),&DBInterface::sendOneSevaBooking,
                      m_allReportModel,&SevaDetailsTableView::insertSevaRow);
 
+    //    QObject::connect(DBInterface::getInstance(),&DBInterface::sendOneSevaBooking,
+    //                     m_allView,&AllViewReports::insertSevaRow);
+
     QObject::connect(DBInterface::getInstance(),&DBInterface::sendOneSevaBooking,
-                     m_allView,&AllViewReports::insertSevaRow);
+                     m_sevaBookingTV,&SevaBookingTableModel::addBookingDetails);
 
     QObject::connect(DBInterface::getInstance(),&DBInterface::sendOneSevaBooking,
                      m_ReportOnDateModel->sevaOnDateModel(),&SevaDetailsOnDateModel::insertSevaRow);
@@ -28,8 +34,10 @@ SevaViewProxy::SevaViewProxy(QObject *parent) : QObject(parent)
     QObject::connect(DBInterface::getInstance(),&DBInterface::account_report,
                      m_ReportOnDateModel->accountreportModel(),&AccountReportModel::insertSevaRow);
 
-    QObject::connect(m_allView,&AllViewReports::exportCsvButtonClicked,
-                     this,&SevaViewProxy::generateCSV);
+    QObject::connect(DBInterface::getInstance(),&DBInterface::booking_report,
+                     m_ReportOnDateModel->bookingReportModel(),&BookingReportModel::insertSevaRow);
+    //    QObject::connect(m_allView,&AllViewReports::exportCsvButtonClicked,
+    //                     this,&SevaViewProxy::generateCSV);
     QDir dir(".");
     dir.mkdir("Data");
 
@@ -127,7 +135,7 @@ bool SevaViewProxy::saveReceipt(MySevaReceipt *receipt)
     qDebug() << Q_FUNC_INFO <<  Qt::endl;
     return m_sevaBookingModelData->saveReceipt(receipt);
     //receipt->print();
-  //  return true;
+    //  return true;
 }
 
 bool SevaViewProxy::addSevaOnly(int sevaType,int sevaId,QString sevaName,
@@ -163,6 +171,51 @@ bool SevaViewProxy::printReceipt()
     //return true;
 }
 
+bool SevaViewProxy::printVoucherReceipt(VoucherElement *voucherElement)
+{
+    qDebug() << Q_FUNC_INFO << Qt::endl;
+    //print_details* p = new Print_Detail;
+    print_voucherDetails* p = new Print_VoucherDetail;
+    p->VOUCHER_NO = voucherElement->voucherNo();
+    p->VOUCHER_COST = voucherElement->voucherCost();
+    p->VOUCHER_DATE = voucherElement->voucherDate();
+    p->MOB_NO = voucherElement->mobileNo();
+    p->VOUCHER_ITEM = voucherElement->voucherItem();
+    p->VOUCHER_NAME = voucherElement->voucherName();
+    p->VOUCHER_NOTE = voucherElement->voucherNote();
+    p->VOUCHER_PAYMENT_MOD = voucherElement->voucherPaymentMode();
+    p->VOUCHER_PAYMENT_REFERENCE = voucherElement->PaymentReference();
+    p->VOUCHER_TYPE = voucherElement->voucherType();
+    print_file file;
+    file.printing_file(p);
+    return true ;
+}
+
+bool SevaViewProxy::printBookingReceipt(SevaBookingElement *sevaBookingElement)
+{
+    qDebug() << Q_FUNC_INFO << Qt::endl;
+    //print_details* p = new Print_Detail;
+    print_bookingDetails* p = new Print_BookingDetail;
+    p->serial_No = sevaBookingElement->sno();
+    p->person_Id = sevaBookingElement->person_id();
+    p->devotee_Name = sevaBookingElement->person()->devoteeName();
+    p->mobile_No = sevaBookingElement->person()->mobileNumber();
+    p->gothra = sevaBookingElement->person()->gothra();
+    p->nakshatra = sevaBookingElement->person()->nakshatra();
+    p->seva_Type = sevaBookingElement->sevatype();
+    p->seva_Name = sevaBookingElement->sevaname();
+    p->quantity = sevaBookingElement->quantity();
+    p->receipt_Date = sevaBookingElement->receiptDate();
+    p->seva_Date = sevaBookingElement->sevaDate();
+    p->total_Cost = sevaBookingElement->totalCost();
+    p->cash = sevaBookingElement->cash();
+    p->bank = sevaBookingElement->bank();
+    print_file file;
+    file.printing_file(p);
+    return true ;
+
+}
+
 QString SevaViewProxy::getReceiptNumber() const
 {
     return m_receiptNumber;
@@ -193,14 +246,14 @@ bool SevaViewProxy::showAllData()
     {
         return false;
     }
-    QScreen *screen = qApp->primaryScreen();
-    int w = screen->availableSize().width();
-    int h = screen->availableSize().height()-30;
-    m_allView->setFixedSize(w,h);
-    m_allView->setWindowFlag(Qt::Dialog,true);
-    m_allView->setWindowModality(Qt::ApplicationModal);
-    m_allView->setWindowFlags(Qt::CustomizeWindowHint);
-    m_allView->show();
+    //  QScreen *screen = qApp->primaryScreen();
+    //  int w = screen->availableSize().width();
+    //   int h = screen->availableSize().height()-30;
+    //   m_allView->setFixedSize(w,h);
+    //   m_allView->setWindowFlag(Qt::Dialog,true);
+    //   m_allView->setWindowModality(Qt::ApplicationModal);
+    //  m_allView->setWindowFlags(Qt::CustomizeWindowHint);
+    //  m_allView->show();
     qDebug() << Q_FUNC_INFO << Qt::endl;
     return true;
 }
@@ -229,11 +282,48 @@ void SevaViewProxy::addNewSevaType(QString sevaTypeName, QString personName)
     qDebug() << Q_FUNC_INFO << Qt::endl;
 
 }
-QAbstractItemModel *SevaViewProxy::getSevaModelForErrorHandling()
+
+void SevaViewProxy::print()
 {
-    qDebug() << Q_FUNC_INFO << Qt::endl;
-    return m_currentSevaModel;
+    //    m_sevaReceipt->print();
+    //    foreach(SevaName *seva,m_sevabookinglist){
+    //        qDebug() << Q_FUNC_INFO << " **** Print Seva Details...." << Qt::endl;
+    //        seva->print();
+    //    }
+
+    //    qDebug() << Q_FUNC_INFO << " Seva List Size =" << m_sevabookinglist.size() <<Qt::endl;
+    //    QList<Print_Detail*> printList;
+
+    //    double totalAmount= 0;
+
+    //    for(int i=0;i<m_sevabookinglist.size();i++){
+    //        print_details *p = new Print_Detail;
+    //        p->NAME.append(m_sevaReceipt->devoteeName());
+    //        p->RECPT_NO = m_sevaReceipt->receiptNo();
+    //        p->MOB_NO.append(m_sevaReceipt->mobilenumber());
+    //        p->DATE.append(m_sevaReceipt->receiptDate());
+    //        p->GOTHRA.append(m_sevaReceipt->gothra());
+    //        p->NAKSHATRA.append(m_sevaReceipt->nakshtra());
+
+    //        SevaName* seva = m_sevabookinglist.at(i);
+
+    //        double totalSevaCost = (seva->sevaCost()*seva->count()) + seva->additionalCost();
+    //        p->SEVA_DESCR.append(seva->sevaName());
+    //        p->QTY.append(QString::number(seva->count()));
+    //        p->AMT.append(QString::number(totalSevaCost));
+    //        p->CASH.append(QString::number(seva->sevaCost()));
+    //        p->RATE.append(QString::number(seva->sevaCost()));
+
+    //        p->SEVA_DATE.append(seva->sevaDate());
+    //        totalAmount += totalSevaCost;
+    //        p->TOTAL_AMT.append(QString::number(totalAmount));
+    //        p->TOTAL_IN_WORDS.append(print_file::NumberToWord(p->TOTAL_AMT.toUInt()));
+    //        printList.append(p);
+    //    }
+    //    print_file file;
+    //    file.printing_file(&printList);
 }
+
 void SevaViewProxy::generateCSV()
 {
     if(m_csvReceipt!=nullptr)
@@ -241,11 +331,22 @@ void SevaViewProxy::generateCSV()
     m_csvReceipt = new SevaReceiptCsvProcessor;
 
     QObject::connect(DBInterface::getInstance(),&DBInterface::sendoneByoneSevaBooking,
-    m_csvReceipt,&SevaReceiptCsvProcessor::writeToCsvFormate);
+                     m_csvReceipt,&SevaReceiptCsvProcessor::writeToCsvFormate);
     qDebug() << Q_FUNC_INFO << Qt::endl;
     DBInterface::getInstance()->getDbData();
     qDebug() << Q_FUNC_INFO << Qt::endl;
 }
+
+SevaBookingSearchModel *SevaViewProxy::sevaBSearchModel() const
+{
+    return m_sevaBSearchModel;
+}
+
+SevaBookingTableModel *SevaViewProxy::sevaBookingTV() const
+{
+    return m_sevaBookingTV;
+}
+
 
 SevaReport *SevaViewProxy::reportOnDateModel() const
 {
@@ -255,4 +356,14 @@ SevaReport *SevaViewProxy::reportOnDateModel() const
 void SevaViewProxy::setReportOnDateModel(SevaReport *newReportOnDateModel)
 {
     m_ReportOnDateModel = newReportOnDateModel;
+}
+
+SevaTypeNamesDataModel *SevaViewProxy::getSevaTypeNamesDataModel()
+{
+return m_sevaBookingModelData;
+}
+QAbstractItemModel *SevaViewProxy::getSevaModelForErrorHandling()
+{
+    qDebug() << Q_FUNC_INFO << Qt::endl;
+    return m_currentSevaModel;
 }

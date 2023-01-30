@@ -16,6 +16,7 @@ Rectangle {
     signal editDone();
     property int myHeight : 40
     property int fontPixelSize : 20
+    property int myWidth
 
 
     implicitWidth:300;implicitHeight:myHeight
@@ -34,9 +35,9 @@ Rectangle {
             font.pixelSize: fontPixelSize
             Layout.fillHeight: true
             Layout.fillWidth: true
-            Layout.preferredWidth: 100
+            Layout.preferredWidth: rootRect.myWidth*0.33
             Layout.preferredHeight: myHeight
-            Layout.minimumWidth: 150
+            Layout.minimumWidth: rootRect.myWidth*0.33
             Layout.minimumHeight: myHeight
             Layout.alignment: Qt.AlignBottom
             verticalAlignment: TextInput.AlignBottom
@@ -46,9 +47,9 @@ Rectangle {
             id :_tInput
             Layout.fillHeight: true
             Layout.fillWidth: true
-            Layout.preferredWidth: 200
+            Layout.preferredWidth: rootRect.myWidth - _label.width
             Layout.preferredHeight: myHeight
-            Layout.minimumWidth: 150
+            Layout.minimumWidth: rootRect.myWidth - _label.width
             Layout.minimumHeight: myHeight
             Layout.alignment: Qt.AlignRight
             Layout.rightMargin: 10
@@ -62,6 +63,8 @@ Rectangle {
     }
     function clearData(){
         _tInput.clearData();
+
+
     }
     onActiveFocusChanged: {
         console.log("focus changed")

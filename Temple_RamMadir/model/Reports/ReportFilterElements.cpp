@@ -132,3 +132,13 @@ void ReportFilterElements::setSYear(const QString &newSYear)
         return;
     m_sYear = newSYear;
 }
+
+int ReportFilterElements::iSelectedType() const
+{
+    return m_iSelectedType;
+}
+
+void ReportFilterElements::setISelectedType(int newISelectedType)
+{
+    m_iSelectedType = newISelectedType;
+}

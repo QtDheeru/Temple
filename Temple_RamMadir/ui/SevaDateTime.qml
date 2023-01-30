@@ -5,7 +5,7 @@ import QtQuick.Layouts 1.3
 
 Rectangle {
     id :_rootSevaDateTime
-    width: 200;
+    width: 250;
     property var styles : MyStyles{}
     height: styles.firstRowHeight;//150
     property int subComponentHeight : height/8
@@ -40,19 +40,19 @@ Rectangle {
         width: parent.width
         height: parent.height
         MyDateEntry{
-            id:r1;Layout.topMargin: _rootSevaDateTime.height/100
+            id:r1;
             myHeight:_rootSevaDateTime.subComponentHeight;
             fontPixelSize: _rootSevaDateTime.subComponentPixelSize
-            Layout.preferredWidth: parent.width
-            myWidth: _rootSevaDateTime.width/1.2
+            myWidth: parent.width/1.25
             _labelText:qsTr("Reciept Date")
+            showPopup: false
         }
         MyDateEntry{
             id:r2;
-            Layout.topMargin: _rootSevaDateTime.height/100
+
             myHeight:_rootSevaDateTime.subComponentHeight;
             fontPixelSize: _rootSevaDateTime.subComponentPixelSize
-            myWidth: _rootSevaDateTime.width/1.2
+            myWidth: parent.width/1.25
             _labelText:qsTr("Seva Date")
         }
         MyComboEntry{id:_momento;
@@ -64,6 +64,7 @@ Rectangle {
         }
         MyRowEntry {
             id:r4;_labelText :qsTr("Booked By")
+            myWidth: parent.width/1.25
             myHeight:_rootSevaDateTime.subComponentHeight;
             fontPixelSize: _rootSevaDateTime.subComponentPixelSize
         }

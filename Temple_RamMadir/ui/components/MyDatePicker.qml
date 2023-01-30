@@ -6,10 +6,11 @@ import QtQuick.Controls.Styles 1.4 as CalStyle
 
 Item {
     id : _rootDataPicker
-    property int myWidth: 200
+    property int myWidth: 300
     //height : parent.height
     property alias dateSelected : textDate.text
     property int fontPixelSize : 20
+    property  bool showPopup : true
     property int myheight:20
     signal dateChanged(var date)
     TextField {
@@ -39,12 +40,15 @@ Item {
             anchors.fill: parent
             source: "qrc:/ui/assets/Images/calender.jpeg"
         }
-        onClicked: calPopup.showCalendar(true)
+        onClicked:{
+            if(showPopup==true)
+            calPopup.showCalendar(true)
+        }
     }
     Popup{
         id: calPopup
         width: _rootDataPicker.width-_rootDataPicker.width/4
-        height: 350
+        height: 200
         visible: false
         Cal.Calendar{
             id: cal

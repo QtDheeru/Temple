@@ -9,6 +9,12 @@
 #include "AccountReportElement.h"
 #include "AccountReportModel.h"
 #include "ReportFilterElements.h"
+#include "BookingReportModel.h"
+#include "BookingReportElement.h"
+#include "AccountReportDateRangeModel.h"
+#include "AccountReportMonthWiseModel.h"
+#include "BookingReportDateRangeModel.h"
+#include"BookingReportMonthWiseModel.h"
 
 class SevaReport : public QObject
 {
@@ -17,9 +23,14 @@ public:
     explicit SevaReport(QObject *parent = nullptr);
     Q_PROPERTY(SevaDetailsOnDateModel* reportOnDateModel READ sevaOnDateModel NOTIFY ReportOnDateModelChanged)
     Q_PROPERTY(AccountReportModel* accReportModel READ accountreportModel NOTIFY AccReportModelChanged)
+    Q_PROPERTY(BookingReportModel* bookReportModel READ bookingReportModel NOTIFY bookReportModelChanged)
+    Q_PROPERTY(AccountReportDateRangeModel* accountReportDateRangeModel READ accountReportDateRangeModel NOTIFY AccReportDateRangeModelChanged)
+    Q_PROPERTY(AccountReportMonthWiseModel* accountReportMonthRangeModel READ accountReportMonthRangeModel NOTIFY AccReportMonthRangeModelChanged)
     Q_PROPERTY(ReportFilterElements* reportElements READ getReportElements  NOTIFY reportElementsChanged)
 
+     Q_PROPERTY(BookingReportDateRangeModel* bookingReportDateRangeModel READ bookingReportDateRangeModel NOTIFY BookingReportDateRangeModelChanged)
 
+  Q_PROPERTY(BookingReportMonthWiseModel* bookingReportMonthWiseModel READ bookingReportMonthWiseModel NOTIFY BookingReportMonthRangeModelChanged)
 
 
     void setSevaOnDateModel(SevaDetailsOnDateModel *newSevaOnDateModel);
@@ -34,10 +45,29 @@ public:
 
     ReportFilterElements* getReportElements() const;
 
+    BookingReportModel *bookingReportModel() const;
+
+    AccountReportDateRangeModel *accountReportDateRangeModel() const;
+    void setAccountReportDateRangeModel(AccountReportDateRangeModel *newAccountReportDateRangeModel);
+
+    AccountReportMonthWiseModel *accountReportMonthRangeModel() const;
+    void setAccountReportMonthRangeModel(AccountReportMonthWiseModel *newAccountReportMonthRangeModel);
+
+    BookingReportDateRangeModel *bookingReportDateRangeModel() const;
+    void setBookingReportDateRangeModel(BookingReportDateRangeModel *newBookingReportDateRangeModel);
+
+    BookingReportMonthWiseModel *bookingReportMonthWiseModel() const;
+    void setBookingReportMonthWiseModel(BookingReportMonthWiseModel *newBookingReportMonthWiseModel);
+
 private:
     SevaDetailsOnDateModel *m_sevaOnDateModel;
     AccountReportModel *m_accountreportModel;
+    BookingReportModel *m_bookingReportModel;
     ReportFilterElements *m_reportElements;
+    AccountReportDateRangeModel* m_accountReportDateRangeModel;
+    AccountReportMonthWiseModel* m_accountReportMonthRangeModel;
+    BookingReportDateRangeModel* m_bookingReportDateRangeModel;
+    BookingReportMonthWiseModel* m_bookingReportMonthWiseModel;
 
 
     // QList<SevaBookingElement*> m_sevaDetailsOnDate;
@@ -48,12 +78,35 @@ public slots:
 
     void onDateSelectedAccountModel(QString);
     void onDateRangeSelectedAccountModel(QString,QString);
+
     void generateAccReport(ReportFilterElements*);
+    void generateAccReportForEachDate(ReportFilterElements*);
+    void generateAccReportForEachDateForWholeMonth(ReportFilterElements*);
+    void generateAccReportForEachMonth(ReportFilterElements*);
+
+    void generateBookReport(ReportFilterElements*);
+    void generateBookingReportForEachDate(ReportFilterElements*);
+    void generateBookingReportForEachDateForWholeMonth(ReportFilterElements*);
+    void generateBookingReportForEachMonth(ReportFilterElements*);
+
+    void resetAccModel();
+    void resetAccDateRangeModel();
+    void resetAccMonthRangeModel();
+
+    void resetBookingModel();    
+    void resetBookingDateRangeModel();
+    void resetBookingMonthRangeModel();
 
 signals:
     void ReportOnDateModelChanged();
     void AccReportModelChanged();
     void reportElementsChanged();
+    void bookReportModelChanged();
+    void AccReportDateRangeModelChanged();
+    void AccReportMonthRangeModelChanged();
+
+    void BookingReportDateRangeModelChanged();
+    void BookingReportMonthRangeModelChanged();
 
 
 };

@@ -1,0 +1,25 @@
+{
+    "6482": {
+        "PANAKA KOSAMBARI  SAMPOORNA SEVE": {
+            "Number": 0,
+            "additionalCost": 0,
+            "count": 1,
+            "sevaCost": 0,
+            "sevaId": 54,
+            "sevaName": "PANAKA KOSAMBARI  SAMPOORNA SEVE",
+            "sevaTime": "08:00 AM",
+            "sevaType": 2,
+            "teerthaPrasada": 0
+        },
+        "address": "fdsa",
+        "bookedBy": "",
+        "devoteeName": "San",
+        "gothra": "Jamadagni",
+        "mobilenumber": "1111111111",
+        "momento": "Category-1",
+        "nakshtra": "Ashlesha",
+        "receiptDate": "19-08-2022",
+        "receiptNo": "6482",
+        "reference": ""
+    }
+}

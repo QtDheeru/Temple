@@ -14,7 +14,7 @@ Rectangle{
     property int sum :0
     property alias amout2Pay : _t1.text
     function addTotal(val,count=""){
-        if(val=="")
+        if(val==="")
             return;
         var value = parseInt(val);
         if(count.length ===0){

@@ -18,9 +18,9 @@
 #include <QPixmap>
 #include <QString>
 #include <QPainter>
-
+#include<QSqlQuery>
 #include "common.h"
-
+#include "./model/SevaName.h"
 class print_file : public QWidget
 {
     Q_OBJECT
@@ -38,7 +38,13 @@ public:
     int write2file(QString ,QString ,QString,QString ,float ,QString );
     void PrinterPreview();
     int printing_file(QList<Print_Detail*> *pd);
+    int printing_file(Print_VoucherDetail* pvd);
+    int printing_file(Print_BookingDetail* pbd);
+
     int prin2PixMap(QList<Print_Detail*> *pd);
+    int prin2PixMap(Print_VoucherDetail* pvd);
+    int prin2PixMap(Print_BookingDetail* pbd);
+
     int printing_file(QString , QString , QString , QString , QString , QString, QString, QString, int, QString, QString );
     QList<QString> *list_seva;
     QList<float> *list_cost;

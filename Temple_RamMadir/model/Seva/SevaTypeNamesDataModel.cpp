@@ -14,9 +14,9 @@ SevaTypeNamesDataModel* SevaTypeNamesDataModel::self()
 }
 
 SevaTypeNamesDataModel::SevaTypeNamesDataModel(QObject *parent) : QObject(parent)
-                       ,m_receiptGenerator(new SevaReceiptNumber)
-                       ,m_sevaBookingProgress(new MySevaBookingProgressViewModel)
-                       ,m_sevaBookingModel(new SevaBookingConformationDataModel)
+  ,m_receiptGenerator(new SevaReceiptNumber)
+  ,m_sevaBookingProgress(new MySevaBookingProgressViewModel)
+  ,m_sevaBookingModel(new SevaBookingConformationDataModel)
 {
     qDebug() << Q_FUNC_INFO << Qt::endl;
     QQmlEngine::setObjectOwnership(m_sevaBookingProgress, QQmlEngine::CppOwnership);
@@ -47,7 +47,16 @@ bool SevaTypeNamesDataModel::querySevaNames()
 QList<SevaName *> SevaTypeNamesDataModel::getSevaList(int sevaType)
 {
     qDebug() << Q_FUNC_INFO << " Seva Type =" << sevaType <<Qt::endl;
+    //    if(this->m_sevaNameDetails.value(sevaType)==)
+    //    {
+
+    //    }
     QMap<int, SevaName*> map = this->m_sevaNameDetails.value(sevaType);
+    if(map.empty())
+    {
+        m_sevaNameDetails.remove(sevaType);
+        m_sevaTypeDetails.remove(sevaType);
+    }
     qDebug() << Q_FUNC_INFO << " Sevas===== > " << m_sevaNameDetails.value(sevaType) << Qt::endl << map.values() <<Qt::endl;
     return map.values();
 }
@@ -92,16 +101,16 @@ bool SevaTypeNamesDataModel::printSevaDetails(int sevaType, int sevaId)
 bool SevaTypeNamesDataModel::addSevaOnly(SevaName *s)
 {
     qDebug() << Q_FUNC_INFO << "aaaaaa"<< Qt::endl;
-     if (this->m_sevaBookingModel->addSeva(s)){
-         qDebug() << Q_FUNC_INFO << "bbbbb"<< s->sevaCost() << s->sevaName()<<Qt::endl;
-         this->m_sevaBookingProgress->addSeva(s);
-         qDebug() << Q_FUNC_INFO << "cccccc"<< Qt::endl;
-         return true;
-     } else {
-         // seva already exist. Don't add anywhere
-         qDebug() << Q_FUNC_INFO << "ddddddd"<< Qt::endl;
-         return false;
-     }
+    if (this->m_sevaBookingModel->addSeva(s)){
+        qDebug() << Q_FUNC_INFO << "bbbbb"<< s->sevaCost() << s->sevaName()<<s->additionalCost()<<Qt::endl;
+        this->m_sevaBookingProgress->addSeva(s);
+        qDebug() << Q_FUNC_INFO << "cccccc"<< Qt::endl;
+        return true;
+    } else {
+        // seva already exist. Don't add anywhere
+        qDebug() << Q_FUNC_INFO << "ddddddd"<< Qt::endl;
+        return false;
+    }
 }
 
 bool SevaTypeNamesDataModel::deleteSeva(SevaName *s)
@@ -111,15 +120,20 @@ bool SevaTypeNamesDataModel::deleteSeva(SevaName *s)
     return b1||b2;
 }
 
+SevaBookingConformationDataModel *SevaTypeNamesDataModel::getSevaBookingConformationDataModel()
+{
+return m_sevaBookingModel;
+}
+
 QStringList SevaTypeNamesDataModel::getNakshatras()
 {
-   return DBInterface::getInstance()->qryNakshatras();
+    return DBInterface::getInstance()->qryNakshatras();
 }
 
 QStringList SevaTypeNamesDataModel::getGothras()
 {
-   qDebug() << Q_FUNC_INFO <<Qt::endl;
-   return DBInterface::getInstance()->qryGothras();
+    qDebug() << Q_FUNC_INFO <<Qt::endl;
+    return DBInterface::getInstance()->qryGothras();
 }
 
 QStringList SevaTypeNamesDataModel::getBankList()
@@ -135,7 +149,7 @@ QString SevaTypeNamesDataModel::getNextReceiptNumber()
 
 DevotePersnalDetails *SevaTypeNamesDataModel::searchMobile(QString mobile)
 {
-     return DBInterface::getInstance()->mobileNumberSearching(mobile);
+    return DBInterface::getInstance()->mobileNumberSearching(mobile);
 }
 
 void SevaTypeNamesDataModel::connectSignals() {
@@ -158,8 +172,8 @@ bool SevaTypeNamesDataModel::resetBookingProgressModel()
 
 bool SevaTypeNamesDataModel::printReceipt()
 {
-     m_sevaBookingModel->printReceipt();
-     return true;
+    m_sevaBookingModel->printReceipt();
+    return true;
 }
 
 bool SevaTypeNamesDataModel::saveReceiptDetails(QString recNumber, QString devName, QString mobNumber, QString nakshatra, QString gothra)

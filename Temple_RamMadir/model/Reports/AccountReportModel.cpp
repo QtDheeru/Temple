@@ -1,9 +1,17 @@
 #include "AccountReportModel.h"
 
 AccountReportModel::AccountReportModel(QObject *parent)
-    : QAbstractListModel(parent)
+    : QAbstractTableModel(parent)
 {
+    qDebug()<<Q_FUNC_INFO<<Qt::endl;
     m_iGrandTotal=0;
+      //  connect(DBInterface::getInstance(),&DBInterface::setGrandTotalToZero,
+       //         this,[&](){m_iGrandTotal = 0;});
+}
+
+AccountReportModel::~AccountReportModel()
+{
+    qDebug()<<Q_FUNC_INFO<<Qt::endl;
 }
 
 QVariant AccountReportModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -14,27 +22,44 @@ QVariant AccountReportModel::headerData(int section, Qt::Orientation orientation
 int AccountReportModel::rowCount(const QModelIndex &parent) const
 {
     qDebug()<<Q_FUNC_INFO<<m_accountReportQryList.size()<<Qt::endl;
+//    if(m_accountReportQryList.size()==0)
+//    {
+//        m_iGrandTotal=0;
+//    }
     return m_accountReportQryList.size();
+}
+
+int AccountReportModel::columnCount(const QModelIndex &parent) const
+{
+    return 4;
 }
 
 QVariant AccountReportModel::data(const QModelIndex &index, int role) const
 {
     int r = index.row();
+
     AccountReportElement *_da = m_accountReportQryList.at(r);
+    _da->setSlNo(r+1);
     switch (role) {
     case 1:{
-        qDebug()<<Q_FUNC_INFO<<_da->getSeva_name()<<Qt::endl;
-        return (QString::number( r+1 )+ " " +_da->getSeva_name());}
+        qDebug()<<Q_FUNC_INFO<<_da->slNo()<<Qt::endl;
+        return _da->slNo();}
     case 2:{
-        qDebug()<< Q_FUNC_INFO<<_da->getSeva_cost()<<Qt::endl;
-        return _da->getSeva_cost();}
+        qDebug()<<Q_FUNC_INFO<<_da->getSeva_name()<<Qt::endl;
+        return _da->getSeva_name();}
     case 3:{
+        qDebug()<< Q_FUNC_INFO<<_da->getSeva_cost()<<Qt::endl;
+        QString b;
+        // return b.setNum(_da->getSeva_cost())  + ".00 ?" ;}
+        return b.setNum(_da->getSeva_cost())  + ".00 " ;}
+    case 4:{
         qDebug()<<Q_FUNC_INFO<<_da->getSeva_ticket()<<Qt::endl;
         return _da->getSeva_ticket();}
-    case 4:{
+    case 5:{
         qDebug()<<Q_FUNC_INFO<<_da->getSeva_total()<<Qt::endl;
-
-        return _da->getSeva_total();}
+        QString c;
+        // return c.setNum(_da->getSeva_total())+ ".00 ?";}
+        return c.setNum(_da->getSeva_total())+ ".00 ";}
     }
     return "done";
 }
@@ -42,10 +67,12 @@ QVariant AccountReportModel::data(const QModelIndex &index, int role) const
 QHash<int, QByteArray> AccountReportModel::roleNames() const
 {
     QHash<int, QByteArray> roles;
-    roles[1] ="sevaName";
-    roles[2] = "cost";
-    roles[3] = "personCount";
-    roles[4] = "totalAmount";
+
+    roles[1] = "SlNo";
+    roles[2] ="sevaName";
+    roles[3] = "cost";
+    roles[4] = "personCount";
+    roles[5] = "totalAmount";
 
     return roles;
 }
@@ -63,7 +90,7 @@ void AccountReportModel::onDateRangeSelectedAccountModel(QString start, QString 
 
 bool AccountReportModel::insertSevaRow(AccountReportElement *elm)
 {
-    qDebug()<<Q_FUNC_INFO<<Qt::endl;
+    qDebug()<<Q_FUNC_INFO<<"------------"<<Qt::endl;
     beginInsertRows(QModelIndex(),m_accountReportQryList.size(),m_accountReportQryList.size());
     this->m_accountReportQryList.append(elm);
     endInsertRows();
@@ -80,19 +107,26 @@ void AccountReportModel::generateAccReport(ReportFilterElements *elm)
     m_accountReportQryList.clear();
     endResetModel();
     qDebug()<<Q_FUNC_INFO<<m_accountReportQryList.size()<<Qt::endl;
-    qDebug()<<Q_FUNC_INFO<<Qt::endl;
+    qDebug()<<Q_FUNC_INFO<<"elm date"<<elm->sSingleDate()<<Qt::endl;
+    qDebug()<<Q_FUNC_INFO<<"elm ddetails"<<elm->sSevaName()<<elm->iSevaType()<<Qt::endl;
 
-    if(elm->sSingleDate().compare("null") !=0)
+    if(elm->iSelectedType()==0)
     {
+        qDebug()<<Q_FUNC_INFO<<"Inside c date acc rep"<<Qt::endl;
         elm->setSSingleDate(FormatDate(elm->sSingleDate()));
-       // elm->setSSingleDate(FormatDate(elm->sSingleDate()));
+        qDebug()<<Q_FUNC_INFO<<"elm->setSSingleDate(FormatDate(elm->sSingleDate()))"<<elm->sSingleDate()<<Qt::endl;
+        // elm->setSSingleDate(FormatDate(elm->sSingleDate()));
         DBInterface::getInstance()->account_report_cdate_function(elm->sSevaName(),elm->iSevaType(),(elm->sSingleDate()));
     }
-    else
+    else if(elm->iSelectedType()==1)
     {
         elm->setSStartDate(FormatDate(elm->sStartDate()));
         elm->setSEndDate(FormatDate(elm->sEndDate()));
         DBInterface::getInstance()->account_report_dataRange_function(elm->sSevaName(),elm->iSevaType(),elm->sStartDate(),elm->sEndDate());
+    }
+    else
+    {
+        DBInterface::getInstance()->account_report_cmonth_function(elm->sSevaName(),elm->iSevaType(),elm->sMonth().toInt(),elm->sYear().toInt());
     }
 }
 
@@ -107,9 +141,20 @@ QString AccountReportModel::FormatDate(QString unformat)
     return format;
 }
 
+void AccountReportModel::resetAccModel()
+{
+    qDebug()<<Q_FUNC_INFO<<Qt::endl;
+    beginResetModel();
+    m_accountReportQryList.clear();
+    m_iGrandTotal = 0;
+    endResetModel();
+
+}
+
 int AccountReportModel::iGrandTotal() const
 {
-     qDebug()<<Q_FUNC_INFO<<m_iGrandTotal<<Qt::endl;
+    qDebug()<<Q_FUNC_INFO<<m_iGrandTotal<<Qt::endl;
+
     return m_iGrandTotal;
 }
 
@@ -117,7 +162,19 @@ void AccountReportModel::setIGrandTotal(int newIGrandTotal)
 {
     qDebug()<<Q_FUNC_INFO<<newIGrandTotal<<Qt::endl;
     m_iGrandTotal = newIGrandTotal;
-     emit grandTotalChanged();
+    emit grandTotalChanged();
+}
+
+int AccountReportModel::getAccountReportQryListSize()
+{
+    qDebug()<<Q_FUNC_INFO<<Qt::endl;
+    return m_accountReportQryList.size();
+}
+
+void AccountReportModel::setGrandTotalToZero()
+{
+     qDebug()<<Q_FUNC_INFO<<Qt::endl;
+     setIGrandTotal(0);
 }
 
 

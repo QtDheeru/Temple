@@ -48,6 +48,7 @@ public:
 
     bool printReceipt();
     bool deleteSeva(SevaName *s);
+    Q_INVOKABLE SevaBookingConformationDataModel* getSevaBookingConformationDataModel();
 
 public slots:
     bool processSevaTypes(SevaType *);

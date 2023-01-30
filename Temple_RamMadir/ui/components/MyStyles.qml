@@ -29,7 +29,7 @@ QtObject  {
 
     Component.onCompleted: {
         console.log("SingleTon is created. Screen density  == " + Screen.pixelDensity)
-        console.log("Screen screenWidth size ="+screenWidth)
-        console.log("Screen screenHeight size ="+screenHeight)
+        console.log("Screen screenWidth size ="+Screen.width)
+        console.log("Screen screenHeight size ="+(Screen.height-80))
     }
 }

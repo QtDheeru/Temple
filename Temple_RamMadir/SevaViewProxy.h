@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QDebug>
+#include <QDir>
 #include <QAbstractListModel>
 #include "./model/SevaListViewModel.h"
 #include "./model/SevaName.h"
@@ -11,7 +12,9 @@
 #include "AllViewReports.h"
 #include "SevaReport.h"
 #include "SevaReceiptCsvProcessor.h"
-#include <QDir>
+#include "SevaBookingTableModel.h"
+#include "SevaBookingSearchModel.h"
+//#include  ".\model\Print\common.h"
 
 class SevaTypeNamesDataModel;
 
@@ -21,6 +24,8 @@ class SevaViewProxy : public QObject
     Q_PROPERTY(QString receiptNumber READ getReceiptNumber NOTIFY receiptNumberChanged)
     Q_PROPERTY(SevaDetailsTableView* allReportModel READ getAllReportModel NOTIFY allReportModelChanged)
     Q_PROPERTY(SevaReport* sevaReport READ reportOnDateModel  NOTIFY sevaReportChanged)
+    Q_PROPERTY(SevaBookingSearchModel* sevaBSearchModel READ sevaBSearchModel NOTIFY sevaBookingSearchModelChanged)
+    Q_PROPERTY(SevaBookingTableModel* sevaBookingTV READ sevaBookingTV NOTIFY sevaBookingTVChanged)
 public:
     explicit SevaViewProxy(QObject *parent = nullptr);
     Q_INVOKABLE QAbstractItemModel* getSevaModel(int sevaType);
@@ -51,6 +56,8 @@ public:
 
     Q_INVOKABLE bool deleteSeva(int sevaId, QString sevaName);
     Q_INVOKABLE bool printReceipt();
+    Q_INVOKABLE bool printVoucherReceipt(VoucherElement* voucherElement);
+    Q_INVOKABLE bool printBookingReceipt(SevaBookingElement* sevaBookingElement);
     QString getReceiptNumber() const;
 
     Q_INVOKABLE DevotePersnalDetails* searchMobile(QString mobile);
@@ -62,9 +69,14 @@ public:
     Q_INVOKABLE void addNewSeva(int sevaID,QString sevaName, int cost);
     Q_INVOKABLE int getNextSevaId();
     Q_INVOKABLE void addNewSevaType(QString sevaTypeName,QString personName);
+    void print();
     Q_INVOKABLE QAbstractItemModel* getSevaModelForErrorHandling();
     SevaReport *reportOnDateModel() const;
     void setReportOnDateModel(SevaReport *newReportOnDateModel);
+
+    Q_INVOKABLE SevaTypeNamesDataModel * getSevaTypeNamesDataModel();
+    SevaBookingSearchModel *sevaBSearchModel() const;
+    SevaBookingTableModel *sevaBookingTV() const;
 
 public slots:
     Q_INVOKABLE void generateCSV();
@@ -73,6 +85,8 @@ signals:
     void receiptNumberChanged();
     void allReportModelChanged();
     void sevaReportChanged();
+    void sevaBookingSearchModelChanged();
+    void sevaBookingTVChanged();
 
 private :
     SevaTypeNamesDataModel *m_sevaBookingModelData;
@@ -82,6 +96,8 @@ private :
     AllViewReports *m_allView;
     QString m_receiptNumber;
     SevaReceiptCsvProcessor *m_csvReceipt;
+    SevaBookingTableModel *m_sevaBookingTV;
+    SevaBookingSearchModel *m_sevaBSearchModel;
 };
 
 #endif // SEVAVIEWPROXY_H

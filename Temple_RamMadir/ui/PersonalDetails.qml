@@ -6,7 +6,7 @@ import "./components"
 
 Rectangle {
     id : _r1
-    width: 200
+    width: 250
     height: styles.firstRowHeight;//150
     property int subComponentHeight : height/8
     property int subComponentPixelSize : styles.fontSize
@@ -15,6 +15,10 @@ Rectangle {
     property alias receiptNumber :_receipt._data
     property alias devoteeName : _name._data
     property alias mobileNo : _mobile._data
+
+    property alias devoteeNameEditable : _name._editable
+    property alias mobileNoEditable : _mobile._editable
+
     property alias nakshatra : _nakshatra._data
     property string gothra :  ((_gotra._enteredText == "")?_gotra._data:_gotra._enteredText)
     property bool  isDataExist : _receipt.isDataExist &&
@@ -69,6 +73,7 @@ else{
         MyRowEntry{
             id:_receipt;
             myHeight:_r1.subComponentHeight;
+            myWidth: parent.width/1.25
             fontPixelSize: _r1.subComponentPixelSize
             _labelText:qsTr("Reciept Number")
             _editable:false
@@ -77,6 +82,7 @@ else{
         MyRowEntry{
             id:_mobile;
             myHeight:_r1.subComponentHeight;
+            myWidth: parent.width/1.25
             fontPixelSize: _r1.subComponentPixelSize
             _labelText:qsTr("Mobile Number")
 
@@ -104,6 +110,7 @@ else{
 
         MyRowEntry{id:_name;
             myHeight:subComponentHeight;
+            myWidth: parent.width/1.25
             fontPixelSize: _r1.subComponentPixelSize
             _labelText:qsTr("Name");regExpValidator: RegExpValidator{regExp:/^[a-zA-Z ]*$/}
             focus: true

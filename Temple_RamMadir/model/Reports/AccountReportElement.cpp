@@ -46,3 +46,13 @@ void AccountReportElement::setSeva_total(float newSeva_total)
     seva_total = newSeva_total;
 }
 
+int AccountReportElement::slNo() const
+{
+    return m_slNo;
+}
+
+void AccountReportElement::setSlNo(int newSlNo)
+{
+    m_slNo = newSlNo;
+}
+

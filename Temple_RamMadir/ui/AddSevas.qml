@@ -76,12 +76,14 @@ Rectangle{
             MyRowEntry {
                 id:sevaNameID;_labelText :qsTr("Seva Name")
                 myHeight:_rootSevaDateTime.subComponentHeight;
+                myWidth: parent.width/1.25
                 fontPixelSize: _rootSevaDateTime.subComponentPixelSize
                 anchors.horizontalCenter: parent.horizontalCenter
             }
             MyRowEntry {
                 id:sevaCostID;_labelText :qsTr("Seva Cost")
                 myHeight:_rootSevaDateTime.subComponentHeight
+                myWidth: parent.width/1.25
                 fontPixelSize: _rootSevaDateTime.subComponentPixelSize
                 anchors.horizontalCenter: parent.horizontalCenter
             }

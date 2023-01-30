@@ -1,0 +1,36 @@
+{
+    "6499": {
+        "Nithya Archane": {
+            "Number": 538976353,
+            "additionalCost": 0,
+            "count": 1,
+            "sevaCost": 0,
+            "sevaId": 102,
+            "sevaName": "Nithya Archane",
+            "sevaTime": "08:00 AM",
+            "sevaType": 0,
+            "teerthaPrasada": 50
+        },
+        "SRI RAMA TARAKA HOMA SANKALPA": {
+            "Number": 0,
+            "additionalCost": 0,
+            "count": 1,
+            "sevaCost": 150,
+            "sevaId": 57,
+            "sevaName": "SRI RAMA TARAKA HOMA SANKALPA",
+            "sevaTime": "08:00 AM",
+            "sevaType": 2,
+            "teerthaPrasada": 0
+        },
+        "address": "fdsa",
+        "bookedBy": "",
+        "devoteeName": "Raj",
+        "gothra": "Vishnu Mardhana",
+        "mobilenumber": "9911223344",
+        "momento": "Category-1",
+        "nakshtra": "Swati",
+        "receiptDate": "14-09-2022",
+        "receiptNo": "6499",
+        "reference": ""
+    }
+}

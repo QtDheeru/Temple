@@ -24,7 +24,12 @@ Item {
 //    property string addressText3: " "
 //    property string addressText4: " "
 
-
+ //property string headerText1: "ಶ್ರೀ ದಿಗ್ವಿಜಯಮೂಲರಾಮೋ ವಿಜಯತೇ"
+    //property string headerText2: "ಶ್ರೀ ಜಗದ್ಗುರು ಶ್ರೀಮನ್ ಮಧ್ವಾಚಾರ್ಯ ಮೂಲಮಹಾ ಸಂಸ್ಥಾನ"
+    //property string addressText1: "ಚಾತುರ್ಮಾಸ ಮಹೋತ್ಸವ"
+    //property string addressText2: "ಸಂತೆಬಿದನೂರು ಹಿಂದೂಪುರ(ಮಂಡಲ)"
+   // property string addressText3: "ಸಂತೆಬಿದನೂರು ಹಿಂದೂಪುರ(ಮಂಡಲ)"
+   // property string addressText4: "ಸಂತೆಬಿದನೂರು ಹಿಂದೂಪುರ(ಮಂಡಲ)"
 
     readonly property string templePic: "file:" + confApp.appPath + "/" + confApp.loginImg
             //"qrc:/ui/assets/Images/TempleInviteSnap.jpeg"

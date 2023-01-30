@@ -16,6 +16,9 @@ Rectangle {
     property alias currentIndex :_tInput.currentIndex
     property alias   isEditable : _tInput.editable
     signal indexChanged(var i)
+    signal monthChanged(var mon)
+    signal yearChanged(var yr)
+    signal itemChanged(var j)
     //border.color: "yellow";border.width: 1
     color: "transparent"
     focus: true
@@ -26,30 +29,28 @@ Rectangle {
         spacing: myHeight/3
         Label{
             id : _label
-            //anchors.verticalCenter: parent.verticalCenter
-           // Layout.alignment: Qt.AlignVCenter
+
             text : "Mobile Number"
             color: "black"
             font.pixelSize: _root.fontPixelSize
             Layout.fillHeight: true
             Layout.fillWidth: true
-            Layout.preferredWidth: 100//_root.myWidth*0.33
+            Layout.preferredWidth: _root.myWidth*0.33
             Layout.preferredHeight: _root.myHeight
-            Layout.minimumWidth: 100//_root.myWidth*0.33
-            Layout.minimumHeight: 30
+            Layout.minimumWidth: _root.myWidth*0.33
+            Layout.minimumHeight: _root.myHeight
             Layout.alignment: Qt.AlignVCenter
             verticalAlignment: TextInput.AlignVCenter
             Layout.leftMargin: 10
         }
         ComboBox{
             id :_tInput
-            //Layout.fillHeight: true
-            //Layout.fillHeight: true
+
             Layout.fillWidth: true
-            Layout.preferredWidth: 100//_root.myWidth - _label.width
-            Layout.preferredHeight: myHeight
-            Layout.minimumWidth: 100//_root.myWidth - _label.width
-            Layout.minimumHeight: myHeight
+            Layout.preferredWidth: _root.myWidth - _label.width
+            Layout.preferredHeight: _root.myHeight
+            Layout.minimumWidth: _root.myWidth - _label.width
+            Layout.minimumHeight: _root.myHeight
             Layout.alignment:  Qt.AlignVCenter
             Layout.rightMargin: 10
             font.pixelSize: _root.fontPixelSize
@@ -61,11 +62,19 @@ Rectangle {
             onActivated:{
                 console.log(" Activated Index ="+index)
                 console.log("Selected Text ="+_tInput.textAt(index))
+                var currentItem = delegateModel.items.get(currentIndex)
+               indexChanged(currentItem)
+                monthChanged(currentIndex+1)
+                yearChanged(_tInput.textAt(currentIndex))
+                itemChanged(currentIndex)
             }
             onCurrentIndexChanged: {
 
                 var currentItem = delegateModel.items.get(currentIndex)
                indexChanged(currentItem)
+                monthChanged(currentIndex+1)
+                yearChanged(_tInput.textAt(currentIndex))
+                itemChanged(currentIndex)
             }
         }
     }

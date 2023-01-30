@@ -6,20 +6,23 @@ Dialog {
     title: "Information.."
     property alias text2Display : _t1.text
     width: 400;height: 250
-    standardButtons: Dialog.Ok
 
+    //   standardButtons: Dialog.Ok
+    //  standardButtons: anchors.centerIn
+    // DialogButtonBox.alignment: Qt.AlignCenter
+
+    closePolicy: Popup.NoAutoClose
     signal yesAction();
     signal noAction();
 
-    onAccepted: {
-        console.log("Ok clicked")
-        yesAction();
-    }
-    onRejected: {
-        console.log("Cancel clicked")
-        noAction();
-    }
-
+    //    onAccepted: {
+    //        console.log("Ok clicked")
+    //        yesAction();
+    //    }
+    //    onRejected: {
+    //        console.log("Cancel clicked")
+    //        noAction();
+    //    }
     modal: true
     background: Rectangle{
         anchors.fill: parent
@@ -49,6 +52,15 @@ Dialog {
             font.pixelSize: 25
         }
     }
+    footer: DialogButtonBox{
+        alignment: Qt.AlignCenter
+        standardButtons: DialogButtonBox.Ok
+        onAccepted: {
+            console.log("Ok clicked")
+            yesAction();
+        }
+    }
+
     x: (parent.width - width) / 2
     y: (parent.height - height) / 2
 }

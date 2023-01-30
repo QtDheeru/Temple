@@ -6,10 +6,10 @@
 class DevotePersnalDetails : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString devoteeName READ devoteeName)
-    Q_PROPERTY(QString mobileNumber READ mobileNumber)
-    Q_PROPERTY(QString gothra READ gothra)
-    Q_PROPERTY(QString nakshatra READ nakshatra)
+    Q_PROPERTY(QString devoteeName READ devoteeName WRITE setDevoteeName CONSTANT)
+    Q_PROPERTY(QString mobileNumber READ mobileNumber WRITE setMobileNumber CONSTANT)
+    Q_PROPERTY(QString gothra READ gothra WRITE setGothra CONSTANT)
+    Q_PROPERTY(QString nakshatra READ nakshatra WRITE setNakshatra CONSTANT)
 public:
     explicit DevotePersnalDetails(QObject *parent = nullptr);
 

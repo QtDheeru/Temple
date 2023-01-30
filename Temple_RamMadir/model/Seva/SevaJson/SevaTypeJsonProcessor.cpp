@@ -137,7 +137,7 @@ void SevaTypeJsonProcessor::readSevasFromJsonFormate()
     qDebug() << Q_FUNC_INFO <<Qt::endl;
     QString path = TrustListModel::getTrustListModelInstance()->getConfigLocation()+"/SevaNames.json";
     QFile file(path);
-    qDebug() << Q_FUNC_INFO <<Qt::endl;
+    qDebug() << Q_FUNC_INFO <<" path"<<path<<Qt::endl;
     //  int sevaId = 1000;
     if(!file.exists())
     {

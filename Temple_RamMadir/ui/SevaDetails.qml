@@ -10,6 +10,10 @@ Rectangle {
     property int subComponentHeight : height/7
     property int subComponentPixelSize : styles.fontSize
     color: "lightblue"
+    property alias isCountEditable : countID._editable
+    property alias isAddressEditable : r4._editable
+    property alias isAdditionalCostEditable : r5._editable
+
     property alias reference : r3._data
     property alias count: countID._data
     property alias address : r4._data
@@ -65,15 +69,18 @@ Rectangle {
         }
         MyRowEntry{id:r1;_labelText : qsTr("Seva Name")
             myHeight:_rootSevaDetails.subComponentHeight
+            myWidth: parent.width/1.25
             fontPixelSize: _rootSevaDetails.subComponentPixelSize
             _editable :false
         }
         MyRowEntry{id:r2;_labelText : qsTr("Seva Charges")
             myHeight:_rootSevaDetails.subComponentHeight
+            myWidth: parent.width/1.25
             fontPixelSize: _rootSevaDetails.subComponentPixelSize
             _editable :false; regExpValidator: RegExpValidator{regExp:/^[0-9]*$/} }
         MyRowEntry{id:r3;_labelText : qsTr("Reference ")
             myHeight:_rootSevaDetails.subComponentHeight
+            myWidth: parent.width/1.25
             fontPixelSize: _rootSevaDetails.subComponentPixelSize
 
             //            regExpValidator :RegExpValidator{regExp:/^[a-zA-Z ]*$/}}
@@ -81,20 +88,26 @@ Rectangle {
         MyRowEntry{id:countID;_labelText : qsTr("Count ")
             myHeight:_rootSevaDetails.subComponentHeight
             fontPixelSize: _rootSevaDetails.subComponentPixelSize
+            myWidth: parent.width/1.25
             visible: referenceVisbility ? false:true
             regExpValidator: RegExpValidator{regExp:/^[0-9]*$/}
             _data :"1"
+            _editable :true;
             //            regExpValidator :RegExpValidator{regExp:/^[a-zA-Z ]*$/}}
         }
         MyRowEntry{id:r4;_labelText : qsTr("Address ")
             myHeight:_rootSevaDetails.subComponentHeight
+            myWidth: parent.width/1.25
             fontPixelSize: _rootSevaDetails.subComponentPixelSize
+            _editable :true;
         }
         MyRowEntry{id:r5;_labelText : qsTr("Additional cost ")
             myHeight:_rootSevaDetails.subComponentHeight
             fontPixelSize: _rootSevaDetails.subComponentPixelSize
+            myWidth: parent.width/1.25
             regExpValidator: RegExpValidator{regExp:/^[0-9]*$/}
-             _data :"0"
+            _data :"0"
+            _editable :true;
         }
     }
 }

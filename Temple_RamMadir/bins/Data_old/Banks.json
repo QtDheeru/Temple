@@ -1,0 +1,26 @@
+{
+ "1": {
+		"BankName": "Sbi",
+		"Id": 1		
+	},
+ "2": {
+		"BankName": "Icici",
+		"Id": 2	
+	},
+  "3": {
+		"BankName":  "Hdfc",
+		"Id": 3		
+	},
+ "4": {
+		"BankName": "Canara",
+		"Id": 4		
+	},
+  "5": {
+		"BankName":  "Gpay",
+		"Id": 5		
+	},
+  "6": {
+		"BankName":   "PhonePe",
+		"Id": 6		
+	}
+}

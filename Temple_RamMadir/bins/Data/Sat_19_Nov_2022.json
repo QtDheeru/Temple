@@ -1,0 +1,59 @@
+{
+    "6509": {
+        "Nithya Archane": {
+            "Number": 0,
+            "additionalCost": 0,
+            "count": 1,
+            "sevaCost": 0,
+            "sevaId": 102,
+            "sevaName": "Nithya Archane",
+            "sevaTime": "08:00 AM",
+            "sevaType": 0,
+            "teerthaPrasada": 0
+        },
+        "address": "a",
+        "bookedBy": "",
+        "devoteeName": "San",
+        "gothra": "Jamadagni",
+        "mobilenumber": "1111111111",
+        "momento": "Category-1",
+        "nakshtra": "Ashlesha",
+        "receiptDate": "19-11-2022",
+        "receiptNo": "6509",
+        "reference": ""
+    },
+    "6510": {
+        "Noothana Vastra Seva": {
+            "Number": 1953524069,
+            "additionalCost": 0,
+            "count": 1,
+            "sevaCost": 4000,
+            "sevaId": 2005,
+            "sevaName": "Noothana Vastra Seva",
+            "sevaTime": "08:00 AM",
+            "sevaType": 2000,
+            "teerthaPrasada": 50
+        },
+        "Sarva seva": {
+            "Number": 0,
+            "additionalCost": 0,
+            "count": 1,
+            "sevaCost": 2501,
+            "sevaId": 2006,
+            "sevaName": "Sarva seva",
+            "sevaTime": "08:00 AM",
+            "sevaType": 2000,
+            "teerthaPrasada": 0
+        },
+        "address": "a",
+        "bookedBy": "",
+        "devoteeName": "aa",
+        "gothra": "Kashyapa",
+        "mobilenumber": "4995499469",
+        "momento": "Category-1",
+        "nakshtra": "Ashwini",
+        "receiptDate": "19-11-2022",
+        "receiptNo": "6510",
+        "reference": ""
+    }
+}

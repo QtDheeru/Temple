@@ -1,0 +1,59 @@
+{
+    "6522": {
+        "Nithya Archane": {
+            "Number": 0,
+            "additionalCost": 0,
+            "count": 1,
+            "sevaCost": 0,
+            "sevaId": 102,
+            "sevaName": "Nithya Archane",
+            "sevaTime": "08:00 AM",
+            "sevaType": 0,
+            "teerthaPrasada": 0
+        },
+        "address": "a",
+        "bookedBy": "",
+        "devoteeName": "Sanq",
+        "gothra": "Jamadagni",
+        "mobilenumber": "1111111111",
+        "momento": "Category-1",
+        "nakshtra": "Ashlesha",
+        "receiptDate": "04-01-2023",
+        "receiptNo": "6522",
+        "reference": ""
+    },
+    "6523": {
+        "PANAKA KOSAMBARI SANKLAPA SEVE": {
+            "Number": 538976353,
+            "additionalCost": 0,
+            "count": 1,
+            "sevaCost": 300,
+            "sevaId": 55,
+            "sevaName": "PANAKA KOSAMBARI SANKLAPA SEVE",
+            "sevaTime": "08:00 AM",
+            "sevaType": 2,
+            "teerthaPrasada": 51
+        },
+        "SITA RAMA KALYANOTSVA": {
+            "Number": 538976353,
+            "additionalCost": 0,
+            "count": 1,
+            "sevaCost": 6000,
+            "sevaId": 58,
+            "sevaName": "SITA RAMA KALYANOTSVA",
+            "sevaTime": "08:00 AM",
+            "sevaType": 2,
+            "teerthaPrasada": 51
+        },
+        "address": "a",
+        "bookedBy": "",
+        "devoteeName": "Sanq",
+        "gothra": "Jamadagni",
+        "mobilenumber": "1111111111",
+        "momento": "Category-1",
+        "nakshtra": "Ashlesha",
+        "receiptDate": "04-01-2023",
+        "receiptNo": "6523",
+        "reference": ""
+    }
+}

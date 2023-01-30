@@ -3,8 +3,10 @@ import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.3
 import QtQuick.Window 2.12
 import Utils 1.0
+import QtQuick.Controls 1.4
 import "./components"
-
+import SevaTypeNamesDataModel 1.0
+import SevaBookingConformationDataModel 1.0
 Rectangle{
     id : root
     property var styles : MyStyles{}
@@ -18,20 +20,17 @@ Rectangle{
     //    modal: true
     //    closePolicy: Popup.CloseOnEscape
     signal loadMenuPage()
-    focus: true
+    //signal nextReceipt();
+    //    focus: true
     property string sevaname
     property string sevatype
     property string sevaid
     property var sevaObject
-  
-    signal errorOccur(string errorMsg);
-   
 
     onSevaTypeChanged: {
         console.log(" Popup - Seva Type ="+sevaType)
         _sevaListView.sevaType = sevaType;
     }
-
     Rectangle {
         id : r1
         width: parent.width
@@ -68,14 +67,14 @@ Rectangle{
                     SevaDateTime{id:_sevaDate;Layout.fillWidth: true
                         KeyNavigation.tab: _sevaD}
                 }
-//                RowLayout{
-//                    //Layout.fillHeight: true
-//                    visible: false
-//                    Layout.fillWidth: true
-//                    Layout.topMargin: root.height/100
-//                    Layout.rightMargin: root.height/100
-//                    //SevaDetails{id:_sevaD;Layout.fillWidth: true}
-//                }
+                //                RowLayout{
+                //                    //Layout.fillHeight: true
+                //                    visible: false
+                //                    Layout.fillWidth: true
+                //                    Layout.topMargin: root.height/100
+                //                    Layout.rightMargin: root.height/100
+                //                    //SevaDetails{id:_sevaD;Layout.fillWidth: true}
+                //                }
                 RowLayout{
                     //Layout.fillHeight: true
                     Layout.fillWidth: true
@@ -96,6 +95,7 @@ Rectangle{
                         Layout.rightMargin: 1
                         enablePaymentButton: _personal.isDataExist &&
                                              _sevaD.isDataExist && (_personal.mobileNo.length==10)
+
                         onEnablePaymentButtonChanged: {
                             enableControls(true)
                             console.log(" ******* Enabled Button changed......."+enablePaymentButton)
@@ -121,7 +121,7 @@ Rectangle{
             if(sevaObject === null)
             {
                 console.log("Inside if of seva object")
-                errorOccur("seva not found")
+                //errorOccur("seva not found")
             }
             _sevaD.setSevaDetails(sevaObject)
             _personal.setGothras(sevaProxy.getGothras());
@@ -135,7 +135,7 @@ Rectangle{
             if(sevaObject === null)
             {
                 console.log("Inside if of seva object")
-                errorOccur("seva not found")
+                // errorOccur("seva not found")
             }
             _sevaD.setSevaDetails(sevaObject)
             console.log("seva name  = " + sevaObject.sevaName + " Seva cost = " + sevaObject.sevaCost)
@@ -165,7 +165,16 @@ Rectangle{
         onRejected: {
             resetBaseScreen
         }
+        //        onNextReceip: {
+        //            console.log("onNextReceip..")
+        //            root.clearData();
+        //            //root.resetNextControls(false);
+        //            _sevaContoller.startNextBooking();
+        //            _sevaListView.selectFirstSeva();
+        //        }
+
     }
+
     function resetBaseScreen(){
         r1.opacity = 1;
     }
@@ -184,6 +193,7 @@ Rectangle{
 
     Connections{
         target: _sevaContoller
+        //    target: _ld.item
         function onStartPayment(){
             console.log(" Payment started ")
             if (_sevaP.sevaCount==0){
@@ -196,6 +206,7 @@ Rectangle{
             _paymentDialog.amount2Pay = _sevaPriceSummary.amout2Pay
             r1.opacity = 0.3;
             _paymentDialog.open();
+            // _paymentDialog.b = true;
         }
         function onAddMoreSeva(){
             console.log(" Add more seva")
@@ -207,8 +218,12 @@ Rectangle{
             console.log(" Clear Receipt Data")
             clearData();
         }
+
+
         function onShowAllData(){
             console.log("Show all Data")
+            //            progressBar.visible = true;
+            //            progressBar.opacity = 0.1;
             var b = sevaProxy.showAllData();
             if(b===false)
             {
@@ -216,8 +231,19 @@ Rectangle{
             }
 
             //_ld.source = "SevaBookedDetailView.qml";
+            _ld.source = "SevaAllViewPage.qml"
+            //            while(_ld.status===Loader.Loading)
+            //            {
+            //                console.log("Show all Data  while(_ld.status===Loader.Loading)")
+            //                progressBar.visible = true;
+            //                progressBar.opacity = 0.1;
+            //                pb.value = _ld.progress*10
+            //                console.log(pb.value);
+            //            }
         }
+
         function onNextReceipt() {
+            console.log("In onNextReceipt of sbv")
             root.clearData();
             //root.resetNextControls(false);
             _sevaContoller.startNextBooking();
@@ -229,9 +255,20 @@ Rectangle{
             if(_sevaContoller.state === "paymentComplete")
             {
                 _personal.enabled = false
-//                _sevaContoller.nextButtonFocus = true
-//                root.focus = true
+                //                _sevaContoller.nextButtonFocus = true
+                //                root.focus = true
                 r1.forceActiveFocus();
+                //nextReceipt();
+                //               _sevaD.isCountEditable =  false;
+                //                _sevaD.isAddressEditable = false;
+                //                _sevaD.isAdditionalCostEditable = false;
+                //                _personal.devoteeNameEditable = true //ch
+                //        _personal.mobileNoEditable = true  //ch
+                root.clearData();
+                //root.resetNextControls(false);
+                _sevaContoller.startNextBooking();
+                _sevaListView.selectFirstSeva();
+
             }else
                 _personal.enabled = true
         }
@@ -275,7 +312,13 @@ Rectangle{
     function clearData(){
         console.log(" Data is getting cleared")
         _personal.clearData()
+        //        _personal.devoteeNameEditable = true //ch
+        //        _personal.mobileNoEditable = true  //ch
         _sevaD.clearData();
+        _sevaD.isCountEditable =  true;
+        _sevaD.isAddressEditable = true;
+        _sevaD.isAdditionalCostEditable = true;
+
         _sevaDate.clearData();
         _sevaP.clearData();
         _sevaPriceSummary.clearData();
@@ -324,6 +367,7 @@ Rectangle{
 
     Keys.onEscapePressed: {
         console.log("Esc pressed in select seva type view")
+        //forcFocuseActive();
         loadMenuPage()
     }
     SevaReceipt{
@@ -332,6 +376,20 @@ Rectangle{
     Loader{
         id : _ld
         anchors.fill: parent
+        Connections{
+            target: _ld.item
+            function onLoadSevaBookingView()
+            {
+                console.log(" In onLoadSevaBookingView")
+                _ld.source = "SevaBookingView.qml"
+            }
+            function onLoadMenuPage()
+            {
+                console.log(" In onLoadMenuPage")
+                //_ld.source = "SevaBookingView.qml"
+                loadMenuPage();
+            }
+        }
     }
 
     function printSevaObject(){
@@ -383,11 +441,37 @@ Rectangle{
             console.log("In connections of on error occur of seva booking view")
             //    errorMessage = errorMsg;
             _errorDialog.showError(errorMsg);
-
         }
     }
+    //    Connections{
 
+    //        target: _paymentDialog
+    //        function onNextReceip()
+    //        {
+    //            console.log("onNextReceip..")
+    //            root.clearData();
+    //            //root.resetNextControls(false);
+    //            _sevaContoller.startNextBooking();
+    //            _sevaListView.selectFirstSeva();
+    //        }
+    //    }
+    //    Popup{
+    //        id:popap
+    //    ProgressBar{
+    //        id:pb
+    //        anchors.centerIn: parent
+    //        opacity: parent.opacity
+    //        visible: false
+    //        minimumValue: 1
+    //        maximumValue: 100
+    //        //value:
+    //    }
+    //  }
     Component.onCompleted: {
         console.log("Component.onCompleted: of seva booking view")
+        forceActiveFocus()
+        //        sevaProxy.getBookedView().resetModel();
+        //        sevaProxy.getSevaTypeNamesDataModel().getSevaBookingConformationDataModel().reset();
+        //  _sevaContoller.enablePaymentButton = false
     }
 }

@@ -7,6 +7,7 @@ Rectangle {
     implicitWidth:300;
     implicitHeight:myHeight
     property int myWidth :300
+    property  bool showPopup : true
     property int myHeight : 40
     property int fontPixelSize : 20
     property alias _labelText : _label.text
@@ -38,6 +39,7 @@ Rectangle {
         MyDatePicker{
             id :_tInput
             Layout.fillHeight: true
+        showPopup: _rootDateEntry.showPopup
             Layout.fillWidth: true
             Layout.preferredWidth: _rootDateEntry.myWidth - _label.width
             Layout.preferredHeight: _rootDateEntry.myHeight

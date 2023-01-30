@@ -219,8 +219,12 @@ bool SevaBookingConformationDataModel::deleteSeva(SevaName *s)
 
 bool SevaBookingConformationDataModel::reset()
 {
+    qDebug() << Q_FUNC_INFO << " 7777777777" <<m_sevabookinglist.size()<<Qt::endl;
     //this->m_sevaReceipt
     this->m_sevabookinglist.clear();
+    qDebug() << Q_FUNC_INFO << " 7777777777" <<m_sevabookinglist.size()<<Qt::endl;
+    beginResetModel();
+    endResetModel();
     return true;
 }
 

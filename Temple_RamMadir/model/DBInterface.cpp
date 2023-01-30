@@ -40,7 +40,7 @@ DBInterface::DBInterface(QObject *parent) : QObject(parent)
     db.setDatabaseName(currentPath);
 
     bool ok = db.open();
-
+    qDebug()<<Q_FUNC_INFO<<"******************* DB"<<currentPath<<endl;
     QSqlQuery qry;
     if(ok)
     {
@@ -124,7 +124,11 @@ DBInterface::DBInterface(QObject *parent) : QObject(parent)
                      "COST,"
                      "QUANTITY,"
                      "TOTAL_COST,"
-                     "DATES);";
+                     "DATES,"
+                     "VOUCHER_TYPE,"
+                     "REFERENCE_NO,"
+                     "S_MONTH,"
+                     "S_YEAR);";
 
     qry.prepare(query);
     qry.prepare(query1);
@@ -138,6 +142,7 @@ DBInterface::DBInterface(QObject *parent) : QObject(parent)
     m_proc = new SevaTypeJsonProcessor;
     readSevaTypesFromJson();
     readSevaNamesFromJson();
+
 }
 
 void DBInterface::add_seva_type(QString seva_type, int seva_code,QString seva_adder_name)
@@ -551,7 +556,7 @@ bool DBInterface::insertSevaBooked(QString devoteMobile, QString devoteName, QSt
 
     QSqlQuery qry;
     qry.prepare("INSERT INTO sevabooking(SNO,PERSONID,SEVATYPE,SEVANAME,QUANTITY,S_DATE,S_MONTH,S_YEAR,SEVA_DATE,R_DATE,R_MONTH,R_YEAR,RECEIPT_DATE,SEVACOST,ADDITIONALCOST,SEVATOTALPRICE, NOTE, CASH, BANK, BANKDETAILS, REFERENCE, ADDRESS, MOMENTO)"
-                    "VALUES (:sno, :person_id, :sevatype, :sevaname, :quantity, :s_date, :s_month, :s_year, :seva_date, :r_date, :r_month,:r_year, :receipt_date, :seva_cost, :additionalcost, :sevatotalprice, :note, :cash, :bank, :bankdetails, :reference, :address, :momento)");
+                "VALUES (:sno, :person_id, :sevatype, :sevaname, :quantity, :s_date, :s_month, :s_year, :seva_date, :r_date, :r_month,:r_year, :receipt_date, :seva_cost, :additionalcost, :sevatotalprice, :note, :cash, :bank, :bankdetails, :reference, :address, :momento)");
     qry.bindValue(":sno",rspt_no);
     qry.bindValue(":person_id",personId);
     qry.bindValue(":sevatype",sevaType );
@@ -582,6 +587,42 @@ bool DBInterface::insertSevaBooked(QString devoteMobile, QString devoteName, QSt
     }
     qDebug()<<Q_FUNC_INFO<<"  exiting...\n";
     return true;
+}
+
+void DBInterface::insertVoucherIssued(VoucherElement *ele)
+{
+    QDate sevaDate = QDate::fromString(ele->voucherDate());
+
+    //    int smonth = sevaDate.month();
+    //    int syear = sevaDate.year();
+    QList<QString> li = ele->voucherDate().split("-");
+    int smonth = li.at(1).toInt();
+    int syear =li.at(0).toInt();
+    qDebug()<<Q_FUNC_INFO<<ele->voucherDate()<<Qt::endl;
+    qDebug()<<Q_FUNC_INFO<<"hereee"<<sevaDate<<Qt::endl;
+    qDebug()<<Q_FUNC_INFO<<smonth<<Qt::endl;
+    qDebug()<<Q_FUNC_INFO<<syear<<Qt::endl;
+    QSqlQuery qry;
+    qry.prepare("INSERT INTO VOUCHER_DETAILS(V_NO,NAME,PAYMENT_MODE,NOTE,PHONE,PRODUCT,COST,DATES,VOUCHER_TYPE,REFERENCE_NO,S_MONTH,S_YEAR)"
+                "VALUES (:vno, :name, :payment_mode, :note, :phone, :product, :cost, :dates, :voucher_type, :reference_no, :s_month,:s_year)");
+    qry.bindValue(":vno",ele->voucherNo());
+    qry.bindValue(":name",ele->voucherName());
+    qry.bindValue(":payment_mode",ele->voucherPaymentMode());
+    qry.bindValue(":note",ele->voucherNote());
+    qry.bindValue(":phone",ele->mobileNo());
+    qry.bindValue(":product",ele->voucherItem());
+    qry.bindValue(":cost",ele->voucherCost());
+    qry.bindValue(":dates", ele->voucherDate());
+    //qry.bindValue(":dates", sevaDate);
+    qry.bindValue(":voucher_type", ele->voucherType());
+    qry.bindValue(":reference_no",ele->PaymentReference());
+    qry.bindValue(":s_month",smonth);
+    qry.bindValue(":s_year",syear);
+    bool retVal = qry.exec();
+    if (!retVal){
+        qDebug() << Q_FUNC_INFO << " Query Failed " << qry.lastError().text() <<Qt::endl;
+    }
+    qDebug()<<Q_FUNC_INFO<<"  exiting...\n";
 }
 
 int DBInterface::insertPersonDetails(QString devoteMobile,QString devoteName,QString devoteNakshatra,QString devoteGotra)
@@ -678,6 +719,26 @@ int DBInterface::getLastReceiptNumber()
     }
     qDebug() << Q_FUNC_INFO << " Size = " << qry.size() << " receiptNo ID = "<<receiptNo << " Value = " << qry.value(0) << Qt::endl;
     return receiptNo;
+}
+
+int DBInterface::getLastVoucherNumber()
+{
+    qDebug() << Q_FUNC_INFO <<Qt::endl;
+    //QString lastRecord = "select * from sevabooking ORDER BY SNO ASC LIMIT 1";
+    QString lastRecord = "select V_NO from VOUCHER_DETAILS";
+
+    int voucherNo=-1;
+    QSqlQuery qry;
+    //qry.prepare(lastRecord);
+    qry.exec(lastRecord);
+
+    while(qry.next()){
+
+        voucherNo = qry.value(0).toInt();
+
+    }
+    qDebug() << voucherNo<< Qt::endl;
+    return voucherNo+1;
 }
 
 void DBInterface::to_persondetails_db(QString devoteMobile,QString devoteName,QString devoteNakshatra,QString devoteGotra,QString devoteSevacharge,QString devoteAdditionalcharges,QString devoteCount,QString devotereceiptdate,QString devoteSevadate,QString devoteNote)
@@ -1139,29 +1200,50 @@ DevotePersnalDetails* DBInterface::getPersonDetails(QString person_id)
 bool DBInterface::saveData(QObject *obj)
 {
     qDebug() << Q_FUNC_INFO << " Inserting the data into DB"<<Qt::endl;
-     bool b = false;
+    bool b = false;
     SevaBookingConformationDataModel *sevaData = qobject_cast<SevaBookingConformationDataModel*>(obj);
     MySevaReceipt *rec = sevaData->sevaReceipt();
     qDebug() << Q_FUNC_INFO << " ****8888 NOte =" << rec->note() <<Qt::endl;
     qDebug() << Q_FUNC_INFO << rec->gothra() << Qt::endl;
+   // to Test ---------
+    QSqlQuery qry;
+    QString que;
+    que = ("select * from sevabooking where sevabooking.SNO = '%1';");
+
+    que = que.arg(rec->receiptNo());
+    qry.prepare(que);
+    qry.exec();
+
+    if(qry.next())
+    {
+         qDebug() << Q_FUNC_INFO <<  "Add ####Inside if ######## =" << Qt::endl;
+//        l_sevaname=qry.value(1).toString();
+//        sevacost=qry.value(3).toInt();
+//        if(sevaname==l_sevaname)
+//        {
+//            emit sevadetails(l_sevaname,sevacost);
+//        }
+        return false;
+    }
+      // to Test --------
     QList<SevaName*> sevas = sevaData->sevabookinglist();
     Q_ASSERT(sevaData != nullptr);
     for(int i=0;i<sevas.size();i++){
         SevaName *seva = sevas.at(i);
         qDebug() << Q_FUNC_INFO <<  "Add ############ ="<< seva->additionalCost() << Qt::endl;
-     b =   this->insertSevaBooked(rec->mobilenumber(),rec->devoteeName(),
-                               rec->nakshtra(),rec->gothra(),
-                               QString::number(seva->sevaCost()),QString::number(seva->additionalCost()),
-                               QString::number(seva->count()),rec->receiptDate(),
-                               seva->sevaDate(),rec->note(),
-                               seva->sevaName(),(seva->sevaCost()*seva->count())+seva->additionalCost(),
-                               rec->receiptNo().toInt(),rec->cash(),
-                               rec->bank(),rec->checkOrTranscationId(),
-                               QString("%1").arg(seva->sevaType()),
-                               rec->reference(),rec->address(),rec->momento());
-       qDebug() << Q_FUNC_INFO << " Inserting the data in for loop into DB b is "<<b<<Qt::endl;
+        b =   this->insertSevaBooked(rec->mobilenumber(),rec->devoteeName(),
+                                     rec->nakshtra(),rec->gothra(),
+                                     QString::number(seva->sevaCost()),QString::number(seva->additionalCost()),
+                                     QString::number(seva->count()),rec->receiptDate(),
+                                     seva->sevaDate(),rec->note(),
+                                     seva->sevaName(),(seva->sevaCost()*seva->count())+seva->additionalCost(),
+                                     rec->receiptNo().toInt(),rec->cash(),
+                                     rec->bank(),rec->checkOrTranscationId(),
+                                     QString("%1").arg(seva->sevaType()),
+                                     rec->reference(),rec->address(),rec->momento());
+        qDebug() << Q_FUNC_INFO << " Inserting the data in for loop into DB b is "<<b<<Qt::endl;
     }
-     qDebug() << Q_FUNC_INFO << " Inserting the data into DB b is "<<b<<Qt::endl;
+    qDebug() << Q_FUNC_INFO << " Inserting the data into DB b is "<<b<<Qt::endl;
     return b;
 }
 
@@ -1467,79 +1549,166 @@ void DBInterface::receipt_no_printing()
 void DBInterface::booking_report_cdate_function(QString formatchangedcalendar_str, QString SEVA, int TYPE)
 {
     total_prasada=0;
-    QList<QString> list_sevaname,list_sevadate,list_pname,list_gotra,list_nakshatra,list_mobile,list_note;
-    QList<int> list_prasada,list_quantity,list_ticket;
-    QList<float> list_cost,list_total;
+    //    QList<QString> list_sevaname,list_sevadate,list_pname,list_gotra,list_nakshatra,list_mobile,list_note;
+    //    QList<int> list_prasada,list_quantity,list_ticket;
+    //    QList<float> list_cost,list_total;
+    QList<QString> listOfSevaNames;
+    QList<int> listOfPrasada;
+    QList<int> listOfSevaType;
 
     qDebug()<<"\nChanged format is: "<<formatchangedcalendar_str<<Qt::endl;
-
+    QSqlQuery query_other1;
     QString que;
     if(TYPE==0) {
-        que = ("select PERSONID,SEVANAME,QUANTITY,SEVA_DATE,SEVATOTALPRICE,NOTE from sevabooking where sevabooking.SEVA_DATE='%1';");
+        qDebug()<<"In type 0: "<<Qt::endl;
+        que = ("select persondetails.PERSONNAME,persondetails.GOTHRA,persondetails.NAKSHATRA,sevabooking.SEVANAME,persondetails.MOBILE,NOTE,sevabooking.SEVATYPE from sevabooking,persondetails where sevabooking.PERSONID = persondetails.SNO and sevabooking.RECEIPT_DATE='%1';");
         que = que.arg(formatchangedcalendar_str);
+        //            que = ("select persondetails.PERSONNAME,persondetails.GOTHRA,persondetails.NAKSHATRA,sevabooking.SEVANAME,sevaname.THEERTHAPRASADA,persondetails.MOBILE,NOTE from sevabooking,persondetails,sevaname where sevabooking.PERSONID = persondetails.SNO and sevabooking.RECEIPT_DATE='%1' group by sevabooking.SEVANAME;");
+        //    select persondetails.PERSONNAME,persondetails.GOTHRA,persondetails.NAKSHATRA,sevabooking.SEVANAME,persondetails.MOBILE,NOTE from sevabooking,persondetails where sevabooking.PERSONID = persondetails.SNO and sevabooking.RECEIPT_DATE='2022-12-15'
     }
     else if (SEVA==ALLSEVANAME) {
-        que = ("select PERSONID,SEVANAME,QUANTITY,SEVA_DATE,SEVATOTALPRICE,NOTE from sevabooking where sevabooking.SEVA_DATE='%1' and sevabooking.SEVATYPE='%2'; ");
+        que = ("select persondetails.PERSONNAME,persondetails.GOTHRA,persondetails.NAKSHATRA,sevabooking.SEVANAME,persondetails.MOBILE,NOTE,sevabooking.SEVATYPE from sevabooking,persondetails where sevabooking.PERSONID = persondetails.SNO and sevabooking.RECEIPT_DATE='%1' and sevabooking.SEVATYPE='%2'; ");
         que = que.arg(formatchangedcalendar_str).arg(TYPE);
+        // select PERSONID,SEVANAME,QUANTITY,SEVA_DATE,SEVATOTALPRICE,NOTE from sevabooking where sevabooking.SEVA_DATE='%1' and sevabooking.SEVATYPE='%2';
+        //  select persondetails.PERSONNAME,persondetails.GOTHRA,persondetails.NAKSHATRA,sevabooking.SEVANAME,persondetails.MOBILE,NOTE,sevabooking.SEVATYPE from sevabooking,persondetails where sevabooking.PERSONID = persondetails.SNO and sevabooking.RECEIPT_DATE='%1';
     }
     else {
-
-        que = ("select PERSONID,SEVANAME,QUANTITY,SEVA_DATE,SEVATOTALPRICE,NOTE from sevabooking where sevabooking.SEVA_DATE='%1' and sevabooking.SEVATYPE='%2' and sevabooking.SEVANAME = '%3'; ");
+        // que = ("select persondetails.PERSONNAME,persondetails.GOTHRA,persondetails.NAKSHATRA,sevabooking.SEVANAME,persondetails.MOBILE,NOTE,sevabooking.SEVATYPE from sevabooking,persondetails where sevabooking.PERSONID = persondetails.SNO and sevabooking.RECEIPT_DATE='%1' and sevabooking.SEVATYPE='%2' and sevabooking.SEVANAME = '%3'; ");
+        que = ("sevabooking.SEVA_DATE='%1' and sevabooking.SEVATYPE='%2' and sevabooking.SEVANAME = '%3'; ");
         que = que.arg(formatchangedcalendar_str).arg(TYPE).arg(SEVA);
+        // select persondetails.PERSONNAME,persondetails.GOTHRA,persondetails.NAKSHATRA,sevabooking.SEVANAME,persondetails.MOBILE,NOTE,sevabooking.SEVATYPE from sevabooking,persondetails where sevabooking.PERSONID = persondetails.SNO and sevabooking.RECEIPT_DATE='%1';
     }
 
     qDebug() << " Query string =" << que <<Qt::endl;
-    QSqlQuery query_other1;
-    query_other1.prepare(que);
-    query_other1.exec();
 
-    QSqlQuery query;
+    bool b1= query_other1.prepare(que);
+    qDebug() << " Query string =111111111111111111111" << query_other1.lastError() <<Qt::endl;
+    bool b = query_other1.exec();
+    qDebug() << " Query string =" <<b <<Qt::endl;
+    qDebug() << " Query prepared successfully =" <<b1 <<Qt::endl;
+    qDebug() << " Query string =111111111111111111111" << query_other1.lastError() <<Qt::endl;
+    //  QSqlQuery query;
+    //    while(query_other1.next())
+    //    {
+    //        qDebug() << " Query string inside while = Book rep" << que <<Qt::endl;
+    //        BookingReportElement *elm = new BookingReportElement;
+    //        personid = query_other1.value(0).toString();
+    //        elm->setSevaName(query_other1.value(1).toString());
+    //        list_sevaname.append(p_sevaname);
+    //        quantity = query_other1.value(2).toInt();
+    //        list_quantity.append(quantity);
+    //        query.prepare("SELECT * FROM sevaname");
+    //        query.exec();
+    //        while(query.next())
+    //        {
+    //            QString val = query.value(1).toString();
+    //            qDebug()<<"Seva name in db "<<val<<Qt::endl;
+    //            qDebug()<<"Seva name11 in db "<<elm->sevaName()<<Qt::endl;
+    //            if(val == elm->sevaName())//regular seva at 1st index in combo
+    //            {
+    //                elm->setTeerthaPrasada( query.value(6).toInt());
+    //                qDebug()<<"teethaPrasada in db "<<query.value(6).toInt()<<Qt::endl;
+    //                list_prasada.append(prasada);
+    //            }
+    //        }
+    //        prasada =prasada*quantity;
+    //        yy_date=QDate::fromString(query_other1.value(3).toString(),"yyyy-MM-dd");//cost
+    //        qDebug()<<"DD-MM-YYYY is "<<yy_date<<Qt::endl;
+    //        sevadate = yy_date.toString("dd-MM-yyyy") ;
+    //        list_sevadate.append(sevadate);
+    //        elm->setNote(query_other1.value(5).toString());//total
+    //        list_note.append(note);
+    //        QSqlQuery query_other2;//person details
+    //        query_other2.prepare("SELECT * FROM  persondetails");
+    //        query_other2.exec();
+    //        while(query_other2.next())
+    //        {
+    //            QString p_id = query_other2.value(0).toString();
+    //            if(personid==p_id){
+    //                elm->setName(query_other2.value(1).toString());
+    //                elm->setGothra(query_other2.value(2).toString());
+    //                elm->setNakshatra(query_other2.value(3).toString());
+    //                elm->setMobileNumber(query_other2.value(5).toString());
+    //                list_pname.append(p_name);
+    //                list_gotra.append(p_gotra);
+    //                list_nakshatra.append(p_nakshtra);
+    //                list_mobile.append(p_mobile);
+    //            }
+    //        }
+    //        total_prasada=total_prasada+prasada;
+    //        emit booking_report(elm);
+    //    }
+    //emit booking_report(list_sevaname,list_quantity,list_prasada,list_sevadate,list_note,list_pname,list_gotra,list_nakshatra,list_mobile);
+    qDebug() << " Query string =2222222222222" << que <<Qt::endl;
     while(query_other1.next())
     {
-        personid = query_other1.value(0).toString();
-        p_sevaname = query_other1.value(1).toString();
-        list_sevaname.append(p_sevaname);
-        quantity = query_other1.value(2).toInt();
-        list_quantity.append(quantity);
-        query.prepare("SELECT * FROM sevaname");
-        query.exec();
-        while(query.next())
-        {
-            QString val = query.value(1).toString();
-            if(val == p_sevaname)//regular seva at 1st index in combo
-            {
-                prasada = query.value(6).toInt();
-                list_prasada.append(prasada);
-            }
-        }
-        prasada =prasada*quantity;
-        yy_date=QDate::fromString(query_other1.value(3).toString(),"yyyy-MM-dd");//cost
-        qDebug()<<"DD-MM-YYYY is "<<yy_date<<Qt::endl;
-        sevadate = yy_date.toString("dd-MM-yyyy") ;
-        list_sevadate.append(sevadate);
-        note=query_other1.value(5).toString();//total
-        list_note.append(note);
-        QSqlQuery query_other2;//person details
-        query_other2.prepare("SELECT * FROM  persondetails");
-        query_other2.exec();
-        while(query_other2.next())
-        {
-            QString p_id = query_other2.value(0).toString();
-            if(personid==p_id){
-                p_name=query_other2.value(1).toString();
-                p_gotra=query_other2.value(2).toString();
-                p_nakshtra=query_other2.value(3).toString();
-                p_mobile=query_other2.value(5).toString();
-                list_pname.append(p_name);
-                list_gotra.append(p_gotra);
-                list_nakshatra.append(p_nakshtra);
-                list_mobile.append(p_mobile);
-            }
-        }
-        total_prasada=total_prasada+prasada;
+        qDebug() << " Query string inside 1st while = book rep" << que <<Qt::endl;
+        // ele->setSevaName(query_other1.value(3).toString());
+        listOfSevaNames.append(query_other1.value(3).toString());
+        qDebug() << "999999999999999999999999" << query_other1.value(3).toString() <<Qt::endl;
+        listOfSevaType.append(query_other1.value(6).toInt());
+        qDebug() << "88888888888888888888888888" << query_other1.value(7).toInt() <<Qt::endl;
     }
-    emit booking_report(list_sevaname,list_quantity,list_prasada,list_sevadate,list_note,list_pname,list_gotra,list_nakshatra,list_mobile);
+    QSqlQuery query_other2;
+    int i = 0;
+    QString qu;
+    while(i<listOfSevaNames.size())
+    {
+        qDebug() << "query while/**********" <<Qt::endl;
+        qu = ("select sevaname.THEERTHAPRASADA from sevaname where SEVANAME = '%1' and SEVATYPE = '%2';");
+        qDebug() << "query while/******1****" <<Qt::endl;
 
+        qu = qu.arg(listOfSevaNames.at(i)).arg(listOfSevaType.at(i));
+        qDebug() << "query while/*****2*****" <<Qt::endl;
+
+        bool b1 =   query_other2.prepare(qu);
+        qDebug() << "query while/*****3*****" <<b1<<Qt::endl;
+
+        bool b2 =   query_other2.exec();
+        qDebug() << "query while/*****4*****" <<b2<<qu<<Qt::endl;
+        if(query_other2.next())
+        {
+            qDebug() << "query ifeee/*****5*****" <<Qt::endl;
+            listOfPrasada.append(query_other2.value(0).toInt());
+        }
+        //        else{
+        //             listOfPrasada.append(-1);
+        //        }
+        qDebug() << "query while/*****5*****" <<Qt::endl;
+
+        i++;
+    }
+    i=0;
+    bool b5= query_other1.prepare(que);
+    qDebug() << " Query string =@@@@@@@@@@@@@" << query_other1.lastError() <<Qt::endl;
+    bool b6 = query_other1.exec();
+    while(query_other1.next())
+    {
+        qDebug() << " Query string inside 2nd while = book rep" << que <<Qt::endl;
+        BookingReportElement *ele = new BookingReportElement;
+        ele->setName(query_other1.value(0).toString());
+        ele->setGothra(query_other1.value(1).toString());
+        ele->setNakshatra(query_other1.value(2).toString());
+        ele->setSevaName(query_other1.value(3).toString());
+        //   listOfSevaNames.append(ele->sevaName());
+        ele->setTeerthaPrasada(listOfPrasada.at(i));
+        ele->setMobileNumber(query_other1.value(4).toString());
+        ele->setNote(query_other1.value(5).toString());
+        //        ele->setTeerthaPrasada(0);
+        qDebug() << " kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk" <<Qt::endl;
+
+        qDebug() << query_other1.value(0).toString()<<Qt::endl;
+        qDebug() << query_other1.value(1).toString()<<Qt::endl;
+        qDebug() << query_other1.value(2).toString()<<Qt::endl;
+        qDebug() << query_other1.value(3).toString()<<Qt::endl;
+        qDebug() << query_other1.value(4).toString()<<Qt::endl;
+        qDebug() << query_other1.value(5).toString()<<Qt::endl;
+        qDebug() << query_other1.value(6).toString()<<Qt::endl;
+        qDebug() <<"before emitting signal  booking_report ''''''''"<<endl;
+        emit booking_report(ele);
+        qDebug() <<"after emitting signal  booking_report ''''''''"<<endl;
+        i++;
+    }
 }
 
 void DBInterface::booking_report_cmonth_function(QString SEVA,int TYPE,int month,int year)
@@ -1571,8 +1740,9 @@ void DBInterface::booking_report_cmonth_function(QString SEVA,int TYPE,int month
 
     while(query_other1.next())
     {
+        BookingReportElement *elm = new BookingReportElement;
         personid = query_other1.value(0).toString();
-        p_sevaname = query_other1.value(1).toString();
+        elm->setSevaName( query_other1.value(1).toString());
         list_sevaname.append(p_sevaname);
         quantity = query_other1.value(2).toInt();
         list_quantity.append(quantity);
@@ -1581,9 +1751,9 @@ void DBInterface::booking_report_cmonth_function(QString SEVA,int TYPE,int month
         while(query.next())
         {
             QString val = query.value(1).toString();
-            if(val == p_sevaname)//regular seva at 1st index in combo
+            if(val == elm->sevaName())//regular seva at 1st index in combo
             {
-                prasada = query.value(6).toInt();
+                elm->setTeerthaPrasada( query.value(6).toInt());
                 list_prasada.append(prasada);
             }
         }
@@ -1592,7 +1762,7 @@ void DBInterface::booking_report_cmonth_function(QString SEVA,int TYPE,int month
         qDebug()<<"DD-MM-YYYY is "<<yy_date<<Qt::endl;
         sevadate = yy_date.toString("dd-MM-yyyy") ;
         list_sevadate.append(sevadate);
-        note=query_other1.value(5).toString();//total
+        elm->setNote(query_other1.value(5).toString());//total
         list_note.append(note);
 
         QSqlQuery query_other2;//person details
@@ -1602,10 +1772,10 @@ void DBInterface::booking_report_cmonth_function(QString SEVA,int TYPE,int month
         {
             QString p_id = query_other2.value(0).toString();
             if(personid==p_id){
-                p_name=query_other2.value(1).toString();
-                p_gotra=query_other2.value(2).toString();
-                p_nakshtra=query_other2.value(3).toString();
-                p_mobile=query_other2.value(5).toString();
+                elm->setName(query_other2.value(1).toString());
+                elm->setGothra(query_other2.value(2).toString());
+                elm->setNakshatra(query_other2.value(3).toString());
+                elm->setMobileNumber(query_other2.value(5).toString());
                 list_pname.append(p_name);
                 list_gotra.append(p_gotra);
                 list_nakshatra.append(p_nakshtra);
@@ -1614,10 +1784,98 @@ void DBInterface::booking_report_cmonth_function(QString SEVA,int TYPE,int month
         }
 
         total_prasada=total_prasada+prasada;
+        emit booking_report(elm);
     }
 
-    emit booking_report(list_sevaname,list_quantity,list_prasada,list_sevadate,list_note,list_pname,list_gotra,list_nakshatra,list_mobile);
+    //emit booking_report(list_sevaname,list_quantity,list_prasada,list_sevadate,list_note,list_pname,list_gotra,list_nakshatra,list_mobile);
 
+}
+
+void DBInterface::booking_report_eachDateDataRangeForMonth_function(QString SEVA,int TYPE ,int S_MONTH,int S_YEAR)
+{
+    qDebug() <<Q_FUNC_INFO<<Qt::endl;
+    QList<QString> list_name;
+    QList<int> list_ticket;
+    QList<float> list_cost,list_total;
+    QSqlQuery query_other1;
+    QString readstr;
+    if(TYPE == 0)
+    {
+        readstr = ("select RECEIPT_DATE,sum(QUANTITY) from sevabooking where sevabooking.S_YEAR ='%1' and sevabooking.S_MONTH ='%2' Group by sevabooking.RECEIPT_DATE;" );
+        readstr  = readstr.arg(S_YEAR).arg(S_MONTH);
+    }
+    else if (SEVA==ALLSEVANAME) {
+        readstr = ("select RECEIPT_DATE,sum(QUANTITY) from sevabooking where sevabooking.S_YEAR ='%1' and sevabooking.S_MONTH ='%2' and sevabooking.SEVATYPE = '%3' Group by sevabooking.RECEIPT_DATE;" );
+        readstr  = readstr.arg(S_YEAR).arg(S_MONTH).arg(TYPE);
+    }
+    else {
+        readstr = ("select RECEIPT_DATE,sum(QUANTITY) from sevabooking where sevabooking.S_YEAR ='%1' and sevabooking.S_MONTH ='%2' and sevabooking.SEVATYPE = '%3' and sevabooking.SEVANAME = '%4' Group by sevabooking.RECEIPT_DATE;" );
+        readstr  = readstr.arg(S_YEAR).arg(S_MONTH).arg(TYPE).arg(SEVA);
+    }
+    qDebug() << " Query string =" << readstr <<Qt::endl;
+    query_other1.prepare(readstr);
+    query_other1.exec();
+    while(query_other1.next())
+    {
+        qDebug() << "In while of db ***************************" << readstr <<Qt::endl;
+        BookingReportDateRangeElement *ele = new   BookingReportDateRangeElement;
+        QQmlEngine::setObjectOwnership(ele, QQmlEngine::CppOwnership);
+
+        ele->setDate( query_other1.value(0).toString());
+        qDebug() << "In while of db ********query_other1.value(0).toString()*******************" << query_other1.value(0).toString() <<Qt::endl;
+        ele->setTotalSevaCount( query_other1.value(1).toInt());
+        qDebug() << "In while of db **********query_other1.value(1).toInt()*****************" << query_other1.value(1).toInt() <<Qt::endl;
+
+        emit booking_report_Date_Range(ele);
+
+    }
+}
+
+void DBInterface::booking_report_eachMonth_function(QString SEVA, int TYPE, int month, int year)
+{
+    qDebug() <<Q_FUNC_INFO<<Qt::endl;
+//    QList<QString> list_name;
+//    QList<int> list_ticket;
+//    QList<float> list_cost,list_total;
+  //  int sum=0;
+    QSqlQuery query_other1;
+    QString que;
+    if(TYPE == 0) {
+        qDebug()<<"+__________________________________1___++++++++++________________"<<month;
+
+        que = ("select S_Month,sum(QUANTITY) from sevabooking where sevabooking.S_YEAR='%2' Group by sevabooking.S_MONTH; ");
+        que = que.arg(year);
+    }
+    else if (SEVA==ALLSEVANAME)
+    {
+
+        que = ("select S_Month,sum(QUANTITY) from sevabooking where sevabooking.S_YEAR ='%2' and sevabooking.SEVATYPE = '%3' Group by sevabooking.S_MONTH; ");
+        que = que.arg(month).arg(year).arg(TYPE);
+        qDebug()<<"+________________________________2_____++++++++++________________"<<month;
+
+    }
+    else {
+        que = ("select S_Month,sum(QUANTITY) from sevabooking where sevabooking.S_YEAR ='%2' and sevabooking.SEVATYPE = '%3' and sevabooking.SEVANAME = '%4'  Group by sevabooking.S_MONTH");
+        qDebug() <<month<<"&&&&&&&&&&&"<<year<<"&&&&&&&&&&&&&&&&&&&"<<TYPE<<"&&&&&&&&&&&&&&&&&&&"<<SEVA<<Qt::endl;
+        que = que.arg(month).arg(year).arg(TYPE).arg(SEVA);
+    }
+    qDebug() << " Query string =" << que <<Qt::endl;
+    query_other1.prepare(que);
+    query_other1.exec();
+    while(query_other1.next())
+    {
+        qDebug() << "In while of db ***************************"  <<Qt::endl;
+        BookingReportMonthRangeElement *ele = new   BookingReportMonthRangeElement;
+        QQmlEngine::setObjectOwnership(ele, QQmlEngine::CppOwnership);
+        ele->setMonth( query_other1.value(0).toString());
+        qDebug() << "In while of db ********query_other1.value(0).toString()*******************" << query_other1.value(0).toString() <<Qt::endl;
+        ele->setTotalSevaCount( query_other1.value(1).toInt());
+        qDebug() << "In while of db **********query_other1.value(1).toInt()*****************" << query_other1.value(1).toInt() <<Qt::endl;
+//        ele->setTotalAmount(query_other1.value(2).toFloat());
+//        qDebug() << "In while of db **************query_other1.value(2).toFloat()*************" << query_other1.value(2).toFloat() <<Qt::endl;
+        emit booking_report_Month_Range(ele);
+    }
+    //select S_Month,sum(QUANTITY),sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking wher
 }
 
 void DBInterface::booking_report_dataRange_function(QString SEVA,int TYPE,QString seva_Startdate,QString seva_Enddate)
@@ -1651,8 +1909,9 @@ void DBInterface::booking_report_dataRange_function(QString SEVA,int TYPE,QStrin
     QSqlQuery query;
     while(query_other1.next())
     {
+        BookingReportElement *elm = new BookingReportElement;
         personid = query_other1.value(0).toString();
-        p_sevaname = query_other1.value(1).toString();
+        elm->setSevaName( query_other1.value(1).toString());
         list_sevaname.append(p_sevaname);
         quantity = query_other1.value(2).toInt();
         list_quantity.append(quantity);
@@ -1661,9 +1920,9 @@ void DBInterface::booking_report_dataRange_function(QString SEVA,int TYPE,QStrin
         while(query.next())
         {
             QString val = query.value(1).toString();
-            if(val == p_sevaname)//regular seva at 1st index in combo
+            if(val == elm->sevaName())//regular seva at 1st index in combo
             {
-                prasada = query.value(6).toInt();
+                elm->setTeerthaPrasada( query.value(6).toInt());
                 list_prasada.append(prasada);
             }
         }
@@ -1673,7 +1932,7 @@ void DBInterface::booking_report_dataRange_function(QString SEVA,int TYPE,QStrin
         qDebug()<<"DD-MM-YYYY is "<<yy_date<<Qt::endl;
         sevadate = yy_date.toString("dd-MM-yyyy") ;
         list_sevadate.append(sevadate);
-        note=query_other1.value(5).toString();//total
+        elm->setNote(query_other1.value(5).toString());//total
         list_note.append(note);
 
         QSqlQuery query_other2;//person details
@@ -1683,10 +1942,10 @@ void DBInterface::booking_report_dataRange_function(QString SEVA,int TYPE,QStrin
         {
             QString p_id = query_other2.value(0).toString();
             if(personid==p_id){
-                p_name=query_other2.value(1).toString();
-                p_gotra=query_other2.value(2).toString();
-                p_nakshtra=query_other2.value(3).toString();
-                p_mobile=query_other2.value(5).toString();
+                elm->setName(query_other2.value(1).toString());
+                elm->setGothra(query_other2.value(2).toString());
+                elm->setNakshatra(query_other2.value(3).toString());
+                elm->setMobileNumber(query_other2.value(5).toString());
                 list_pname.append(p_name);
                 list_gotra.append(p_gotra);
                 list_nakshatra.append(p_nakshtra);
@@ -1694,18 +1953,59 @@ void DBInterface::booking_report_dataRange_function(QString SEVA,int TYPE,QStrin
             }
         }
         total_prasada=total_prasada+prasada;
+        emit booking_report(elm);
     }
-    emit booking_report(list_sevaname,list_quantity,list_prasada,list_sevadate,list_note,list_pname,list_gotra,list_nakshatra,list_mobile);
+    //emit booking_report(list_sevaname,list_quantity,list_prasada,list_sevadate,list_note,list_pname,list_gotra,list_nakshatra,list_mobile);
+}
+
+void DBInterface::booking_report_eachDateDataRange_function(QString SEVA,int TYPE ,QString seva_Startdate,QString seva_Enddate)
+{
+    qDebug() <<Q_FUNC_INFO<<Qt::endl;
+    QList<QString> list_name;
+    QList<int> list_ticket;
+    QList<float> list_cost,list_total;
+    QSqlQuery query_other1;
+    QString readstr;
+    if(TYPE == 0)
+    {
+        readstr = ("select RECEIPT_DATE,sum(QUANTITY) from sevabooking where sevabooking.RECEIPT_DATE between '%1' and '%2' Group by sevabooking.RECEIPT_DATE;" );
+        readstr  = readstr.arg(seva_Startdate).arg(seva_Enddate);
+    }
+    else if (SEVA==ALLSEVANAME) {
+        readstr = ("select RECEIPT_DATE,sum(QUANTITY) from sevabooking where sevabooking.RECEIPT_DATE between '%1' and '%2' and sevabooking.SEVATYPE = '%3' Group by sevabooking.RECEIPT_DATE;" );
+        readstr  = readstr.arg(seva_Startdate).arg(seva_Enddate).arg(TYPE);
+    }
+    else {
+        readstr = ("select RECEIPT_DATE,sum(QUANTITY) from sevabooking where sevabooking.RECEIPT_DATE between '%1' and '%2' and sevabooking.SEVATYPE = '%3' and sevabooking.SEVANAME = '%4' Group by sevabooking.RECEIPT_DATE;" );
+        readstr  = readstr.arg(seva_Startdate).arg(seva_Enddate).arg(TYPE).arg(SEVA);
+    }
+    qDebug() << " Query string =" << readstr <<Qt::endl;
+    query_other1.prepare(readstr);
+    query_other1.exec();
+    while(query_other1.next())
+    {
+        qDebug() << "In while of db ***************************" << readstr <<Qt::endl;
+        BookingReportDateRangeElement *ele = new   BookingReportDateRangeElement;
+        QQmlEngine::setObjectOwnership(ele, QQmlEngine::CppOwnership);
+
+        ele->setDate( query_other1.value(0).toString());
+        qDebug() << "In while of db ********query_other1.value(0).toString()*******************" << query_other1.value(0).toString() <<Qt::endl;
+        ele->setTotalSevaCount( query_other1.value(1).toInt());
+        qDebug() << "In while of db **********query_other1.value(1).toInt()*****************" << query_other1.value(1).toInt() <<Qt::endl;
+
+        emit booking_report_Date_Range(ele);
+
+    }
 }
 
 DBInterface::~DBInterface()
 {
-
+    qDebug() <<Q_FUNC_INFO<<Qt::endl;
 }
 
 void DBInterface::account_report_cdate_function(QString SEVA,int TYPE,QString formatchangedcalendar_str)
 {
-    qDebug()<<formatchangedcalendar_str<<"^^^^^^^^^^^^^^^^^^^^^^^^^^"<<Qt::endl;
+    qDebug()<<formatchangedcalendar_str<<"^^^^^^^^^^^^^^^^^^^^^^^^^^ "<<SEVA<< "  "<<TYPE<<Qt::endl;
     QList<QString> list_name;
     QList<int> list_ticket;
     QList<float> list_cost,list_total;
@@ -1713,26 +2013,33 @@ void DBInterface::account_report_cdate_function(QString SEVA,int TYPE,QString fo
     QString que1;
     AccountReportElement ele;
     if(TYPE==0) {
-        que1 = ("select SEVANAME,sum(QUANTITY),SEVACOST,sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where sevabooking.RECEIPT_DATE='%1' Group by sevabooking.SEVANAME");
+        qDebug() <<"First"<<Qt::endl;
+        que1 = ("select SEVANAME,sum(QUANTITY),SEVACOST,sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where sevabooking.RECEIPT_DATE='%1' Group by sevabooking.SEVANAME; ");
         que1 = que1.arg(formatchangedcalendar_str);
 
     }
     else if (SEVA==ALLSEVANAME) {
+        qDebug() <<"Second"<<Qt::endl;
         que1 = ("select SEVANAME,sum(QUANTITY),SEVACOST,sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where sevabooking.RECEIPT_DATE='%1' and sevabooking.SEVATYPE='%2' Group by sevabooking.SEVANAME; ");
         que1 = que1.arg(formatchangedcalendar_str).arg(TYPE);
     }
     else {
-
+        qDebug() <<"Third"<<Qt::endl;
         que1 = ("select SEVANAME,sum(QUANTITY),SEVACOST,sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where sevabooking.RECEIPT_DATE='%1' and sevabooking.SEVATYPE='%2' and sevabooking.SEVANAME = '%3' Group by sevabooking.SEVANAME; ");
         que1 = que1.arg(formatchangedcalendar_str).arg(TYPE).arg(SEVA);
     }
 
     qDebug() << " Query string =" << que1 <<Qt::endl;
     query_other1.prepare(que1);
-    query_other1.exec();
-
+    bool b =  query_other1.exec();
+    qDebug() << " Query string Acc rep" << b <<Qt::endl;
+    //    if(!(query_other1.next()))
+    //    {
+    //        emit setGrandTotalToZero();
+    //    }
     while(query_other1.next())
     {
+        qDebug() << " Query string inside while = Acc rep" << que1 <<Qt::endl;
         AccountReportElement *ele = new AccountReportElement;
         ele->setSeva_name( query_other1.value(0).toString());
         ele->setSeva_ticket( query_other1.value(1).toInt());
@@ -1742,8 +2049,9 @@ void DBInterface::account_report_cdate_function(QString SEVA,int TYPE,QString fo
         qDebug() << query_other1.value(1).toString()<<endl;
         qDebug() << query_other1.value(2).toString()<<endl;
         qDebug() << query_other1.value(3).toString()<<endl;
+        qDebug() <<"before emitting signal  account_report ''''''''"<<endl;
         emit account_report(ele);
-
+        qDebug() <<"after emitting signal  account_report ''''''''"<<endl;
     }
 
 
@@ -1760,6 +2068,7 @@ void DBInterface::account_report_cmonth_function(QString SEVA,int TYPE,int month
     QString que;
     if(TYPE == 0) {
         que = ("select SEVANAME,sum(QUANTITY),SEVACOST,sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where sevabooking.R_MONTH='%1' and sevabooking.R_YEAR='%2' Group by sevabooking.SEVANAME; ");
+        //    que = ("select SEVANAME,sum(QUANTITY),SEVACOST,sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where sevabooking.R_MONTH='%1' and sevabooking.R_YEAR='%2' Group by sevabooking.SEVANAME; ");
         que = que.arg(month).arg(year);
     }
     else if (SEVA==ALLSEVANAME)
@@ -1788,6 +2097,263 @@ void DBInterface::account_report_cmonth_function(QString SEVA,int TYPE,int month
         emit account_report(ele);
     }
 
+}
+
+void DBInterface::account_report_eachMonth_function(QString SEVA,int TYPE,int month,int year)
+{
+
+    QList<QString> list_name;
+    QList<int> list_ticket;
+    QList<float> list_cost,list_total;
+    int sum=0;
+    QSqlQuery query_other1;
+    QString que;
+    if(TYPE == 0) {
+        qDebug()<<"+__________________________________1___++++++++++________________"<<month;
+
+        que = ("select S_Month,sum(QUANTITY),sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where sevabooking.S_YEAR='%2' Group by sevabooking.S_MONTH; ");
+        que = que.arg(year);
+    }
+    else if (SEVA==ALLSEVANAME)
+    {
+
+        que = ("select S_Month,sum(QUANTITY),sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where sevabooking.S_YEAR ='%2' and sevabooking.SEVATYPE = '%3' Group by sevabooking.S_MONTH; ");
+        que = que.arg(month).arg(year).arg(TYPE);
+        qDebug()<<"+________________________________2_____++++++++++________________"<<month;
+
+    }
+    else {
+        que = ("select S_Month,sum(QUANTITY),sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where sevabooking.S_YEAR ='%2' and sevabooking.SEVATYPE = '%3' and sevabooking.SEVANAME = '%4'  Group by sevabooking.S_MONTH");
+        qDebug() <<month<<"&&&&&&&&&&&"<<year<<"&&&&&&&&&&&&&&&&&&&"<<TYPE<<"&&&&&&&&&&&&&&&&&&&"<<SEVA<<Qt::endl;
+        que = que.arg(month).arg(year).arg(TYPE).arg(SEVA);
+    }
+    qDebug() << " Query string =" << que <<Qt::endl;
+    query_other1.prepare(que);
+    query_other1.exec();
+    while(query_other1.next())
+    {
+        qDebug() << "In while of db ***************************"  <<Qt::endl;
+        AccountReportMonthRangeElement *ele = new   AccountReportMonthRangeElement;
+        QQmlEngine::setObjectOwnership(ele, QQmlEngine::CppOwnership);
+        ele->setMonth( query_other1.value(0).toString());
+        qDebug() << "In while of db ********query_other1.value(0).toString()*******************" << query_other1.value(0).toString() <<Qt::endl;
+        ele->setTotalSevaCount( query_other1.value(1).toInt());
+        qDebug() << "In while of db **********query_other1.value(1).toInt()*****************" << query_other1.value(1).toInt() <<Qt::endl;
+        ele->setTotalAmount(query_other1.value(2).toFloat());
+        qDebug() << "In while of db **************query_other1.value(2).toFloat()*************" << query_other1.value(2).toFloat() <<Qt::endl;
+        emit account_report_Month_Range(ele);
+    }
+    //select S_Month,sum(QUANTITY),sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where sevabooking.S_YEAR = '2022' Group by sevabooking.S_MONTH;
+}
+
+void DBInterface::voucher_report_cdate_function(QString formatchangedcalendar_str, QString voucher_type , QString payment_mode)
+{
+    qDebug()<<Q_FUNC_INFO<<Qt::endl;
+    qDebug()<< formatchangedcalendar_str<<"1111111"<<Qt::endl;
+    qDebug()<<voucher_type<<"222222"<<Qt::endl;
+    qDebug()<<payment_mode<<"333333"<<Qt::endl;
+    QSqlQuery query_other1;
+    QString que1;
+    if(voucher_type =="ALL" && payment_mode=="ALL")
+    {
+        que1 = ("select V_NO,NAME,PAYMENT_MODE,NOTE,PHONE,PRODUCT,COST,DATES,VOUCHER_TYPE,REFERENCE_NO from VOUCHER_DETAILS where VOUCHER_DETAILS.DATES='%1';");
+        que1 = que1.arg(formatchangedcalendar_str);
+    }
+
+    if(voucher_type =="ALL" && payment_mode!="ALL")
+    {
+        que1 = ("select V_NO,NAME,PAYMENT_MODE,NOTE,PHONE,PRODUCT,COST,DATES,VOUCHER_TYPE,REFERENCE_NO from VOUCHER_DETAILS where VOUCHER_DETAILS.DATES='%1' and VOUCHER_DETAILS.PAYMENT_MODE='%2';");
+        que1 = que1.arg(formatchangedcalendar_str).arg(payment_mode);
+    }
+
+    if(voucher_type !="ALL" && payment_mode=="ALL")
+    {
+        que1 = ("select V_NO,NAME,PAYMENT_MODE,NOTE,PHONE,PRODUCT,COST,DATES,VOUCHER_TYPE,REFERENCE_NO from VOUCHER_DETAILS where VOUCHER_DETAILS.DATES='%1' and VOUCHER_DETAILS.VOUCHER_TYPE='%2';");
+        que1 = que1.arg(formatchangedcalendar_str).arg(voucher_type);
+    }
+
+    if(voucher_type !="ALL" && payment_mode!="ALL")
+    {
+        que1 = ("select V_NO,NAME,PAYMENT_MODE,NOTE,PHONE,PRODUCT,COST,DATES,VOUCHER_TYPE,REFERENCE_NO from VOUCHER_DETAILS where VOUCHER_DETAILS.DATES='%1' and VOUCHER_DETAILS.VOUCHER_TYPE='%2' and VOUCHER_DETAILS.PAYMENT_MODE='%3';");
+        que1 = que1.arg(formatchangedcalendar_str).arg(voucher_type).arg(payment_mode);
+    }
+
+    qDebug() << " Query string =" << que1 <<Qt::endl;
+    query_other1.prepare(que1);
+    qDebug() << " Query string =111111" << que1 <<Qt::endl;
+    bool b = query_other1.exec();
+    qDebug() << " Query string =222222" << b <<Qt::endl;
+    while(query_other1.next())
+    {
+        qDebug() << " Query string inside while =" << que1 <<Qt::endl;
+        VoucherElement *ele = new VoucherElement;
+        ele->setVoucherNo(query_other1.value(0).toInt());
+        ele->setVoucherName(query_other1.value(1).toString());
+        ele->setVoucherPaymentMode(query_other1.value(2).toString());
+        ele->setVoucherNote(query_other1.value(3).toString());
+        ele->setMobileNo(query_other1.value(4).toString());
+        ele->setVoucherItem(query_other1.value(5).toString());
+        ele->setVoucherCost(query_other1.value(6).toString());
+        ele->setVoucherDate(query_other1.value(7).toString());
+        ele->setVoucherType(query_other1.value(8).toString());
+        ele->setPaymentReference(query_other1.value(9).toString());
+
+        qDebug() <<  query_other1.value(0).toString();
+        qDebug() <<  query_other1.value(1).toString();
+        qDebug() <<  query_other1.value(2).toString();
+        qDebug() <<  query_other1.value(3).toString();
+        qDebug() <<  query_other1.value(4).toString();
+        qDebug() <<  query_other1.value(5).toString();
+        qDebug() <<  query_other1.value(6).toString();
+        qDebug() <<  query_other1.value(7).toString();
+        qDebug() << "++++++++++ setVoucherDate =" << que1 <<query_other1.value(7).toString() <<Qt::endl;
+        qDebug() << query_other1.value(8).toString();
+        qDebug() << query_other1.value(9).toString();
+        emit voucher_report(ele);
+    }
+}
+
+void DBInterface::voucher_report_cmonth_function(int month, int year, QString voucher_type , QString payment_mode)
+{
+    qDebug()<<Q_FUNC_INFO<<Qt::endl;
+    qDebug()<< month<<Qt::endl;
+    qDebug()<< year<<Qt::endl;
+    qDebug()<<voucher_type<<Qt::endl;
+    qDebug()<<payment_mode<<Qt::endl;
+    QSqlQuery query_other1;
+    QString que1;
+    if(voucher_type =="ALL" && payment_mode=="ALL")
+    {
+        que1 = ("select V_NO,NAME,PAYMENT_MODE,NOTE,PHONE,PRODUCT,COST,DATES,VOUCHER_TYPE,S_MONTH,S_YEAR,REFERENCE_NO from VOUCHER_DETAILS where VOUCHER_DETAILS.S_MONTH='%1' and VOUCHER_DETAILS.S_YEAR='%2';");
+        que1 = que1.arg(month).arg(year);
+    }
+
+    if(voucher_type =="ALL" && payment_mode!="ALL")
+    {
+        que1 = ("select V_NO,NAME,PAYMENT_MODE,NOTE,PHONE,PRODUCT,COST,DATES,VOUCHER_TYPE,S_MONTH,S_YEAR,REFERENCE_NO from VOUCHER_DETAILS where VOUCHER_DETAILS.S_MONTH='%1' and VOUCHER_DETAILS.S_YEAR='%2' and VOUCHER_DETAILS.PAYMENT_MODE='%3';");
+        que1 = que1.arg(month).arg(year).arg(payment_mode);
+    }
+
+    if(voucher_type !="ALL" && payment_mode=="ALL")
+    {
+        que1 = ("select V_NO,NAME,PAYMENT_MODE,NOTE,PHONE,PRODUCT,COST,DATES,VOUCHER_TYPE,S_MONTH,S_YEAR,REFERENCE_NO from VOUCHER_DETAILS where VOUCHER_DETAILS.S_MONTH='%1' and VOUCHER_DETAILS.S_YEAR='%2' and VOUCHER_DETAILS.VOUCHER_TYPE='%3';");
+        que1 = que1.arg(month).arg(year).arg(voucher_type);
+    }
+
+    if(voucher_type !="ALL" && payment_mode!="ALL")
+    {
+        que1 = ("select V_NO,NAME,PAYMENT_MODE,NOTE,PHONE,PRODUCT,COST,DATES,VOUCHER_TYPE,S_MONTH,S_YEAR,REFERENCE_NO from VOUCHER_DETAILS where VOUCHER_DETAILS.S_MONTH='%1' and VOUCHER_DETAILS.S_YEAR='%2' and VOUCHER_DETAILS.VOUCHER_TYPE='%3' and VOUCHER_DETAILS.PAYMENT_MODE='%4';");
+        que1 = que1.arg(month).arg(year).arg(voucher_type).arg(payment_mode);
+    }
+
+    qDebug() << " Query string =" << que1 <<Qt::endl;
+    query_other1.prepare(que1);
+    query_other1.exec();
+    while(query_other1.next())
+    {
+        VoucherElement *ele = new VoucherElement;
+        ele->setVoucherNo(query_other1.value(0).toInt());
+        ele->setVoucherName(query_other1.value(1).toString());
+        ele->setVoucherPaymentMode(query_other1.value(2).toString());
+        ele->setVoucherNote(query_other1.value(3).toString());
+        ele->setMobileNo(query_other1.value(4).toString());
+        ele->setVoucherItem(query_other1.value(5).toString());
+        ele->setVoucherCost(query_other1.value(6).toString());
+        ele->setVoucherDate(query_other1.value(7).toString());
+        ele->setVoucherType(query_other1.value(8).toString());
+        ele->setPaymentReference(query_other1.value(9).toString());
+
+        qDebug() <<  query_other1.value(0).toString();
+        qDebug() <<  query_other1.value(1).toString();
+        qDebug() <<  query_other1.value(2).toString();
+        qDebug() <<  query_other1.value(3).toString();
+        qDebug() <<  query_other1.value(4).toString();
+        qDebug() <<  query_other1.value(5).toString();
+        qDebug() <<  query_other1.value(6).toString();
+        qDebug() <<  query_other1.value(7).toString();
+        qDebug() << query_other1.value(8).toString();
+        qDebug() << query_other1.value(9).toString();
+        emit voucher_report(ele);
+    }
+}
+
+void DBInterface::voucher_report_dataRange_function(QString startDate, QString endDate, QString voucher_type , QString payment_mode)
+{
+    qDebug()<<Q_FUNC_INFO<<Qt::endl;
+    qDebug()<< startDate<<Qt::endl;
+    qDebug()<< endDate<<Qt::endl;
+    qDebug()<<voucher_type<<Qt::endl;
+    qDebug()<<payment_mode<<Qt::endl;
+
+    QSqlQuery query_other1;
+    QString que1;
+    if(voucher_type =="ALL" && payment_mode=="ALL")
+    {
+        que1 = ("select V_NO,NAME,PAYMENT_MODE,NOTE,PHONE,PRODUCT,COST,DATES,VOUCHER_TYPE,REFERENCE_NO from VOUCHER_DETAILS where VOUCHER_DETAILS.DATES between '%1' and '%2';");
+        que1 = que1.arg(startDate).arg(endDate);
+    }
+
+    if(voucher_type =="ALL" && payment_mode!="ALL")
+    {
+        que1 = ("select V_NO,NAME,PAYMENT_MODE,NOTE,PHONE,PRODUCT,COST,DATES,VOUCHER_TYPE,REFERENCE_NO from VOUCHER_DETAILS where VOUCHER_DETAILS.DATES between '%1' and '%2' and VOUCHER_DETAILS.PAYMENT_MODE='%3';");
+        que1 = que1.arg(startDate).arg(endDate).arg(payment_mode);
+    }
+
+    if(voucher_type !="ALL" && payment_mode=="ALL")
+    {
+        que1 = ("select V_NO,NAME,PAYMENT_MODE,NOTE,PHONE,PRODUCT,COST,DATES,VOUCHER_TYPE,REFERENCE_NO from VOUCHER_DETAILS where VOUCHER_DETAILS.DATES between '%1' and '%2' and VOUCHER_DETAILS.VOUCHER_TYPE='%3';");
+        que1 = que1.arg(startDate).arg(endDate).arg(voucher_type);
+    }
+
+    if(voucher_type !="ALL" && payment_mode!="ALL")
+    {
+        que1 = ("select V_NO,NAME,PAYMENT_MODE,NOTE,PHONE,PRODUCT,COST,DATES,VOUCHER_TYPE,REFERENCE_NO from VOUCHER_DETAILS where VOUCHER_DETAILS.DATES between '%1' and '%2' and VOUCHER_DETAILS.VOUCHER_TYPE='%3' and VOUCHER_DETAILS.PAYMENT_MODE='%4';");
+        que1 = que1.arg(startDate).arg(endDate).arg(voucher_type).arg(payment_mode);
+    }
+
+    qDebug() << " Query string =" << que1 <<Qt::endl;
+    query_other1.prepare(que1);
+    bool b =  query_other1.exec();
+    qDebug()<<"b = "<<b<<Qt::endl;
+    //    bool b1 =  query_other1.next();
+    //    qDebug()<<"b1 = "<<b1<<Qt::endl;
+    //    if(query_other1.next()==false)
+    //    {
+    //        return;
+    //    }
+    //    if(query_other1.size()==0)
+    //    {
+    //        return 0;
+    //    }
+    while(query_other1.next())
+    {
+        qDebug()<<"Inside while "<<Qt::endl;
+        VoucherElement *ele = new VoucherElement;
+        ele->setVoucherNo(query_other1.value(0).toInt());
+        ele->setVoucherName(query_other1.value(1).toString());
+        ele->setVoucherPaymentMode(query_other1.value(2).toString());
+        ele->setVoucherNote(query_other1.value(3).toString());
+        ele->setMobileNo(query_other1.value(4).toString());
+        ele->setVoucherItem(query_other1.value(5).toString());
+        ele->setVoucherCost(query_other1.value(6).toString());
+        ele->setVoucherDate(query_other1.value(7).toString());
+        ele->setVoucherType(query_other1.value(8).toString());
+        ele->setPaymentReference(query_other1.value(9).toString());
+
+        qDebug() <<  query_other1.value(0).toString();
+        qDebug() <<  query_other1.value(1).toString();
+        qDebug() <<  query_other1.value(2).toString();
+        qDebug() <<  query_other1.value(3).toString();
+        qDebug() <<  query_other1.value(4).toString();
+        qDebug() <<  query_other1.value(5).toString();
+        qDebug() <<  query_other1.value(6).toString();
+        qDebug() <<  query_other1.value(7).toString();
+        //      qDebug() << "++++++++++ setVoucherDate of data range=" << que1 <<query_other1.value(7).toString() <<Qt::endl;
+        qDebug() << query_other1.value(8).toString();
+        qDebug() << query_other1.value(9).toString();
+        emit voucher_report(ele);
+    }
+    //  return 1;
 }
 
 void DBInterface::account_report_dataRange_function(QString SEVA,int TYPE ,QString seva_Startdate,QString seva_Enddate)
@@ -1825,6 +2391,126 @@ void DBInterface::account_report_dataRange_function(QString SEVA,int TYPE ,QStri
     }
 }
 
+void DBInterface::account_report_eachDateDataRange_function(QString SEVA,int TYPE ,QString seva_Startdate,QString seva_Enddate)
+{
+    QList<QString> list_name;
+    QList<int> list_ticket;
+    QList<float> list_cost,list_total;
+    QSqlQuery query_other1;
+    QString readstr;
+    if(TYPE == 0)
+    {
+        readstr = ("select RECEIPT_DATE,sum(QUANTITY),sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where sevabooking.RECEIPT_DATE between '%1' and '%2' Group by sevabooking.RECEIPT_DATE;" );
+        readstr  = readstr.arg(seva_Startdate).arg(seva_Enddate);
+    }
+    else if (SEVA==ALLSEVANAME) {
+        readstr = ("select RECEIPT_DATE,sum(QUANTITY),SEVACOST,sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where sevabooking.RECEIPT_DATE between '%1' and '%2' and sevabooking.SEVATYPE = '%3' Group by sevabooking.RECEIPT_DATE;" );
+        readstr  = readstr.arg(seva_Startdate).arg(seva_Enddate).arg(TYPE);
+    }
+    else {
+        readstr = ("select RECEIPT_DATE,sum(QUANTITY),SEVACOST,sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where sevabooking.RECEIPT_DATE between '%1' and '%2' and sevabooking.SEVATYPE = '%3' and sevabooking.SEVANAME = '%4' Group by sevabooking.RECEIPT_DATE;" );
+        readstr  = readstr.arg(seva_Startdate).arg(seva_Enddate).arg(TYPE).arg(SEVA);
+    }
+    qDebug() << " Query string =" << readstr <<Qt::endl;
+    query_other1.prepare(readstr);
+    query_other1.exec();
+    while(query_other1.next())
+    {
+        qDebug() << "In while of db ***************************" << readstr <<Qt::endl;
+        AccountReportDateRangeElement *ele = new   AccountReportDateRangeElement;
+        QQmlEngine::setObjectOwnership(ele, QQmlEngine::CppOwnership);
+
+        ele->setDate( query_other1.value(0).toString());
+        qDebug() << "In while of db ********query_other1.value(0).toString()*******************" << query_other1.value(0).toString() <<Qt::endl;
+        ele->setTotalSevaCount( query_other1.value(1).toInt());
+        qDebug() << "In while of db **********query_other1.value(1).toInt()*****************" << query_other1.value(1).toInt() <<Qt::endl;
+        ele->setTotalAmount(query_other1.value(2).toFloat());
+        qDebug() << "In while of db **************query_other1.value(2).toFloat()*************" << query_other1.value(2).toFloat() <<Qt::endl;
+        emit account_report_Date_Range(ele);
+
+    }
+    //   select RECEIPT_DATE,sum(QUANTITY),sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where sevabooking.RECEIPT_DATE between '2022-08-01' and '2022-11-18' Group by sevabooking.RECEIPT_DATE
+}
+void DBInterface::account_report_eachDateDataRangeForMonth_function(QString SEVA,int TYPE ,int S_MONTH,int S_YEAR)
+{
+    QList<QString> list_name;
+    QList<int> list_ticket;
+    QList<float> list_cost,list_total;
+    QSqlQuery query_other1;
+    QString readstr;
+    if(TYPE == 0)
+    {
+        readstr = ("select RECEIPT_DATE,sum(QUANTITY),sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where sevabooking.S_YEAR ='%1' and sevabooking.S_MONTH ='%2' Group by sevabooking.RECEIPT_DATE;" );
+        readstr  = readstr.arg(S_YEAR).arg(S_MONTH);
+    }
+    else if (SEVA==ALLSEVANAME) {
+        readstr = ("select RECEIPT_DATE,sum(QUANTITY),SEVACOST,sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where sevabooking.S_YEAR ='%1' and sevabooking.S_MONTH ='%2' and sevabooking.SEVATYPE = '%3' Group by sevabooking.RECEIPT_DATE;" );
+        readstr  = readstr.arg(S_YEAR).arg(S_MONTH).arg(TYPE);
+    }
+    else {
+        readstr = ("select RECEIPT_DATE,sum(QUANTITY),SEVACOST,sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where sevabooking.S_YEAR ='%1' and sevabooking.S_MONTH ='%2' and sevabooking.SEVATYPE = '%3' and sevabooking.SEVANAME = '%4' Group by sevabooking.RECEIPT_DATE;" );
+        readstr  = readstr.arg(S_YEAR).arg(S_MONTH).arg(TYPE).arg(SEVA);
+    }
+    qDebug() << " Query string =" << readstr <<Qt::endl;
+    query_other1.prepare(readstr);
+    query_other1.exec();
+    while(query_other1.next())
+    {
+        qDebug() << "In while of db ***************************" << readstr <<Qt::endl;
+        AccountReportDateRangeElement *ele = new   AccountReportDateRangeElement;
+        QQmlEngine::setObjectOwnership(ele, QQmlEngine::CppOwnership);
+
+        ele->setDate( query_other1.value(0).toString());
+        qDebug() << "In while of db ********query_other1.value(0).toString()*******************" << query_other1.value(0).toString() <<Qt::endl;
+        ele->setTotalSevaCount( query_other1.value(1).toInt());
+        qDebug() << "In while of db **********query_other1.value(1).toInt()*****************" << query_other1.value(1).toInt() <<Qt::endl;
+        ele->setTotalAmount(query_other1.value(2).toFloat());
+        qDebug() << "In while of db **************query_other1.value(2).toFloat()*************" << query_other1.value(2).toFloat() <<Qt::endl;
+        emit account_report_Date_Range(ele);
+
+    }
+    //  select RECEIPT_DATE,sum(QUANTITY),sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where sevabooking.S_year ='2022' and sevabooking.S_Month ='11' Group by sevabooking.RECEIPT_DATE
+}
+
+void DBInterface::account_report_eachDateDataRangeForWholeMonth_function(QString SEVA,int TYPE ,int S_MONTH,int S_YEAR)
+{
+    QList<QString> list_name;
+    QList<int> list_ticket;
+    QList<float> list_cost,list_total;
+    QSqlQuery query_other1;
+    QString readstr;
+    if(TYPE == 0)
+    {
+        readstr = ("select RECEIPT_DATE,sum(QUANTITY),sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where sevabooking.S_YEAR ='%1' and sevabooking.S_MONTH ='%2' Group by sevabooking.RECEIPT_DATE;" );
+        readstr  = readstr.arg(S_YEAR).arg(S_MONTH);
+    }
+    else if (SEVA==ALLSEVANAME) {
+        readstr = ("select RECEIPT_DATE,sum(QUANTITY),SEVACOST,sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where sevabooking.S_YEAR ='%1' and sevabooking.S_MONTH ='%2' and sevabooking.SEVATYPE = '%3' Group by sevabooking.RECEIPT_DATE;" );
+        readstr  = readstr.arg(S_YEAR).arg(S_MONTH).arg(TYPE);
+    }
+    else {
+        readstr = ("select RECEIPT_DATE,sum(QUANTITY),SEVACOST,sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where sevabooking.S_YEAR ='%1' and sevabooking.S_MONTH ='%2' and sevabooking.SEVATYPE = '%3' and sevabooking.SEVANAME = '%4' Group by sevabooking.RECEIPT_DATE;" );
+        readstr  = readstr.arg(S_YEAR).arg(S_MONTH).arg(TYPE).arg(SEVA);
+    }
+    qDebug() << " Query string =" << readstr <<Qt::endl;
+    query_other1.prepare(readstr);
+    query_other1.exec();
+    while(query_other1.next())
+    {
+        qDebug() << "In while of db ***************************" << readstr <<Qt::endl;
+        AccountReportDateRangeElement *ele = new   AccountReportDateRangeElement;
+        QQmlEngine::setObjectOwnership(ele, QQmlEngine::CppOwnership);
+
+        ele->setDate( query_other1.value(0).toString());
+        qDebug() << "In while of db ********query_other1.value(0).toString()*******************" << query_other1.value(0).toString() <<Qt::endl;
+        ele->setTotalSevaCount( query_other1.value(1).toInt());
+        qDebug() << "In while of db **********query_other1.value(1).toInt()*****************" << query_other1.value(1).toInt() <<Qt::endl;
+        ele->setTotalAmount(query_other1.value(2).toFloat());
+        qDebug() << "In while of db **************query_other1.value(2).toFloat()*************" << query_other1.value(2).toFloat() <<Qt::endl;
+        emit account_report_Date_Range(ele);
+
+    }
+}
 void DBInterface::signin_clicked(QString username,QString password,int type)
 {
     bool found =false;
@@ -2211,11 +2897,11 @@ bool DBInterface::qrySevabookingBySevaDate(QString formatchangedcalendar_str)
     que = ("select SNO,PERSONID,SEVANAME,SEVA_DATE,RECEIPT_DATE,SEVATOTALPRICE,CASH,BANK,reference,address,momento from sevabooking where sevabooking.SEVA_DATE='%1';");
     que = que.arg(formatchangedcalendar_str);
     query.prepare(que);
-   bool b = query.exec();
-   if(b==false)
-   {
-       return false;
-   }
+    bool b = query.exec();
+    if(b==false)
+    {
+        return false;
+    }
     while(query.next())
     {
         SevaBookingElement *elem = new SevaBookingElement;

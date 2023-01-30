@@ -23,13 +23,17 @@ public:
     float getSeva_total() const;
     void setSeva_total(float newSeva_total);
 
+    int slNo() const;
+    void setSlNo(int newSlNo);
+
 signals:
 
 private:
+    int m_slNo;
     QString seva_name;
     int seva_ticket;
     float seva_cost;
-     float seva_total;
+    float seva_total;
 
 
 };

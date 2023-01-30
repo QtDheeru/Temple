@@ -9,7 +9,7 @@ Dialog {
     width: 500;
     height: 400;
     closePolicy: Popup.NoAutoClose
-
+    // property bool b : closeButton.enabled
     modal: true
     property alias amount2Pay : _sevaPayment.amount2Pay
     property string errorMessage: "Amount To Pay does not \n\n Match with Cash Paid"
@@ -18,6 +18,7 @@ Dialog {
     signal closeClicked();
     signal printClicked();
     signal errorOccur(string errorMsg);
+    // signal nextReceip();
     function clearData() {
         console.log(" ")
         _sevaPayment.clearData()
@@ -50,35 +51,42 @@ Dialog {
             Layout.margins: 5
             Button{
                 Layout.topMargin: 5;Layout.bottomMargin: 5;
-                Layout.fillWidth: true;text :"Confirm"
+                Layout.fillWidth: true;text :"Payment Confirm"
                 Layout.maximumHeight: parent.height-15
                 font.pixelSize: 20
                 enabled: _sevaPayment.isDataExist
                 onClicked: {
-                  if (checkAmoutPaid()) {
-                      paymentComplete();
-                      //_sevaPayment.clearData();
-                      _paymentDialog.close()
-                  } else {
-                      _display.text2Display = root.errorMessage
-                      _display.visible = true;
-                  }
+                    console.log("In confirm  clicked")
+                    if (checkAmoutPaid()) {
+                        console.log("In if confirm  clicked")
+                        closeButton.enabled = false;
+                        paymentComplete();
+                        //_sevaPayment.clearData();
+                        // nextReceip();
+                        closeButton.enabled = true;
+                        _paymentDialog.close()
+                    } else {
+                        _display.text2Display = root.errorMessage
+                        _display.visible = true;
+                    }
                 }
             }
+            //            Button{
+            //                Layout.topMargin: 5;Layout.bottomMargin: 5;
+            //                Layout.fillWidth: true;text :"Print"
+            //                Layout.maximumHeight: parent.height-15
+            //                font.pixelSize: 20
+            //                enabled: _sevaPayment.isDataExist
+            //                visible: false
+            //                onClicked: {
+            //                    console.log("In print-------- clicked")
+            //                    printClicked();
+            //                }
+            //            }
             Button{
+                id:closeButton
                 Layout.topMargin: 5;Layout.bottomMargin: 5;
-                Layout.fillWidth: true;text :"Print"
-                Layout.maximumHeight: parent.height-15
-                font.pixelSize: 20
-                enabled: _sevaPayment.isDataExist
-                visible: false
-                onClicked: {
-                  printClicked();
-                }
-            }
-            Button{
-                Layout.topMargin: 5;Layout.bottomMargin: 5;
-                Layout.fillWidth: true;text :"Close"
+                Layout.fillWidth: true;text :"Cancel"
                 Layout.maximumHeight: parent.height-15
                 font.pixelSize: 20
                 onClicked: {
@@ -94,14 +102,14 @@ Dialog {
     contentItem: SevaPaymentDetails{id:_sevaPayment;Layout.fillWidth: true}
 
     function checkAmoutPaid(){
-         var tempAmount2Pay = _sevaPayment.amount2Pay.trim().substring(4).trim()
-         if (tempAmount2Pay === _sevaPayment.cashPaid.trim()){
-             console.log("Amount Paid does match. Contine further ="+tempAmount2Pay + " 2BePaid ="+_sevaPayment.cashPaid.trim())
-             return true;
-         }else {
-             console.log("Amount Paid does match. Contine further ="+tempAmount2Pay + " 2BePaid ="+_sevaPayment.cashPaid.trim())
-             return false;
-         }
+        var tempAmount2Pay = _sevaPayment.amount2Pay.trim().substring(4).trim()
+        if (tempAmount2Pay === _sevaPayment.cashPaid.trim()){
+            console.log("Amount Paid does match. Contine further ="+tempAmount2Pay + " 2BePaid ="+_sevaPayment.cashPaid.trim())
+            return true;
+        }else {
+            console.log("Amount Paid does match. Contine further ="+tempAmount2Pay + " 2BePaid ="+_sevaPayment.cashPaid.trim())
+            return false;
+        }
     }
 
     DisplayDialog{
@@ -145,5 +153,6 @@ Dialog {
 
     Component.onCompleted: {
         console.log("In Component.onCompleted: of SevaPaymenConfirmationDialog");
+        //closeButton.enabled = true;
     }
 }

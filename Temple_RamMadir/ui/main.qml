@@ -11,18 +11,18 @@ ApplicationWindow {
     signal errorOccur(string errorMsg);
     width: styles.screenWidth
     height: styles.screenHeight
+    //property var tot ;
     property var constant: Constants{}
     title: constant.addressText1
     color: "black"
     flags: Qt.Dialog
-    
     Component.onCompleted: {
         //        console.log("=====" + confApp.appPath + "/" + confApp.welcomescreenImg );
         //        console.log( confApp.welcomescreenImg);
 
         console.log("screen height= " + Screen.height)
         console.log("screen width= " + Screen.width)
-        console.log("Screen MyStyles-screenWidth size =" + styles.screenWidth)
+        console.log("Screen MyStyles-screecnWidth size =" + styles.screenWidth)
         console.log("Screen MyStyles-screenHeight size =" + styles.screenHeight)
         console.log("screen density  == " + Screen.pixelDensity)
     }
@@ -67,8 +67,9 @@ ApplicationWindow {
                 var str2 =trustListModel.getDataLocation();
                 console.log("str1 = --" + str1);
                 console.log("str2 = --" + str2);
-                loader.source = "WelcomeScreen.qml"
-                //        loader.source= "SevaBookingView.qml"
+                //   loader.source = "WelcomeScreen.qml"
+                //  loader.source= "SevaBookingView.qml"
+                loader.source = "MenuPage.qml"
             }
             if(trustListModel.getTrustListSize()===0){
                 console.log("trustListModel.getTrustList===0");
@@ -103,6 +104,68 @@ ApplicationWindow {
             console.log("In main")
             sevaProxy.sevaReport.generateAccReport(obj)
         }
+        function onSendBookReportImput(obj)
+        {
+            console.log("In main")
+            sevaProxy.sevaReport.generateBookReport(obj)
+        }
+        function onSendReportDateRangeImput(obj)
+        {
+            console.log("In main")
+            sevaProxy.sevaReport.generateAccReportForEachDate(obj)
+        }
+        function onSendBookingReportDateRangeImput(obj)
+        {
+            console.log("In main")
+            sevaProxy.sevaReport.generateBookingReportForEachDate(obj)
+        }
+        function onSendReportDateRangeImputForWholeMonth(obj)
+        {
+            console.log("In main")
+            sevaProxy.sevaReport.generateAccReportForEachDateForWholeMonth(obj)
+        }
+        function onSendBookingReportDateRangeImputForWholeMonth(obj)
+        {
+            console.log("In main")
+            sevaProxy.sevaReport.generateBookingReportForEachDateForWholeMonth(obj)
+        }
+        function onSendReportMonthRangeImput(obj)
+        {
+            console.log("In main")
+            sevaProxy.sevaReport.generateAccReportForEachMonth(obj)
+        }
+        function onSendBookingReportMonthRangeImput(obj)
+        {
+            console.log("In main")
+            sevaProxy.sevaReport.generateBookingReportForEachMonth(obj)
+        }
+        function onSendBookReportInput(obj)
+        {
+            console.log("In main")
+            sevaProxy.sevaReport.generateBookReport(obj)
+        }
+        function onSendSingleDateReportInput(obj)
+        {
+            console.log("In main")
+            sevaProxy.sevaReport.generateAccReport(obj)
+        }
+        function onSendSingleDateBookingReportInput(obj)
+        {
+            console.log("In main")
+            sevaProxy.sevaReport.generateBookReport(obj)
+        }
+        function onResetAccModel(){
+            console.log("reset Model")
+            sevaProxy.sevaReport.resetAccModel()
+        }
+        //        function onResetAccDateRangeModel(){
+        //            console.log("reset Model")
+        //            sevaProxy.sevaReport.resetAccDateRangeModel()
+        //        }
+        function onResetBookingModel(){
+            console.log("reset DateRangeModel")
+            sevaProxy.sevaReport.resetBookingModel()
+        }
 
         //Login Page Handlers
         function onWrongCred() {
@@ -121,6 +184,7 @@ ApplicationWindow {
             console.log("clicked on Sevabooking")
             //            loader.source= "SelectSevaTypeMenu.qml"
             loader.source= "SevaBookingView.qml"
+
         }
         function onAccountDetails() {
             console.log("Clicked on AccountDetails")
@@ -128,6 +192,7 @@ ApplicationWindow {
         }
         function onBookingreport() {
             console.log("Clicked on Bookingreport")
+            loader.source = "BookingReportPage.qml"
         }
         function onAdmin() {
             console.log("Clicked on Admin")
@@ -138,7 +203,24 @@ ApplicationWindow {
         }
         function onVoucher() {
             console.log("Clicked on Voucher")
+            loader.source = "voucherPage.qml"
         }
+//        function onLoadVoucherPage()
+//        {
+//            console.log("In onLoadVoucherPage")
+//            loader.source = "voucherPage.qml"
+//        }
+
+        function onSendVoucherReportInput(obj)
+        {
+            console.log("signal emitted from voucher report page in main.qml")
+            voucherReportModel.generateVoucherReport(obj)
+        }
+        function onResetVouModel()
+        {
+            voucherReportModel.resetVouModel()
+        }
+
         //seva Booking view Handlers
         function onLoadMenuPage() {
             console.log("loading Menu page")

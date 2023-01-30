@@ -18,6 +18,7 @@ public:
     Q_PROPERTY(QString sEndDate READ sEndDate WRITE setSEndDate NOTIFY sEndDateChanged)
     Q_PROPERTY(QString sMonth READ sMonth WRITE setSMonth NOTIFY sMonthChanged)
     Q_PROPERTY(QString sYear READ sYear WRITE setSYear NOTIFY sYearChanged)
+    Q_PROPERTY(int iSelectedType READ iSelectedType WRITE setISelectedType NOTIFY iSelectedTypeChanged)
 
     bool bSevawise() const;
     void setBSevawise(bool newBSevawise);
@@ -46,6 +47,9 @@ public:
     const QString &sYear() const;
     void setSYear(const QString &newSYear);
 
+    int iSelectedType() const;
+    void setISelectedType(int newISelectedType);
+
 signals:
     void bSevawiseChanged();
     void bDatewiseChanged();
@@ -56,6 +60,7 @@ signals:
     void sEndDateChanged();
     void sMonthChanged();
     void sYearChanged();
+    void iSelectedTypeChanged();
 
 private:
     bool m_bSevawise;
@@ -67,6 +72,7 @@ private:
     QString m_sEndDate;
     QString m_sMonth;
     QString m_sYear;
+    int m_iSelectedType;
 
 
 };
