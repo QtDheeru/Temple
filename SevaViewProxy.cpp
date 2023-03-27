@@ -60,6 +60,8 @@ SevaViewProxy::SevaViewProxy(QObject *parent) : QObject(parent)
     QObject::connect(DBInterface::getInstance(),&DBInterface::sendChangedDataToSevaBookingTablemodel,
                      m_sevaBookingTV,&SevaBookingTableModel::reset);
     QObject::connect(DBInterface::getInstance(),&DBInterface::refreshModel,m_sevaBookingTV,&SevaBookingTableModel::referseshTheModel);
+    QObject::connect(DBInterface::getInstance(),&DBInterface::signalClosedStatus,this,&SevaViewProxy::rcvclosedStatus);
+    QObject::connect(DBInterface::getInstance(),&DBInterface::sendUpdateStatus,this,&SevaViewProxy::recvUpdateStatus);
 
     //    QObject::connect(DBInterface::getInstance(),SIGNAL(forFUllDetails(QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>))
     //        ,m_allReportModel,SLOT(getData(QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>)));
@@ -69,6 +71,8 @@ QAbstractItemModel *SevaViewProxy::getSevaModel(int sevaType)
 {
     qDebug() << Q_FUNC_INFO << " Seva Type =" << sevaType << Qt::endl;
     m_currentSevaModel = new SevaListViewModel;
+    QObject::connect(DBInterface::getInstance(),&DBInterface::signalClose,m_currentSevaModel,&SevaListViewModel::recvClosedObj);
+
     QQmlEngine::setObjectOwnership(m_currentSevaModel,QQmlEngine::CppOwnership);
     m_currentSevaModel->initSevaList(sevaType);
     return m_currentSevaModel;
@@ -200,6 +204,19 @@ bool SevaViewProxy::deleteSeva(int sevaid, QString sevaname){
     s->setSevaId(sevaid);
     this->m_sevaBookingModelData->deleteSeva(s);
     delete s;
+    return true;
+}
+
+bool SevaViewProxy::closeSeva(int sevaId)
+{
+    qDebug()<<Q_FUNC_INFO<<sevaId<<Qt::endl;
+    DBInterface::getInstance()->closeSeva(sevaId);
+    return true;
+}
+
+bool SevaViewProxy::modifySeva(int sevaId, QString sevaName,int cost, QString Date)
+{
+    DBInterface::getInstance()->modifySeva(sevaId,sevaName,cost,Date);
     return true;
 }
 
@@ -368,6 +385,17 @@ void SevaViewProxy::getAllAccountDetails()
     emit collectAllAccountsdata();
 }
 
+void SevaViewProxy::rcvclosedStatus(QString status)
+{
+    qDebug()<<Q_FUNC_INFO<<Qt::endl;
+    emit sendStatustoQml(status + " Successfully");
+}
+
+void SevaViewProxy::recvUpdateStatus(QString updatestatus)
+{
+    qDebug()<<Q_FUNC_INFO<<Qt::endl;
+    emit sendUpdateStatustoQml(updatestatus);
+}
 
 SevaTypeNamesDataModel *SevaViewProxy::sevaBookingModelData() const
 {

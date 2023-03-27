@@ -112,12 +112,12 @@ void VoucherReportModel::generateVoucherReport(VoucherFilterElements *ele)
     qDebug()<<"Payment mode "<<ele->sPaymentMode()<<Qt::endl;
     if(ele->iSelectedType()==0)
     {
-        ele->setSSingleDate(FormatDate(ele->sSingleDate()));
+//        ele->setSSingleDate(FormatDate(ele->sSingleDate()));
         DBInterface::getInstance()->voucher_report_cdate_function(ele->sSingleDate(),ele->sVoucherType(),ele->sPaymentMode());
     }
     else if(ele->iSelectedType()==1)
     {
-        ele->setSStartDate(FormatDate(ele->sStartDate()));
+//        ele->setSStartDate(FormatDate(ele->sStartDate()));
         ele->setSEndDate(FormatDate(ele->sEndDate()));
         /*int x =*/ DBInterface::getInstance()->voucher_report_dataRange_function(ele->sStartDate(),ele->sEndDate(),ele->sVoucherType(),ele->sPaymentMode());
         //        if(x==0)

@@ -76,6 +76,21 @@ int SevaListViewModel::getSevaListViewSize()
     return m_sevaList.size();
 }
 
+void SevaListViewModel::recvClosedObj(int sevaid)
+{
+    qDebug()<<Q_FUNC_INFO<<Qt::endl;
+    int index=0;
+    for(int itr=0;itr<m_sevaList.size();itr++){
+        if(sevaid==m_sevaList[itr]->sevaId()){
+            index=itr;
+            qDebug()<<"The index is.."<<index<<Qt::endl;
+            beginRemoveRows(QModelIndex(),index,index);
+            m_sevaList.removeAt(index);
+            endRemoveRows();
+        }
+    }
+}
+
 QHash<int, QByteArray> SevaListViewModel::roleNames() const
 {
     QHash<int, QByteArray> roles;

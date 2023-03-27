@@ -24,7 +24,7 @@ Rectangle{
             cellWidth: 250
             width: 400;height: 400
             model: sevaProxy.getSevaTypeModel()
-            delegate : MySevaTypeDelegate{
+            delegate : MySevaTypeDelegate {
                 Component.onCompleted: {
                     sevaTypeSelected.connect(_root.onSevaTypeSelected)
                 }

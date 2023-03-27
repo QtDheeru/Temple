@@ -56,7 +56,6 @@ bool SevaBookingSearchModel::filterAcceptsRow(int source_row, const QModelIndex 
             int proxyRow = proxyIndex.row();
             qDebug()<<Q_FUNC_INFO<<"hereee Devotee Name inside if"<<proxyRow<<Qt::endl;
             return(filterElement.toLower().startsWith(m_txtTyped.toLower()));
-
         }
         else
         {

@@ -28,6 +28,9 @@ public:
     SevaName* getSevaByIndex(int index);
     Q_INVOKABLE int getSevaListViewSize();
 
+public slots:
+    void recvClosedObj(int sevaid);
+
 private:
     QList<SevaName*> m_sevaList;
     // QAbstractItemModel interface

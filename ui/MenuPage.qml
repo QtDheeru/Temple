@@ -40,7 +40,6 @@ Rectangle {
             onButtonClikcked: {
                 loadDevoteeSelection()
 //               console.log("Seva Booking Button Clicked");
-
             }
         }
         TempleButton{

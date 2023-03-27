@@ -110,7 +110,6 @@ Rectangle {
                     font.bold: true
                 }
             }
-
         }
     }
     Component {

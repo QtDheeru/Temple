@@ -64,6 +64,10 @@ Rectangle {
                 function sendcurrentSevaidx(indx){
                     sevaName.sindex = indx;
                 }
+                onSendSevaCurrentIndex:{
+                    console.log("hello mahesha")
+                    sevaNameEntry.getSevaNameDetail(idx)
+                }
 
             }
             SevaNameEntry{
@@ -73,7 +77,7 @@ Rectangle {
                 Layout.fillHeight: true
                 Layout.minimumWidth: 100
                 Layout.preferredWidth: parent.width/6
-                visible: _actionSelector.sevaNameSelected
+                visible: _actionSelector.sevaNameSelected               
             }
         }
 
@@ -87,7 +91,6 @@ Rectangle {
     }
     Keys.onEscapePressed: {
         console.log("Esc pressed in Admin Page...")
-        //this.close()
         loadMenuPage()
     }
     Component.onCompleted: {
