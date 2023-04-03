@@ -1,0 +1,36 @@
+{
+    "6637": {
+        "Chataka": {
+            "Number": 795440431,
+            "additionalCost": 0,
+            "count": 1,
+            "sevaCost": 800,
+            "sevaId": 2,
+            "sevaName": "Chataka",
+            "sevaTime": "08:00 AM",
+            "sevaType": 1,
+            "teerthaPrasada": 7105905
+        },
+        "Dwadashi Hasthodaka": {
+            "Number": 1,
+            "additionalCost": 0,
+            "count": 1,
+            "sevaCost": 50,
+            "sevaId": 4,
+            "sevaName": "Dwadashi Hasthodaka",
+            "sevaTime": "08:00 AM",
+            "sevaType": 1,
+            "teerthaPrasada": 0
+        },
+        "address": "ddd",
+        "bookedBy": "",
+        "devoteeName": "Dheerendra  Purohit",
+        "gothra": "Kashyapa",
+        "mobilenumber": "9900541516",
+        "momento": "Category-1",
+        "nakshtra": "Ashwini",
+        "receiptDate": "03-04-2023",
+        "receiptNo": "6637",
+        "reference": ""
+    }
+}

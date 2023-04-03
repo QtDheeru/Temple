@@ -1,0 +1,71 @@
+{
+    "6612": {
+        "PANAKA KOSAMBARI SANKLAPA SEVE": {
+            "Number": 0,
+            "additionalCost": 1000,
+            "count": 1,
+            "sevaCost": 300,
+            "sevaId": 55,
+            "sevaName": "PANAKA KOSAMBARI SANKLAPA SEVE",
+            "sevaTime": "08:00 AM",
+            "sevaType": 2,
+            "teerthaPrasada": 0
+        },
+        "address": "Pattanagere",
+        "bookedBy": "Suman",
+        "devoteeName": "Suman N",
+        "gothra": "Kashyapa",
+        "mobilenumber": "9481914363",
+        "momento": "Category-1",
+        "nakshtra": "Shathabhisha",
+        "receiptDate": "30-03-2023",
+        "receiptNo": "6612",
+        "reference": ""
+    },
+    "6613": {
+        "SRI SITA RAMA KALYANOTSAVA SANKALPAA": {
+            "Number": 0,
+            "additionalCost": 1000,
+            "count": 1,
+            "sevaCost": 150,
+            "sevaId": 59,
+            "sevaName": "SRI SITA RAMA KALYANOTSAVA SANKALPAA",
+            "sevaTime": "08:00 AM",
+            "sevaType": 2,
+            "teerthaPrasada": 0
+        },
+        "address": "Pattanagere",
+        "bookedBy": "Suman",
+        "devoteeName": "Suman N",
+        "gothra": "Kashyapa",
+        "mobilenumber": "9481914363",
+        "momento": "Category-1",
+        "nakshtra": "Shathabhisha",
+        "receiptDate": "30-03-2023",
+        "receiptNo": "6613",
+        "reference": ""
+    },
+    "6614": {
+        "PANAKA KOSAMBARI SANKLAPA SEVE": {
+            "Number": 0,
+            "additionalCost": 1000,
+            "count": 1,
+            "sevaCost": 300,
+            "sevaId": 55,
+            "sevaName": "PANAKA KOSAMBARI SANKLAPA SEVE",
+            "sevaTime": "08:00 AM",
+            "sevaType": 2,
+            "teerthaPrasada": 0
+        },
+        "address": "Pattanegere",
+        "bookedBy": "",
+        "devoteeName": "Suman N",
+        "gothra": "Kashyapa",
+        "mobilenumber": "9481914363",
+        "momento": "Category-1",
+        "nakshtra": "Shathabhisha",
+        "receiptDate": "30-03-2023",
+        "receiptNo": "6614",
+        "reference": ""
+    }
+}
