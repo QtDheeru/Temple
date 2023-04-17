@@ -35,9 +35,9 @@ QVariant SevaBookingConformationDataModel::data(const QModelIndex &index, int ro
         break;
     case Cash:return sevabooking->sevaCost();
         break;
-    case Sevadate:return sevabooking->sevaDate();
+    case Sevadate:return sevabooking->sevaStartDate();
         break;
-    case Sevatime:return sevabooking->sevaTime();
+    case Sevatime:return sevabooking->sevaStartTime();
 
     }
     return 0;
@@ -107,7 +107,7 @@ void SevaBookingConformationDataModel::print()
         p->CASH.append(QString::number(seva->sevaCost()));
         p->RATE.append(QString::number(seva->sevaCost()));
 
-        p->SEVA_DATE.append(seva->sevaDate());
+        p->SEVA_DATE.append(seva->sevaStartDate());
         totalAmount += totalSevaCost;
         p->TOTAL_AMT.append(QString::number(totalAmount));
         p->TOTAL_IN_WORDS.append(print_file::NumberToWord(p->TOTAL_AMT.toUInt()));
@@ -131,7 +131,7 @@ void SevaBookingConformationDataModel::addNewData(QString sevaname, int sevachar
     sb->setSevaCost(sevacharges);
     sb->setCount(count);
     sb->setAdditionalCost(extra);
-    sb->setSevaDate(sevadate);
+    sb->setSevaStartDate(sevadate);
     m_sevabookinglist.append(sb);
     qDebug()<<Q_FUNC_INFO<<"new sevabooking data is added to the list"<<m_sevabookinglist<<Qt::endl;
     print();

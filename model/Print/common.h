@@ -154,6 +154,8 @@ const QString HEADER_4="Ph:080-48520969      Office Timings: 8AM to 1PM & 6PM to
 constexpr int HEADER_4_FONT=9;
 const QString HEADER_LEFT=" ";
 constexpr int HEADER_LEFT_FONT=9;
+const QString HEADER_Title="PAYMENT VOUCHER";
+constexpr int HEADER_Title_Font=10;
 
 const QString FOOTER_2="1.  ಸೇವಾಕರ್ತರು ಸೇವಾ ದಿನಾಂಕದಂದು ನಿಗದಿತ ಸಮಯಕ್ಕೆ ಬಂದು ಸಂಕಲ್ಪ ಮಾಡಿ ಸೇವೆ ಮಾಡಿಸಬೇಕು.";
 constexpr int FOOTER_2_FONT=5;
@@ -199,7 +201,7 @@ const QString TRUST_SEAL = "For SMSR&C Trust";
 //    constexpr int FOOTER_1_FONT=11;
 //    const QString FOOTER_3= "2. ಸೇವಾಕರ್ತರು ಬರದಿದ್ದ ತಡಮಾಡಿದ ಪಕ್ಷದಲ್ಲಿ ಅವರ ಹೆಸರಿನಲ್ಲಿ ಸಂಕಲ್ಪ ಮಾಡಿ ಸೇವೆ ಮಾಡಲಾಗುವುದು.";
 //    constexpr int FOOTER_3_FONT=11;
-//    const QString FOOTER_4= "3.ಸೇವಕತೃಗಳು ಭಾರತೀಯ ಉಡುಪಿನಲ್ಲಿ ಬರುವುದು ಸೂಕ್ತ.";
+//    const QString FOOTER_4= "3. ಸೇವಕತೃಗಳು ಭಾರತೀಯ ಉಡುಪಿನಲ್ಲಿ ಬರಬೇಕು.";
 //    constexpr int FOOTER_4_FONT=8;
 //    const QString FOOTER_5= "4.ಚಟಕ /ಸಂಕಲ್ಪ- ಇಬ್ಬರಿಗೆ ತೀರ್ಥ ಪ್ರಸಾದದ ವ್ಯವಸ್ಥೆ ಸೇರಿರುತ್ತದೆ.";
 //    constexpr int FOOTER_5_FONT=8;

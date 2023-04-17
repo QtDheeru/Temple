@@ -106,6 +106,7 @@ DBInterface::DBInterface(QObject *parent) : QObject(parent)
                      "LASTNAME,"
                      "USERNAME,"
                      "PASSWORD,"
+                     "ROLENUMBER,"
                      "DATE);";
 
     QString query5 = "CREATE TABLE mastersignin("
@@ -135,6 +136,9 @@ DBInterface::DBInterface(QObject *parent) : QObject(parent)
     qry.prepare(query2);
     qry.prepare(query3);
     qry.prepare(query4);
+    if(qry.exec()){
+        qDebug()<<"Signin table created";
+    }
     qry.prepare(query5);
     qry.prepare(query6);
     //    qry.exec();
@@ -353,9 +357,9 @@ void DBInterface::addsevaname(int sevatype, QString sevaName, int seva_cost, QSt
     Squery.exec();
 }
 
-bool DBInterface::addsevaname(SevaName* sevaName)
+bool DBInterface::createSeva(SevaName* sevaName)
 {
-    qDebug () << Q_FUNC_INFO << " Seva Requested to Add = " << sevaName->sevaId() <<Qt::endl;
+    qDebug () << Q_FUNC_INFO << "Request add. Seva Name = " << sevaName->sevaName() << " sevaId= " << sevaName->sevaId() <<Qt::endl;
     QSqlQuery qry;
     qry.prepare("select * from sevaname where SNO=:sno");
     qry.bindValue(":sno",sevaName->sevaId());
@@ -364,7 +368,9 @@ bool DBInterface::addsevaname(SevaName* sevaName)
         int snu =qry.value(0).toInt();
         qDebug () << Q_FUNC_INFO << " Seva Name in DB =" << snu <<Qt::endl;
         if (snu == sevaName->sevaId()){
-            qWarning() << Q_FUNC_INFO << " Seva with ID = " << sevaName->sevaId() << "already exist in DB" <<Qt::endl;
+            qCritical()<<Q_FUNC_INFO<<"Seva with ID ="<< sevaName->sevaId() <<endl;
+            emit dbError("DataBase Error: sevaID " + QString::number(sevaName->sevaId()) + "  already exist");
+            this->setError("DataBase Error: sevaID = " + QString::number(sevaName->sevaId()) + " already exist");
             return false;
         }
     }
@@ -376,16 +382,23 @@ bool DBInterface::addsevaname(SevaName* sevaName)
     Squery.bindValue(":seva_name",sevaName->sevaName());
     Squery.bindValue(":seva_type",sevaName->sevaType());
     Squery.bindValue(":seva_cost",sevaName->sevaCost());
-    Squery.bindValue(":seva_date",sevaName->sevaDate());
+    Squery.bindValue(":seva_date",sevaName->sevaStartDate());
     Squery.bindValue(":seva_adder_name",sevaName->userName());
     Squery.bindValue(":t_prasada",sevaName->teerthaPrasada());
-    Squery.bindValue(":pooja_time",sevaName->sevaTime());
+    Squery.bindValue(":pooja_time",sevaName->sevaStartTime());
     Squery.bindValue(":pooja",sevaName->sankalpa());
 
-    qDebug() << Q_FUNC_INFO << "**** Seva name added *******" <<Qt::endl;
-    sevaName->print();
-    Squery.exec();
-    return true;
+    bool retVal = Squery.exec();
+    if (!retVal) {
+        qCritical()<<Q_FUNC_INFO<<"Seva with ID ="<< sevaName->sevaId() <<endl;
+        emit dbError("DataBase Error: sevaID " + QString::number(sevaName->sevaId()) + "  already exist");
+        this->setError("DataBase Error: sevaID = " + QString::number(sevaName->sevaId()) + " already exist");
+        return false;
+    } else {
+        emit dbError("DataBase Error: sevaID " + QString::number(sevaName->sevaId()) + "  Added successfully");
+        this->setError("DataBase Error: sevaID = " + QString::number(sevaName->sevaId()) + " Added successfully");
+        qDebug() << Q_FUNC_INFO << "**** Seva Name =" << sevaName->sevaName() <<  " Added successfully " <<Qt::endl;
+    }
 }
 
 void DBInterface::modify_db_type(int r_s_no,QString r_seva_name,int r_seva_code,QString sevaadder_name,int m_s_no)
@@ -573,10 +586,12 @@ bool DBInterface::insertSevaBooked(QString devoteMobile, QString devoteName, QSt
     qury.prepare(qr1);
     QString devoteSevaType;
     qury.exec();
+    int bookedsevaSerialNumber=-1;
     while(qury.next()){
         RID=qury.value(0).toInt();
         QString val1=qury.value(1).toString();
         devoteSevaType=qury.value(2).toString();
+
     }
     qDebug() << Q_FUNC_INFO << " Name =" << devoteSevaName << " Query Size ="<<qury.size() << " Type=" << devoteSevaType <<  Qt::endl;
 
@@ -603,7 +618,7 @@ bool DBInterface::insertSevaBooked(QString devoteMobile, QString devoteName, QSt
     qry.bindValue(":person_id",personId);
     qry.bindValue(":sevatype",sevaType );
     qry.bindValue(":sevaname",devoteSevaName);
-    qry.bindValue(":quantity",devoteCount );
+    qry.bindValue(":quantity",devoteCount);
     qry.bindValue(":s_date",sday);
     qry.bindValue(":s_month",smonth );
     qry.bindValue(":s_year",syear );
@@ -692,15 +707,18 @@ int DBInterface::insertPersonDetails(QString devoteMobile,QString devoteName,QSt
         qry1.exec();
         qDebug() << Q_FUNC_INFO << " Query Size =" << qry1.size() <<Qt::endl;
         while(qry1.next()){
-            personId = qry1.value(0).toInt();
+            int pId = qry1.value(0).toInt();
+            if(pId>personId){
+                personId=pId;
+            }
         }
-        personId++;
+        ++personId;
         qDebug() << Q_FUNC_INFO << " Size =" << qry1.size() << " Person ID="<<personId << " Value ="<<qry1.value(0)<<Qt::endl;
 
         QSqlQuery qry;
         qry.prepare("INSERT INTO persondetails(SNO,PERSONNAME,GOTHRA,NAKSHATRA,DATE,MOBILE)"
                     "VALUES (:sno, :person_name, :gothra, :nakshatra, :date, :mobile)");
-        qry.bindValue(":sno",personId);
+        qry.bindValue(":sno",personId++);
         qry.bindValue(":person_name",devoteName);
         qry.bindValue(":gothra",devoteGotra);
         qry.bindValue(":nakshatra",devoteNakshatra );
@@ -797,11 +815,15 @@ void DBInterface::to_persondetails_db(QString devoteMobile,QString devoteName,QS
     QSqlQuery qry;
     qry.prepare("select * from persondetails");
     qry.exec();
+    int personserilaNumber=-1;
     while(qry.next())
     {
-        RID=qry.value(0).toInt();
+        int personSNO=qry.value(0).toInt();
         QString val1 = qry.value(5).toString();
         QString val2 = qry.value(1).toString();
+        if(personSNO > personserilaNumber){
+            personserilaNumber=personSNO;
+        }
 
         if(val1==devoteMobile)
         {
@@ -839,7 +861,7 @@ void DBInterface::to_persondetails_db(QString devoteMobile,QString devoteName,QS
         QSqlQuery qry;
         qry.prepare("INSERT INTO persondetails(SNO,PERSONNAME,GOTHRA,NAKSHATRA,DATE,MOBILE)"
                     "VALUES (:sno, :person_name, :gothra, :nakshatra, :date, :mobile)");
-        qry.bindValue(":sno",RID);
+        qry.bindValue(":sno",++personserilaNumber);
         qry.bindValue(":person_name",devoteName);
         qry.bindValue(":gothra",devoteGotra );
         qry.bindValue(":nakshatra",devoteNakshatra );
@@ -1228,7 +1250,6 @@ DevotePersnalDetails* DBInterface::getPersonDetails(QString person_id)
             nakshatra =query.value(3).toString();
             date=query.value(4).toString();
             mobile = query.value(5).toString();
-
             person->setDevoteeName(person_name);
             person->setMobileNumber(mobile);
             person->setGothra(gotra);
@@ -1251,6 +1272,9 @@ bool DBInterface::saveData(QObject *obj)
     QSqlQuery qry;
     QString que;
     que = ("select * from sevabooking where sevabooking.SNO = '%1';");
+    QStringList recieptNumber=rec->receiptNo().split("_");
+    int rcptNum=recieptNumber[2].toInt();
+    qDebug()<<"The reciept number: "<<rcptNum<<Qt::endl;
 
     que = que.arg(rec->receiptNo());
     qry.prepare(que);
@@ -1277,9 +1301,9 @@ bool DBInterface::saveData(QObject *obj)
                                      rec->nakshtra(),rec->gothra(),
                                      QString::number(seva->sevaCost()),QString::number(seva->additionalCost()),
                                      QString::number(seva->count()),rec->receiptDate(),
-                                     seva->sevaDate(),rec->note(),
+                                     seva->sevaStartDate(),rec->note(),
                                      seva->sevaName(),(seva->sevaCost()*seva->count())+seva->additionalCost(),
-                                     rec->receiptNo().toInt(),rec->cash(),
+                                     rcptNum,rec->cash(),
                                      rec->bank(),rec->checkOrTranscationId(),
                                      QString("%1").arg(seva->sevaType()),
                                      rec->reference(),rec->address(),rec->momento());
@@ -2616,7 +2640,7 @@ void DBInterface::old_password(QString l_userfirstname, QString l_userlastname)
     }
 }
 
-void DBInterface::add_new_signin_details(QString fname, QString lname, QString username, QString password,QString date)
+void DBInterface::add_new_signin_details(QString fname, QString lname, QString username, QString password,int rolenum,QString date)
 {
 
     QSqlQuery query_s_no;
@@ -2638,7 +2662,7 @@ void DBInterface::add_new_signin_details(QString fname, QString lname, QString u
         qDebug()<<Q_FUNC_INFO<<val1<<Qt::endl;
         qDebug()<<Q_FUNC_INFO<<val2<<Qt::endl;
 
-        qDebug()<<Q_FUNC_INFO<< fname<<lname<<username<<  password<< date<<"%%%%%%%%%%%%"<<val1<<val2<<Qt::endl;
+        qDebug()<<Q_FUNC_INFO<< fname<<lname<<username<<  password<<rolenum<< date<<"%%%%%%%%%%%%"<<val1<<val2<<Qt::endl;
 
         if((fname==val1)||(lname==val2))
         {
@@ -2651,15 +2675,17 @@ void DBInterface::add_new_signin_details(QString fname, QString lname, QString u
     }
     if(!found)
     {
+        qDebug()<<"Data not found"<<Qt::endl;
         QSqlQuery Squery;
-        Squery.prepare("INSERT INTO signindetails(SNO,FIRSTNAME,LASTNAME,USERNAME,PASSWORD,DATE)"
-                       "VALUES (:sno, :first_name, :last_name, :user_name, :password, :date)");
+        Squery.prepare("INSERT INTO signindetails(SNO,FIRSTNAME,LASTNAME,USERNAME,PASSWORD,ROLENUMBER,DATE)"
+                       "VALUES (:sno, :first_name, :last_name, :user_name, :password,:role_no, :date)");
         TID = TID +1;
         Squery.bindValue(":sno",TID);
         Squery.bindValue(":first_name",fname);
         Squery.bindValue(":last_name",lname );
         Squery.bindValue(":user_name",username);
         Squery.bindValue(":password",password);
+        Squery.bindValue(":role_no",rolenum);
         Squery.bindValue(":date",date);
         Squery.exec();
         emit sucessfully_added();
@@ -2881,20 +2907,24 @@ QString DBInterface::NumberToWord(const unsigned int number)
 bool DBInterface::checkCredentials(QString userID, QString pass)
 {
     QSqlQuery query_s_no;
-    query_s_no.prepare("select SNO,FIRSTNAME,LASTNAME,USERNAME,PASSWORD,DATE from signindetails");
+    query_s_no.prepare("select SNO,FIRSTNAME,LASTNAME,USERNAME,PASSWORD,ROLENUMBER,DATE from signindetails");
     query_s_no.exec();
     //    qDebug() << Q_FUNC_INFO << "Size of query == " << query_s_no.size()<<Qt::endl;
     while(query_s_no.next())
     {
         QString user_name=query_s_no.value(3).toString();
         QString pass_word=query_s_no.value(4).toString();
+        int rolenumber= query_s_no.value(5).toString().toInt();
         //        qDebug() << Q_FUNC_INFO << "db id and password ==  " << user_name << pass_word;
         if(userID==user_name && pass == pass_word){
             emit success();
+            qDebug()<<"The role number is"<<rolenumber<<Qt::endl;
+            emit sendRolenumber(rolenumber);
             return true;
         }
     }
     qDebug() << Q_FUNC_INFO << userID << pass << Qt::endl;
+
     emit wrongCred();
     return false;
 }
@@ -3090,7 +3120,7 @@ bool DBInterface::querySevaNames()
         sevaNames->setSevaName(qry.value(1).toString());
         sevaNames->setSevaType(qry.value(2).toInt());
         sevaNames->setSevaCost(qry.value(3).toInt());
-        sevaNames->setSevaDate(qry.value(4).toString());
+        sevaNames->setSevaStartDate(qry.value(4).toString());
         emit sendSevaName(sevaNames);
     }
     qDebug() << Q_FUNC_INFO << "querying seva names done" << Qt::endl;
@@ -3102,7 +3132,7 @@ void DBInterface::readSevaNamesFromJson() {
     qDebug() << Q_FUNC_INFO <<Qt::endl;
     connect(m_proc,&SevaTypeJsonProcessor::sendSevaName,
             this,[this](SevaName* sevaName){
-        this->addsevaname(sevaName);
+        this->createSeva(sevaName);
     });
     qDebug() << Q_FUNC_INFO <<Qt::endl;
     m_proc->readSevasFromJsonFormate();

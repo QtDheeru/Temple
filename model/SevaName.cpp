@@ -68,12 +68,12 @@ void SevaName::setTeerthaPrasada(int teerthaPrasada)
     m_teerthaPrasada = teerthaPrasada;
 }
 
-QString SevaName::sevaDate() const
+QString SevaName::sevaStartDate() const
 {
     return m_sevaStartDate;
 }
 
-void SevaName::setSevaDate(const QString &sevaDate)
+void SevaName::setSevaStartDate(const QString &sevaDate)
 {
     m_sevaStartDate = sevaDate;
 }
@@ -84,12 +84,12 @@ void SevaName::print()
     qDebug() << Q_FUNC_INFO << " Seva ID     =" << this->sevaId();
     qDebug() << Q_FUNC_INFO << " Seva Number =" << this->Number();
     qDebug() << Q_FUNC_INFO << " Seva        =" << this->sevaCost();
-    qDebug() << Q_FUNC_INFO << " Seva Date   =" << this->sevaDate();
+    qDebug() << Q_FUNC_INFO << " Seva Date   =" << this->sevaStartDate();
     qDebug() << Q_FUNC_INFO << " Seva Type   =" << this->sevaType();
     qDebug() << Q_FUNC_INFO << " Seva Cost   =" << this->sevaCost();
     qDebug() << Q_FUNC_INFO << " Seva Count  =" << this->count();
     qDebug() << Q_FUNC_INFO << " Additional Cost =" << this->additionalCost();
-    qDebug() << Q_FUNC_INFO << " Seva Time  =" << this->sevaTime();
+    qDebug() << Q_FUNC_INFO << " Seva Time  =" << this->sevaStartTime();
 }
 
 int SevaName::count() const
@@ -114,12 +114,12 @@ void SevaName::setAdditionalCost(int additionalCost)
     m_additionalCost = additionalCost;
 }
 
-QString SevaName::sevaTime() const
+QString SevaName::sevaStartTime() const
 {
     return m_sevaStartTime;
 }
 
-void SevaName::setSevaTime(const QString &sevaTime)
+void SevaName::setSevaStartTime(const QString &sevaTime)
 {
     m_sevaStartTime = sevaTime;
 }

@@ -8,16 +8,17 @@ Rectangle{
     color: "skyblue"
 
     function setSevaType(sevaType){
-            console.log("Seva Type ="+sevaType.sevaTypeName);
-            sevatypeName._data = sevaType.sevaTypeName;
-            sevaCode._data = sevaType.sevaTypeId
+        console.log("Seva Type ="+sevaType.sevaTypeName);
+        sevatypeName._data = sevaType.sevaTypeName;
+        sevaCode._data = sevaType.sevaTypeId
     }
 
     Column{
         id:col
         height:parent.height
         width:parent.width
-        spacing: 50
+        spacing: 100
+        anchors.centerIn: parent
         Rectangle{
             id:entryrect
             height: parent.height/1.5
@@ -27,7 +28,7 @@ Rectangle{
             anchors.horizontalCenter: parent.horizontalCenter
             Column{
                 height: parent.height/1.1
-                width: parent.width
+                width: parent.width/1.75
                 anchors.centerIn: parent
                 MyRowEntry {
                     id:sevatypeName;_labelText :qsTr("Name")
@@ -52,12 +53,13 @@ Rectangle{
                 }
                 Row{
                     width: parent.width
-                    height: 50
+                    height: 80
+                    spacing: parent.width/12
                     Button{
                         text:"Add"
                         anchors.verticalCenter: parent.verticalCenter
                         onClicked: {
-                            console.log("Addclicked")
+                            console.log("Add userclicked")
                             var message = sevaProxy.addNewSevaType(sevatypeName._data,sevaCode._data,userName._data)
                             _errorDialog.showError(message)
                         }

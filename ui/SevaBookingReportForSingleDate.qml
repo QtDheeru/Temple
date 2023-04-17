@@ -150,6 +150,29 @@ Rectangle{
             resizable: true}
 
     }
+    Button{
+        id:_exportCsv
+        height:60
+        width: 200
+        anchors.top: lv1.bottom
+        anchors.horizontalCenter: lv1.horizontalCenter
+        style: ButtonStyle{
+            background: Rectangle{
+                id: bg
+                border.width: 1
+                radius: 3
+                color: "cornflowerblue"
+                Label{
+                    text: "Export Data"
+                    anchors.centerIn: parent
+                }
+            }
+        }
+        onClicked: {
+            console.log("export data clicked")
+            sevaProxy.generateCSV()
+        }
+    }
 
 
     //  }

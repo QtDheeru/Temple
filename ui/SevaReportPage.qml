@@ -298,6 +298,7 @@ Rectangle{
                 }
 
             }
+
             Rectangle{
                 id:_footer
                 width: leftpart.width

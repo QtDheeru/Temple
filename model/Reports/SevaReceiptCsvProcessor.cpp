@@ -1,11 +1,12 @@
 #include "SevaReceiptCsvProcessor.h"
-
+#include <QFileDialog>
 SevaReceiptCsvProcessor::SevaReceiptCsvProcessor(QObject *parent)
     : QObject{parent}
 {
     qDebug()<<Q_FUNC_INFO<<Qt::endl;
-    QString todayDate = QDate::currentDate().toString("ddd_dd_MMM_yyyy");
-    QString path =  "Data/";
+    int id;
+    QString todayDate = QDate::currentDate().toString("ddd_dd_MMM_yyyy"+QString::number(id++));
+    QString path =  "SevaBookingReportExcelSheets/";
     QDir::setCurrent(path);
     m_file.setFileName(todayDate+".csv");
 
@@ -27,6 +28,7 @@ int SevaReceiptCsvProcessor::m_addHeader =1;
 
 void SevaReceiptCsvProcessor::writeToCsvFormate(SevaBookingElement *sr)
 {
+
     qDebug()<<Q_FUNC_INFO<<Qt::endl;
     if(!m_file.open(QIODevice::WriteOnly|QIODevice::Append))
     {

@@ -18,7 +18,7 @@ Rectangle{
     property string trustName;
     property string trustCode;
     property string trustIndex;
-    property alias mainTrust: win
+    //property alias mainTrust: win
     signal loadWelcome();
     function abhishek(){
         console.log("abhishek");

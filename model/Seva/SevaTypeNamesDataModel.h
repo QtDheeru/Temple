@@ -50,6 +50,9 @@ public:
     bool deleteSeva(SevaName *s);
     Q_INVOKABLE SevaBookingConformationDataModel* getSevaBookingConformationDataModel();
 
+
+    QString createNewSeva(SevaName *seva);
+
 public slots:
     bool processSevaTypes(SevaType *);
 signals:

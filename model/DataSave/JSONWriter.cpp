@@ -74,7 +74,7 @@ void JsonWriter::writeToJson(MySevaReceipt *sr, QList<SevaName *> sevaNamesList)
         sevaNameObject.insert("teerthaPrasada",sevaNamesList.at(i)->teerthaPrasada());
         sevaNameObject.insert("count",sevaNamesList.at(i)->count());
         sevaNameObject.insert("additionalCost",sevaNamesList.at(i)->additionalCost());
-        sevaNameObject.insert("sevaTime",sevaNamesList.at(i)->sevaTime());
+        sevaNameObject.insert("sevaTime",sevaNamesList.at(i)->sevaStartTime());
         receiptObject.insert(sevaNamesList.at(i)->sevaName(),sevaNameObject);
     }
 

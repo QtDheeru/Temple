@@ -6,13 +6,13 @@ Rectangle {
     border.width: 2
     signal buttonClikcked()
     property string buttonText;
-
+    property var myopacity
+    opacity:myopacity
     Text {
         id: txt
         text:buttonText
         font.pixelSize: parent.width/12
         anchors.centerIn: parent
-
     }
     MouseArea{
         id:_SevaBooking

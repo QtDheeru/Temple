@@ -29,7 +29,8 @@ SOURCES += \
         model/SevaListViewModel.cpp \
         model/SevaName.cpp \
         model/SevaType.cpp \
-        model/SevaTypeViewModel.cpp
+        model/SevaTypeViewModel.cpp \
+        model/UserManagement.cpp
 
 RESOURCES += qml.qrc
 DESTDIR = $$PWD/bins
@@ -63,6 +64,7 @@ HEADERS += \
     model/SevaName.h \
     model/SevaType.h \
     model/SevaTypeViewModel.h \
+    model/UserManagement.h \
     model/common.h
 
 include(model/Print/Print.pri)

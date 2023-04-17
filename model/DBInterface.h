@@ -139,7 +139,7 @@ public slots:
 
     void signin_clicked(QString, QString, int);
     void old_password(QString l_userfirstname, QString l_userlastname);
-    void add_new_signin_details(QString, QString, QString, QString, QString);
+    void add_new_signin_details(QString, QString, QString, QString,int ,QString);
     QList<SigninDetails*> geting_signInDetails();
     void delete_selected_LoginDetails(QString);
     void modify_selected_LoginDetails(QString,QString,QString, QString, QString, QString);
@@ -165,7 +165,7 @@ public slots:
     QStringList qryGothras();
     QStringList qryBankList();
     bool add_seva_type(SevaType *sevaType);
-    bool addsevaname(SevaName *sevaName);
+    bool createSeva(SevaName *sevaName);
     void readSevaNamesFromJson();
     void readSevaTypesFromJson();
     DevotePersnalDetails* getPersonDetails(QString person_id);
@@ -182,8 +182,7 @@ signals :
     void sendoneByoneSevaBooking(SevaBookingElement*);
     void setGrandTotalToZero();
     void dbError(QString errorMsg);
-
-
+    void sendRolenumber(int rolenum);
 private:
     explicit DBInterface(QObject *parent = nullptr);
     int val;

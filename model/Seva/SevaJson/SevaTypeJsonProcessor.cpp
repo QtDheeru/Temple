@@ -289,7 +289,7 @@ void SevaTypeJsonProcessor::readSevasFromJsonFormate()
                             {
                                 if(value.toString()!="")
                                 {
-                                    sn->setSevaDate(value.toString());
+                                    sn->setSevaStartDate(value.toString());
                                 }
                                 else{
                                     qDebug()<<Q_FUNC_INFO<<"SevaDate is empty"<<Qt::endl;
@@ -323,7 +323,7 @@ void SevaTypeJsonProcessor::readSevasFromJsonFormate()
                             {
                                 if(value.toString()!="")
                                 {
-                                    sn->setSevaTime(value.toString());
+                                    sn->setSevaStartTime(value.toString());
                                 }
                                 else{
                                     qDebug()<<Q_FUNC_INFO<<" SevaTime string is empty"<<Qt::endl;
@@ -404,8 +404,8 @@ void SevaTypeJsonProcessor::printSevasNames()
         it.next();
         qDebug()<<it.key() << ": " << it.value()->sevaName()<<","<<it.value()->sevaId() <<","
                <<it.value()->Number()<<","<<it.value()->sevaType()<<","<<it.value()->sevaCost()
-              <<","<<it.value()->teerthaPrasada()<<","<<it.value()->sevaDate()<<","<<it.value()->count()
-             <<","<<it.value()->additionalCost()<<","<<it.value()->sevaTime()<<","<<it.value()->userName()
+              <<","<<it.value()->teerthaPrasada()<<","<<it.value()->sevaStartDate()<<","<<it.value()->count()
+             <<","<<it.value()->additionalCost()<<","<<it.value()->sevaStartTime()<<","<<it.value()->userName()
             <<","<<it.value()->sankalpa()<<Qt::endl;
     }
 }

@@ -31,15 +31,15 @@ int SevaTypeViewModel::rowCount(const QModelIndex &parent) const
 
 QVariant SevaTypeViewModel::data(const QModelIndex &index, int role) const
 {
-    //Q_UNUSED(role);
+    Q_UNUSED(role);
     qDebug() << Q_FUNC_INFO << " Row =" << index.row() <<Qt::endl;
     if (!index.isValid())
         return QVariant();
 
     SevaType *s = this->m_sevaTypes.at(index.row());
     switch(role){
-        case 1 : return s->sevaTypeId();
-        case 2 : return s->sevaTypeName();
+        case 1 : return s->sevaTypeId();break;
+        case 2 : return s->sevaTypeName();break;
     }
 
     //return QVariant::fromValue(m_sevaTypes.at(index.row()));

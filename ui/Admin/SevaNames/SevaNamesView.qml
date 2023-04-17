@@ -1,6 +1,7 @@
 import QtQuick 2.14
 import QtQuick.Controls 2.5
-import "../components"
+import "../../components"
+import "../../Admin"
 import QtQuick.Layouts 1.3
 
 Rectangle {

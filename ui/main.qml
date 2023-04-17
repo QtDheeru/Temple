@@ -9,6 +9,7 @@ ApplicationWindow {
     visible: true
     property var styles : MyStyles{}
     signal errorOccur(string errorMsg);
+
     width: styles.screenWidth
     height: styles.screenHeight
     //property var tot ;
@@ -28,8 +29,11 @@ ApplicationWindow {
     }
     Loader{
         id:loader
-        anchors.fill: parent
+        //anchors.fill: parent
+        height: parent.height
+        width: parent.width
         source: "WelcomeToAppScreen.qml"
+        signal accountDetails();
     }
     DisplayDialog {
         id :_errorDialog
@@ -69,7 +73,7 @@ ApplicationWindow {
                 console.log("str2 = --" + str2);
                 //   loader.source = "WelcomeScreen.qml"
                 //  loader.source= "SevaBookingView.qml"
-                loader.source = "MenuPage.qml"
+                loader.source = "Login.qml"
             }
             if(trustListModel.getTrustListSize()===0){
                 console.log("trustListModel.getTrustList===0");
@@ -86,6 +90,11 @@ ApplicationWindow {
             console.log("Welcome screen TimeTriggered");
             loader.source= "Login.qml"
         }
+  /*      function onLoadLogin(pagecount)
+        {
+            console.log("Login Page loaded");
+            loader.setSource("Login.qml",{pageNumber:pagecount,loginPageImage:"",height:300,width:300})
+        }*/
         function onDateClicked(date)
         {
             console.log("date clicked " +date )
@@ -171,9 +180,18 @@ ApplicationWindow {
         function onWrongCred() {
             console.log("Wrong credentials")
         }
-        function onLoginSuccess() {
-            console.log("Wrong credentials")
-            loader.source = "MenuPage.qml"
+        function onLoginSuccess(pcount) {
+            console.log("Wrong credentials",pcount)
+            if(pcount===0){
+                loader.source = "MenuPage.qml"}
+            if(pcount===2){
+                console.log("Inside pcount 2")
+                loader.source = "SevaReportPage.qml"
+            }
+            if (pcount === 4){
+                console.log("Inside pcount 4")
+                loader.source = "qrc:/ui/Admin/AdminRights.qml"
+            }
         }
         function onLoadWelcome() {
             console.log("Correct credentials")
@@ -208,11 +226,11 @@ ApplicationWindow {
             console.log("Clicked on Voucher")
             loader.source = "voucherPage.qml"
         }
-//        function onLoadVoucherPage()
-//        {
-//            console.log("In onLoadVoucherPage")
-//            loader.source = "voucherPage.qml"
-//        }
+        //        function onLoadVoucherPage()
+        //        {
+        //            console.log("In onLoadVoucherPage")
+        //            loader.source = "voucherPage.qml"
+        //        }
 
         function onSendVoucherReportInput(obj)
         {
@@ -226,7 +244,7 @@ ApplicationWindow {
 
         //seva Booking view Handlers
         function onLoadMenuPage() {
-            console.log("loading Menu page")
+            console.log("loading Menu page from main")
             loader.source = "MenuPage.qml"
         }
         function onCloseAddSeva(){
@@ -242,6 +260,14 @@ ApplicationWindow {
             console.log("In onErrorOccured of main")
             _errorDialog.showError(errorMsg);
             console.log("In onErrorOccured of main2222")
+        }
+        function onLoadUserManagement(){
+            console.log("User Management loading")
+            loader.source = "qrc:/ui/Admin/UserManagement.qml"
+        }
+        function onLoadAdminrights(){
+            console.log("loading from main")
+            loader.source = "qrc:/ui/Admin/AdminRights.qml"
         }
     }
     Connections{

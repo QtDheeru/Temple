@@ -11,6 +11,7 @@ SevaViewProxy::SevaViewProxy(QObject *parent) : QObject(parent)
   ,m_receiptNumber("-1")
   ,m_sevaTypeModel(nullptr)
 {
+    m_userMngmnt = new UserManagement;
     m_allReportModel  = new SevaDetailsTableView;
     m_allView = new AllViewReports;
     m_ReportOnDateModel = new SevaReport;
@@ -39,7 +40,7 @@ SevaViewProxy::SevaViewProxy(QObject *parent) : QObject(parent)
     QDir dir(".");
     dir.mkdir("Data");
     QObject::connect(m_sevaBookingModelData,&SevaTypeNamesDataModel::error,this,
-                    &SevaViewProxy::errorMessage);
+                     &SevaViewProxy::errorMessage);
 
 
     //    QObject::connect(DBInterface::getInstance(),SIGNAL(forFUllDetails(QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>))
@@ -50,6 +51,7 @@ QAbstractItemModel *SevaViewProxy::getSevaModel(int sevaType)
 {
     qDebug() << Q_FUNC_INFO << " Seva Type =" << sevaType << Qt::endl;
     m_currentSevaModel = new SevaListViewModel;
+    QQmlEngine::setObjectOwnership(m_currentSevaModel,QQmlEngine::CppOwnership);
     m_currentSevaModel->initSevaList(sevaType);
     return m_currentSevaModel;
 }
@@ -84,14 +86,16 @@ SevaName* SevaViewProxy::getSeva(int sevaType, int sevaId)
 
 SevaName *SevaViewProxy::getSevaByIndex(int index)
 {
-    qDebug() << Q_FUNC_INFO << Qt::endl;
+    qDebug() << Q_FUNC_INFO<<index << Qt::endl;
+    qDebug()<<"current.... seva model"<<Qt::endl;
     Q_ASSERT(m_currentSevaModel != nullptr);
+    qDebug()<<"current seva model"<<m_currentSevaModel<<Qt::endl;
     return this->m_currentSevaModel->getSevaByIndex(index);
 }
 
 SevaType *SevaViewProxy::getSevaTypeByIndex(int index)
 {
-     return this->m_sevaTypeModel->getSevaTypeByIndex(index);
+    return this->m_sevaTypeModel->getSevaTypeByIndex(index);
 }
 
 void SevaViewProxy::print(int sevaType, int sevaId)
@@ -159,8 +163,8 @@ bool SevaViewProxy::addSevaOnly(int sevaType,int sevaId,QString sevaName,
     s->setSevaName(sevaName);
     s->setSevaCost(sevaCost);
     s->setAdditionalCost(additionalCost);
-    s->setSevaDate(sevaDate);
-    s->setSevaTime(sevaTime);
+    s->setSevaStartDate(sevaDate);
+    s->setSevaStartTime(sevaTime);
     s->setCount(count);
     return this->m_sevaBookingModelData->addSevaOnly(s);
 }
@@ -185,7 +189,9 @@ bool SevaViewProxy::printVoucherReceipt(VoucherElement *voucherElement)
     qDebug() << Q_FUNC_INFO << Qt::endl;
     //print_details* p = new Print_Detail;
     print_voucherDetails* p = new Print_VoucherDetail;
-    p->VOUCHER_NO = voucherElement->voucherNo();
+    int voucherNumber= voucherElement->voucherNo();
+    qDebug()<<"Suman Voucher~~~~ "<<voucherNumber<<Qt::endl;
+    p->VOUCHER_NO =QString::number(voucherNumber);
     p->VOUCHER_COST = voucherElement->voucherCost();
     p->VOUCHER_DATE = voucherElement->voucherDate();
     p->MOB_NO = voucherElement->mobileNo();
@@ -275,10 +281,10 @@ void SevaViewProxy::addNewSeva(int sevaID, QString sevaName, int cost)
     s->setSevaType(sevaID);
     s->setSankalpa(false);
     s->setTeerthaPrasada(1);
-    s->setSevaDate(QDate::currentDate().toString("dd.MM.yyyy"));
-    s->setSevaTime("09:00 AM");
+    s->setSevaStartDate(QDate::currentDate().toString("dd.MM.yyyy"));
+    s->setSevaStartTime("09:00 AM");
     s->setSevaId(1111);
-    DBInterface::getInstance()->addsevaname(s);
+    DBInterface::getInstance()->createSeva(s);
 }
 
 int SevaViewProxy::getNextSevaId()
@@ -295,7 +301,9 @@ QString SevaViewProxy::addNewSevaType(QString sevaTypeName,int sevaTypeId ,QStri
 
 QString SevaViewProxy::createNewSeva(SevaName *seva)
 {
+    qDebug()<<Q_FUNC_INFO<<seva->sevaName()<<seva->sevaId()<<seva->Number()<<seva->sevaCost()<<seva->sevaStartDate()<<seva->sevaType()<<seva->sevaCost()<<seva->count()<<seva->sevaStartTime();
      seva->print();
+     return m_sevaBookingModelData->createNewSeva(seva);
 }
 
 void SevaViewProxy::print()
@@ -341,15 +349,21 @@ void SevaViewProxy::print()
 
 void SevaViewProxy::generateCSV()
 {
+    qDebug()<<Q_FUNC_INFO<<"genrarte CSV"<<Qt::endl;
     if(m_csvReceipt!=nullptr)
         delete m_csvReceipt;
     m_csvReceipt = new SevaReceiptCsvProcessor;
-
     QObject::connect(DBInterface::getInstance(),&DBInterface::sendoneByoneSevaBooking,
                      m_csvReceipt,&SevaReceiptCsvProcessor::writeToCsvFormate);
     qDebug() << Q_FUNC_INFO << Qt::endl;
     DBInterface::getInstance()->getDbData();
     qDebug() << Q_FUNC_INFO << Qt::endl;
+    emit successMessage("Export Complete!");
+}
+
+UserManagement *SevaViewProxy::userMngmnt() const
+{
+    return m_userMngmnt;
 }
 
 SevaBookingSearchModel *SevaViewProxy::sevaBSearchModel() const
@@ -360,6 +374,12 @@ SevaBookingSearchModel *SevaViewProxy::sevaBSearchModel() const
 SevaBookingTableModel *SevaViewProxy::sevaBookingTV() const
 {
     return m_sevaBookingTV;
+}
+
+void SevaViewProxy::addNewSigninDetails(QString name, QString lastname, QString userid, QString password, int rolenumber, QString date)
+{
+    qDebug()<<Q_FUNC_INFO<<name<<lastname<<userid<<password<<rolenumber<<date<<Qt::endl;
+    DBInterface::getInstance()->add_new_signin_details(name,lastname,userid,password,rolenumber,"");
 }
 
 
@@ -375,7 +395,7 @@ void SevaViewProxy::setReportOnDateModel(SevaReport *newReportOnDateModel)
 
 SevaTypeNamesDataModel *SevaViewProxy::getSevaTypeNamesDataModel()
 {
-return m_sevaBookingModelData;
+    return m_sevaBookingModelData;
 }
 QAbstractItemModel *SevaViewProxy::getSevaModelForErrorHandling()
 {

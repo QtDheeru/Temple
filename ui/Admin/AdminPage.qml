@@ -67,7 +67,8 @@ Rectangle {
     }
     Keys.onEscapePressed: {
         console.log("Esc pressed in Admin Page...")
-        this.close()
+        //this.close()
+        loadMenuPage()
     }
     Component.onCompleted: {
         console.log("Admin Page is created........")

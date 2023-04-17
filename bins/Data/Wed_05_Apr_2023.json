@@ -1,0 +1,127 @@
+{
+    "2023_4_0007": {
+        "Nithya Archane": {
+            "Number": 90852616,
+            "additionalCost": 100,
+            "count": 1,
+            "sevaCost": 0,
+            "sevaId": 102,
+            "sevaName": "Nithya Archane",
+            "sevaTime": "08:00 AM",
+            "sevaType": 0,
+            "teerthaPrasada": 90852616
+        },
+        "address": "RR Nagara",
+        "bookedBy": "",
+        "devoteeName": "Suman N",
+        "gothra": "kashyapa",
+        "mobilenumber": "9481914363",
+        "momento": "Category-1",
+        "nakshtra": "Ashwini",
+        "receiptDate": "05-04-2023",
+        "receiptNo": "2023_4_0007",
+        "reference": ""
+    },
+    "2023_4_0008": {
+        "Nithya Archane": {
+            "Number": 7929977,
+            "additionalCost": 0,
+            "count": 1,
+            "sevaCost": 0,
+            "sevaId": 102,
+            "sevaName": "Nithya Archane",
+            "sevaTime": "08:00 AM",
+            "sevaType": 0,
+            "teerthaPrasada": 6553700
+        },
+        "address": "RR nagara",
+        "bookedBy": "",
+        "devoteeName": "Suman N",
+        "gothra": "kashyapa",
+        "mobilenumber": "9481914363",
+        "momento": "Category-1",
+        "nakshtra": "Ashwini",
+        "receiptDate": "05-04-2023",
+        "receiptNo": "2023_4_0008",
+        "reference": ""
+    },
+    "2023_4_0009": {
+        "PANAKA KOSAMBARI SANKLAPA SEVE": {
+            "Number": 7929977,
+            "additionalCost": 0,
+            "count": 1,
+            "sevaCost": 300,
+            "sevaId": 55,
+            "sevaName": "PANAKA KOSAMBARI SANKLAPA SEVE",
+            "sevaTime": "08:00 AM",
+            "sevaType": 2,
+            "teerthaPrasada": 6553700
+        },
+        "SRI RAMA TARAKA HOMA SANKALPA": {
+            "Number": 7929977,
+            "additionalCost": 0,
+            "count": 1,
+            "sevaCost": 150,
+            "sevaId": 57,
+            "sevaName": "SRI RAMA TARAKA HOMA SANKALPA",
+            "sevaTime": "08:00 AM",
+            "sevaType": 2,
+            "teerthaPrasada": 6553700
+        },
+        "SRI SITA RAMANJANEYARIGE NOOTA VASTRA DHARANE pratyekavagi": {
+            "Number": 7929977,
+            "additionalCost": 100,
+            "count": 1,
+            "sevaCost": 500,
+            "sevaId": 63,
+            "sevaName": "SRI SITA RAMANJANEYARIGE NOOTA VASTRA DHARANE pratyekavagi",
+            "sevaTime": "08:00 AM",
+            "sevaType": 2,
+            "teerthaPrasada": 6553700
+        },
+        "YELLA DINAGALA PRAVACHANA SEVE": {
+            "Number": 7929977,
+            "additionalCost": 0,
+            "count": 1,
+            "sevaCost": 6000,
+            "sevaId": 61,
+            "sevaName": "YELLA DINAGALA PRAVACHANA SEVE",
+            "sevaTime": "08:00 AM",
+            "sevaType": 2,
+            "teerthaPrasada": 6553700
+        },
+        "address": "RR Nagara",
+        "bookedBy": "",
+        "devoteeName": "Suman N",
+        "gothra": "kashyapa",
+        "mobilenumber": "9481914363",
+        "momento": "Category-1",
+        "nakshtra": "Ashwini",
+        "receiptDate": "05-04-2023",
+        "receiptNo": "2023_4_0009",
+        "reference": ""
+    },
+    "2023_4_0010": {
+        "SRI SITA RAMANJANEYARIGE NOOTA VASTRA DHARANE pratyekavagi": {
+            "Number": 7929977,
+            "additionalCost": 0,
+            "count": 1,
+            "sevaCost": 500,
+            "sevaId": 63,
+            "sevaName": "SRI SITA RAMANJANEYARIGE NOOTA VASTRA DHARANE pratyekavagi",
+            "sevaTime": "08:00 AM",
+            "sevaType": 2,
+            "teerthaPrasada": 6553700
+        },
+        "address": "RR Nagara",
+        "bookedBy": "",
+        "devoteeName": "Suman N",
+        "gothra": "kkgothra",
+        "mobilenumber": "9481914363",
+        "momento": "Category-1",
+        "nakshtra": "Ashwini",
+        "receiptDate": "05-04-2023",
+        "receiptNo": "2023_4_0010",
+        "reference": ""
+    }
+}

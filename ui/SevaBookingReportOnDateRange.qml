@@ -176,9 +176,29 @@ Rectangle{
             //                }
             //            }
         }
-
-
-
+    }
+    Button{
+        id:_exportCsv
+        height:60
+        width: 200
+        anchors.top: lv1.bottom
+        anchors.horizontalCenter: lv1.horizontalCenter
+        style: ButtonStyle{
+            background: Rectangle{
+                id: bg
+                border.width: 1
+                radius: 3
+                color: "cornflowerblue"
+                Label{
+                    text: "Export Data"
+                    anchors.centerIn: parent
+                }
+            }
+        }
+        onClicked: {
+            console.log("export data clicked")
+            sevaProxy.generateCSV()
+        }
     }
     //    Rectangle{
     //        id:_footer
@@ -230,7 +250,7 @@ Rectangle{
     }
     Keys.onEscapePressed: {
         console.log("Esc pressed in  seva booking report on Date Range page"+isAllSel)
-       //  loadMenuPage();
+        //  loadMenuPage();
         if((!isRangeDateSelected)&&(isAllSel==="All"))
         {
             console.log("Esc pressed in  seva booking report on Date Range page loadMonthWisePage()")
@@ -239,6 +259,26 @@ Rectangle{
         else{
             console.log("Esc pressed in  seva booking report on Date Range page loadMenuPage();")
             loadMenuPage();
+        }
+    }
+    DisplayDialog {
+        id :_errorDialog
+        visible: false
+        width: 600
+        function showError(message){
+            console.log("Show eroor")
+            _errorDialog.visible = true
+            _errorDialog.text2Display = message
+            _errorDialog.open();
+            //_errorDialog.visible = false;
+        }
+    }
+    Connections{
+        id:_connection
+        target:sevaProxy
+        onSuccessMessage:{
+            console.log("OnSuccess Message");
+            _errorDialog.showError(exportmsg)
         }
     }
 }

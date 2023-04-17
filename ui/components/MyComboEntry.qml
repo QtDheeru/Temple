@@ -26,7 +26,7 @@ Rectangle {
     RowLayout{
         anchors.fill: parent
         Layout.leftMargin: 10
-        spacing: myHeight/3
+        spacing: myHeight/2
         Label{
             id : _label
             text : "Mobile Number"

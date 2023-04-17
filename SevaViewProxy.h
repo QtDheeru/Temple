@@ -15,7 +15,7 @@
 #include "SevaBookingTableModel.h"
 #include "SevaBookingSearchModel.h"
 #include "./model/SevaTypeViewModel.h"
-
+#include "./model/UserManagement.h"
 class SevaTypeNamesDataModel;
 
 class SevaViewProxy : public QObject
@@ -26,6 +26,7 @@ class SevaViewProxy : public QObject
     Q_PROPERTY(SevaReport* sevaReport READ reportOnDateModel  NOTIFY sevaReportChanged)
     Q_PROPERTY(SevaBookingSearchModel* sevaBSearchModel READ sevaBSearchModel NOTIFY sevaBookingSearchModelChanged)
     Q_PROPERTY(SevaBookingTableModel* sevaBookingTV READ sevaBookingTV NOTIFY sevaBookingTVChanged)
+    Q_PROPERTY(UserManagement* userManagement READ userMngmnt CONSTANT)
 public:
     explicit SevaViewProxy(QObject *parent = nullptr);
     Q_INVOKABLE QAbstractItemModel* getSevaModel(int sevaType);
@@ -82,6 +83,10 @@ public:
     SevaBookingSearchModel *sevaBSearchModel() const;
     SevaBookingTableModel *sevaBookingTV() const;
 
+    Q_INVOKABLE void addNewSigninDetails(QString name,QString lastname,QString userid,QString password ,int rolenumber,QString date);
+
+    UserManagement *userMngmnt() const;
+
 public slots:
     Q_INVOKABLE void generateCSV();
 
@@ -92,6 +97,7 @@ signals:
     void sevaBookingSearchModelChanged();
     void sevaBookingTVChanged();
     void errorMessage(QString errMsg);
+    void successMessage(QString exportmsg);
 
 private :
     SevaTypeNamesDataModel *m_sevaBookingModelData;
@@ -103,8 +109,8 @@ private :
     SevaReceiptCsvProcessor *m_csvReceipt;
     SevaBookingTableModel *m_sevaBookingTV;
     SevaBookingSearchModel *m_sevaBSearchModel;
-
-     SevaTypeViewModel *m_sevaTypeModel;
+    SevaTypeViewModel *m_sevaTypeModel;
+    UserManagement* m_userMngmnt;
 };
 
 #endif // SEVAVIEWPROXY_H

@@ -125,11 +125,7 @@ Item {
                     text:"Add"
                     Layout.fillWidth: true
                     onClicked: {
-                        console.log("SevaNameEntry.qml - Addclicked")
-
-                        var sevaObj = seva.createObject(null);
-                        sevaProxy.createNewSeva(sevaObj)
-                        _errorDialog.showError(message)
+                            addNewSeva()
                     }
                 }
                 Button{
@@ -181,5 +177,21 @@ Item {
     }
     Component.onCompleted: {
         header.width = _root.width
+    }
+
+    function addNewSeva(){
+        console.log("SevaNameEntry.qml - Addclicked")
+        var sevaObj = seva.createObject(null);
+        sevaObj.sevaName = sevaName._data
+        sevaObj.sevaId = parseInt(sevaId._data);
+        sevaObj.sevaType = parseInt(sevaCode._data);
+        sevaObj.sevaCost = sevaCost._data;
+        sevaObj.sevaStartDate = sevaDateStart._data;
+        sevaObj.sevaStartTime = sevaTime._data
+        sevaObj.teerthaPrasada = parseInt(teerthaPrasadaCount._data)
+        sevaObj.sankalpa = sankalpa._data
+        sevaObj.userName = userName._data
+        var message = sevaProxy.createNewSeva(sevaObj)
+        _errorDialog.showError(message)
     }
 }

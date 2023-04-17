@@ -73,5 +73,8 @@
         <file>ui/Admin/SevaDetailDelegate.qml</file>
         <file>ui/Admin/SevaNames/SevaNameEntry.qml</file>
         <file>ui/Admin/SevaNames/SevaNamesView.qml</file>
+        <file>ui/assets/Images/remove.png</file>
+        <file>ui/Admin/AdminRights.qml</file>
+        <file>ui/Admin/UserManagement.qml</file>
     </qresource>
 </RCC>

@@ -9,11 +9,13 @@ Rectangle {
     color: "cornflowerblue"
     border.color: "black"
     border.width: 4
+    signal loadLogin(int pagecount);
     signal sevabooking();
     signal accountDetails();
     signal bookingreport();
     signal admin();
     signal closeProject();
+    //signal loadMenuPage();
     signal voucher();
     signal errorOccur(string errorMsg);
     property int countIfSevaNamesPresentInSevaTypes:0;
@@ -72,9 +74,20 @@ Rectangle {
             color: "aqua"
             buttonText: "ACCOUNT DETAILS"
             border.width: _menupage.width/300
+            enabled: sevaProxy.userManagement.rolenum===1
+            myopacity: sevaProxy.userManagement.rolenum===1 ? 1 :0.4
             onButtonClikcked: {
                 console.log("account details button clicked");
-                accountDetails();
+                _loginloader.active= true
+                loadLogin(2)
+                if(sevaProxy.userManagement.rolenum !== 1){
+                    _adminmsg.showMsg("Admin Access Only!")
+                }
+                else{
+                    console.log("this is admin")
+                }
+
+                //accountDetails();
                 //_errorDialog.open()
             }
         }
@@ -97,10 +110,20 @@ Rectangle {
             height: _menupage.height/5
             color: "aqua"
             buttonText: "ADMIN"
+            enabled: sevaProxy.userManagement.rolenum===1
+            myopacity: sevaProxy.userManagement.rolenum===1 ? 1 :0.4
             border.width: _menupage.width/300
             onButtonClikcked: {
                 console.log("admin button clicked")
-                admin();
+                _loginloader.active= true
+                loadLogin(4)
+                if(sevaProxy.userManagement.rolenum !== 1){
+                    _adminmsg.showMsg("Admin Access Only!")
+                }
+                else{
+                    console.log("this is admin")
+                }
+                // admin();
             }
         }
         TempleButton{
@@ -135,8 +158,55 @@ Rectangle {
             text2Display :"Not Implemented"
         }
     }
-    Keys.onEscapePressed: {
-        console.log("Esc pressed in select seva type view")
-        this.close()
+
+    Loader{
+        id:_loginloader
+        height: parent.height/1.9
+        width: parent.width/2.75
+        anchors.centerIn: parent
+    }
+    Connections{
+        id:_connection
+        target:_menupage
+        function onLoadLogin(pagecount){
+            console.log("Inside LoadLogin")
+            if(pagecount===2){
+                console.log("Inside LoadLogin count2")
+                _loginloader.setSource("qrc:/ui/Login.qml",{imgVisible:false,pageNumber:pagecount});
+            }
+            else if(pagecount === 4){
+                console.log("Inside LoadLogin count4")
+                _loginloader.setSource("qrc:/ui/Login.qml",{imgVisible:false,pageNumber:pagecount});
+            }
+        }
+    }
+    Connections{
+        id:_loaderConnection
+        target: _loginloader.item
+        function onLoginSuccess(pcount){
+            if(pcount===0){
+                _loginloader.anchors.fill = parent
+                loader.source = "MenuPage.qml"}
+            if(pcount===2){
+                _loginloader.anchors.fill = parent
+                console.log("Inside pcount 2")
+                loader.source = "SevaReportPage.qml"
+            }
+            if (pcount === 4){
+                _loginloader.anchors.fill = parent
+                console.log("Inside pcount 4")
+                loader.source = "qrc:/ui/Admin/AdminRights.qml"
+            }
+        }
+        function onCloseWindow(){
+            _loginloader.active= false
+        }
+        function onLoadUserManagement(){
+            console.log("User Management loading")
+            loader.source = "qrc:/ui/Admin/UserManagement.qml"
+        }
+    }
+    Component.onCompleted: {
+        console.log("the accounts enable",button2.enabled)
     }
 }

@@ -2,7 +2,7 @@
 
 CSVDataWriter::CSVDataWriter()
 {
-
+    qDebug()<<Q_FUNC_INFO<<Qt::endl;
 }
 
 

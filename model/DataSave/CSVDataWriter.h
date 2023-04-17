@@ -1,6 +1,6 @@
 #ifndef CSVDATAWRITER_H
 #define CSVDATAWRITER_H
-
+#include <QDebug>
 #include "IDataWriter.h"
 class CSVDataWriter : public IDataWriter
 {

@@ -64,6 +64,7 @@ QList<SevaName *> SevaTypeNamesDataModel::getSevaList(int sevaType)
 bool SevaTypeNamesDataModel::processSevaTypes(SevaType *st)
 {
     qDebug() << Q_FUNC_INFO << " Inserting Seva  Type =" << st->sevaTypeId() <<Qt::endl;
+    QQmlEngine::setObjectOwnership(st, QQmlEngine::CppOwnership);
     this->m_sevaTypeDetails.insert(st->sevaTypeId(),st);
     return true;
 }
@@ -122,7 +123,13 @@ bool SevaTypeNamesDataModel::deleteSeva(SevaName *s)
 
 SevaBookingConformationDataModel *SevaTypeNamesDataModel::getSevaBookingConformationDataModel()
 {
-return m_sevaBookingModel;
+    return m_sevaBookingModel;
+}
+
+QString SevaTypeNamesDataModel::createNewSeva(SevaName *seva)
+{
+    DBInterface::getInstance()->createSeva(seva);
+    return  DBInterface::getInstance()->getError();
 }
 
 QStringList SevaTypeNamesDataModel::getNakshatras()

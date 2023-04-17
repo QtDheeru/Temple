@@ -13,28 +13,50 @@ Item {
     property int fpixelsize: styles.firstRowFontSize
     property string tex1
     property string tex2
-    property color backgroundColor : mainRectangle.color
+    property int pageNumber:0
+    property color backgroundColor :"#f3f8f9"
     property string loginErrorString: "Incorrect password"
     property string loginPageImage: styles.loginPageImage
+    property var  imgVisible
     signal wrongCred()
-    signal loginSuccess()
+    signal closeWindow();
+    signal loginSuccess(int pcount)
     Rectangle
     {
         id : mainRectangle
         width: root.width
         height : root.height
-        color: "#f3f8f9"
+        color:backgroundColor
         Image {
             id: image01
             source: "qrc:/ui/assets/Images/background01.jpeg"
             rotation: 90
             anchors.left: parent.left
+            height: parent.height/4
+            width: parent.width/4
+            visible: imgVisible
         }
         Image {
             id: image02
             source: "qrc:/ui/assets/Images/background04.jpeg"
             anchors.right:  parent.right
             anchors.bottom:  parent.bottom
+            visible: imgVisible
+        }
+        Image {
+            id: name
+            source: "qrc:/ui/assets/Images/remove.png"
+            height: 30
+            width: 30
+            visible: pageNumber===0? false:true
+            anchors.right: parent.right
+            MouseArea{
+                anchors.fill: parent
+                onClicked: {
+                    console.log("close clicked")
+                    closeWindow()
+                }
+            }
         }
         Text {
             id: mainText
@@ -47,6 +69,7 @@ Item {
         }
         Column
         {
+            id:_column
             anchors.bottomMargin: root.height/10
             anchors.bottom: parent.bottom
             anchors.horizontalCenter: parent.horizontalCenter
@@ -54,8 +77,9 @@ Item {
             Image {
                 id: image03
                 source: loginPageImage
-//                source:"qrc:/ui/assets/Images/TempleInviteSnap.PNG"
-//                source: "file:D:/Temple_Raj/Temple_Kiosk_8/Temple_Kiosk_8/bins/Data/RamaTempleBenglauru/TempleInviteSnap1.PNG"
+                visible: imgVisible
+                //                source:"qrc:/ui/assets/Images/TempleInviteSnap.PNG"
+                //                source: "file:D:/Temple_Raj/Temple_Kiosk_8/Temple_Kiosk_8/bins/Data/RamaTempleBenglauru/TempleInviteSnap1.PNG"
                 anchors.horizontalCenter: parent.horizontalCenter
                 height: root.height/2
                 width: root.width/3
@@ -74,8 +98,9 @@ Item {
                     horizontalAlignment: TextInput.AlignHCenter
                     verticalAlignment: TextInput.AlignVCenter
                     font.pixelSize: fpixelsize
-                    width: mainRectangle.width/3
-                    height: mainRectangle.height/13
+                    //                    width: mainRectangle.width/3
+                    //                    height: mainRectangle.height/13
+                    anchors.fill: parent
                     property string placeholderText: "Enter your Login ID"
                     clip: true
                     Text {
@@ -107,8 +132,9 @@ Item {
                     font.pixelSize: fpixelsize
                     horizontalAlignment: TextInput.AlignHCenter
                     verticalAlignment: TextInput.AlignVCenter
-                    width: mainRectangle.width/3
-                    height: mainRectangle.height/13
+                    //                    width: mainRectangle.width/3
+                    //                    height: mainRectangle.height/13
+                    anchors.fill: parent
                     property string placeholderText: "Enter your password"
                     echoMode : TextInput.Password
                     clip: true
@@ -121,8 +147,11 @@ Item {
                         font.pixelSize: styles.firstRowFontSize
                         anchors.centerIn: parent
                         clip: true
-
                     }
+                   onActiveFocusOnPressChanged: {
+                       passwordPlaceTextID.text = ""
+                   }
+
                 }
             }
             RoundButton{
@@ -132,7 +161,8 @@ Item {
                 radius: columnrect3.width/4
                 palette {  button:"#9B26B6" }
                 onClicked: {
-                    dbchecker.checkCredentials(userNameID.text,passwordInput.text)
+                    //dbchecker.checkCredentials(userNameID.text,passwordInput.text)
+                    sevaProxy.userManagement.authorize(userNameID.text,passwordInput.text)
                     userNameID.text = ""
                     passwordInput.text = ""
 
@@ -161,7 +191,7 @@ Item {
         function onCorrectCredentials()
         {
             console.log("Credentials are correct")
-            loginSuccess()
+            loginSuccess(pageNumber)
         }
         function onWrongCredentials()
         {
@@ -170,5 +200,44 @@ Item {
             errortext.visible = true
         }
     }
+    Keys.onEscapePressed: {
+        console.log("Escape Pressed ==== ",pageNumber)
+        if(pageNumber === 2 || pageNumber === 4){
+            Qt.quit();
+        }
+    }
+    Component.onCompleted: {
+        console.log("The Page Number===",pageNumber)
+        if(pageNumber === 2){
+            _column.anchors.centerIn = parent
+            columnrect.width=mainRectangle.width/3.5
+            columnrect.height = mainRectangle.height/11
+            backgroundColor = "cornflowerblue"
+            mainRectangle.border.width = 2
+
+            columnrect2.width=mainRectangle.width/3.5
+            columnrect2.height = mainRectangle.height/11
+
+            columnrect3.width=mainRectangle.width/3.5
+            columnrect3.height = mainRectangle.height/11
+        }
+        else if(pageNumber === 4){
+            _column.anchors.centerIn = parent
+            columnrect.width = mainRectangle.width/3.5
+            columnrect.height = mainRectangle.height/11
+            backgroundColor = "cornflowerblue"
+            mainRectangle.border.width = 2
+
+            columnrect2.width = mainRectangle.width/3.5
+            columnrect2.height = mainRectangle.height/11
+
+            columnrect3.width = mainRectangle.width/3.5
+            columnrect3.height = mainRectangle.height/11
+        }
+        else {
+            console.log( "The page number is 0")
+        }
+    }
+
 }
 

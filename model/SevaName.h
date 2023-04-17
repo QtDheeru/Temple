@@ -9,8 +9,22 @@ class SevaName : public QObject
     Q_PROPERTY(QString sevaName READ sevaName WRITE setSevaName NOTIFY sevaNameChanged)
     Q_PROPERTY(int sevaType READ sevaType WRITE setSevaType NOTIFY sevaTypeChanged)
     Q_PROPERTY(int sevaId   READ sevaId WRITE setSevaId NOTIFY sevaIdChanged)
+    Q_PROPERTY(int sevaType READ sevaType WRITE setSevaType NOTIFY sevaTypeChanged)
     Q_PROPERTY(double sevaCost READ sevaCost WRITE setSevaCost NOTIFY sevaCostChanged)
+    Q_PROPERTY(int teerthaPrasada READ teerthaPrasada WRITE setTeerthaPrasada NOTIFY teerthaPrasadaChanged)
+
+    Q_PROPERTY(QString sevaStartDate READ sevaStartDate WRITE setSevaStartDate NOTIFY sevaStartDateChanged)
+    Q_PROPERTY(QString sevaEndDate READ sevaEndDate WRITE setSevaEndDate NOTIFY sevaEndDateChanged)
+
+    Q_PROPERTY(double count READ count WRITE setCount NOTIFY countChanged)
     Q_PROPERTY(int additionalCost READ additionalCost WRITE setAdditionalCost NOTIFY additionalCostChanged)
+
+    Q_PROPERTY(QString sevaStartTime READ sevaStartTime WRITE setSevaStartTime NOTIFY startTimeChanged)
+    Q_PROPERTY(QString sevaEndTime READ sevaEndTime WRITE setSevaEndTime NOTIFY endTimeChanged)
+
+    Q_PROPERTY(QString userName READ userName WRITE setUserName NOTIFY userNameChanged)
+    Q_PROPERTY(bool sankalpa READ sankalpa WRITE setSankalpa NOTIFY sankalpaChanged)
+    Q_PROPERTY(double enable READ enable WRITE setEnable NOTIFY enableChanged)
 
 public:
     explicit SevaName(QObject *parent = nullptr);
@@ -34,8 +48,8 @@ public:
     int teerthaPrasada() const;
     void setTeerthaPrasada(int teerthaPrasada);
 
-    QString sevaDate() const;
-    void setSevaDate(const QString &sevaDate);
+    QString sevaStartDate() const;
+    void setSevaStartDate(const QString &sevaDate);
 
     Q_INVOKABLE void print();
 
@@ -45,8 +59,11 @@ public:
     int additionalCost() const;
     void setAdditionalCost(int additionalCost);
 
-    QString sevaTime() const;
-    void setSevaTime(const QString &sevaTime);
+    QString sevaStartTime() const;
+    void setSevaStartTime(const QString &sevaTime);
+
+    QString sevaEndTime() const;
+    void setSevaEndTime(const QString &sevaEndTime);
 
     QString userName() const;
     void setUserName(const QString &userName);
@@ -54,8 +71,8 @@ public:
     bool sankalpa() const;
     void setSankalpa(bool sankalpa);
 
-    QString sevaEndTime() const;
-    void setSevaEndTime(const QString &sevaEndTime);
+//    QString sevaEndTime() const;
+//    void setSevaEndTime(const QString &sevaEndTime);
 
     bool enable() const;
     void setEnable(bool enable);
@@ -67,8 +84,20 @@ signals:
     void sevaNameChanged();
     void sevaTypeChanged();
     void sevaIdChanged();
+  //  void sevaTypeChanged();
     void sevaCostChanged();
+    void teerthaPrasadaChanged();
+    void sevaStartDateChanged();
+    void sevaEndDateChanged();
+    void startTimeChanged();
+    void endTimeChanged();
+    void countChanged();
+
     void additionalCostChanged();
+
+    void userNameChanged();
+    void sankalpaChanged();
+    void enableChanged();
 
 private :
     QString m_sevaName;
@@ -86,6 +115,7 @@ private :
     QString m_userName;
     bool    m_sankalpa;
     bool    m_enable;
+    //int 	m_Number;
 };
 
 #endif // SEVANAME_H
