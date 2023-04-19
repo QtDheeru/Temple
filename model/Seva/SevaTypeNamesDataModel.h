@@ -22,8 +22,8 @@ public:
     ~SevaTypeNamesDataModel();
     static SevaTypeNamesDataModel* self();
 
-    bool querySevaTypes();
-    bool querySevaNames();
+    Q_INVOKABLE bool querySevaTypes();
+    Q_INVOKABLE bool querySevaNames();
     QList<SevaName*> getSevaList(int sevaType);
 
 

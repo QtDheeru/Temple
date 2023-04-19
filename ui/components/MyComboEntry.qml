@@ -6,6 +6,8 @@ Rectangle {
     id : _root
     property int myHeight : 30
     property int fontPixelSize : 20
+    property int comboBoxFontSize:20
+    property var rowspacing:myHeight/2
     property int myWidth
     implicitWidth:150;implicitHeight:myHeight
     property alias _labelText : _label.text
@@ -24,9 +26,10 @@ Rectangle {
     focus: true
     Layout.fillWidth: true
     RowLayout{
+        id:row
         anchors.fill: parent
         Layout.leftMargin: 10
-        spacing: myHeight/2
+        spacing:rowspacing
         Label{
             id : _label
             text : "Mobile Number"
@@ -44,15 +47,14 @@ Rectangle {
         }
         ComboBox{
             id :_tInput
-
             Layout.fillWidth: true
-            Layout.preferredWidth: _root.myWidth - _label.width
+            Layout.preferredWidth: _root.myWidth - _label.widt
             Layout.preferredHeight: _root.myHeight
             Layout.minimumWidth: _root.myWidth - _label.width
             Layout.minimumHeight: _root.myHeight
             Layout.alignment:  Qt.AlignVCenter
             Layout.rightMargin: 10
-            font.pixelSize: _root.fontPixelSize
+            font.pixelSize: _root.comboBoxFontSize
 //            indicator: Image {
 //                id: indi
 //                scale : 0.5

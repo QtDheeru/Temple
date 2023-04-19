@@ -15,6 +15,7 @@ Rectangle {
     signal bookingreport();
     signal admin();
     signal closeProject();
+    signal loadAdminrights()
     //signal loadMenuPage();
     signal voucher();
     signal errorOccur(string errorMsg);
@@ -78,8 +79,9 @@ Rectangle {
             myopacity: sevaProxy.userManagement.rolenum===1 ? 1 :0.4
             onButtonClikcked: {
                 console.log("account details button clicked");
-                _loginloader.active= true
-                loadLogin(2)
+                accountDetails();
+                //                _loginloader.active= true
+                //                loadLogin(2)
                 if(sevaProxy.userManagement.rolenum !== 1){
                     _adminmsg.showMsg("Admin Access Only!")
                 }
@@ -87,7 +89,6 @@ Rectangle {
                     console.log("this is admin")
                 }
 
-                //accountDetails();
                 //_errorDialog.open()
             }
         }
@@ -114,16 +115,17 @@ Rectangle {
             myopacity: sevaProxy.userManagement.rolenum===1 ? 1 :0.4
             border.width: _menupage.width/300
             onButtonClikcked: {
+                loadAdminrights()
+//                admin();
                 console.log("admin button clicked")
-                _loginloader.active= true
-                loadLogin(4)
+                // _loginloader.active= true
+                // loadLogin(4)
                 if(sevaProxy.userManagement.rolenum !== 1){
                     _adminmsg.showMsg("Admin Access Only!")
                 }
                 else{
                     console.log("this is admin")
                 }
-                // admin();
             }
         }
         TempleButton{
@@ -131,12 +133,13 @@ Rectangle {
             width:_menupage.width/4
             height: _menupage.height/5
             color: "aqua"
-            buttonText: "CLOSE PROJECT"
+            buttonText: "CLOSE APPLICATION"
             border.width: _menupage.width/300
             onButtonClikcked: {
                 console.log("close button clicked");
+                Qt.quit();
                 closeProject();
-                _errorDialog.open()
+                //                _errorDialog.open()
             }
         }
         TempleButton{

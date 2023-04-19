@@ -22,7 +22,6 @@ void UserManagement::addUser(QString name, QString lastname, QString userid, QSt
         rolenum=2;
     }
     DBInterface::getInstance()->add_new_signin_details(name,lastname,userid,password,rolenum,"");
-    emit userAdded("User Added Success");
 }
 
 void UserManagement::modify(QString name, QString password, int userRole)

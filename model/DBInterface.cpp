@@ -2645,6 +2645,7 @@ void DBInterface::add_new_signin_details(QString fname, QString lname, QString u
 
     QSqlQuery query_s_no;
     QMessageBox msgbox;
+    QString status;
     query_s_no.prepare("select SNO from signindetails");
     query_s_no.exec();
     while(query_s_no.next()){
@@ -2653,27 +2654,28 @@ void DBInterface::add_new_signin_details(QString fname, QString lname, QString u
     }
     bool found =false;
     QSqlQuery qry;
-    qry.prepare("select SNO,FIRSTNAME,LASTNAME from signindetails");
+    qry.prepare("select * from signindetails");
     qry.exec();
     while(qry.next())
     {
-        QString val1=qry.value(1).toString();
-        int val2=qry.value(2).toInt();
-        qDebug()<<Q_FUNC_INFO<<val1<<Qt::endl;
-        qDebug()<<Q_FUNC_INFO<<val2<<Qt::endl;
+        QString val1=qry.value(3).toString();
+        qDebug()<<"The val1 is= "<<val1<<Qt::endl;
+        //        qDebug()<<Q_FUNC_INFO<<val2<<Qt::endl;
 
-        qDebug()<<Q_FUNC_INFO<< fname<<lname<<username<<  password<<rolenum<< date<<"%%%%%%%%%%%%"<<val1<<val2<<Qt::endl;
+        qDebug()<<Q_FUNC_INFO<< fname<<lname<<username<<  password<<rolenum<< date<<"%%%%%%%%%%%%"<<val1<<Qt::endl;
 
-        if((fname==val1)||(lname==val2))
+        if(username==val1)
         {
+            qDebug()<<"User exist"<<Qt::endl;
             found =true;
-            msgbox.setText(tr("ITS ALLREADY EXIST"));
-            msgbox.exec();
-            return;
-            break;
+            status = username + ": " + "Alraedy Exist";
+            //            msgbox.setText(tr("User ALLREADY EXIST"));
+            //            msgbox.exec();
+            //                    return;
+            //            break;
         }
     }
-    if(!found)
+    if(found==false)
     {
         qDebug()<<"Data not found"<<Qt::endl;
         QSqlQuery Squery;
@@ -2688,8 +2690,9 @@ void DBInterface::add_new_signin_details(QString fname, QString lname, QString u
         Squery.bindValue(":role_no",rolenum);
         Squery.bindValue(":date",date);
         Squery.exec();
-        emit sucessfully_added();
+        status = username+ ": " + "Added Successfuly";
     }
+    emit sucessfully_added(status);
 }
 
 QList<SigninDetails *> DBInterface::geting_signInDetails()

@@ -27,6 +27,7 @@ class SevaViewProxy : public QObject
     Q_PROPERTY(SevaBookingSearchModel* sevaBSearchModel READ sevaBSearchModel NOTIFY sevaBookingSearchModelChanged)
     Q_PROPERTY(SevaBookingTableModel* sevaBookingTV READ sevaBookingTV NOTIFY sevaBookingTVChanged)
     Q_PROPERTY(UserManagement* userManagement READ userMngmnt CONSTANT)
+    Q_PROPERTY(SevaTypeNamesDataModel *sevaBookingModelData READ sevaBookingModelData CONSTANT)
 public:
     explicit SevaViewProxy(QObject *parent = nullptr);
     Q_INVOKABLE QAbstractItemModel* getSevaModel(int sevaType);
@@ -87,6 +88,8 @@ public:
 
     UserManagement *userMngmnt() const;
 
+    SevaTypeNamesDataModel *sevaBookingModelData() const;
+
 public slots:
     Q_INVOKABLE void generateCSV();
 
@@ -111,6 +114,7 @@ private :
     SevaBookingSearchModel *m_sevaBSearchModel;
     SevaTypeViewModel *m_sevaTypeModel;
     UserManagement* m_userMngmnt;
+
 };
 
 #endif // SEVAVIEWPROXY_H

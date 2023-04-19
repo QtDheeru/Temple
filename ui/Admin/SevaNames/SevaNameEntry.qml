@@ -8,9 +8,9 @@ Item {
     id  : _root
     Layout.fillWidth: true
     function setSevaType(sevaType){
-            console.log("Seva Type ="+sevaType.sevaTypeName);
-            sevatypeName._data = sevaType.sevaTypeName;
-            sevaCode._data = sevaType.sevaTypeId
+        console.log("Seva Type ="+sevaType.sevaTypeName);
+        sevatypeName._data = sevaType.sevaTypeName;
+        sevaCode._data = sevaType.sevaTypeId
     }
 
     Rectangle{
@@ -125,12 +125,13 @@ Item {
                     text:"Add"
                     Layout.fillWidth: true
                     onClicked: {
-                            addNewSeva()
+                        addNewSeva()
+                        sevaProxy.sevaBookingModelData.querySevaNames()
                     }
                 }
                 Button{
                     text:"Modify"
-                     Layout.fillWidth: true
+                    Layout.fillWidth: true
                     onClicked: {
                         console.log("Modify Clicked")
                     }

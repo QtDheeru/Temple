@@ -30,6 +30,7 @@ Rectangle{
                 height: parent.height/1.1
                 width: parent.width/1.75
                 anchors.centerIn: parent
+                spacing: parent.height/14
                 MyRowEntry {
                     id:sevatypeName;_labelText :qsTr("Name")
                     myHeight:parent.height/5
@@ -55,12 +56,15 @@ Rectangle{
                     width: parent.width
                     height: 80
                     spacing: parent.width/12
+                    anchors.left: parent.left
+                    anchors.leftMargin: parent.width /(-7)
                     Button{
                         text:"Add"
                         anchors.verticalCenter: parent.verticalCenter
                         onClicked: {
                             console.log("Add userclicked")
                             var message = sevaProxy.addNewSevaType(sevatypeName._data,sevaCode._data,userName._data)
+                             sevaProxy.sevaBookingModelData.querySevaType();
                             _errorDialog.showError(message)
                         }
                     }

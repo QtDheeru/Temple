@@ -148,9 +148,6 @@ Item {
                         anchors.centerIn: parent
                         clip: true
                     }
-                   onActiveFocusOnPressChanged: {
-                       passwordPlaceTextID.text = ""
-                   }
 
                 }
             }

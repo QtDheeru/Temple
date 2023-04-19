@@ -45,7 +45,7 @@ Rectangle {
             fontPixelSize: _rootSevaDateTime.subComponentPixelSize
             myWidth: parent.width/1.25
             _labelText:qsTr("Reciept Date")
-            showPopup: false
+            showPopup: sevaProxy.userManagement.rolenum===1
         }
         MyDateEntry{
             id:r2;

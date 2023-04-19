@@ -83,7 +83,7 @@ signals:
     void success();
     void wrongCred();
     void show_username_password(QString,QString);
-    void sucessfully_added();
+    void sucessfully_added(QString msg);
 
 
 public slots:

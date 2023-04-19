@@ -42,7 +42,8 @@ SevaViewProxy::SevaViewProxy(QObject *parent) : QObject(parent)
     QObject::connect(m_sevaBookingModelData,&SevaTypeNamesDataModel::error,this,
                      &SevaViewProxy::errorMessage);
 
-
+    QObject::connect(DBInterface::getInstance(),&DBInterface::sucessfully_added,m_userMngmnt,
+                     &UserManagement::userAdded);
     //    QObject::connect(DBInterface::getInstance(),SIGNAL(forFUllDetails(QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>))
     //        ,m_allReportModel,SLOT(getData(QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>)));
 }
@@ -302,8 +303,8 @@ QString SevaViewProxy::addNewSevaType(QString sevaTypeName,int sevaTypeId ,QStri
 QString SevaViewProxy::createNewSeva(SevaName *seva)
 {
     qDebug()<<Q_FUNC_INFO<<seva->sevaName()<<seva->sevaId()<<seva->Number()<<seva->sevaCost()<<seva->sevaStartDate()<<seva->sevaType()<<seva->sevaCost()<<seva->count()<<seva->sevaStartTime();
-     seva->print();
-     return m_sevaBookingModelData->createNewSeva(seva);
+    seva->print();
+    return m_sevaBookingModelData->createNewSeva(seva);
 }
 
 void SevaViewProxy::print()
@@ -359,6 +360,11 @@ void SevaViewProxy::generateCSV()
     DBInterface::getInstance()->getDbData();
     qDebug() << Q_FUNC_INFO << Qt::endl;
     emit successMessage("Export Complete!");
+}
+
+SevaTypeNamesDataModel *SevaViewProxy::sevaBookingModelData() const
+{
+    return m_sevaBookingModelData;
 }
 
 UserManagement *SevaViewProxy::userMngmnt() const
