@@ -1,0 +1,48 @@
+{
+    "2023_4_0008": {
+        "SRI SITA RAMANJANEYARIGE NOOTA VASTRA DHARANE pratyekavagi": {
+            "Number": 7929977,
+            "additionalCost": 0,
+            "count": 2,
+            "sevaCost": 500,
+            "sevaId": 63,
+            "sevaName": "SRI SITA RAMANJANEYARIGE NOOTA VASTRA DHARANE pratyekavagi",
+            "sevaTime": "08:00 AM",
+            "sevaType": 2,
+            "teerthaPrasada": 6553700
+        },
+        "address": "giri nagara",
+        "bookedBy": "vadhiraj",
+        "devoteeName": "Vadhiraj G",
+        "gothra": "kashyapa",
+        "mobilenumber": "7987547946",
+        "momento": "Category-1",
+        "nakshtra": "Bharani",
+        "receiptDate": "25-04-2023",
+        "receiptNo": "2023_4_0008",
+        "reference": ""
+    },
+    "2023_4_0009": {
+        "M Navami Pravachna Seva-All days": {
+            "Number": 7929977,
+            "additionalCost": 21000,
+            "count": 1,
+            "sevaCost": 6000,
+            "sevaId": 26,
+            "sevaName": "M Navami Pravachna Seva-All days",
+            "sevaTime": "08:00 AM",
+            "sevaType": 3,
+            "teerthaPrasada": 6553700
+        },
+        "address": "RR Nagara",
+        "bookedBy": "",
+        "devoteeName": "Suman N",
+        "gothra": "kashyapa",
+        "mobilenumber": "9481914363",
+        "momento": "Category-1",
+        "nakshtra": "Ashwini",
+        "receiptDate": "25-04-2023",
+        "receiptNo": "2023_4_0009",
+        "reference": ""
+    }
+}

@@ -12,7 +12,7 @@ static int SID=0;
 static int RID=0;
 //static int SET=0 ;
 static int TID=0 ;
-
+static int VID=0;
 
 //delete from sevaname where SNO>=1000;
 DBInterface::DBInterface(QObject *parent) : QObject(parent)
@@ -21,6 +21,7 @@ DBInterface::DBInterface(QObject *parent) : QObject(parent)
     TID=0;
     SID=0;
     RID=0;
+    VID=0;
     db = QSqlDatabase::addDatabase("QSQLITE");
     //QString currentPath=qApp->applicationDirPath()+"/Data/nseva.db";
     QString currentPath = TrustListModel::getTrustListModelInstance()->getDataLocation()+"/nseva.db";
@@ -787,18 +788,17 @@ int DBInterface::getLastVoucherNumber()
     //QString lastRecord = "select * from sevabooking ORDER BY SNO ASC LIMIT 1";
     QString lastRecord = "select V_NO from VOUCHER_DETAILS";
 
-    int voucherNo=-1;
     QSqlQuery qry;
     //qry.prepare(lastRecord);
     qry.exec(lastRecord);
 
     while(qry.next()){
 
-        voucherNo = qry.value(0).toInt();
+        VID = qry.value(0).toInt();
 
     }
-    qDebug() << voucherNo<< Qt::endl;
-    return voucherNo+1;
+    qDebug() << VID<< Qt::endl;
+    return VID+1;
 }
 
 void DBInterface::to_persondetails_db(QString devoteMobile,QString devoteName,QString devoteNakshatra,QString devoteGotra,QString devoteSevacharge,QString devoteAdditionalcharges,QString devoteCount,QString devotereceiptdate,QString devoteSevadate,QString devoteNote)

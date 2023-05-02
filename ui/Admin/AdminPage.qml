@@ -45,6 +45,7 @@ Rectangle {
                 Layout.minimumWidth: 100
                 Layout.preferredWidth: 200
                 visible: _actionSelector.sevaTypeSelected
+                Layout.alignment: Qt.AlignVCenter
             }
             SevaNameEntry{
                 id : sevaNameEntry

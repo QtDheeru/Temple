@@ -206,12 +206,12 @@ int print_file::printing_file_1(QList<Print_Detail *> *pd)
             painter.setFont(QFont("Arial",9));
             painter.drawText(next_slot_x+27,next_slot_y,pd->at(i)->SEVA_DESCR);
 
-            painter.drawText(next_slot_x+213,next_slot_y,pd->at(i)->RATE);
+            painter.drawText(next_slot_x+213,next_slot_y,pd->at(i)->RATE+".00Rs");
             painter.drawText(next_slot_x+270,next_slot_y,pd->at(i)->QTY);
 
             QRectF amt_rect(next_slot_x+275,next_slot_y-13,rect_width-left_margin+309,20);
             //painter.drawText(amt_rect, Qt::AlignRight, pd->at(i)->AMT+".00");
-            painter.drawText(next_slot_x+270+60,next_slot_y,pd->at(i)->AMT+".00");
+            painter.drawText(next_slot_x+270+60,next_slot_y,pd->at(i)->AMT+".00Rs");
             qDebug() << Q_FUNC_INFO << " **** Amount =" << pd->at(i)->AMT <<Qt::endl;
         }
 
@@ -225,7 +225,7 @@ int print_file::printing_file_1(QList<Print_Detail *> *pd)
 
         painter.drawText(left_margin+285,top_margin+370," Total: ₹ ");
         painter.setFont(QFont("Times New Roman", 8, QFont::Bold));
-        painter.drawText(left_margin+327,top_margin+370,pd->back()->TOTAL_AMT+".00");
+        painter.drawText(left_margin+327,top_margin+370,pd->back()->TOTAL_AMT+".00Rs");
 
         painter.setFont(QFont("Arial",7));
 
@@ -363,14 +363,14 @@ int print_file::prin2PixMap(QList<Print_Detail *> *pd)
             //            QRectF boundingRect(amt_rect);
             //            painter.drawText(amt_rect,Qt::AlignLeft|Qt::AlignTop|Qt::TextWordWrap,pd->at(i)->SEVA_DESCR , &boundingRect);
             //            painter.setFont(QFont("Arial",9));
-            painter.drawText(next_slot_x+293,next_slot_y+15,pd->at(i)->RATE);
+            painter.drawText(next_slot_x+286,next_slot_y+15,pd->at(i)->RATE+".00Rs");
             qDebug() << Q_FUNC_INFO << " **** rate =" << pd->at(i)->RATE <<Qt::endl;
             painter.drawText(next_slot_x+365,next_slot_y+15,pd->at(i)->QTY);
 
             //QRectF amt_rect(next_slot_x+275,next_slot_y-13,rect_width-margin+309,20);
             //painter.drawText(amt_rect, Qt::AlignRight, pd->at(i)->AMT+".00");
             //painter.drawText(amt_rect, Qt::AlignRight, pd->at(i)->AMT+".00");
-            painter.drawText(next_slot_x+360+50,next_slot_y+15,pd->at(i)->AMT);
+            painter.drawText(next_slot_x+360+45,next_slot_y+15,pd->at(i)->AMT+".00Rs");
             next_slot_y = next_slot_y + 40;
 
             qDebug() << Q_FUNC_INFO << " **** Amount =" << pd->at(i)->AMT <<Qt::endl;
@@ -386,8 +386,8 @@ int print_file::prin2PixMap(QList<Print_Detail *> *pd)
 
         painter.setFont(QFont("Arial",10));
 
-        painter.drawText(margin+360,top_margin+375," Total: ₹ ");
-        painter.drawText(margin+420,top_margin+375,pd->back()->TOTAL_AMT+".00");
+        painter.drawText(margin+340,top_margin+375," Total: ₹ ");
+        painter.drawText(margin+400,top_margin+375,pd->back()->TOTAL_AMT+".00Rs");
 
         //painter.setFont(QFont("Arial",10));
 

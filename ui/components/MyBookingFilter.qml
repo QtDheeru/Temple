@@ -23,6 +23,8 @@ Rectangle {
     property alias  isSingleDateSelected: _selectDateRadio.checked
     //property alias  repItm: _rip
     property alias isAllselected:_month._data
+    property var currentmonth
+    property var currentyear
     // property alias repEle: _rip
     signal dateRangeSelected();
     signal monthWiseSelected();
@@ -309,8 +311,12 @@ Rectangle {
                             _rip.iSelectedType = 2
                             //                            _rip.sMonth = 1
                             //                            _rip.sYear = "2015"
+                            //                            _rip.sMonth = _month.currentIndex+1
+                            //                            _rip.sYear = _year._data
+
                             _rip.sMonth = _month.currentIndex+1
                             _rip.sYear = _year._data
+
                             //                            _rip.bSevawise = _sevawise.checked
                             //                            _rip.bDatewise = _datewise.checked
                             //                            _rip.sSingleDate =  "null"
@@ -342,6 +348,9 @@ Rectangle {
                     enabled: false
                     _labelText :qsTr("Year")
                     _dataModel:["2015","2016","2017","2018","2019","2020","2021","2022","2023","2024","2025","2026","2027","2028","2029","2030"]
+                }
+                Component.onCompleted: {
+
                 }
             }
         }
@@ -433,7 +442,7 @@ Rectangle {
                     console.log("---------11----------------")
                     loadDateWiseBookingPage();
                     console.log("---------12----------------")
-                   // sendReportDateRangeInputForWholeMonth(_rip)
+                    // sendReportDateRangeInputForWholeMonth(_rip)
 
                     sendBookingReportDateRangeInputForWholeMonth(_rip)
                     if((sevaProxy.sevaReport.bookingReportDateRangeModel.getBookingReportDateRangeQryList()===0))
@@ -443,15 +452,15 @@ Rectangle {
                         sendError("No Reports for this Month & Year");
                     }
                 }
-//                if(sevaProxy.sevaReport.accReportModel.getAccountReportQryListSize()===0)
-//                {
-//                    console.log("---------d----------------")
-//                    tot = sevaProxy.sevaReport.accReportModel.grandTotal + ".00 ₹"
-//                }
-//                else{
-//                    console.log("---------e----------------")
-//                    tot = sevaProxy.sevaReport.accReportModel.grandTotal + ".00 ₹"
-//                }
+                //                if(sevaProxy.sevaReport.accReportModel.getAccountReportQryListSize()===0)
+                //                {
+                //                    console.log("---------d----------------")
+                //                    tot = sevaProxy.sevaReport.accReportModel.grandTotal + ".00 ₹"
+                //                }
+                //                else{
+                //                    console.log("---------e----------------")
+                //                    tot = sevaProxy.sevaReport.accReportModel.grandTotal + ".00 ₹"
+                //                }
             }
         }
     }
@@ -461,6 +470,7 @@ Rectangle {
     }
     Component.onCompleted: {
         console.log(" Trying to get the list category")
+
         if( sevaProxy.getSevaTypeModel()===null)
         {
             errorOccur("seva type model not found");
@@ -475,10 +485,10 @@ Rectangle {
             _rip.sSevaName=  "All";
             _rip.iSelectedType = 0
             _rip.sSingleDate =  Qt.formatDate(new Date(), "dd-MM-yyyy")
-           // sevaProxy.sevaReport.generateAccReport(_rip)
+            // sevaProxy.sevaReport.generateAccReport(_rip)
             var li =  _rip.sSingleDate.split("-");
             //console.log("******** "+li[2]+"-"+li[1]+"-"+li[0])
-           // _rip.sSingleDate = li[2]+"-"+li[1]+"-"+li[0]
+            // _rip.sSingleDate = li[2]+"-"+li[1]+"-"+li[0]
             console.log("  _rip.sSingleDate 2"+ _rip.sSingleDate)
             sevaProxy.sevaReport.generateBookReport(_rip)
             if(sevaProxy.sevaReport.bookReportModel.getBookingReportQryListSize()===0)
@@ -535,7 +545,6 @@ Rectangle {
     Connections{
         target:_month
         function onMonthChanged(mon){
-
             _rip.sMonth = mon
             console.log("Selected month"+ _rip.sMonth)
         }
@@ -543,11 +552,11 @@ Rectangle {
     Connections{
         target:_year
         function onYearChanged(yr){
-
             _rip.sYear = yr
             console.log("Selected year"+ _rip.sYear)
         }
     }
     ButtonGroup { id: radioGroup }
+
 
 }

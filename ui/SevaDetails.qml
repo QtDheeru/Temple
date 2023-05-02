@@ -21,8 +21,8 @@ Rectangle {
     property string sevatime : "08:00 AM"
     property alias referenceVisbility :r3.visible
     property bool isDataExist : r1.isDataExist &&
-                                r2.isDataExist &&
-                                r4.isDataExist
+                                r2.isDataExist
+
     function setSevaDetails(seva){
         console.log(" Seva Details =" + seva.sevaCost)
         seva.print();

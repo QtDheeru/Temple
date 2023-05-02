@@ -35,7 +35,7 @@ Rectangle{
                 id:r1
                 height:20
                 // z:5
-               // color: styleData.selected ? "skyblue"  : "white"
+                // color: styleData.selected ? "skyblue"  : "white"
 
 
                 MouseArea {
@@ -49,23 +49,23 @@ Rectangle{
                         console.log("mouse clicked left styleData.selected "+styleData.selected)
                         // clear any other selected row
 
-//                        // select this row
-//                        // styleData.selected = true
-//                        //                    color= styleData.selected ? "skyblue" : "white"
-//                        console.log("clicked cell in table view ",lv1.currentRow)
+                        //                        // select this row
+                        //                        // styleData.selected = true
+                        //                        //                    color= styleData.selected ? "skyblue" : "white"
+                        //                        console.log("clicked cell in table view ",lv1.currentRow)
 
-//                        // convert mouse position from delegate to tableview coordinates
-//                        var coordinates = r1.mapToItem(lv1, mouse.x, mouse.y);
-//                        console.log("clicked cell in table view coordinates = ",coordinates)
+                        //                        // convert mouse position from delegate to tableview coordinates
+                        //                        var coordinates = r1.mapToItem(lv1, mouse.x, mouse.y);
+                        //                        console.log("clicked cell in table view coordinates = ",coordinates)
 
-//                        //   active and click the appropriate items (internal)
-//                        var clickIndex = lv1.__listView.indexAt(0, coordinates.y + lv1.__listView.contentY)
-//                        console.log("clicked cell in table view clickIndex = ",clickIndex)
-//                        if (clickIndex > -1) {
-//                            if (lv1.__activateItemOnSingleClick) lv1.activated(clickIndex)
-//                            lv1.clicked(clickIndex)
-//                        }
-//                        //       consume the mouse event
+                        //                        //   active and click the appropriate items (internal)
+                        //                        var clickIndex = lv1.__listView.indexAt(0, coordinates.y + lv1.__listView.contentY)
+                        //                        console.log("clicked cell in table view clickIndex = ",clickIndex)
+                        //                        if (clickIndex > -1) {
+                        //                            if (lv1.__activateItemOnSingleClick) lv1.activated(clickIndex)
+                        //                            lv1.clicked(clickIndex)
+                        //                        }
+                        //                        //       consume the mouse event
                         mouse.accepted = true
 
                         if (mouse.button === Qt.LeftButton)
@@ -83,56 +83,56 @@ Rectangle{
                 height:20
                 color: styleData.selected ? "skyblue" : styleData.row%2 ? "light gray" : "white"
                 Text {
-                     anchors.fill: parent
-                  //  anchors.centerIn: parent
+                    anchors.fill: parent
+                    //  anchors.centerIn: parent
                     text: styleData.value
-                //    x:_itmdel.x+25
+                    //    x:_itmdel.x+25
                     // horizontalAlignment: styleData.column === 0? Text.AlignLeft:Text.AlignRight
                     // verticalAlignment: Qt.AlignVCenter
 
                     font.pixelSize: 14
                 }
 
-//                Rectangle{
-//                    anchors.right: parent.right
-//                    width:1
-//                    color:"black"
-//                    height:parent.height
-//                }
+                //                Rectangle{
+                //                    anchors.right: parent.right
+                //                    width:1
+                //                    color:"black"
+                //                    height:parent.height
+                //                }
             }
         }
-//        onClicked: {
-//            console.log("clicked cell in table view ",row)
-//            //        var rowItem =  (sevaProxy.sevaBSearchModel).index(row)
-//            selectedRow = row
-//            //        (sevaProxy.sevaBSearchModel)
-//            //         if (mouse.button == Qt.RightButton)
-//            {
-//                console.log("clicked cell in table view ",row)
-//            }
+        //        onClicked: {
+        //            console.log("clicked cell in table view ",row)
+        //            //        var rowItem =  (sevaProxy.sevaBSearchModel).index(row)
+        //            selectedRow = row
+        //            //        (sevaProxy.sevaBSearchModel)
+        //            //         if (mouse.button == Qt.RightButton)
+        //            {
+        //                console.log("clicked cell in table view ",row)
+        //            }
 
-//        }
+        //        }
         TableViewColumn {
             id:_slNo;title: "Sl No"; role: "SlNo";
             width: _rr1.width/8.1
 
             movable: false
             resizable: false
-//            delegate: Rectangle{
-//                id:_slNodel
-//                height:20
-//                color: styleData.row%2 ? "light gray":"white"
-//                Text {
-//                  //  anchors.fill: parent
-//                      anchors.centerIn: parent
-//                    text: styleData.value
-//                    horizontalAlignment:Text.AlignLeft
-//                    padding: 5
-//                    verticalAlignment: Qt.AlignVCenter
+            //            delegate: Rectangle{
+            //                id:_slNodel
+            //                height:20
+            //                color: styleData.row%2 ? "light gray":"white"
+            //                Text {
+            //                  //  anchors.fill: parent
+            //                      anchors.centerIn: parent
+            //                    text: styleData.value
+            //                    horizontalAlignment:Text.AlignLeft
+            //                    padding: 5
+            //                    verticalAlignment: Qt.AlignVCenter
 
-//                    font.pixelSize: 14
-//                }
-//            }
+            //                    font.pixelSize: 14
+            //                }
+            //            }
         }
         TableViewColumn {
             id:_sevaName;title: "Month"; role: "month";
@@ -239,7 +239,7 @@ Rectangle{
 
     Component.onCompleted:  {
         console.log("Component.completed: of SevaAccountReportMonthWise.qml")
-  forceActiveFocus();
+        forceActiveFocus();
         // sevaProxy.sevaReport.resetAccDateRangeModel();
         //sevaProxy.sevaReport.generateAccReportForEachDate(obj);
     }

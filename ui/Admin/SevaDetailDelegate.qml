@@ -28,7 +28,7 @@ RowLayout{
         contentItem: Text {
             id : _t1
             text : sevaTypeName;
-            font.pixelSize: 15
+            font.pixelSize: 22
             color: "black"
             wrapMode: Text.WordWrap
             verticalAlignment: Text.AlignVCenter
@@ -43,7 +43,7 @@ RowLayout{
         contentItem: Text {
             id : _t2
             text : sevaTypeId;
-            font.pixelSize: 15
+            font.pixelSize: 22
             color: "black"
             wrapMode: Text.WordWrap
             verticalAlignment: Text.AlignVCenter

@@ -24,6 +24,7 @@ Rectangle {
     //property alias  repItm: _rip
     property alias isAllselected:_month._data
     // property alias repEle: _rip
+    property var currentMonth;
     signal dateRangeSelected();
     signal monthWiseSelected();
     //color: "lightblue"
@@ -309,15 +310,22 @@ Rectangle {
                             _rip.iSelectedType = 2
                             //                            _rip.sMonth = 1
                             //                            _rip.sYear = "2015"
-                            _rip.sMonth = _month.currentIndex+1
+//                            _rip.sMonth = _month.currentIndex+1
+//                            _rip.sYear = _year._data
+
+                            currentMonth= new Date().toLocaleString("M");
+                            currentMonth = currentMonth.charAt(0)
+                            console.log("Hello currentMonth=====",currentMonth)
+                            _rip.sMonth = _month.currentIndex + currentMonth
+                            console.log("Suman month----",_rip.sMonth)
                             _rip.sYear = _year._data
                             //                            _rip.bSevawise = _sevawise.checked
                             //                            _rip.bDatewise = _datewise.checked
                             //                            _rip.sSingleDate =  "null"
                             //                            _rip.sStartDate =  "null"
                             //                            _rip.sEndDate = "null"
-                            console.log("_month.currentIndex+1 "+_month.currentIndex+1)
-                            console.log("_year._data "+_year._data)
+                            console.log("_month.currentIndex+1 "+ _month.currentIndex+1)
+                            console.log("_year._data "+_year.currentIndex)
                         }
                     }
                 }
@@ -577,7 +585,6 @@ Rectangle {
     Connections{
         target:_year
         function onYearChanged(yr){
-
             _rip.sYear = yr
             console.log("Selected year"+ _rip.sYear)
         }

@@ -35,21 +35,21 @@ Rectangle{
                     id:sevatypeName;_labelText :qsTr("Name")
                     myHeight:parent.height/5
                     myWidth: parent.width
-                    fontPixelSize: parent.width/20
+                    fontPixelSize: parent.width/18
                     anchors.horizontalCenter: parent.horizontalCenter
                 }
                 MyRowEntry {
                     id:sevaCode;_labelText :qsTr("SevaCode")
                     myHeight:parent.height/5
                     myWidth: parent.width
-                    fontPixelSize: parent.width/20
+                    fontPixelSize: parent.width/18
                     anchors.horizontalCenter: parent.horizontalCenter
                 }
                 MyRowEntry {
                     id:userName;_labelText :qsTr("UserName")
                     myHeight:parent.height/5
                     myWidth: parent.width
-                    fontPixelSize: parent.width/20
+                    fontPixelSize: parent.width/18
                     anchors.horizontalCenter: parent.horizontalCenter
                 }
                 Row{

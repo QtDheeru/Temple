@@ -172,6 +172,7 @@ Item {
                     anchors.centerIn: parent
                     clip: true
                 }
+
             }
             Text {
                 id: errortext
@@ -234,6 +235,12 @@ Item {
         else {
             console.log( "The page number is 0")
         }
+    }
+    Keys.onEnterPressed: {
+        console.log( "enter key pressed")
+        sevaProxy.userManagement.authorize(userNameID.text,passwordInput.text)
+        userNameID.text = ""
+        passwordInput.text = ""
     }
 
 }

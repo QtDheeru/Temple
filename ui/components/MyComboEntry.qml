@@ -55,31 +55,29 @@ Rectangle {
             Layout.alignment:  Qt.AlignVCenter
             Layout.rightMargin: 10
             font.pixelSize: _root.comboBoxFontSize
-//            indicator: Image {
-//                id: indi
-//                scale : 0.5
-//                source: "qrc:/ui/assets/Images/up-and-down-arrows.png"
-//            }
+            //            indicator: Image {
+            //                id: indi
+            //                scale : 0.5
+            //                source: "qrc:/ui/assets/Images/up-and-down-arrows.png"
+            //            }
             onActivated:{
                 console.log(" Activated Index ="+index)
                 console.log("Selected Text ="+_tInput.textAt(index))
                 var currentItem = delegateModel.items.get(currentIndex)
-               indexChanged(currentItem)
+                indexChanged(currentItem)
                 monthChanged(currentIndex+1)
                 yearChanged(_tInput.textAt(currentIndex))
                 itemChanged(currentIndex)
             }
             onCurrentIndexChanged: {
-
                 var currentItem = delegateModel.items.get(currentIndex)
-               indexChanged(currentItem)
+                indexChanged(currentItem)
                 monthChanged(currentIndex+1)
                 yearChanged(_tInput.textAt(currentIndex))
                 itemChanged(currentIndex)
             }
         }
     }
-
     function findTextInComboBox(combotext){
         console.log(" FInding the tetxt ="+combotext)
         return _tInput.find(combotext);

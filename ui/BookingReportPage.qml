@@ -90,6 +90,9 @@ Rectangle{
                 border.width: 2
                 color: "#576F72"
             }
+            Component.onCompleted: {
+                console.log("The month and year initial",_reportitems.mnt," ",_reportitems.yr)
+            }
         }
         Rectangle{
             id:leftpart
