@@ -25,6 +25,7 @@ struct print_details
     QString RECPT_NO;
     QString MOB_NO;
     QString DATE;
+    QString TIME;
     QString GOTHRA;
     QString SEVA_DATE;
     QString NAKSHATRA;
@@ -72,10 +73,11 @@ struct print_bookingDetails
     QString  quantity;
     QString  receipt_Date;
     QString  seva_Date;
+    QString  seva_time;
     QString  total_Cost;
     QString  cash;
     QString  bank;
-     QString note;
+    QString note;
 };
 struct PersonDetails{
     QString personId;

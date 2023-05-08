@@ -37,7 +37,7 @@ Rectangle{
                     fontPixelSize: _r1.subComponentPixelSize
                     myWidth: parent.width/1.25
                     _labelText:qsTr("Reciept Date")
-                    showPopup: false
+                    showPopup: true
                 }
                 MyRowEntry{
                     id:_voucherNo;

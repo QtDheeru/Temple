@@ -15,6 +15,7 @@ class SevaBookingElement : public QObject
     Q_PROPERTY(QString quantity READ quantity WRITE setQuantity CONSTANT)
     Q_PROPERTY(QString receiptDate READ receiptDate WRITE setReceiptDate CONSTANT)
     Q_PROPERTY(QString sevaDate READ sevaDate WRITE setSevaDate CONSTANT)
+    Q_PROPERTY(QString sevatime READ sevatime WRITE setSevatime NOTIFY sevatimeChanged)
     Q_PROPERTY(QString totalCost READ totalCost WRITE setTotalCost CONSTANT)
     Q_PROPERTY(QString cash READ cash WRITE setCash CONSTANT)
     Q_PROPERTY(QString bank READ bank WRITE setBank CONSTANT)
@@ -67,7 +68,13 @@ public:
     const QString &bookedBy() const;
     void setBookedBy(const QString &newBookedBy);
 
+
+    const QString &sevatime() const;
+    void setSevatime(const QString &newSevatime);
+
 signals:
+
+    void sevatimeChanged();
 
 private :
     QString m_sno ;
@@ -78,6 +85,7 @@ private :
     QString m_quantity;
     QString m_receiptDate;
     QString m_sevaDate;
+    QString m_sevatime;
     QString m_totalCost;
     QString m_cash;
     QString m_bank;

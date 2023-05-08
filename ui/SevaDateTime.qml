@@ -16,7 +16,7 @@ Rectangle {
     property alias sevadate : r2.selecteddate
     property alias momento : _momento._data
     property alias bookedby : r4._data
-    property string sevatime : "08:00 AM"
+    property string sevatime : _time._data
     ColumnLayout {
         id : _c1
         //spacing: styles.verticalSpacing
@@ -41,7 +41,7 @@ Rectangle {
         height: parent.height
         MyDateEntry{
             id:r1;
-            myHeight:_rootSevaDateTime.subComponentHeight;
+            myHeight:_rootSevaDateTime.subComponentHeight ;
             fontPixelSize: _rootSevaDateTime.subComponentPixelSize
             myWidth: parent.width/1.25
             _labelText:qsTr("Reciept Date")
@@ -49,23 +49,28 @@ Rectangle {
         }
         MyDateEntry{
             id:r2;
-
             myHeight:_rootSevaDateTime.subComponentHeight;
             fontPixelSize: _rootSevaDateTime.subComponentPixelSize
             myWidth: parent.width/1.25
             _labelText:qsTr("Seva Date")
         }
         MyComboEntry{id:_momento;
-            myHeight:_rootSevaDateTime.subComponentHeight;
+            myHeight:_rootSevaDateTime.subComponentHeight-10;
             fontPixelSize: _rootSevaDateTime.subComponentPixelSize
             myWidth: parent.width/1.25
             Layout.topMargin: 8;
             _labelText :qsTr("Momento")
         }
         MyRowEntry {
+            id:_time;_labelText :qsTr("Seva Time")
+            myWidth: parent.width/1.25
+            myHeight:_rootSevaDateTime.subComponentHeight-10;
+            fontPixelSize: _rootSevaDateTime.subComponentPixelSize
+        }
+        MyRowEntry {
             id:r4;_labelText :qsTr("Booked By")
             myWidth: parent.width/1.25
-            myHeight:_rootSevaDateTime.subComponentHeight;
+            myHeight:_rootSevaDateTime.subComponentHeight-10;
             fontPixelSize: _rootSevaDateTime.subComponentPixelSize
         }
     }

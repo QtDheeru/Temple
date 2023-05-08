@@ -62,7 +62,7 @@ void SevaBookingConformationDataModel::init()
 {
     qDebug()<<Q_FUNC_INFO<<Qt::endl;
 }
-void SevaBookingConformationDataModel::addData(int receiptNumber, QString date, QString mobile, QString name, QString Nakshatra, QString gothra,int bank, QString banklist, QString note)
+void SevaBookingConformationDataModel::addData(int receiptNumber, QString date,QString sevatime, QString mobile, QString name, QString Nakshatra, QString gothra,int bank, QString banklist, QString note)
 {
     qDebug()<<Q_FUNC_INFO<<"addData function called"<<Qt::endl;
     this->setReceiptNumber(receiptNumber);
@@ -74,6 +74,7 @@ void SevaBookingConformationDataModel::addData(int receiptNumber, QString date, 
     this->setBank(bank);
     this->setBanklist(banklist);
     this->setNote(note);
+    this->setSevatime(sevatime);
 }
 
 void SevaBookingConformationDataModel::print()
@@ -97,7 +98,7 @@ void SevaBookingConformationDataModel::print()
         p->DATE.append(m_sevaReceipt->receiptDate());
         p->GOTHRA.append(m_sevaReceipt->gothra());
         p->NAKSHATRA.append(m_sevaReceipt->nakshtra());
-
+        p->SEVA_TIME.append(m_sevaReceipt->sevatime());
         SevaName* seva = m_sevabookinglist.at(i);
 
         double totalSevaCost = (seva->sevaCost()*seva->count()) + seva->additionalCost();
@@ -123,7 +124,7 @@ void SevaBookingConformationDataModel::printReceipt()
     this->print();
 }
 
-void SevaBookingConformationDataModel::addNewData(QString sevaname, int sevacharges, int count, int extra, int cash, QString sevadate, int sevatime)
+void SevaBookingConformationDataModel::addNewData(QString sevaname, int sevacharges, int count, int extra, int cash, QString sevadate, QString sevatime)
 {
     qDebug()<<Q_FUNC_INFO<<"addNewData function called"<<Qt::endl;
     sb=new SevaName;
@@ -132,6 +133,7 @@ void SevaBookingConformationDataModel::addNewData(QString sevaname, int sevachar
     sb->setCount(count);
     sb->setAdditionalCost(extra);
     sb->setSevaStartDate(sevadate);
+    sb->setSevaStartTime(sevatime);
     m_sevabookinglist.append(sb);
     qDebug()<<Q_FUNC_INFO<<"new sevabooking data is added to the list"<<m_sevabookinglist<<Qt::endl;
     print();
@@ -159,6 +161,7 @@ bool SevaBookingConformationDataModel::saveReceipt(MySevaReceipt *rec)
     this->m_sevaReceipt->setMobilenumber(rec->mobilenumber());
 
     this->m_sevaReceipt->setReceiptDate(rec->receiptDate());
+    this->m_sevaReceipt->setSevatime(rec->sevatime());
     this->m_sevaReceipt->setMomento(rec->momento());
     this->m_sevaReceipt->setBookedBy(rec->bookedBy());
 
@@ -372,4 +375,17 @@ MySevaReceipt *SevaBookingConformationDataModel::sevaReceipt() const
 QList<SevaName *> SevaBookingConformationDataModel::sevabookinglist() const
 {
     return m_sevabookinglist;
+}
+
+const QString &SevaBookingConformationDataModel::sevatime() const
+{
+    return m_sevatime;
+}
+
+void SevaBookingConformationDataModel::setSevatime(const QString &newSevatime)
+{
+    if (m_sevatime == newSevatime)
+        return;
+    m_sevatime = newSevatime;
+    emit sevatimeChanged();
 }

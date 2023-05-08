@@ -28,8 +28,6 @@ const QString &BookingReportDateRangeElement::date() const
 
 void BookingReportDateRangeElement::setDate(const QString &newDate)
 {
-    if (m_date == newDate)
-        return;
     m_date = newDate;
     emit dateChanged();
 }

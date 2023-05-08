@@ -13,7 +13,7 @@ Rectangle {
     property alias isCountEditable : countID._editable
     property alias isAddressEditable : r4._editable
     property alias isAdditionalCostEditable : r5._editable
-
+    property alias sevaCost: r2._data
     property alias reference : r3._data
     property alias count: countID._data
     property alias address : r4._data
@@ -28,6 +28,12 @@ Rectangle {
         seva.print();
         r1._data = seva.sevaName;
         r2._data = seva.sevaCost
+        if(seva.sevaCost === 0){
+            r2._editable = true
+            seva.cost = r2._data
+        }else{
+            r2._editable = false
+        }
     }
 
     function resetPartial(){

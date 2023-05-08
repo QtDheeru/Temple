@@ -173,6 +173,13 @@ Rectangle{
             sevaProxy.generateCSV()
         }
     }
+    Connections{
+        id:connection
+        target: sevaProxy
+        onSuccessMessage:{
+            _errorDialog.showmsg(exportmsg)
+        }
+    }
 
 
     //  }
@@ -219,9 +226,9 @@ Rectangle{
         id :_errorDialog
         visible: false
 
-        function showError(message){
+        function showmsg(exportmsg){
             _errorDialog.visible = true;
-            _errorDialog.text2Display = message
+            _errorDialog.text2Display = exportmsg
             _errorDialog.open();
             //_errorDialog.visible = false;
         }

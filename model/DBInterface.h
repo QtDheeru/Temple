@@ -93,7 +93,7 @@ public slots:
     void modify_db_seva(int,QString,int,QString,QString,QString,int,QString,int);
     void delete_sevadb(QString, QString);
     //void sevabookingdb(QString , QString , QString , QString , QString , QString , QString , QString , QString , QString , QString , int, int , QString , QString , QString);
-    bool insertSevaBooked(QString , QString , QString , QString , QString , QString , QString , QString , QString , QString , QString , int, int , QString , QString , QString, QString sevaType,QString reference="ref",QString address="RR nagar",QString momento="momento");
+    bool insertSevaBooked(QString , QString , QString ,QString , QString , QString , QString , QString , QString , QString , QString , int, int , QString , QString , QString, QString sevaType,QString reference="ref",QString address="RR nagar",QString momento="momento",QString="");
     void insertVoucherIssued(VoucherElement*);
     bool check_name_db(int,QString,int,QString,QString,int,QString,int);
     bool check_db(QString, int, QString seva_adder_name);

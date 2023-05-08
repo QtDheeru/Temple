@@ -4,8 +4,10 @@ BookingReportDateRangeModel::BookingReportDateRangeModel(QObject *parent)
     : QAbstractTableModel{parent}
 {
     qDebug()<<Q_FUNC_INFO<<Qt::endl;
-    connect(DBInterface::getInstance(),&DBInterface::booking_report_Date_Range,
-            this,&BookingReportDateRangeModel::insertSevaRow);
+    bool status= connect(DBInterface::getInstance(),&DBInterface::booking_report_Date_Range,
+                         this,&BookingReportDateRangeModel::insertSevaRow);
+    qDebug()<<"The connect status"<<status<<Qt::endl;
+
 }
 
 BookingReportDateRangeModel::~BookingReportDateRangeModel()
@@ -62,7 +64,7 @@ QHash<int, QByteArray> BookingReportDateRangeModel::roleNames() const
 
 bool BookingReportDateRangeModel::insertSevaRow(BookingReportDateRangeElement *elm)
 {
-    qDebug()<<Q_FUNC_INFO<<Qt::endl;
+    qDebug()<<Q_FUNC_INFO<<"suman insert sevaRow for report"<<Qt::endl;
     qDebug()<<Q_FUNC_INFO<<"------------"<<Qt::endl;
     beginInsertRows(QModelIndex(),m_bookingReportDateRangeQryList.size(),m_bookingReportDateRangeQryList.size());
     this->m_bookingReportDateRangeQryList.append(elm);

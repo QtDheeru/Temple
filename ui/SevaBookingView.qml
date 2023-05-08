@@ -294,7 +294,7 @@ Rectangle{
         var retVal = sevaProxy.addSevaOnly(sevaObject.sevaType,
                                            sevaObject.sevaId,
                                            sevaObject.sevaName,
-                                           sevaObject.sevaCost,
+                                           _sevaD.sevaCost,
                                            _sevaDate.sevadate,
                                            _sevaDate.sevatime,
                                            _sevaD.addcost,
@@ -305,7 +305,7 @@ Rectangle{
             return;
         }
 
-        _sevaPriceSummary.addTotal(sevaObject.sevaCost,_sevaD.count)
+        _sevaPriceSummary.addTotal(_sevaD.sevaCost,_sevaD.count)
         _sevaPriceSummary.addTotal(_sevaD.addcost)
         sevaObject = null;
     }
@@ -341,8 +341,8 @@ Rectangle{
 
         _sevaReceipt.receiptDate = _sevaDate.receiptdate.trim();
         _sevaReceipt.momento = _sevaDate.momento.trim()
+        _sevaReceipt.sevatime = _sevaDate.sevatime.trim();
         _sevaReceipt.bookedBy = _sevaDate.bookedby.trim()
-
         _sevaReceipt.cash =  _paymentDialog.paymentObject.cashPaid.trim()
         _sevaReceipt.bank =  _paymentDialog.paymentObject.bankSelected.trim()
         _sevaReceipt.onlineRef =  _paymentDialog.paymentObject.checkOrTransactionId.trim()

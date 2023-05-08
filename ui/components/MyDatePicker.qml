@@ -47,8 +47,8 @@ Item {
     }
     Popup{
         id: calPopup
-        width: _rootDataPicker.width-_rootDataPicker.width/4
-        height: 200
+        width: _rootDataPicker.width-_rootDataPicker.width/2.8
+        height: 360
         visible: false
         Cal.Calendar{
             id: cal

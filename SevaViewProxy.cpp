@@ -223,6 +223,7 @@ bool SevaViewProxy::printBookingReceipt(SevaBookingElement *sevaBookingElement)
     p->quantity = sevaBookingElement->quantity();
     p->receipt_Date = sevaBookingElement->receiptDate();
     p->seva_Date = sevaBookingElement->sevaDate();
+    p->seva_time = sevaBookingElement->sevatime();
     p->total_Cost = sevaBookingElement->totalCost();
     p->cash = sevaBookingElement->cash();
     p->bank = sevaBookingElement->bank();
@@ -359,7 +360,7 @@ void SevaViewProxy::generateCSV()
     qDebug() << Q_FUNC_INFO << Qt::endl;
     DBInterface::getInstance()->getDbData();
     qDebug() << Q_FUNC_INFO << Qt::endl;
-    emit successMessage("Export Complete!");
+    emit successMessage("Export Completed!");
 }
 
 SevaTypeNamesDataModel *SevaViewProxy::sevaBookingModelData() const

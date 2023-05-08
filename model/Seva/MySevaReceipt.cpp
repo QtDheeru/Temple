@@ -160,3 +160,16 @@ void MySevaReceipt::setNote(const QString &note)
 {
     m_note = note;
 }
+
+const QString &MySevaReceipt::sevatime() const
+{
+    return m_sevatime;
+}
+
+void MySevaReceipt::setSevatime(const QString &newSevatime)
+{
+    if (m_sevatime == newSevatime)
+        return;
+    m_sevatime = newSevatime;
+    emit sevatimeChanged();
+}

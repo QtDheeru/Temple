@@ -416,7 +416,6 @@ Rectangle{
                     _errorDialog.visible = true;
                     _errorDialog.text2Display = message
                     _errorDialog.open();
-                    //_errorDialog.visible = false;
                 }
             }
         }

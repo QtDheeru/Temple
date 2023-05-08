@@ -162,7 +162,8 @@ void AllViewReports::insertHeader(){
 void AllViewReports::clearModel()
 {
     qDebug() << Q_FUNC_INFO << " clear data called"<< Qt::endl;
-    m_sourceModel->removeRows( 0, m_sourceModel->rowCount());
+    m_sourceModel->clear();
+    //m_sourceModel->removeRows( 0, m_sourceModel->rowCount());
 }
 
 void AllViewReports::insertSevaRow(SevaBookingElement *elem)

@@ -13,6 +13,7 @@ class SevaBookingConformationDataModel : public QAbstractListModel
     Q_OBJECT
     Q_PROPERTY(int receiptNumber READ receiptNumber WRITE setReceiptNumber);
     Q_PROPERTY(QString date READ date WRITE setDate);
+    Q_PROPERTY(QString sevatime READ sevatime WRITE setSevatime NOTIFY sevatimeChanged)
 
     Q_PROPERTY(QString mobilenumber READ mobilenumber WRITE setMobilenumber);
     Q_PROPERTY(QString name READ name WRITE setName);
@@ -41,11 +42,11 @@ public:
    Q_INVOKABLE void init();
 
     Q_INVOKABLE void addData(
-                             int receiptNumber,QString date,QString mobile,QString name,QString Nakshatra,
+                             int receiptNumber,QString date,QString sevatime,QString mobile,QString name,QString Nakshatra,
                              QString gothra,int bank,QString banklist,QString note
             );
 
-    Q_INVOKABLE void addNewData(QString sevaname,int sevacharges,int count,int extra,int cash,QString sevadate,int sevatime);
+    Q_INVOKABLE void addNewData(QString sevaname,int sevacharges,int count,int extra,int cash,QString sevadate,QString sevatime);
 
     Q_INVOKABLE void saveReceiptDetails(QString receiptNumber,
                                         QString mobile, QString name, QString nak,
@@ -104,11 +105,18 @@ public:
 
     QList<SevaName *> sevabookinglist() const;
 
+    const QString &sevatime() const;
+    void setSevatime(const QString &newSevatime);
+
+signals:
+    void sevatimeChanged();
+
 private:
     int m_receiptNumber;
     QString m_receiptNo;
     QString m_name;
     QString m_date;
+    QString m_sevatime;
     QString m_mobilenumber;
     QString m_nakshtra;
     QString m_gothra;

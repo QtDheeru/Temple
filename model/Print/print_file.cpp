@@ -329,8 +329,8 @@ int print_file::prin2PixMap(QList<Print_Detail *> *pd)
         QLineF line4(margin+210,top_margin+90,margin+210,200);
         painter.drawLine(line4);
 
-        painter.drawText(margin+230,top_margin+105,"Recpt.no:");
-        painter.drawText(margin+295,top_margin+105,pd->front()->RECPT_NO);
+        painter.drawText(margin+230,top_margin+105,"Recpt.No:");
+        painter.drawText(margin+310,top_margin+105,pd->front()->RECPT_NO);
 
         painter.drawText(margin+230,top_margin+130,"Date:");
         painter.drawText(margin+295,top_margin+130,pd->back()->DATE);
@@ -339,11 +339,13 @@ int print_file::prin2PixMap(QList<Print_Detail *> *pd)
         painter.drawText(margin+308,top_margin+155,pd->back()->SEVA_DATE);
 
         painter.drawText(margin+230,top_margin+180,"Seva Time:");
-        painter.drawText(margin+285,top_margin+180,pd->back()->SEVA_TIME);
+        painter.drawText(margin+310,top_margin+180,pd->back()->SEVA_TIME);
 
         QLineF line2(margin,top_margin+190,printW+10,200);
         painter.drawLine(line2);
         painter.drawText(margin+5,top_margin+205,"Sl.no");
+        QLineF lineslno(margin+45,top_margin+190,margin+45,370);
+        painter.drawLine(lineslno);
         painter.drawText(margin+55,top_margin+205,"Seva Name");
         painter.drawText(margin+290,top_margin+205,"Cost");
 
@@ -358,19 +360,19 @@ int print_file::prin2PixMap(QList<Print_Detail *> *pd)
         {
             painter.drawText(next_slot_x,next_slot_y+15, QString::number(i+1));
             painter.setFont(QFont("Arial",8));
-            painter.drawText(next_slot_x+27,next_slot_y+5,260,320,Qt::AlignLeft|Qt::AlignTop|Qt::TextWordWrap,pd->at(i)->SEVA_DESCR);
+            painter.drawText(next_slot_x+47,next_slot_y+5,260,320,Qt::AlignLeft|Qt::AlignTop|Qt::TextWordWrap,pd->at(i)->SEVA_DESCR);
             //            QRectF amt_rect(next_slot_x+275,next_slot_y-13,rect_width-left_margin+309,20);
             //            QRectF boundingRect(amt_rect);
             //            painter.drawText(amt_rect,Qt::AlignLeft|Qt::AlignTop|Qt::TextWordWrap,pd->at(i)->SEVA_DESCR , &boundingRect);
             //            painter.setFont(QFont("Arial",9));
-            painter.drawText(next_slot_x+286,next_slot_y+15,pd->at(i)->RATE+".00Rs");
+            painter.drawText(next_slot_x+286,next_slot_y+15,pd->at(i)->RATE+".00");
             qDebug() << Q_FUNC_INFO << " **** rate =" << pd->at(i)->RATE <<Qt::endl;
             painter.drawText(next_slot_x+365,next_slot_y+15,pd->at(i)->QTY);
 
             //QRectF amt_rect(next_slot_x+275,next_slot_y-13,rect_width-margin+309,20);
             //painter.drawText(amt_rect, Qt::AlignRight, pd->at(i)->AMT+".00");
             //painter.drawText(amt_rect, Qt::AlignRight, pd->at(i)->AMT+".00");
-            painter.drawText(next_slot_x+360+45,next_slot_y+15,pd->at(i)->AMT+".00Rs");
+            painter.drawText(next_slot_x+360+45,next_slot_y+15,pd->at(i)->AMT+".00");
             next_slot_y = next_slot_y + 40;
 
             qDebug() << Q_FUNC_INFO << " **** Amount =" << pd->at(i)->AMT <<Qt::endl;
@@ -387,12 +389,12 @@ int print_file::prin2PixMap(QList<Print_Detail *> *pd)
         painter.setFont(QFont("Arial",10));
 
         painter.drawText(margin+340,top_margin+375," Total: ₹ ");
-        painter.drawText(margin+400,top_margin+375,pd->back()->TOTAL_AMT+".00Rs");
+        painter.drawText(margin+408,top_margin+375,pd->back()->TOTAL_AMT+".00");
 
         //painter.setFont(QFont("Arial",10));
 
         painter.drawText(margin,top_margin+387,"Total in words:₹");
-        painter.drawText(margin+108,top_margin+386,pd->back()->TOTAL_IN_WORDS+" only");
+        painter.drawText(margin+112,top_margin+386,pd->back()->TOTAL_IN_WORDS+" only");
 
         painter.drawText(margin+2,top_margin+405,"Note:");
         painter.drawText(margin+37,top_margin+405,pd->back()->NOTE);
@@ -489,7 +491,7 @@ int print_file::prin2PixMap(Print_VoucherDetail *pvd)
         painter.drawLine(verticleLine);
 
 
-        painter.drawText(margin+10,top_margin+150,"Voucher.no:");
+        painter.drawText(margin+10,top_margin+150,"Voucher.No:");
         qDebug()<<"The Voucher Number ------------- "<<pvd->VOUCHER_NO<<Qt::endl;
         painter.drawText(margin+100,top_margin+150,pvd->VOUCHER_NO);
 
@@ -522,7 +524,7 @@ int print_file::prin2PixMap(Print_VoucherDetail *pvd)
         painter.drawText(margin+10,top_margin+260,"Item: "+pvd->VOUCHER_ITEM);
 
         painter.drawText(margin+10,top_margin+290,"Total Amount: ");
-        painter.drawText(margin+370,top_margin+290,pvd->VOUCHER_COST+".00Rs");
+        painter.drawText(margin+370,top_margin+290,pvd->VOUCHER_COST+".00");
 
         painter.drawText(margin+10,top_margin+320,"Payment Ref: ");
         painter.drawText(margin+110,top_margin+320,pvd->VOUCHER_PAYMENT_REFERENCE);
@@ -569,7 +571,7 @@ int print_file::prin2PixMap(Print_VoucherDetail *pvd)
         painter.setFont(QFont("Arial",10));
 
         painter.drawText(margin+300,top_margin+380," Total: ₹ ");
-        painter.drawText(margin+380,top_margin+380,pvd->VOUCHER_COST+".00Rs");
+        painter.drawText(margin+380,top_margin+380,pvd->VOUCHER_COST+".00");
 
         painter.setFont(QFont("Arial",10));
 

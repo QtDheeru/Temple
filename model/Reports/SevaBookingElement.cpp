@@ -166,3 +166,19 @@ void SevaBookingElement::setBookedBy(const QString &newBookedBy)
 {
     m_bookedBy = newBookedBy;
 }
+
+const QString &SevaBookingElement::sevatime() const
+{
+    return m_sevatime;
+}
+
+void SevaBookingElement::setSevatime(const QString &newSevatime)
+{
+    if (m_sevatime == newSevatime)
+        return;
+    m_sevatime = newSevatime;
+    emit sevatimeChanged();
+}
+
+
+

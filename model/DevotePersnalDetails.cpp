@@ -7,7 +7,7 @@ DevotePersnalDetails::DevotePersnalDetails(QObject *parent) : QObject(parent)
   ,m_gothra("")
   ,m_nakshatra("")
 {
-
+    qDebug()<<Q_FUNC_INFO <<Qt::endl;
 }
 
 QString DevotePersnalDetails::devoteeName() const
@@ -52,10 +52,10 @@ void DevotePersnalDetails::setNakshatra(const QString &nakshatra)
 
 void DevotePersnalDetails::print()
 {
-     qDebug() << " Name =" << this->devoteeName();
-     qDebug() << " Nakshatra " << this->nakshatra();
-     qDebug() << " Gothra " << this->gothra() <<Qt::endl;
-     qDebug() << " Mobile " << this->mobileNumber() <<Qt::endl;
+    qDebug() << " Name =" << this->devoteeName();
+    qDebug() << " Nakshatra " << this->nakshatra();
+    qDebug() << " Gothra " << this->gothra() <<Qt::endl;
+    qDebug() << " Mobile " << this->mobileNumber() <<Qt::endl;
 }
 
 QString DevotePersnalDetails::personDbId() const

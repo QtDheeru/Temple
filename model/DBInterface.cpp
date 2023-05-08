@@ -84,13 +84,18 @@ DBInterface::DBInterface(QObject *parent) : QObject(parent)
                      "R_MONTH,"
                      "R_YEAR,"
                      "RECEIPT_DATE,"
+                     "S_TIME,"
                      "SEVACOST,"
                      "ADDITIONALCOST,"
                      "SEVATOTALPRICE,"
                      "NOTE,"
                      "CASH TEXT(30),"
                      "BANK TEXT(30),"
-                     "BANKDETAILS TEXT(30));";
+                     "BANKDETAILS TEXT(30),"
+                     "REFERENCE TEXT(30),"
+                     "ADDRESS TEXT(30),"
+                     "MOMENTO TEXT(30));";
+
 
     QString query3 = "CREATE TABLE persondetails("
                      "SNO,"
@@ -135,7 +140,9 @@ DBInterface::DBInterface(QObject *parent) : QObject(parent)
     qry.prepare(query);
     qry.prepare(query1);
     qry.prepare(query2);
+    if(qry.exec()){qDebug()<<"Sevabooking table created";}else{qDebug()<<"Sevabboking table not created";}
     qry.prepare(query3);
+    if(qry.exec()){qDebug()<<"persondetails table created";}else{qDebug()<<"person details creation failed";}
     qry.prepare(query4);
     if(qry.exec()){
         qDebug()<<"Signin table created";
@@ -175,14 +182,14 @@ bool DBInterface::add_seva_type(QString seva_type, int seva_code,QString seva_ad
         int sevacode = query_other.value(2).toString().toInt();
         if(sevacode==seva_code){
             qCritical()<<Q_FUNC_INFO<<"sevacode alraedy exist"<<endl;
-            emit dbError("DataBase Error: sevacode " + QString::number(seva_code) + "  already exist");
-            this->setError("DataBase Error: sevacode = " + QString::number(seva_code) + " Already exist");
+            emit dbError("Database Message: sevacode " + QString::number(seva_code) + "  already exist");
+            this->setError("Database Message: sevacode = " + QString::number(seva_code) + " Already exist");
             return false;
         }
         if(sevaTypeName.compare(seva_type,Qt::CaseInsensitive)==0){
             qCritical()<<Q_FUNC_INFO<<" Seva Name = " << seva_type << "  alraedy exist"<<endl;
-            emit dbError("DataBase Error: sevatype  " + seva_type + "  already exist");
-            this->setError("DataBase Error: sevatype = " + seva_type + " Already exist");
+            emit dbError("DataBase Msg: sevatype  " + seva_type + "  already exist");
+            this->setError("DataBase Msg: sevatype = " + seva_type + " Already exist");
             return false;
         }
         if(snumber>sevaSerialNumber){
@@ -370,8 +377,8 @@ bool DBInterface::createSeva(SevaName* sevaName)
         qDebug () << Q_FUNC_INFO << " Seva Name in DB =" << snu <<Qt::endl;
         if (snu == sevaName->sevaId()){
             qCritical()<<Q_FUNC_INFO<<"Seva with ID ="<< sevaName->sevaId() <<endl;
-            emit dbError("DataBase Error: sevaID " + QString::number(sevaName->sevaId()) + "  already exist");
-            this->setError("DataBase Error: sevaID = " + QString::number(sevaName->sevaId()) + " already exist");
+            emit dbError("Database Message: sevaID " + QString::number(sevaName->sevaId()) + "  already exist");
+            this->setError("Database Message: sevaID = " + QString::number(sevaName->sevaId()) + " already exist");
             return false;
         }
     }
@@ -392,12 +399,12 @@ bool DBInterface::createSeva(SevaName* sevaName)
     bool retVal = Squery.exec();
     if (!retVal) {
         qCritical()<<Q_FUNC_INFO<<"Seva with ID ="<< sevaName->sevaId() <<endl;
-        emit dbError("DataBase Error: sevaID " + QString::number(sevaName->sevaId()) + "  already exist");
-        this->setError("DataBase Error: sevaID = " + QString::number(sevaName->sevaId()) + " already exist");
+        emit dbError("Database Message: sevaID " + QString::number(sevaName->sevaId()) + "  already exist");
+        this->setError("Database Message: sevaID = " + QString::number(sevaName->sevaId()) + " already exist");
         return false;
     } else {
-        emit dbError("DataBase Error: sevaID " + QString::number(sevaName->sevaId()) + "  Added successfully");
-        this->setError("DataBase Error: sevaID = " + QString::number(sevaName->sevaId()) + " Added successfully");
+        emit dbError("Database Message: sevaID " + QString::number(sevaName->sevaId()) + "  Added successfully");
+        this->setError("Database Message: sevaID = " + QString::number(sevaName->sevaId()) + " Added successfully");
         qDebug() << Q_FUNC_INFO << "**** Seva Name =" << sevaName->sevaName() <<  " Added successfully " <<Qt::endl;
     }
 }
@@ -574,8 +581,8 @@ void DBInterface::delete_db(int d_sno)
 }
 
 //void DBInterface::sevabookingdb(QString devoteMobile, QString devoteName, QString devoteNakshatra, QString devoteGotra, QString devoteSevacharge, QString devoteAdditionalcharges, QString devoteCount, QString devotereceiptdate, QString devoteSevadate, QString devoteNote, QString devoteSevaName, int cost, int rspt_no, QString cash, QString bank_ref, QString bank_name)
-bool DBInterface::insertSevaBooked(QString devoteMobile, QString devoteName, QString devoteNakshatra, QString devoteGotra, QString devoteSevacharge, QString devoteAdditionalcharges, QString devoteCount, QString devotereceiptdate, QString devoteSevadate, QString devoteNote, QString devoteSevaName, int cost, int rspt_no, QString cash, QString bank_ref, QString bank_name,
-                                   QString sevaType,QString reference,QString address,QString momento)
+bool DBInterface::insertSevaBooked(QString devoteMobile, QString devoteName, QString devoteNakshatra, QString devoteGotra, QString devoteSevacharge, QString devoteAdditionalcharges, QString devoteCount, QString devotereceiptdate, QString devoteSevadate,QString devoteNote, QString devoteSevaName, int cost, int rspt_no, QString cash, QString bank_ref, QString bank_name,
+                                   QString sevaType,QString reference,QString address,QString momento,QString sevatime)
 {
     qDebug()<<Q_FUNC_INFO << " Mobile number is "<<devoteMobile<<"\n";
     qDebug() << Q_FUNC_INFO << "gotra ===  > " << devoteGotra ;
@@ -587,7 +594,7 @@ bool DBInterface::insertSevaBooked(QString devoteMobile, QString devoteName, QSt
     qury.prepare(qr1);
     QString devoteSevaType;
     qury.exec();
-    int bookedsevaSerialNumber=-1;
+    int bookedsevaSerialNumber=0;
     while(qury.next()){
         RID=qury.value(0).toInt();
         QString val1=qury.value(1).toString();
@@ -611,10 +618,13 @@ bool DBInterface::insertSevaBooked(QString devoteMobile, QString devoteName, QSt
     int rmonth = receiptDate.month();
     int ryear = receiptDate.year();
     devotereceiptdate = receiptDate.toString("yyyy-MM-dd");
-
     QSqlQuery qry;
-    qry.prepare("INSERT INTO sevabooking(SNO,PERSONID,SEVATYPE,SEVANAME,QUANTITY,S_DATE,S_MONTH,S_YEAR,SEVA_DATE,R_DATE,R_MONTH,R_YEAR,RECEIPT_DATE,SEVACOST,ADDITIONALCOST,SEVATOTALPRICE, NOTE, CASH, BANK, BANKDETAILS, REFERENCE, ADDRESS, MOMENTO)"
-                "VALUES (:sno, :person_id, :sevatype, :sevaname, :quantity, :s_date, :s_month, :s_year, :seva_date, :r_date, :r_month,:r_year, :receipt_date, :seva_cost, :additionalcost, :sevatotalprice, :note, :cash, :bank, :bankdetails, :reference, :address, :momento)");
+    qry.prepare("INSERT INTO sevabooking(SNO,PERSONID,SEVATYPE,SEVANAME,QUANTITY,S_DATE,S_MONTH,S_YEAR,SEVA_DATE,R_DATE,R_MONTH,R_YEAR,RECEIPT_DATE,S_TIME,SEVACOST,ADDITIONALCOST,SEVATOTALPRICE, NOTE, CASH, BANK, BANKDETAILS, REFERENCE, ADDRESS, MOMENTO)"
+                "VALUES (:sno, :person_id, :sevatype, :sevaname, :quantity, :s_date, :s_month, :s_year, :seva_date, :r_date, :r_month,:r_year, :receipt_date, :s_time, :seva_cost, :additionalcost, :sevatotalprice, :note, :cash, :bank, :bankdetails, :reference, :address, :momento)");
+
+    if(qry.exec()){qDebug()<<"sevabooking insert success!"<<Qt::endl;}else {
+        qDebug()<<"sevabooking insert failed!"<<Qt::endl;
+    }
     qry.bindValue(":sno",rspt_no);
     qry.bindValue(":person_id",personId);
     qry.bindValue(":sevatype",sevaType );
@@ -628,7 +638,8 @@ bool DBInterface::insertSevaBooked(QString devoteMobile, QString devoteName, QSt
     qry.bindValue(":r_month",rmonth );
     qry.bindValue(":r_year",ryear );
     qry.bindValue(":receipt_date",devotereceiptdate);
-    qry.bindValue(":seva_cost",devoteSevacharge );
+    qry.bindValue(":s_time",sevatime);
+    qry.bindValue(":seva_cost",devoteSevacharge);
     qry.bindValue(":additionalcost",devoteAdditionalcharges);
     qry.bindValue(":sevatotalprice",cost);
     qry.bindValue(":note",devoteNote );
@@ -688,7 +699,7 @@ int DBInterface::insertPersonDetails(QString devoteMobile,QString devoteName,QSt
     qDebug()<<Q_FUNC_INFO<<" entered\n";
 
     bool found = false;
-    int  personId = -1;
+    int  personId = 0;
 
     qDebug()<<Q_FUNC_INFO << " Name: "<<devoteName<<" Mobile: "<<devoteMobile <<"\n";
 
@@ -719,7 +730,7 @@ int DBInterface::insertPersonDetails(QString devoteMobile,QString devoteName,QSt
         QSqlQuery qry;
         qry.prepare("INSERT INTO persondetails(SNO,PERSONNAME,GOTHRA,NAKSHATRA,DATE,MOBILE)"
                     "VALUES (:sno, :person_name, :gothra, :nakshatra, :date, :mobile)");
-        qry.bindValue(":sno",personId++);
+        qry.bindValue(":sno",personId);
         qry.bindValue(":person_name",devoteName);
         qry.bindValue(":gothra",devoteGotra);
         qry.bindValue(":nakshatra",devoteNakshatra );
@@ -1306,7 +1317,7 @@ bool DBInterface::saveData(QObject *obj)
                                      rcptNum,rec->cash(),
                                      rec->bank(),rec->checkOrTranscationId(),
                                      QString("%1").arg(seva->sevaType()),
-                                     rec->reference(),rec->address(),rec->momento());
+                                     rec->reference(),rec->address(),rec->momento(),QString("%1").arg(seva->sevaStartTime()));
         qDebug() << Q_FUNC_INFO << " Inserting the data in for loop into DB b is "<<b<<Qt::endl;
     }
     qDebug() << Q_FUNC_INFO << " Inserting the data into DB b is "<<b<<Qt::endl;
@@ -1745,7 +1756,7 @@ void DBInterface::booking_report_cdate_function(QString formatchangedcalendar_st
         i++;
     }
     i=0;
-    bool b5= query_other1.prepare(que);
+    bool b5 = query_other1.prepare(que);
     qDebug() << " Query string =@@@@@@@@@@@@@" << query_other1.lastError() <<Qt::endl;
     bool b6 = query_other1.exec();
     while(query_other1.next())
@@ -1763,36 +1774,36 @@ void DBInterface::booking_report_cdate_function(QString formatchangedcalendar_st
         //        ele->setTeerthaPrasada(0);
         qDebug() << " kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk" <<Qt::endl;
 
-        qDebug() << query_other1.value(0).toString()<<Qt::endl;
-        qDebug() << query_other1.value(1).toString()<<Qt::endl;
-        qDebug() << query_other1.value(2).toString()<<Qt::endl;
-        qDebug() << query_other1.value(3).toString()<<Qt::endl;
-        qDebug() << query_other1.value(4).toString()<<Qt::endl;
-        qDebug() << query_other1.value(5).toString()<<Qt::endl;
-        qDebug() << query_other1.value(6).toString()<<Qt::endl;
-        qDebug() <<"before emitting signal  booking_report ''''''''"<<endl;
+        qDebug() <<"name--"<< query_other1.value(0).toString()<<Qt::endl;
+        qDebug() <<"gothra--"<< query_other1.value(1).toString()<<Qt::endl;
+        qDebug() <<"nakshatra--"<< query_other1.value(2).toString()<<Qt::endl;
+        qDebug() <<"seva--"<< query_other1.value(3).toString()<<Qt::endl;
+        qDebug() <<"mobile--"<< query_other1.value(4).toString()<<Qt::endl;
+        qDebug() <<"note--"<< query_other1.value(5).toString()<<Qt::endl;
+        qDebug() <<"prasada--"<< query_other1.value(6).toString()<<Qt::endl;
+        qDebug() <<"before emitting signal  booking_report ''''''''"<<Qt::endl;
         emit booking_report(ele);
-        qDebug() <<"after emitting signal  booking_report ''''''''"<<endl;
+        qDebug() <<"after emitting signal  booking_report ''''''''"<<Qt::endl;
         i++;
+        qDebug()<<"after increment"<<i<<Qt::endl;
     }
 }
 
 void DBInterface::booking_report_cmonth_function(QString SEVA,int TYPE,int month,int year)
 {
+    qDebug()<<Q_FUNC_INFO<<"booking report month wise"<<SEVA<<TYPE<<month<<year<<Qt::endl;
     total_prasada=0;
     QList<QString> list_sevaname,list_sevadate,list_pname,list_gotra,list_nakshatra,list_mobile,list_note;
     QList<int> list_prasada,list_quantity,list_ticket;
     QSqlQuery query_other1;
     QString que;
     if(TYPE == 0) {
-        que = ("select PERSONID,SEVANAME,QUANTITY,SEVA_DATE,SEVATOTALPRICE,NOTE from sevabooking where sevabooking.S_MONTH='%1' and sevabooking.S_YEAR='%2' ; ");
+        que = ("select PERSONID,SEVANAME,QUANTITY,SEVA_DATE,SEVATOTALPRICE,NOTE from sevabooking where sevabooking.S_MONTH='%1' and sevabooking.S_YEAR='%2';");
         que = que.arg(month).arg(year);
     }
-    else if (SEVA==ALLSEVANAME) {
-
+    else if (SEVA==ALLSEVANAME){
         que = ("select PERSONID,SEVANAME,QUANTITY,SEVA_DATE,SEVATOTALPRICE,NOTE from sevabooking where sevabooking.S_MONTH='%1' and sevabooking.S_YEAR ='%2' and sevabooking.SEVATYPE = '%3' ; ");
         que = que.arg(month).arg(year).arg(TYPE);
-
     }
     else {
         que = ("select PERSONID,SEVANAME,QUANTITY,SEVA_DATE,SEVATOTALPRICE,NOTE from sevabooking where sevabooking.S_MONTH='%1' and sevabooking.S_YEAR ='%2' and sevabooking.SEVATYPE = '%3' and sevabooking.SEVANAME = '%4'  ");
@@ -1859,7 +1870,7 @@ void DBInterface::booking_report_cmonth_function(QString SEVA,int TYPE,int month
 
 void DBInterface::booking_report_eachDateDataRangeForMonth_function(QString SEVA,int TYPE ,int S_MONTH,int S_YEAR)
 {
-    qDebug() <<Q_FUNC_INFO<<Qt::endl;
+    qDebug() <<Q_FUNC_INFO<<"The suman monthe"<<S_MONTH<<S_YEAR<<Qt::endl;
     QList<QString> list_name;
     QList<int> list_ticket;
     QList<float> list_cost,list_total;
@@ -1883,17 +1894,15 @@ void DBInterface::booking_report_eachDateDataRangeForMonth_function(QString SEVA
     query_other1.exec();
     while(query_other1.next())
     {
+        qDebug()<<"Query in while"<<Qt::endl;
         qDebug() << "In while of db ***************************" << readstr <<Qt::endl;
         BookingReportDateRangeElement *ele = new   BookingReportDateRangeElement;
         QQmlEngine::setObjectOwnership(ele, QQmlEngine::CppOwnership);
-
         ele->setDate( query_other1.value(0).toString());
         qDebug() << "In while of db ********query_other1.value(0).toString()*******************" << query_other1.value(0).toString() <<Qt::endl;
         ele->setTotalSevaCount( query_other1.value(1).toInt());
         qDebug() << "In while of db **********query_other1.value(1).toInt()*****************" << query_other1.value(1).toInt() <<Qt::endl;
-
         emit booking_report_Date_Range(ele);
-
     }
 }
 
@@ -2111,13 +2120,13 @@ void DBInterface::account_report_cdate_function(QString SEVA,int TYPE,QString fo
         ele->setSeva_ticket( query_other1.value(1).toInt());
         ele->setSeva_cost(query_other1.value(2).toFloat());//cost
         ele->setSeva_total(query_other1.value(3).toFloat());//total
-        qDebug() << query_other1.value(0).toString()<<endl;
-        qDebug() << query_other1.value(1).toString()<<endl;
-        qDebug() << query_other1.value(2).toString()<<endl;
-        qDebug() << query_other1.value(3).toString()<<endl;
-        qDebug() <<"before emitting signal  account_report ''''''''"<<endl;
+        qDebug() << query_other1.value(0).toString()<<Qt::endl;
+        qDebug() << query_other1.value(1).toString()<<Qt::endl;
+        qDebug() << query_other1.value(2).toString()<<Qt::endl;
+        qDebug() << query_other1.value(3).toString()<<Qt::endl;
+        qDebug() <<"before emitting signal  account_report ''''''''"<<Qt::endl;
         emit account_report(ele);
-        qDebug() <<"after emitting signal  account_report ''''''''"<<endl;
+        qDebug() <<"after emitting signal  account_report ''''''''"<<Qt::endl;
     }
 
 
@@ -2785,7 +2794,6 @@ QList<print_details *> DBInterface::printWithReceiptNumber(int receiptNumber)
         QString realformatreceiptdate=query_other1.value(7).toString();
         QDate Date = QDate::fromString(realformatreceiptdate,"yyyy-MM-dd");
         pdetails->DATE = Date.toString("dd-MM-yyyy");
-
 
 
         QString realformatsevadate =query_other1.value(8).toString();

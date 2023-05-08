@@ -16,6 +16,7 @@ class MySevaReceipt : public QObject
     Q_PROPERTY(QString bookedBy READ bookedBy WRITE  setBookedBy NOTIFY bookedByChanged)
     Q_PROPERTY(QString reference READ reference WRITE  setReference NOTIFY referenceChanged)
     Q_PROPERTY(QString address READ address WRITE  setAddress NOTIFY addressChanged)
+    Q_PROPERTY(QString sevatime READ sevatime WRITE setSevatime NOTIFY sevatimeChanged)
 
     Q_PROPERTY(QString cash READ cash WRITE  setCash NOTIFY cashChanged)
     Q_PROPERTY(QString bank READ bank WRITE  setBank NOTIFY bankChanged)
@@ -67,6 +68,9 @@ public:
     QString note() const;
     void setNote(const QString &note);
 
+    const QString &sevatime() const;
+    void setSevatime(const QString &newSevatime);
+
 signals:
     void receiptNoChanged();
     void devoteeNameChanged();
@@ -86,6 +90,8 @@ signals:
     void onlineRefChanged();
     void noteChanged();
 
+    void sevatimeChanged();
+
 private :
     QString m_receiptNo;
     QString m_devoteeName;
@@ -94,6 +100,7 @@ private :
     QString m_gothra;
 
     QString m_receiptDate;
+    QString m_sevatime;
     QString m_momento;
     QString m_bookedBy;
 
