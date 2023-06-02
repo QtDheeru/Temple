@@ -58,8 +58,8 @@ public slots:
 private:
     QList<SevaBookingElement*> m_bookedSeva;
     static int x;
-     static int y;
-      static int z;
+    static int y;
+    static int z;
 
 };
 

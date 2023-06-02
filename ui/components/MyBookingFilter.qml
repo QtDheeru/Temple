@@ -314,8 +314,9 @@ Rectangle {
                             //                            _rip.sMonth = _month.currentIndex+1
                             //                            _rip.sYear = _year._data
 
-                            _rip.sMonth = _month.currentIndex+1
-                            _rip.sYear = _year._data
+                            //                            _rip.sMonth = _month.currentIndex+1
+                            //                            _rip.sYear = _year._data
+
 
                             //                            _rip.bSevawise = _sevawise.checked
                             //                            _rip.bDatewise = _datewise.checked
@@ -348,9 +349,6 @@ Rectangle {
                     enabled: false
                     _labelText :qsTr("Year")
                     _dataModel:["2015","2016","2017","2018","2019","2020","2021","2022","2023","2024","2025","2026","2027","2028","2029","2030"]
-                }
-                Component.onCompleted: {
-
                 }
             }
         }
@@ -544,6 +542,9 @@ Rectangle {
 
     Connections{
         target:_month
+        function onSendCurrentMonth(mIndex){
+            _month.currentIndex = mIndex
+        }
         function onMonthChanged(mon){
             _rip.sMonth = mon
             console.log("Selected month"+ _rip.sMonth)
@@ -551,9 +552,12 @@ Rectangle {
     }
     Connections{
         target:_year
+        function onSendCurrentYear(yIndex){
+            _year.currentIndex = yIndex
+        }
         function onYearChanged(yr){
             _rip.sYear = yr
-            console.log("Selected year"+ _rip.sYear)
+            console.log(" bookings Selected year"+ _rip.sYear)
         }
     }
     ButtonGroup { id: radioGroup }

@@ -511,7 +511,37 @@ Rectangle{
                     }
                 }
             }
-
+            Button{
+                id:_exportCsv
+                height:60
+                width: 200
+                anchors.top: lv1.bottom
+                anchors.horizontalCenter: lv1.horizontalCenter
+                style: ButtonStyle{
+                    background: Rectangle{
+                        id: bg
+                        border.width: 1
+                        radius: 3
+                        color: "cornflowerblue"
+                        Label{
+                            text: "Export Data"
+                            anchors.centerIn: parent
+                        }
+                    }
+                }
+                onClicked: {
+                    console.log("export data clicked")
+                    voucherReportModel.generateVoucherReportCSV()
+                }
+            }
+            Connections{
+                id:_connection
+                target:voucherReportModel
+                onSuccessMessage:{
+                    console.log("OnSuccess Message");
+                    _errorDialog.showError(exportmsg)
+                }
+            }
             DisplayDialog {
                 id :_errorDialog
                 visible: false

@@ -812,6 +812,77 @@ int DBInterface::getLastVoucherNumber()
     return VID+1;
 }
 
+void DBInterface::getvoucherdata()
+{
+    qDebug()<<Q_FUNC_INFO<<"^^^^^^^^^^^^^^^1111111^^^^^^^^^^^^^^^^^^"<<Qt::endl;
+
+    QList<QString> v_sno,v_date,v_name,v_phone,v_cost,v_voucherType,v_item ,v_paymentMode,v_note,v_refNo;
+    QString str;
+    qDebug()<<Q_FUNC_INFO<<"^^^^^^^^^^^^^^^222222^^^^^^^^^^^^^^^^^^"<<Qt::endl;
+
+    str = ("select * from VOUCHER_DETAILS;");
+    QSqlQuery query_other1;
+    query_other1.prepare(str);
+    query_other1.exec();
+    qDebug()<<Q_FUNC_INFO<<"^^^^^^^^^^^^^^^3333333^^^^^^^^^^^^^^^^^^  " << query_other1.size() <<Qt::endl;
+
+    while(query_other1.next()){
+        qDebug()<<Q_FUNC_INFO<<"^^^^^^^^^^^^^^^ Query DB for View^^^^^^^^^^^^^^^^^^"<<Qt::endl;
+        VoucherElement *velement = new VoucherElement;
+
+        QString vno = query_other1.value(0).toString();
+        QString vname = query_other1.value(1).toString();
+        QString vpaymntmode =query_other1.value(2).toString();
+        QString vnote =query_other1.value(3).toString();
+        QString vphone=query_other1.value(4).toString();
+
+        velement->setVoucherNo(vno.toInt());
+        velement->setVoucherName(vname);
+        velement->setVoucherPaymentMode(vpaymntmode);
+        velement->setVoucherNote(vnote);
+        velement->setMobileNo(vphone);
+
+        QString vproduct = query_other1.value(5).toString();
+        QString  vcost = query_other1.value(6).toString();
+        QString vqauntity =query_other1.value(7).toString();
+        QString vtotal =query_other1.value(8).toString();
+        QString vdate= query_other1.value(9).toString();
+        QDate v_voucherdate = QDate::fromString(vdate,"yyyy-MM-dd");
+        QString voucheDate = v_voucherdate.toString("dd-MM-yyyy");
+
+        QString voucherType = query_other1.value(10).toString();
+        QString v_referenceNo =  query_other1.value(11).toString();
+
+
+        int v_day = query_other1.value(12).toInt();
+        int  v_month = query_other1.value(13).toInt();
+
+        velement->setVoucherCost(vcost);
+        velement->setVoucherItem(vproduct);
+        velement->setVoucherDate(voucheDate);
+        velement->setVoucherType(voucherType);
+        velement->setPaymentReference(v_referenceNo);
+
+        v_sno.append(vno);
+        v_date.append(voucheDate);
+        v_name.append(vname);
+        v_phone.append(vphone);
+        v_note.append(vnote);
+        v_cost.append(vcost);
+        v_voucherType.append(voucherType);
+        v_item.append(vproduct);
+        v_paymentMode.append(vpaymntmode);
+        v_refNo.append(v_referenceNo);
+        emit sendVoucheronebyone(velement);
+    }
+}
+
+void DBInterface::getAccountData()
+{
+    qDebug()<<Q_FUNC_INFO<<Qt::endl;
+
+}
+
 void DBInterface::to_persondetails_db(QString devoteMobile,QString devoteName,QString devoteNakshatra,QString devoteGotra,QString devoteSevacharge,QString devoteAdditionalcharges,QString devoteCount,QString devotereceiptdate,QString devoteSevadate,QString devoteNote)
 {
     //    devoteAdditionalcharges,QString devoteCount,QString devotereceiptdate,QString devoteSevadate,QString devoteNote)
@@ -1638,20 +1709,20 @@ void DBInterface::booking_report_cdate_function(QString formatchangedcalendar_st
     QString que;
     if(TYPE==0) {
         qDebug()<<"In type 0: "<<Qt::endl;
-        que = ("select persondetails.PERSONNAME,persondetails.GOTHRA,persondetails.NAKSHATRA,sevabooking.SEVANAME,persondetails.MOBILE,NOTE,sevabooking.SEVATYPE from sevabooking,persondetails where sevabooking.PERSONID = persondetails.SNO and sevabooking.RECEIPT_DATE='%1';");
+        que = ("select persondetails.PERSONNAME,persondetails.GOTHRA,persondetails.NAKSHATRA,sevabooking.SEVANAME,persondetails.MOBILE,sevabooking.NOTE,sevabooking.SEVATYPE,sevabooking.SEVA_DATE,sevabooking.RECEIPT_DATE,sevabooking.SEVATOTALPRICE,sevabooking.BANK,sevabooking.REFERENCE,sevabooking.ADDRESS,sevabooking.QUANTITY from sevabooking,persondetails where sevabooking.PERSONID = persondetails.SNO and sevabooking.RECEIPT_DATE='%1';");
         que = que.arg(formatchangedcalendar_str);
         //            que = ("select persondetails.PERSONNAME,persondetails.GOTHRA,persondetails.NAKSHATRA,sevabooking.SEVANAME,sevaname.THEERTHAPRASADA,persondetails.MOBILE,NOTE from sevabooking,persondetails,sevaname where sevabooking.PERSONID = persondetails.SNO and sevabooking.RECEIPT_DATE='%1' group by sevabooking.SEVANAME;");
         //    select persondetails.PERSONNAME,persondetails.GOTHRA,persondetails.NAKSHATRA,sevabooking.SEVANAME,persondetails.MOBILE,NOTE from sevabooking,persondetails where sevabooking.PERSONID = persondetails.SNO and sevabooking.RECEIPT_DATE='2022-12-15'
     }
     else if (SEVA==ALLSEVANAME) {
-        que = ("select persondetails.PERSONNAME,persondetails.GOTHRA,persondetails.NAKSHATRA,sevabooking.SEVANAME,persondetails.MOBILE,NOTE,sevabooking.SEVATYPE from sevabooking,persondetails where sevabooking.PERSONID = persondetails.SNO and sevabooking.RECEIPT_DATE='%1' and sevabooking.SEVATYPE='%2'; ");
+        que = ("select persondetails.PERSONNAME,persondetails.GOTHRA,persondetails.NAKSHATRA,sevabooking.SEVANAME,persondetails.MOBILE,sevabooking.NOTE,sevabooking.SEVATYPE,sevabooking.SEVA_DATE,sevabooking.RECEIPT_DATE,sevabooking.SEVATOTALPRICE,sevabooking.BANK,sevabooking.REFERENCE,sevabooking.ADDRESS,sevabooking.QUANTITY from sevabooking,persondetails where sevabooking.PERSONID = persondetails.SNO and sevabooking.RECEIPT_DATE='%1' and sevabooking.SEVATYPE='%2'; ");
         que = que.arg(formatchangedcalendar_str).arg(TYPE);
         // select PERSONID,SEVANAME,QUANTITY,SEVA_DATE,SEVATOTALPRICE,NOTE from sevabooking where sevabooking.SEVA_DATE='%1' and sevabooking.SEVATYPE='%2';
         //  select persondetails.PERSONNAME,persondetails.GOTHRA,persondetails.NAKSHATRA,sevabooking.SEVANAME,persondetails.MOBILE,NOTE,sevabooking.SEVATYPE from sevabooking,persondetails where sevabooking.PERSONID = persondetails.SNO and sevabooking.RECEIPT_DATE='%1';
     }
     else {
         // que = ("select persondetails.PERSONNAME,persondetails.GOTHRA,persondetails.NAKSHATRA,sevabooking.SEVANAME,persondetails.MOBILE,NOTE,sevabooking.SEVATYPE from sevabooking,persondetails where sevabooking.PERSONID = persondetails.SNO and sevabooking.RECEIPT_DATE='%1' and sevabooking.SEVATYPE='%2' and sevabooking.SEVANAME = '%3'; ");
-        que = ("sevabooking.SEVA_DATE='%1' and sevabooking.SEVATYPE='%2' and sevabooking.SEVANAME = '%3'; ");
+        que = ("sevabooking.SEVA_DATE='%1' and sevabooking.SEVATYPE='%2' and sevabooking.SEVANAME = '%3' ; ");
         que = que.arg(formatchangedcalendar_str).arg(TYPE).arg(SEVA);
         // select persondetails.PERSONNAME,persondetails.GOTHRA,persondetails.NAKSHATRA,sevabooking.SEVANAME,persondetails.MOBILE,NOTE,sevabooking.SEVATYPE from sevabooking,persondetails where sevabooking.PERSONID = persondetails.SNO and sevabooking.RECEIPT_DATE='%1';
     }
@@ -1771,16 +1842,31 @@ void DBInterface::booking_report_cdate_function(QString formatchangedcalendar_st
         ele->setTeerthaPrasada(listOfPrasada.at(i));
         ele->setMobileNumber(query_other1.value(4).toString());
         ele->setNote(query_other1.value(5).toString());
+        ele->setSevaDate(query_other1.value(7).toString());
+        ele->setReceiptDate(query_other1.value(8).toString());
+        ele->setTotal(query_other1.value(9).toString());
+        ele->setPaymntMode(query_other1.value(10).toString());
+        ele->setReferenceNo(query_other1.value(11).toString());
+        ele->setAddress(query_other1.value(12).toString());
+        ele->setSevaCount(query_other1.value(13).toInt());
         //        ele->setTeerthaPrasada(0);
         qDebug() << " kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk" <<Qt::endl;
 
-        qDebug() <<"name--"<< query_other1.value(0).toString()<<Qt::endl;
-        qDebug() <<"gothra--"<< query_other1.value(1).toString()<<Qt::endl;
-        qDebug() <<"nakshatra--"<< query_other1.value(2).toString()<<Qt::endl;
-        qDebug() <<"seva--"<< query_other1.value(3).toString()<<Qt::endl;
-        qDebug() <<"mobile--"<< query_other1.value(4).toString()<<Qt::endl;
-        qDebug() <<"note--"<< query_other1.value(5).toString()<<Qt::endl;
-        qDebug() <<"prasada--"<< query_other1.value(6).toString()<<Qt::endl;
+         qDebug() <<"Sl No--"<< query_other1.value(0).toString()<<Qt::endl;
+        qDebug() <<"name--"<< query_other1.value(1).toString()<<Qt::endl;
+        qDebug() <<"gothra--"<< query_other1.value(2).toString()<<Qt::endl;
+        qDebug() <<"nakshatra--"<< query_other1.value(3).toString()<<Qt::endl;
+        qDebug() <<"seva--"<< query_other1.value(4).toString()<<Qt::endl;
+        qDebug() <<"mobile--"<< query_other1.value(5).toString()<<Qt::endl;
+        qDebug() <<"note--"<< query_other1.value(6).toString()<<Qt::endl;
+        qDebug() <<"prasada--"<< query_other1.value(7).toString()<<Qt::endl;
+        qDebug() <<"SDate--"<< query_other1.value(8).toString()<<Qt::endl;
+        qDebug() <<"Rdate--"<< query_other1.value(9).toString()<<Qt::endl;
+        qDebug() <<"total--"<< query_other1.value(910).toString()<<Qt::endl;
+        qDebug() <<"paymode--"<< query_other1.value(11).toString()<<Qt::endl;
+        qDebug() <<"refrence--"<< query_other1.value(12).toString()<<Qt::endl;
+        qDebug() <<"address--"<< query_other1.value(13).toString()<<Qt::endl;
+
         qDebug() <<"before emitting signal  booking_report ''''''''"<<Qt::endl;
         emit booking_report(ele);
         qDebug() <<"after emitting signal  booking_report ''''''''"<<Qt::endl;
@@ -2128,9 +2214,6 @@ void DBInterface::account_report_cdate_function(QString SEVA,int TYPE,QString fo
         emit account_report(ele);
         qDebug() <<"after emitting signal  account_report ''''''''"<<Qt::endl;
     }
-
-
-
 }
 
 void DBInterface::account_report_cmonth_function(QString SEVA,int TYPE,int month,int year)
@@ -2336,7 +2419,7 @@ void DBInterface::voucher_report_cmonth_function(int month, int year, QString vo
         ele->setVoucherCost(query_other1.value(6).toString());
         ele->setVoucherDate(query_other1.value(7).toString());
         ele->setVoucherType(query_other1.value(8).toString());
-        ele->setPaymentReference(query_other1.value(9).toString());
+        ele->setPaymentReference(query_other1.value(11).toString());
 
         qDebug() <<  query_other1.value(0).toString();
         qDebug() <<  query_other1.value(1).toString();
@@ -2923,6 +3006,8 @@ bool DBInterface::checkCredentials(QString userID, QString pass)
     //    qDebug() << Q_FUNC_INFO << "Size of query == " << query_s_no.size()<<Qt::endl;
     while(query_s_no.next())
     {
+        QString first_name= query_s_no.value(1).toString();
+        QString last_name=query_s_no.value(2).toString();
         QString user_name=query_s_no.value(3).toString();
         QString pass_word=query_s_no.value(4).toString();
         int rolenumber= query_s_no.value(5).toString().toInt();
@@ -2930,7 +3015,7 @@ bool DBInterface::checkCredentials(QString userID, QString pass)
         if(userID==user_name && pass == pass_word){
             emit success();
             qDebug()<<"The role number is"<<rolenumber<<Qt::endl;
-            emit sendRolenumber(rolenumber);
+            emit sendRolenumber(rolenumber,first_name +" "+ last_name);
             return true;
         }
     }
@@ -3167,13 +3252,13 @@ void DBInterface::readSevaTypesFromJson()
 QStringList DBInterface::qryNakshatras()
 {
     QStringList nakshatras;
-    nakshatras << "Ashwini" << "Bharani" << "Krittika" << "Rohini"
-               << "Mrigashira" << "Ardra" << "Punarvasu" << "Pushya"
-               << "Ashlesha" << "Magha" << "Purvaphalguni"<<"Uttaraphalguni"
-               << "Hasta" << "Chitra" << "Swati"<<"Vishakha"<<"Anuradha"
-               << "Jyeshtha"<<"Moola"<<"Purvashadha"<<"Uttarashadha"
-               << "Shravana"<< "Dhanishtha" <<"Shathabhisha" <<"Purvabhadrapada"
-               << "Uttarabhadrapada"<<"Revati";
+    nakshatras<<"" << "Ashwini" << "Bharani" << "Krittika" << "Rohini"
+             << "Mrigashira" << "Ardra" << "Punarvasu" << "Pushya"
+             << "Ashlesha" << "Magha" << "Purvaphalguni"<<"Uttaraphalguni"
+             << "Hasta" << "Chitra" << "Swati"<<"Vishakha"<<"Anuradha"
+             << "Jyeshtha"<<"Moola"<<"Purvashadha"<<"Uttarashadha"
+             << "Shravana"<< "Dhanishtha" <<"Shathabhisha" <<"Purvabhadrapada"
+             << "Uttarabhadrapada"<<"Revati";
     return nakshatras;
 }
 

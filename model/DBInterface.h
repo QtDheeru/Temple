@@ -79,6 +79,7 @@ signals:
     void account_report_Month_Range(AccountReportMonthRangeElement*);
     void booking_report_Month_Range(BookingReportMonthRangeElement*);
     void voucher_report(VoucherElement*);
+
     void correct_password(QString);
     void success();
     void wrongCred();
@@ -175,6 +176,9 @@ public slots:
     int getLastReceiptNumber();
     int getLastVoucherNumber();
 
+    void getvoucherdata();  //Suman N added
+    void getAccountData();  //Suman N added
+
 signals :
     void sendSevaType(SevaType *);
     void sendSevaName(SevaName *);
@@ -182,7 +186,9 @@ signals :
     void sendoneByoneSevaBooking(SevaBookingElement*);
     void setGrandTotalToZero();
     void dbError(QString errorMsg);
-    void sendRolenumber(int rolenum);
+    void sendRolenumber(int rolenum,QString signInName);
+    void sendVoucheronebyone(VoucherElement*); //Suman N
+    void sendAcoountoneByone(AccountReportElement*); //Suman N
 private:
     explicit DBInterface(QObject *parent = nullptr);
     int val;

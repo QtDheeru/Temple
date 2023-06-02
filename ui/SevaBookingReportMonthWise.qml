@@ -221,7 +221,25 @@ Rectangle{
         }
         onClicked: {
             console.log("export data clicked")
-            sevaProxy.generateCSV()
+            sevaProxy.sevaReport.bookReportModel.generateBookingReportCSV()
+
+        }
+    }
+    Connections{
+        id:connection
+        target:  sevaProxy.sevaReport.bookReportModel
+        onSuccessMessage:{
+            _errorDialog.showmsg(exportmsg)
+        }
+    }
+    DisplayDialog {
+        id :_errorDialog
+        visible: false
+
+        function showmsg(exportmsg){
+            _errorDialog.visible = true;
+            _errorDialog.text2Display = exportmsg
+            _errorDialog.open();
         }
     }
 //    Rectangle{

@@ -75,3 +75,83 @@ void BookingReportElement::setNote(const QString &newNote)
 {
     m_note = newNote;
 }
+
+const QString &BookingReportElement::sevaDate() const
+{
+    return m_sevaDate;
+}
+
+void BookingReportElement::setSevaDate(const QString &newSevaDate)
+{
+    m_sevaDate = newSevaDate;
+}
+
+const QString &BookingReportElement::receiptDate() const
+{
+    return m_receiptDate;
+}
+
+void BookingReportElement::setReceiptDate(const QString &newReceiptDate)
+{
+    m_receiptDate = newReceiptDate;
+}
+
+const QString &BookingReportElement::total() const
+{
+    return m_total;
+}
+
+void BookingReportElement::setTotal(const QString &newTotal)
+{
+    m_total = newTotal;
+}
+
+const QString &BookingReportElement::paymntMode() const
+{
+    return m_paymntMode;
+}
+
+void BookingReportElement::setPaymntMode(const QString &newPaymntMode)
+{
+    m_paymntMode = newPaymntMode;
+}
+
+const QString &BookingReportElement::referenceNo() const
+{
+    return m_referenceNo;
+}
+
+void BookingReportElement::setReferenceNo(const QString &newReferenceNo)
+{
+    m_referenceNo = newReferenceNo;
+}
+
+const QString &BookingReportElement::address() const
+{
+    return m_address;
+}
+
+void BookingReportElement::setAddress(const QString &newAddress)
+{
+    m_address = newAddress;
+}
+
+int BookingReportElement::sNO() const
+{
+    return m_sNO;
+}
+
+void BookingReportElement::setSNO(int newSNO)
+{
+    m_sNO = newSNO;
+}
+
+int BookingReportElement::sevaCount() const
+{
+    return m_sevaCount;
+}
+
+void BookingReportElement::setSevaCount(int newSevaCount)
+{
+    m_sevaCount = newSevaCount;
+}

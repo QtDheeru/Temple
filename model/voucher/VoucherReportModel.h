@@ -7,6 +7,7 @@
 #include <QDebug>
 #include <QDate>
 #include "./model/DBInterface.h"
+#include "VoucherReportCSVProcessor.h"
 
 class VoucherReportModel : public QAbstractTableModel
 {
@@ -22,8 +23,8 @@ public:
     int iGrandTotal() const;
     void setIGrandTotal(int newIGrandTotal);
     Q_INVOKABLE int getVoucherReportQryListSize();
-
-     Q_INVOKABLE VoucherElement *getVoucherReportAt(int indx);
+    Q_INVOKABLE VoucherElement *getVoucherReportAt(int indx);
+    Q_INVOKABLE void generateVoucherReportCSV();
 public slots:
     void generateVoucherReport(VoucherFilterElements*);
     void insertVoucherRow(VoucherElement*);
@@ -31,9 +32,12 @@ public slots:
 private:
     QList<VoucherElement*> m_voucherReportQryList;
     int m_iGrandTotal;
-
+    VoucherReportCSVProcessor* voucherReportCSVProcessor;
 signals:
     void grandTotalChanged();
+    void sendVoucherReportList(QList<VoucherElement*>);
+    void successMessage(QString exportmsg);                    //Suman N
+
 };
 
 #endif // VOUCHERREPORTMODEL_H

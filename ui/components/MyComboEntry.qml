@@ -7,7 +7,7 @@ Rectangle {
     property int myHeight : 30
     property int fontPixelSize : 20
     property int comboBoxFontSize:20
-    property var rowspacing:myHeight/2
+    property int rowspacing:myHeight/2
     property int myWidth
     implicitWidth:150;implicitHeight:myHeight
     property alias _labelText : _label.text
@@ -21,6 +21,8 @@ Rectangle {
     signal monthChanged(var mon)
     signal yearChanged(var yr)
     signal itemChanged(var j)
+    signal sendCurrentYear(var yIndex)      //Suman N
+    signal sendCurrentMonth(var mIndex)     //Suman N
     //border.color: "yellow";border.width: 1
     color: "transparent"
     focus: true
@@ -75,6 +77,13 @@ Rectangle {
                 monthChanged(currentIndex+1)
                 yearChanged(_tInput.textAt(currentIndex))
                 itemChanged(currentIndex)
+            }
+            Component.onCompleted: {
+                var month1 = new Date().getMonth()
+                var year1 =  new Date().getFullYear()
+                var yearIndex = _tInput.find(year1)
+                sendCurrentYear(yearIndex)
+                sendCurrentMonth(month1)
             }
         }
     }

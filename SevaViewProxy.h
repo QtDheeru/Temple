@@ -16,6 +16,7 @@
 #include "SevaBookingSearchModel.h"
 #include "./model/SevaTypeViewModel.h"
 #include "./model/UserManagement.h"
+#include "VoucherReportCSVProcessor.h"
 class SevaTypeNamesDataModel;
 
 class SevaViewProxy : public QObject
@@ -91,7 +92,7 @@ public:
     SevaTypeNamesDataModel *sevaBookingModelData() const;
 
 public slots:
-    Q_INVOKABLE void generateCSV();
+     void generateCSVSevaBookingReport();
 
 signals:
     void receiptNumberChanged();
@@ -101,7 +102,6 @@ signals:
     void sevaBookingTVChanged();
     void errorMessage(QString errMsg);
     void successMessage(QString exportmsg);
-
 private :
     SevaTypeNamesDataModel *m_sevaBookingModelData;
     SevaListViewModel *m_currentSevaModel;
@@ -110,6 +110,7 @@ private :
     AllViewReports *m_allView;
     QString m_receiptNumber;
     SevaReceiptCsvProcessor *m_csvReceipt;
+    VoucherReportCSVProcessor* m_voucherReportCSv;
     SevaBookingTableModel *m_sevaBookingTV;
     SevaBookingSearchModel *m_sevaBSearchModel;
     SevaTypeViewModel *m_sevaTypeModel;

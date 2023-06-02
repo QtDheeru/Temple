@@ -6,9 +6,11 @@
 #include <QFile>
 #include "MySevaReceipt.h"
 #include <QElapsedTimer>
+#include "BookingReportElement.h"
 #include "SevaBookingElement.h"
 #include <QDate>
 #include <QDir>
+#include <QFileDialog>
 
 class SevaReceiptCsvProcessor : public QObject
 {
@@ -20,13 +22,18 @@ public:
     //    void writeToCsvFormate(MySevaReceipt* sr);
     const QList<MySevaReceipt *> &sevaReceiptList() const;
     void setSevaReceiptList(const QList<MySevaReceipt *> &newSevaReceiptList);
-    void writeToCsvFormate(SevaBookingElement* sr);
+    void writeToCsvFormate(SevaBookingElement* sr);                             //Suman N
+
 signals:
+
+public slots:
+    void recieveBookingReportList( QList<BookingReportElement*>);               //Suman N
+
 private:
     QList<MySevaReceipt*> m_sevaReceiptList;
     static int m_addHeader;
     QFile m_file;
-
+    QString fileName;
 };
 
 #endif // SEVARECEIPTCSVPROCESSOR_H

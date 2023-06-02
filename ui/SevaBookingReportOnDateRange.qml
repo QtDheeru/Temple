@@ -197,7 +197,7 @@ Rectangle{
         }
         onClicked: {
             console.log("export data clicked")
-            sevaProxy.generateCSV()
+            sevaProxy.sevaReport.bookReportModel.generateBookingReportCSV()
         }
     }
     //    Rectangle{
@@ -275,7 +275,7 @@ Rectangle{
     }
     Connections{
         id:_connection
-        target:sevaProxy
+        target:sevaProxy.sevaReport.bookReportModel
         onSuccessMessage:{
             console.log("OnSuccess Message");
             _errorDialog.showError(exportmsg)

@@ -20,7 +20,7 @@ Rectangle{
     signal sendBookingReportDateRangeImputForWholeMonth(var obj);
     signal sendBookingReportMonthRangeImput(var obj);
     // property var styles : MyStyles{}
-    property var footerHeight: _r1.height/15
+    property int footerHeight: _r1.height/15
     // property alias tot :total.text
     property alias  isRangeDateSelected :_reportitems.isRangeDateSelected
     property alias isAllselected : _reportitems.isAllselected
@@ -177,7 +177,7 @@ Rectangle{
 
 
                 TableViewColumn {
-                    id:_teerthaPrasada;title: "Tertha Prasada"; role: "teerthaPrasada";
+                    id:_teerthaPrasada;title: "SevaCount"; role: "SevaCount";
                     width: leftpart.width/7.1
                     movable: false
                     resizable: false

@@ -175,6 +175,8 @@ Rectangle{
         }
 
     }
+
+
     Rectangle{
         id:_footer
         width: _rr1.width
@@ -209,9 +211,48 @@ Rectangle{
                 Component.onCompleted: {
                     console.log("In Component.onCompleted: of seva report page single date total text "+total.text)
                     //  total.text = sevaProxy.sevaReport.accReportModel.grandTotal + ".00 ₹"
-
                 }
             }
+        }
+    }
+    Button{
+        id:_exportCsv
+        height:60
+        width: 200
+        anchors.top: lv1.bottom
+        anchors.horizontalCenter: lv1.horizontalCenter
+        style: ButtonStyle{
+            background: Rectangle{
+                id: bg
+                border.width: 1
+                radius: 3
+                color: "cornflowerblue"
+                Label{
+                    text: "Export Data"
+                    anchors.centerIn: parent
+                }
+            }
+        }
+        onClicked: {
+            console.log("export data clicked")
+            sevaProxy.sevaReport.accReportModel.generateAccountCSV()
+        }
+    }
+    Connections{
+        id:connection
+        target: sevaProxy.sevaReport.accReportModel
+        onSuccessMessage:{
+            _errorDialog.showmsg(exportmsg)
+        }
+    }
+    DisplayDialog {
+        id :_errorDialog
+        visible: false
+
+        function showmsg(exportmsg){
+            _errorDialog.visible = true;
+            _errorDialog.text2Display = exportmsg
+            _errorDialog.open();
         }
     }
     Keys.onEscapePressed: {

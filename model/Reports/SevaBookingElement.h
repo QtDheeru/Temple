@@ -72,16 +72,18 @@ public:
     const QString &sevatime() const;
     void setSevatime(const QString &newSevatime);
 
+
 signals:
 
     void sevatimeChanged();
 
+
 private :
-    QString m_sno ;
-    QString m_person_id ;
+    QString m_sno;
+    QString m_person_id;
     DevotePersnalDetails *m_person;
-    QString m_sevatype ;
-    QString m_sevaname ;
+    QString m_sevatype;
+    QString m_sevaname;
     QString m_quantity;
     QString m_receiptDate;
     QString m_sevaDate;

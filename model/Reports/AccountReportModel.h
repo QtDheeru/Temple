@@ -6,6 +6,7 @@
 #include <QDebug>
 #include "AccountReportElement.h"
 #include "ReportFilterElements.h"
+#include "AccountReportCSVProcessor.h"
 class AccountReportModel : public QAbstractTableModel
 {
     Q_OBJECT
@@ -37,14 +38,17 @@ public:
     void setIGrandTotal(int newIGrandTotal);
     Q_INVOKABLE int getAccountReportQryListSize();
     Q_INVOKABLE void setGrandTotalToZero();
-
+    Q_INVOKABLE void generateAccountCSV();//Suman N
 
 private:
     QList<AccountReportElement*> m_accountReportQryList;
     int m_iGrandTotal;
+    AccountReportCSVProcessor *accountCSVProcessor ;
 
 signals:
     void grandTotalChanged();
+    void sendAccountReportList(QList<AccountReportElement*>);
+    void successMessage(QString exportmsg);                    //Suman N
 };
 
 #endif // ACCOUNTREPORTMODEL_H

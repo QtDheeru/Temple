@@ -395,18 +395,23 @@ Rectangle {
 
     Connections{
         target:_month
-        function onMonthChanged(mon){
+        function onSendCurrentMonth(mIndex){
+            _month.currentIndex = mIndex
+        }
 
+        function onMonthChanged(mon){
             _rip.sMonth = mon
             console.log("Selected month"+ _rip.sMonth)
         }
     }
     Connections{
         target:_year
+        function onSendCurrentYear(yIndex){
+            _year.currentIndex = yIndex
+        }
         function onYearChanged(yr){
-
             _rip.sYear = yr
-            console.log("Selected year"+ _rip.sYear)
+            console.log("voucher Selected year"+ _rip.sYear)
         }
     }
     ButtonGroup { id: radioGroup }

@@ -3,6 +3,7 @@
 SevaDetailsOnDateModel::SevaDetailsOnDateModel(QObject *parent)
     : QAbstractListModel(parent)
 {
+    qDebug()<<"hello suman"<<Qt::endl;
 }
 
 QVariant SevaDetailsOnDateModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -38,14 +39,14 @@ QVariant SevaDetailsOnDateModel::data(const QModelIndex &index, int role) const
     case 12:{return _da->address();}
 
     }
-
+    return QVariant();
 }
 
 QHash<int, QByteArray> SevaDetailsOnDateModel::roleNames() const
 {
-    qDebug() << Q_FUNC_INFO <<endl;
+    qDebug() << Q_FUNC_INFO <<Qt::endl;
     QHash<int, QByteArray> roles;
-    roles[1] ="Sno";
+    roles[1] = "Sno";
     roles[2] = "name";
     roles[3] = "mobile";
     roles[4] = "sevaName";

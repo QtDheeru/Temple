@@ -5,7 +5,7 @@ UserManagement::UserManagement(QObject *parent)
 {
     qDebug()<<Q_FUNC_INFO<<Qt::endl;
     this->setCurrentRole(-1);
-    connect(DBInterface::getInstance(),&DBInterface::sendRolenumber,this,&UserManagement::setCurrentRole);
+    connect(DBInterface::getInstance(),&DBInterface::sendRolenumber,this,&UserManagement::user_Recieved);
 }
 UserManagement::~UserManagement()
 {
@@ -46,6 +46,24 @@ void UserManagement::setCurrentRole(int newCurrentRole)
     qDebug()<<"The role number recieved"<<newCurrentRole<<Qt::endl;
     currentRole = newCurrentRole;
     emit rolenumchanged();
+}
+
+void UserManagement::user_Recieved(int rolenum, QString signInName)
+{
+    qDebug()<<Q_FUNC_INFO<<Qt::endl;
+    this->setCurrentRole(rolenum);
+    this->setSignIn_Name(signInName);
+}
+
+const QString &UserManagement::getSignIn_Name() const
+{
+    return signIn_Name;
+}
+
+void UserManagement::setSignIn_Name(const QString &newSignIn_Name)
+{
+    signIn_Name = newSignIn_Name;
+    emit signIn_NameChanged();
 }
 
 

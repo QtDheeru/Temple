@@ -4,6 +4,7 @@ VoucherReportModel::VoucherReportModel(QObject *parent)
     : QAbstractTableModel{parent}
 {
     qDebug()<<Q_FUNC_INFO<<Qt::endl;
+    voucherReportCSVProcessor = nullptr;
     m_iGrandTotal = 0;
     connect(DBInterface::getInstance(),&DBInterface::voucher_report,
             this,&VoucherReportModel::insertVoucherRow);
@@ -78,7 +79,7 @@ QHash<int, QByteArray> VoucherReportModel::roleNames() const
     roles[7] = "voucherNote";
     roles[8] = "voucherCost";
     roles[9] = "voucherPaymentMode";
-    roles[10] = "paymentReference";
+    roles[10]= "paymentReference";
 
     return roles;
 }
@@ -179,4 +180,16 @@ VoucherElement* VoucherReportModel::getVoucherReportAt(int indx)
     qDebug()<<Q_FUNC_INFO<<Qt::endl;
     //return m_voucherReportQryList.size();
     return m_voucherReportQryList.at(indx);
+}
+
+void VoucherReportModel::generateVoucherReportCSV()
+{
+    qDebug()<<Q_FUNC_INFO<<Qt::endl;
+    if(voucherReportCSVProcessor!=nullptr)
+        delete voucherReportCSVProcessor;
+    voucherReportCSVProcessor  = new VoucherReportCSVProcessor;
+    connect(this,&VoucherReportModel::sendVoucherReportList,voucherReportCSVProcessor,
+            &VoucherReportCSVProcessor::writeToCsvFormatVoucherReport);
+    emit sendVoucherReportList(m_voucherReportQryList);
+    emit successMessage("Export Complete");
 }

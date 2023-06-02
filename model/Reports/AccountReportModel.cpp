@@ -5,8 +5,9 @@ AccountReportModel::AccountReportModel(QObject *parent)
 {
     qDebug()<<Q_FUNC_INFO<<Qt::endl;
     m_iGrandTotal=0;
-      //  connect(DBInterface::getInstance(),&DBInterface::setGrandTotalToZero,
-       //         this,[&](){m_iGrandTotal = 0;});
+    accountCSVProcessor = nullptr;
+    //  connect(DBInterface::getInstance(),&DBInterface::setGrandTotalToZero,
+    //         this,[&](){m_iGrandTotal = 0;});
 }
 
 AccountReportModel::~AccountReportModel()
@@ -21,11 +22,16 @@ QVariant AccountReportModel::headerData(int section, Qt::Orientation orientation
 
 int AccountReportModel::rowCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent);
     qDebug()<<Q_FUNC_INFO<<m_accountReportQryList.size()<<Qt::endl;
-//    if(m_accountReportQryList.size()==0)
-//    {
-//        m_iGrandTotal=0;
-//    }
+    for (auto it=m_accountReportQryList.begin();it != m_accountReportQryList.end(); it++){
+        qDebug()<<"Suman Accounts---"<<(*it)->slNo()<<Qt::endl;
+        qDebug()<<"Suman Accounts---"<<(*it)->getSeva_name()<<Qt::endl;
+        qDebug()<<"Suman Accounts---"<<(*it)->getSeva_cost()<<Qt::endl;
+        qDebug()<<"Suman Accounts---"<<(*it)->getSeva_ticket()<<Qt::endl;
+        qDebug()<<"Suman Accounts---"<<(*it)->getSeva_total()<<Qt::endl;
+
+    }
     return m_accountReportQryList.size();
 }
 
@@ -173,8 +179,20 @@ int AccountReportModel::getAccountReportQryListSize()
 
 void AccountReportModel::setGrandTotalToZero()
 {
-     qDebug()<<Q_FUNC_INFO<<Qt::endl;
-     setIGrandTotal(0);
+    qDebug()<<Q_FUNC_INFO<<Qt::endl;
+    setIGrandTotal(0);
+}
+
+void AccountReportModel::generateAccountCSV()
+{
+    qDebug()<<Q_FUNC_INFO<<Qt::endl;
+    if(accountCSVProcessor!=nullptr)
+        delete accountCSVProcessor;
+    accountCSVProcessor  = new AccountReportCSVProcessor;
+    connect(this,&AccountReportModel::sendAccountReportList,accountCSVProcessor,
+            &AccountReportCSVProcessor::recieveAccountReportList);
+    emit sendAccountReportList(m_accountReportQryList);
+    emit successMessage("Export Complete");
 }
 
 

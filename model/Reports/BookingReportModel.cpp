@@ -3,7 +3,8 @@
 BookingReportModel::BookingReportModel(QObject *parent)
     : QAbstractTableModel{parent}
 {
-
+     qDebug()<<Q_FUNC_INFO<<Qt::endl;
+    sevaCSVProcessor = nullptr;
 }
 
 int BookingReportModel::rowCount(const QModelIndex &parent) const
@@ -40,7 +41,7 @@ QVariant BookingReportModel::data(const QModelIndex &index, int role) const
         return _da->sevaName();}
     case 5:{
         qDebug()<<Q_FUNC_INFO<<_da->teerthaPrasada()<<Qt::endl;
-        return _da->teerthaPrasada();}
+        return _da->sevaCount();}
     case 6:{
         qDebug()<<Q_FUNC_INFO<<_da->mobileNumber()<<Qt::endl;
         return _da->mobileNumber();}
@@ -60,7 +61,7 @@ QHash<int, QByteArray> BookingReportModel::roleNames() const
     roles[2] = "gothra";
     roles[3] = "nakshatra";
     roles[4] = "sevaName";
-    roles[5] = "teerthaPrasada";
+    roles[5] = "sevaCount";
     roles[6] = "mobileNumber";
     roles[7] = "note";
 
@@ -135,6 +136,18 @@ void BookingReportModel::resetBookingModel()
 
 int BookingReportModel::getBookingReportQryListSize()
 {
-qDebug()<<Q_FUNC_INFO<<Qt::endl;
-return m_bookingReportQryList.size();
+    qDebug()<<Q_FUNC_INFO<<Qt::endl;
+    return m_bookingReportQryList.size();
+}
+
+void BookingReportModel::generateBookingReportCSV()
+{
+    qDebug()<<Q_FUNC_INFO<<Qt::endl;
+    if(sevaCSVProcessor!=nullptr)
+        delete sevaCSVProcessor;
+    sevaCSVProcessor = new SevaReceiptCsvProcessor;
+    connect(this,&BookingReportModel::sendBookingReportList,
+            sevaCSVProcessor,&SevaReceiptCsvProcessor::recieveBookingReportList);
+    emit sendBookingReportList(m_bookingReportQryList);
+    emit successMessage("Export Complete");
 }

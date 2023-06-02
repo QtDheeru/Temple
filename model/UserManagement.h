@@ -7,6 +7,8 @@ class UserManagement : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(int rolenum READ getCurrentRole WRITE setCurrentRole NOTIFY rolenumchanged)
+    Q_PROPERTY(QString signIn_Name READ getSignIn_Name WRITE setSignIn_Name NOTIFY signIn_NameChanged)
+
 public:
     explicit UserManagement(QObject *parent = nullptr);
     ~UserManagement();
@@ -18,11 +20,20 @@ public:
     int getCurrentRole() const;
     void setCurrentRole(int newCurrentRole);
 
+    const QString &getSignIn_Name() const;
+    void setSignIn_Name(const QString &newSignIn_Name);
+
 signals:
     void userAdded(QString msg);
     void rolenumchanged();
+    void signIn_NameChanged();
+
+public slots:
+   void user_Recieved(int rolenum,QString signInName);
+
 private:
     int currentRole;
+    QString signIn_Name;
 };
 
 #endif // USERMANAGEMENT_H

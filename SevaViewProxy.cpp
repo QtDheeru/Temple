@@ -16,6 +16,7 @@ SevaViewProxy::SevaViewProxy(QObject *parent) : QObject(parent)
     m_allView = new AllViewReports;
     m_ReportOnDateModel = new SevaReport;
     m_csvReceipt = nullptr;
+    m_voucherReportCSv = nullptr;
     m_sevaBookingTV = new SevaBookingTableModel;
     m_sevaBSearchModel = new SevaBookingSearchModel;
     m_sevaBSearchModel->setSourceModel(m_sevaBookingTV);
@@ -36,7 +37,7 @@ SevaViewProxy::SevaViewProxy(QObject *parent) : QObject(parent)
     QObject::connect(DBInterface::getInstance(),&DBInterface::booking_report,
                      m_ReportOnDateModel->bookingReportModel(),&BookingReportModel::insertSevaRow);
     //    QObject::connect(m_allView,&AllViewReports::exportCsvButtonClicked,
-    //                     this,&SevaViewProxy::generateCSV);
+    //                     this,&SevaViewProxy::generateCSVSevaBookingReport);
     QDir dir(".");
     dir.mkdir("Data");
     QObject::connect(m_sevaBookingModelData,&SevaTypeNamesDataModel::error,this,
@@ -349,9 +350,9 @@ void SevaViewProxy::print()
     //    file.printing_file(&printList);
 }
 
-void SevaViewProxy::generateCSV()
+void SevaViewProxy::generateCSVSevaBookingReport()
 {
-    qDebug()<<Q_FUNC_INFO<<"genrarte CSV"<<Qt::endl;
+    qDebug()<<Q_FUNC_INFO<<"genrarte CSV Sevabooking Report"<<Qt::endl;
     if(m_csvReceipt!=nullptr)
         delete m_csvReceipt;
     m_csvReceipt = new SevaReceiptCsvProcessor;
@@ -362,6 +363,7 @@ void SevaViewProxy::generateCSV()
     qDebug() << Q_FUNC_INFO << Qt::endl;
     emit successMessage("Export Completed!");
 }
+
 
 SevaTypeNamesDataModel *SevaViewProxy::sevaBookingModelData() const
 {

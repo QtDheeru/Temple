@@ -4,18 +4,19 @@ SevaReceiptCsvProcessor::SevaReceiptCsvProcessor(QObject *parent)
     : QObject{parent}
 {
     qDebug()<<Q_FUNC_INFO<<Qt::endl;
-    int id;
-    QString todayDate = QDate::currentDate().toString("ddd_dd_MMM_yyyy"+QString::number(id++));
-    QString path =  "SevaBookingReportExcelSheets/";
-    QDir::setCurrent(path);
-    m_file.setFileName(todayDate+".csv");
-
-    if(!m_file.open(QIODevice::WriteOnly|QIODevice::Truncate))
-    {
-        qWarning()<<Q_FUNC_INFO<<"----file not open"<<m_file.error() << Qt::endl;
-        return;
-    }
-    m_file.close();
+    //    int id=0;
+    //    QString todayDate = QDate::currentDate().toString("ddd_dd_MMM_yyyy"+QString::number(id++));
+    //    QString path = "SevaBookingReportExcelSheets/";
+    //    QDir::setCurrent(path);
+    //    m_file.setFileName("Bookings"+todayDate+".csv");
+    //    if(!m_file.open(QIODevice::WriteOnly|QIODevice::Truncate))
+    //    {
+    //        qWarning()<<Q_FUNC_INFO<<"----sevabookings file not open"<<m_file.error() << Qt::endl;
+    //        return;
+    //    }
+    //    m_file.close();
+    QString todayDate ="SevaBookings_"+ QDate::currentDate().toString("ddd_dd_MMM_yyyy");
+    fileName = QFileDialog::getSaveFileName(nullptr, "Save File", "" , "Text Files (*.csv)");  //Suman N added
 }
 
 SevaReceiptCsvProcessor::~SevaReceiptCsvProcessor()
@@ -28,35 +29,80 @@ int SevaReceiptCsvProcessor::m_addHeader =1;
 
 void SevaReceiptCsvProcessor::writeToCsvFormate(SevaBookingElement *sr)
 {
-
     qDebug()<<Q_FUNC_INFO<<Qt::endl;
-    if(!m_file.open(QIODevice::WriteOnly|QIODevice::Append))
-    {
-        qWarning()<<Q_FUNC_INFO<<m_file.error() <<Qt::endl;
-        return;
+
+    if(!fileName.isEmpty()){
+        QFile file(fileName);
+        if (file.open(QIODevice::WriteOnly|QIODevice::Append))
+        {
+            QTextStream out(&file);
+            QString storeData;
+            if(m_addHeader)
+            {
+                QString header;
+                header =  QString("Sno") + "," + "Name" + "," + "Mobile" + "," + "SevaName" + "," + "SevaDate" + "," + "ReceiptDate" + "," + "SevaCount" +"," + "Total" + "," + "Cash" + "," + "Bank" + "," + "Reference" + '\n';
+                out<<header.toUpper();
+            }
+            storeData = sr->sno()+","+
+                    sr->person()->devoteeName()+","+
+                    sr->person()->mobileNumber()+","+
+                    sr->sevaname()+","+
+                    sr->sevaDate()+","+
+                    sr->receiptDate()+","+
+                    sr->quantity()+","+
+                    sr->totalCost()+","+
+                    sr->cash()+","+
+                    sr->bank()+","+
+                    sr->reference()+'\n';
+            out<<storeData;
+            qDebug() << "File saved: " << fileName;
+            file.close();
+        }
+        else
+        {
+            qCritical() << "Failed to open file for saving.";
+        }
     }
-    QTextStream out(&m_file);
-    QString storeData;
-    if(m_addHeader)
-    {
-        QString header;
-        header =  QString("Sno") + "," + "Name" + "," + "Mobile" + "," + "SevaName" + "," + "SevaDate" + "," + "ReceiptDate" + "," + "Total" + "," + "Cash" + "," + "Bank" + "," + "Reference" + "," + "Momento" + "," + "address"+'\n';
-        out<<header.toUpper();
+    m_addHeader =0;
+}
+
+void SevaReceiptCsvProcessor::recieveBookingReportList(QList<BookingReportElement *> bookingReportList)
+{
+    qDebug()<<Q_FUNC_INFO<<Qt::endl;
+    int id=1;
+    if(!fileName.isEmpty()){
+        QFile file(fileName);
+        if (file.open(QIODevice::WriteOnly|QIODevice::Append))
+        {
+            QTextStream out(&file);
+            QString storeData;
+            if(m_addHeader)
+            {
+                QString header;
+                header =  QString("Sno") + "," + "Name" + "," + "Mobile" + "," + "SevaName" + "," + "SevaDate" + "," + "ReceiptDate"+ "," + "SevaCount" + "," + "Total" + "," + "PaymentMode" + ","  + "ReferenceNo" +'\n';
+                out<<header.toUpper();
+            }
+            for(auto it=bookingReportList.begin();it != bookingReportList.end();it++){
+                storeData = QString::number(id++)+","+
+                        (*it)->name()+","+
+                        (*it)->mobileNumber()+","+
+                        (*it)->sevaName()+","+
+                        (*it)->sevaDate()+","+
+                        (*it)->receiptDate()+","+
+                        QString::number((*it)->sevaCount())+","+
+                        (*it)->total()+","+
+                        (*it)->paymntMode() +","+
+                        (*it)->referenceNo() +'\n' ;
+                out<<storeData;
+            }
+            qDebug() << "File saved: " << fileName;
+            file.close();
+        }
+        else
+        {
+            qCritical() << "Failed to open file for saving.";
+        }
     }
-    storeData = sr->sno()+","+
-            sr->person()->devoteeName()+","+
-            sr->person()->mobileNumber()+","+
-            sr->sevaname()+","+
-            sr->sevaDate()+","+
-            sr->receiptDate()+","+
-            sr->totalCost()+","+
-            sr->cash()+","+
-            sr->bank()+","+
-            sr->reference()+","+
-            sr->momento()+","+
-            sr->address()+'\n';
-    out<<storeData;
-    m_file.close();
     m_addHeader =0;
 }
 

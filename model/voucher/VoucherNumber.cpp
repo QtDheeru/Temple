@@ -2,7 +2,7 @@
 
 VoucherNumber::VoucherNumber()
 {
-
+    qDebug()<<Q_FUNC_INFO<<Qt::endl;
 }
 
 QString VoucherNumber::getNextVoucherNumber()

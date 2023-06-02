@@ -116,7 +116,7 @@ Rectangle {
         anchors.topMargin: 10
         anchors.top: _sevaTypeSelection.bottom
         width: parent.width-5
-        height: parent.height - _sevaTypeSelection.height -5
+        height: parent.height - _sevaTypeSelection.height*1.5
         highlight :highlightBar
         spacing: 2
         clip: true

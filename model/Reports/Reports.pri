@@ -1,5 +1,6 @@
 INCLUDEPATH += $$PWD
 HEADERS += \
+    $$PWD/AccountReportCSVProcessor.h \
     $$PWD/AccountReportDateRangeElement.h \
     $$PWD/AccountReportDateRangeModel.h \
     $$PWD/AccountReportElement.h \
@@ -25,6 +26,7 @@ HEADERS += \
     $$PWD/SevaReport.h
 
 SOURCES += \
+    $$PWD/AccountReportCSVProcessor.cpp \
     $$PWD/AccountReportDateRangeElement.cpp \
     $$PWD/AccountReportDateRangeModel.cpp \
     $$PWD/AccountReportElement.cpp \

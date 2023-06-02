@@ -115,7 +115,7 @@ Rectangle{
 
 
         TableViewColumn {
-            id:_teerthaPrasada;title: "Tertha Prasada"; role: "teerthaPrasada";
+            id:_teerthaPrasada;title: "SevaCount"; role: "sevaCount";
             width: leftpart.width/7.1
             movable: false
             resizable: false
@@ -150,34 +150,72 @@ Rectangle{
             resizable: true}
 
     }
-    Button{
-        id:_exportCsv
-        height:60
-        width: 200
+    Row{
         anchors.top: lv1.bottom
         anchors.horizontalCenter: lv1.horizontalCenter
-        style: ButtonStyle{
-            background: Rectangle{
-                id: bg
-                border.width: 1
-                radius: 3
-                color: "cornflowerblue"
-                Label{
-                    text: "Export Data"
-                    anchors.centerIn: parent
+        spacing: parent.width/6
+        Button{
+            id:_exportCsv
+            height:60
+            width: 200
+            anchors.verticalCenter: parent.verticalCenter
+            style: ButtonStyle{
+                background: Rectangle{
+                    id: bg
+                    border.width: 1
+                    radius: 3
+                    color: "cornflowerblue"
+                    Label{
+                        text: "Export Data"
+                        anchors.centerIn: parent
+                        font.pixelSize: 16
+                    }
                 }
             }
+            onClicked: {
+                console.log("export data clicked")
+                sevaProxy.sevaReport.bookReportModel.generateBookingReportCSV()
+            }
         }
-        onClicked: {
-            console.log("export data clicked")
-            sevaProxy.generateCSV()
+        Button{
+            id:_exportALL
+            height:60
+            width: 200
+            anchors.verticalCenter: parent.verticalCenter
+            style: ButtonStyle{
+                background: Rectangle{
+                    id: bgall
+                    border.width: 1
+                    radius: 3
+                    color: "cornflowerblue"
+                    Label{
+                        text: "Export All Data"
+                        anchors.centerIn: parent
+                        font.pixelSize: 16
+                    }
+                }
+            }
+            onClicked: {
+                console.log("export data clicked")
+                sevaProxy.generateCSVSevaBookingReport()
+            }
         }
     }
     Connections{
         id:connection
-        target: sevaProxy
+        target:  sevaProxy.sevaReport.bookReportModel
         onSuccessMessage:{
             _errorDialog.showmsg(exportmsg)
+        }
+    }
+    DisplayDialog {
+        id :_errorDialog
+        visible: false
+
+        function showmsg(exportmsg){
+            _errorDialog.visible = true;
+            _errorDialog.text2Display = exportmsg
+            _errorDialog.open();
         }
     }
 
@@ -222,17 +260,7 @@ Rectangle{
     //            }
     //        }
     //    }
-    DisplayDialog {
-        id :_errorDialog
-        visible: false
 
-        function showmsg(exportmsg){
-            _errorDialog.visible = true;
-            _errorDialog.text2Display = exportmsg
-            _errorDialog.open();
-            //_errorDialog.visible = false;
-        }
-    }
     Keys.onEscapePressed: {
         console.log("Esc pressed in SevaAccountReportForSingleDate ")
         //sendReportDateRangeImputAgain();

@@ -7,7 +7,7 @@
 #include "BookingReportElement.h"
 #include "ReportFilterElements.h"
 #include <QDebug>
-
+#include "SevaReceiptCsvProcessor.h"
 class BookingReportModel : public QAbstractTableModel
 {
     Q_OBJECT
@@ -26,9 +26,13 @@ public:
     QString FormatDate(QString);
     void resetBookingModel();
     Q_INVOKABLE int getBookingReportQryListSize();
-
+    Q_INVOKABLE void generateBookingReportCSV(); //Suman N
+signals:
+    void sendBookingReportList( QList<BookingReportElement*>); //suman N
+    void successMessage(QString exportmsg);                      //Suman N
 private:
     QList<BookingReportElement*> m_bookingReportQryList;
+    SevaReceiptCsvProcessor* sevaCSVProcessor;                //Suman N
 };
 
 #endif // BOOKINGREPORTMODEL_H

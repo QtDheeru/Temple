@@ -43,7 +43,7 @@ Rectangle{
             SevaListView{
                 id :_sevaListView
                 Layout.topMargin: root.height/100
-                Layout.fillHeight: true
+                Layout.fillHeight: parent.height
                 focus: false
                 fontPixelSize : root.fontPixelSize
             }
@@ -470,6 +470,7 @@ Rectangle{
     Component.onCompleted: {
         console.log("Component.onCompleted: of seva booking view")
         forceActiveFocus()
+        _sevaDate.bookedby = sevaProxy.userManagement.signIn_Name
         //        sevaProxy.getBookedView().resetModel();
         //        sevaProxy.getSevaTypeNamesDataModel().getSevaBookingConformationDataModel().reset();
         //  _sevaContoller.enablePaymentButton = false
