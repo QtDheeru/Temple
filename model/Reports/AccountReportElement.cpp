@@ -3,7 +3,11 @@
 AccountReportElement::AccountReportElement(QObject *parent)
     : QObject{parent}
 {
-
+    qDebug()<<Q_FUNC_INFO<<Qt::endl;
+    cash = 0;
+    neft =0;
+    cheque = 0;
+    upi = 0;
 }
 
 const QString &AccountReportElement::getSeva_name() const
@@ -54,5 +58,45 @@ int AccountReportElement::slNo() const
 void AccountReportElement::setSlNo(int newSlNo)
 {
     m_slNo = newSlNo;
+}
+
+float AccountReportElement::getCash() const
+{
+    return cash;
+}
+
+void AccountReportElement::setCash(float newCash)
+{
+    cash = newCash;
+}
+
+float AccountReportElement::getNeft() const
+{
+    return neft;
+}
+
+void AccountReportElement::setNeft(float newNeft)
+{
+    neft = newNeft;
+}
+
+float AccountReportElement::getCheque() const
+{
+    return cheque;
+}
+
+void AccountReportElement::setCheque(float newCheque)
+{
+    cheque = newCheque;
+}
+
+float AccountReportElement::getUpi() const
+{
+    return upi;
+}
+
+void AccountReportElement::setUpi(float newUpi)
+{
+    upi = newUpi;
 }
 

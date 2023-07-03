@@ -30,7 +30,7 @@ void AccountReportCSVProcessor::recieveAccountReportList(QList<AccountReportElem
             {
                 qDebug()<<"Inside if"<<Qt::endl;
                 QString header;
-                header =  QString("Sl_No") + "," + "Seva_Name" + "," + "Seva_Cost" + "," + "Seva_Count" + "," + "Total_Amount" +'\n';
+                header =  QString("Sl_No") + "," + "Seva_Name" + "," + "Seva_Cost" + "," + "Seva_Count"+ "," +"Cash" + "," + "Cheque"+ "," + "NEFT" + "," + "UPI"+ "," + "Total_Amount" +'\n';
                 out<<header.toUpper();
             }
             for(auto it =accountReportList.begin(); it != accountReportList.end(); it++){
@@ -38,6 +38,10 @@ void AccountReportCSVProcessor::recieveAccountReportList(QList<AccountReportElem
                         (*it)->getSeva_name()+","+
                         QString::number((*it)->getSeva_cost())+","+
                         QString::number((*it)->getSeva_ticket())+","+
+                        QString::number((*it)->getCash())+","+
+                         QString::number((*it)->getCheque()) +","+
+                         QString::number((*it)->getNeft()) +","+
+                         QString::number((*it)->getUpi()) +","+
                         QString::number((*it)->getSeva_total())+'\n';
                 out<<storeData;
             }

@@ -61,7 +61,18 @@ QVariant AccountReportModel::data(const QModelIndex &index, int role) const
     case 4:{
         qDebug()<<Q_FUNC_INFO<<_da->getSeva_ticket()<<Qt::endl;
         return _da->getSeva_ticket();}
-    case 5:{
+    case 5:
+        return _da->getCash();break;
+    case 6:{
+        return _da->getCheque();break;
+    }
+    case 7: {
+        return _da->getNeft();break;}
+    case 8:{
+
+        return _da->getUpi();break;
+    }
+    case 9:{
         qDebug()<<Q_FUNC_INFO<<_da->getSeva_total()<<Qt::endl;
         QString c;
         // return c.setNum(_da->getSeva_total())+ ".00 ?";}
@@ -78,8 +89,11 @@ QHash<int, QByteArray> AccountReportModel::roleNames() const
     roles[2] ="sevaName";
     roles[3] = "cost";
     roles[4] = "personCount";
-    roles[5] = "totalAmount";
-
+    roles[5] = "Cash";
+    roles[6] = "Cheque";
+    roles[7] = "NEFT";
+    roles[8] = "UPI";
+    roles[9] = "totalAmount";
     return roles;
 }
 

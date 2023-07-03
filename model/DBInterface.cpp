@@ -1348,6 +1348,9 @@ bool DBInterface::saveData(QObject *obj)
     bool b = false;
     SevaBookingConformationDataModel *sevaData = qobject_cast<SevaBookingConformationDataModel*>(obj);
     MySevaReceipt *rec = sevaData->sevaReceipt();
+    if(rec->paymentMode()=="Cash"){
+        rec->setBank("");
+    }
     qDebug() << Q_FUNC_INFO << " ****8888 NOte =" << rec->note() <<Qt::endl;
     qDebug() << Q_FUNC_INFO << rec->gothra() << Qt::endl;
     // to Test ---------
@@ -1386,9 +1389,9 @@ bool DBInterface::saveData(QObject *obj)
                                      seva->sevaStartDate(),rec->note(),
                                      seva->sevaName(),(seva->sevaCost()*seva->count())+seva->additionalCost(),
                                      rcptNum,rec->cash(),
-                                     rec->bank(),rec->checkOrTranscationId(),
+                                     rec->paymentMode(),rec->bank(),
                                      QString("%1").arg(seva->sevaType()),
-                                     rec->reference(),rec->address(),rec->momento(),QString("%1").arg(seva->sevaStartTime()));
+                                     rec->checkOrTranscationId(),rec->address(),rec->momento(),QString("%1").arg(seva->sevaStartTime()));
         qDebug() << Q_FUNC_INFO << " Inserting the data in for loop into DB b is "<<b<<Qt::endl;
     }
     qDebug() << Q_FUNC_INFO << " Inserting the data into DB b is "<<b<<Qt::endl;
@@ -1852,7 +1855,7 @@ void DBInterface::booking_report_cdate_function(QString formatchangedcalendar_st
         //        ele->setTeerthaPrasada(0);
         qDebug() << " kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk" <<Qt::endl;
 
-         qDebug() <<"Sl No--"<< query_other1.value(0).toString()<<Qt::endl;
+        qDebug() <<"Sl No--"<< query_other1.value(0).toString()<<Qt::endl;
         qDebug() <<"name--"<< query_other1.value(1).toString()<<Qt::endl;
         qDebug() <<"gothra--"<< query_other1.value(2).toString()<<Qt::endl;
         qDebug() <<"nakshatra--"<< query_other1.value(3).toString()<<Qt::endl;
@@ -2166,38 +2169,91 @@ DBInterface::~DBInterface()
 
 void DBInterface::account_report_cdate_function(QString SEVA,int TYPE,QString formatchangedcalendar_str)
 {
+    qDebug()<<Q_FUNC_INFO<<Qt::endl;
     qDebug()<<formatchangedcalendar_str<<"^^^^^^^^^^^^^^^^^^^^^^^^^^ "<<SEVA<< "  "<<TYPE<<Qt::endl;
     QList<QString> list_name;
     QList<int> list_ticket;
     QList<float> list_cost,list_total;
     QSqlQuery query_other1;
+    QSqlQuery cash,cheque,neft,upi;
     QString que1;
+    QString cashmode,cheqmode,neftmode,upimode;
     AccountReportElement ele;
     if(TYPE==0) {
         qDebug() <<"First"<<Qt::endl;
         que1 = ("select SEVANAME,sum(QUANTITY),SEVACOST,sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where sevabooking.RECEIPT_DATE='%1' Group by sevabooking.SEVANAME; ");
         que1 = que1.arg(formatchangedcalendar_str);
 
+        cashmode = ("select sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where sevabooking.BANK='cash' and sevabooking.RECEIPT_DATE='%1' Group by sevabooking.SEVANAME;");
+        cashmode = cashmode.arg(formatchangedcalendar_str);
+
+        cheqmode = ("select sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where BANK='Cheque' and sevabooking.RECEIPT_DATE='%1' Group by sevabooking.SEVANAME;");
+        cheqmode = cheqmode.arg(formatchangedcalendar_str);
+
+        neftmode = ("select sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where BANK='NEFT' and sevabooking.RECEIPT_DATE='%1' Group by sevabooking.SEVANAME;");
+        neftmode = neftmode.arg(formatchangedcalendar_str);
+
+        upimode = ("select sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where BANK='UPI' and sevabooking.RECEIPT_DATE='%1' Group by sevabooking.SEVANAME;");
+        upimode = upimode.arg(formatchangedcalendar_str);
     }
     else if (SEVA==ALLSEVANAME) {
         qDebug() <<"Second"<<Qt::endl;
         que1 = ("select SEVANAME,sum(QUANTITY),SEVACOST,sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where sevabooking.RECEIPT_DATE='%1' and sevabooking.SEVATYPE='%2' Group by sevabooking.SEVANAME; ");
         que1 = que1.arg(formatchangedcalendar_str).arg(TYPE);
+
+        cashmode = ("select sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where sevabooking.BANK='cash' and sevabooking.RECEIPT_DATE='%1' and sevabooking.SEVATYPE='%2' Group by sevabooking.SEVANAME;");
+        cashmode = cashmode.arg(formatchangedcalendar_str).arg(TYPE);
+
+        cheqmode = ("select sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where BANK='Cheque' and sevabooking.RECEIPT_DATE='%1' and sevabooking.SEVATYPE='%2' Group by sevabooking.SEVANAME;");
+        cheqmode = cheqmode.arg(formatchangedcalendar_str).arg(TYPE);
+
+        neftmode = ("select sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where BANK='NEFT' and sevabooking.RECEIPT_DATE='%1' and sevabooking.SEVATYPE='%2' Group by sevabooking.SEVANAME;");
+        neftmode = neftmode.arg(formatchangedcalendar_str).arg(TYPE);
+
+        upimode = ("select sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where BANK='UPI' and sevabooking.RECEIPT_DATE='%1' and sevabooking.SEVATYPE='%2' Group by sevabooking.SEVANAME;");
+        upimode = upimode.arg(formatchangedcalendar_str).arg(TYPE);
+
     }
     else {
         qDebug() <<"Third"<<Qt::endl;
         que1 = ("select SEVANAME,sum(QUANTITY),SEVACOST,sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where sevabooking.RECEIPT_DATE='%1' and sevabooking.SEVATYPE='%2' and sevabooking.SEVANAME = '%3' Group by sevabooking.SEVANAME; ");
         que1 = que1.arg(formatchangedcalendar_str).arg(TYPE).arg(SEVA);
+
+        cashmode = ("select sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where sevabooking.BANK='cash' and sevabooking.RECEIPT_DATE='%1' and sevabooking.SEVATYPE='%2' and sevabooking.SEVANAME = '%3' Group by sevabooking.SEVANAME;");
+        cashmode = cashmode.arg(formatchangedcalendar_str).arg(TYPE).arg(SEVA);
+
+        cheqmode = ("select sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where BANK='Cheque' and sevabooking.RECEIPT_DATE='%1' and sevabooking.SEVATYPE='%2' and sevabooking.SEVANAME = '%3' Group by sevabooking.SEVANAME;");
+        cheqmode = cheqmode.arg(formatchangedcalendar_str).arg(TYPE).arg(SEVA);
+
+        neftmode = ("select sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where BANK='NEFT' and sevabooking.RECEIPT_DATE='%1' and sevabooking.SEVATYPE='%2' and sevabooking.SEVANAME = '%3' Group by sevabooking.SEVANAME;");
+        neftmode = neftmode.arg(formatchangedcalendar_str).arg(TYPE).arg(SEVA);
+
+        upimode = ("select sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where BANK='UPI' and sevabooking.RECEIPT_DATE='%1' and sevabooking.SEVATYPE='%2' and sevabooking.SEVANAME = '%3' Group by sevabooking.SEVANAME;");
+        upimode = upimode.arg(formatchangedcalendar_str).arg(TYPE).arg(SEVA);
     }
 
     qDebug() << " Query string =" << que1 <<Qt::endl;
     query_other1.prepare(que1);
+    cash.prepare(cashmode);
+    cash.exec();
+
+    cheque.prepare(cheqmode);
+    cheque.exec();
+
+    neft.prepare(neftmode);
+    neft.exec();
+    upi.prepare(upimode);
+    upi.exec();
+    if(cash.exec()){
+        qDebug()<<"inside cash true"<<Qt::endl;
+    }
+    else{
+        qDebug()<<"inside cash false"<<Qt::endl;
+    }
     bool b =  query_other1.exec();
     qDebug() << " Query string Acc rep" << b <<Qt::endl;
-    //    if(!(query_other1.next()))
-    //    {
-    //        emit setGrandTotalToZero();
-    //    }
+
+//    while(query_other1.next() && cash.next() && cheque.next() && neft.next() && upi.next())
     while(query_other1.next())
     {
         qDebug() << " Query string inside while = Acc rep" << que1 <<Qt::endl;
@@ -2206,14 +2262,38 @@ void DBInterface::account_report_cdate_function(QString SEVA,int TYPE,QString fo
         ele->setSeva_ticket( query_other1.value(1).toInt());
         ele->setSeva_cost(query_other1.value(2).toFloat());//cost
         ele->setSeva_total(query_other1.value(3).toFloat());//total
+
+//        ele->setCash(cash.value(0).toFloat());
+//        ele->setCheque(cheque.value(0).toFloat());
+//        ele->setNeft(neft.value(0).toFloat());
+//        ele->setUpi(upi.value(0).toFloat());
+
+        while(cash.next()){
+            qDebug()<<"suman cash"<<cash.value(0).toString()<<Qt::endl;
+            ele->setCash(cash.value(0).toFloat());
+        }
+        while(cheque.next()){
+            qDebug()<<"suman cheque"<<cheque.value(0).toString()<<Qt::endl;
+            ele->setCheque(cheque.value(0).toFloat());
+        }
+        while(neft.next()){
+            qDebug()<<"suman neft"<<neft.value(0).toString()<<Qt::endl;
+            ele->setNeft(neft.value(0).toFloat());
+        }
+        while(upi.next()){
+            qDebug()<<"suman upi"<<upi.value(0).toString()<<Qt::endl;
+            ele->setUpi(upi.value(0).toFloat());
+        }
+
         qDebug() << query_other1.value(0).toString()<<Qt::endl;
         qDebug() << query_other1.value(1).toString()<<Qt::endl;
         qDebug() << query_other1.value(2).toString()<<Qt::endl;
         qDebug() << query_other1.value(3).toString()<<Qt::endl;
-        qDebug() <<"before emitting signal  account_report ''''''''"<<Qt::endl;
+        qDebug() <<"before emitting signal  account_report ''''''''" <<Qt::endl;
         emit account_report(ele);
         qDebug() <<"after emitting signal  account_report ''''''''"<<Qt::endl;
     }
+
 }
 
 void DBInterface::account_report_cmonth_function(QString SEVA,int TYPE,int month,int year)
@@ -2551,6 +2631,7 @@ void DBInterface::account_report_dataRange_function(QString SEVA,int TYPE ,QStri
 
 void DBInterface::account_report_eachDateDataRange_function(QString SEVA,int TYPE ,QString seva_Startdate,QString seva_Enddate)
 {
+    qDebug()<<Q_FUNC_INFO<<Qt::endl;
     QList<QString> list_name;
     QList<int> list_ticket;
     QList<float> list_cost,list_total;
@@ -2560,18 +2641,22 @@ void DBInterface::account_report_eachDateDataRange_function(QString SEVA,int TYP
     {
         readstr = ("select RECEIPT_DATE,sum(QUANTITY),sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where sevabooking.RECEIPT_DATE between '%1' and '%2' Group by sevabooking.RECEIPT_DATE;" );
         readstr  = readstr.arg(seva_Startdate).arg(seva_Enddate);
+
     }
     else if (SEVA==ALLSEVANAME) {
         readstr = ("select RECEIPT_DATE,sum(QUANTITY),SEVACOST,sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where sevabooking.RECEIPT_DATE between '%1' and '%2' and sevabooking.SEVATYPE = '%3' Group by sevabooking.RECEIPT_DATE;" );
         readstr  = readstr.arg(seva_Startdate).arg(seva_Enddate).arg(TYPE);
+
     }
     else {
-        readstr = ("select RECEIPT_DATE,sum(QUANTITY),SEVACOST,sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where sevabooking.RECEIPT_DATE between '%1' and '%2' and sevabooking.SEVATYPE = '%3' and sevabooking.SEVANAME = '%4' Group by sevabooking.RECEIPT_DATE;" );
+        readstr = ("select RECEIPT_DATE,sum(QUANTITY),SEVACOST,sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where sevabooking.RECEIPT_DATE between '%1' and '%2' and sevabooking.SEVATYPE = '%3' and sevabooking.SEVANAME = '%4' and  Group by sevabooking.RECEIPT_DATE;" );
         readstr  = readstr.arg(seva_Startdate).arg(seva_Enddate).arg(TYPE).arg(SEVA);
+
     }
     qDebug() << " Query string =" << readstr <<Qt::endl;
     query_other1.prepare(readstr);
     query_other1.exec();
+
     while(query_other1.next())
     {
         qDebug() << "In while of db ***************************" << readstr <<Qt::endl;
@@ -2583,10 +2668,12 @@ void DBInterface::account_report_eachDateDataRange_function(QString SEVA,int TYP
         ele->setTotalSevaCount( query_other1.value(1).toInt());
         qDebug() << "In while of db **********query_other1.value(1).toInt()*****************" << query_other1.value(1).toInt() <<Qt::endl;
         ele->setTotalAmount(query_other1.value(2).toFloat());
+
         qDebug() << "In while of db **************query_other1.value(2).toFloat()*************" << query_other1.value(2).toFloat() <<Qt::endl;
         emit account_report_Date_Range(ele);
 
     }
+
     //   select RECEIPT_DATE,sum(QUANTITY),sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where sevabooking.RECEIPT_DATE between '2022-08-01' and '2022-11-18' Group by sevabooking.RECEIPT_DATE
 }
 void DBInterface::account_report_eachDateDataRangeForMonth_function(QString SEVA,int TYPE ,int S_MONTH,int S_YEAR)

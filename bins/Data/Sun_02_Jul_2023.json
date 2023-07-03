@@ -1,0 +1,36 @@
+{
+    "2023_7_0080": {
+        "Panchamrutha/Abhisheka": {
+            "Number": 431154264,
+            "additionalCost": 0,
+            "count": 4,
+            "sevaCost": 50,
+            "sevaId": 6,
+            "sevaName": "Panchamrutha/Abhisheka",
+            "sevaTime": "",
+            "sevaType": 1,
+            "teerthaPrasada": 431154264
+        },
+        "Serva Seva": {
+            "Number": 7929977,
+            "additionalCost": 0,
+            "count": 5,
+            "sevaCost": 500,
+            "sevaId": 37,
+            "sevaName": "Serva Seva",
+            "sevaTime": "",
+            "sevaType": 1,
+            "teerthaPrasada": 6553700
+        },
+        "address": "",
+        "bookedBy": "Prasanna Rao",
+        "devoteeName": "Suman N",
+        "gothra": "Kashyapa",
+        "mobilenumber": "9481914363",
+        "momento": "Category-1",
+        "nakshtra": "Shathabhisha",
+        "receiptDate": "02-07-2023",
+        "receiptNo": "2023_7_0080",
+        "reference": ""
+    }
+}

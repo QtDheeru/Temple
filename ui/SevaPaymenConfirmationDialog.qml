@@ -6,8 +6,8 @@ import "./components"
 Dialog {
     id : root
     visible: false
-    width: 500;
-    height: 400;
+    width: 680;
+    height: 520;
     closePolicy: Popup.NoAutoClose
     // property bool b : closeButton.enabled
     modal: true

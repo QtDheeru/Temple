@@ -173,3 +173,16 @@ void MySevaReceipt::setSevatime(const QString &newSevatime)
     m_sevatime = newSevatime;
     emit sevatimeChanged();
 }
+
+const QString &MySevaReceipt::paymentMode() const
+{
+    return m_paymentMode;
+}
+
+void MySevaReceipt::setPaymentMode(const QString &newPaymentMode)
+{
+    if (m_paymentMode == newPaymentMode)
+        return;
+    m_paymentMode = newPaymentMode;
+    emit paymentModeChanged();
+}

@@ -8,21 +8,11 @@ Dialog {
     width: 400;height: 250
 
     standardButtons: Dialog.Ok | Dialog.Close
-    //  standardButtons: anchors.centerIn
-    // DialogButtonBox.alignment: Qt.AlignCenter
 
     closePolicy: Popup.NoAutoClose
     signal yesAction();
     signal noAction();
 
-    //    onAccepted: {
-    //        console.log("Ok clicked")
-    //        yesAction();
-    //    }
-    //    onRejected: {
-    //        console.log("Cancel clicked")
-    //        noAction();
-    //    }
     modal: true
     background: Rectangle{
         anchors.fill: parent

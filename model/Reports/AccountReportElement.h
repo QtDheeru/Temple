@@ -2,7 +2,7 @@
 #define ACCOUNTREPORTELEMENT_H
 
 #include <QObject>
-
+#include <QDebug>
 class AccountReportElement : public QObject
 {
     Q_OBJECT
@@ -26,6 +26,18 @@ public:
     int slNo() const;
     void setSlNo(int newSlNo);
 
+    float getCash() const;
+    void setCash(float newCash);
+
+    float getNeft() const;
+    void setNeft(float newNeft);
+
+    float getCheque() const;
+    void setCheque(float newCheque);
+
+    float getUpi() const;
+    void setUpi(float newUpi);
+
 signals:
 
 private:
@@ -34,7 +46,10 @@ private:
     int seva_ticket;
     float seva_cost;
     float seva_total;
-
+    float cash;
+    float neft;
+    float cheque;
+    float upi;
 
 };
 

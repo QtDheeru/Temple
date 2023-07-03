@@ -31,13 +31,7 @@ Rectangle{
                     font.pixelSize: 15
                     font.family: "Helvetica"
                 }
-                //                        Rectangle {
-                //                            anchors.right: parent.right
-                //                            anchors.top: parent.top
-                //                            anchors.bottom: parent.bottom
-                //                            width: 1
-                //                            color: "black"
-                //                        }
+
             }
             rowDelegate: Rectangle {
                 height:20
@@ -51,129 +45,68 @@ Rectangle{
                     anchors.fill: parent
                     //   anchors.centerIn: parent
                     text: styleData.value
-                    //                    horizontalAlignment: styleData.column === 0? Text.AlignLeft:Text.AlignRight
-                    //                    verticalAlignment: Qt.AlignVCenter
-
                     font.pixelSize: 14
                 }
-
-                //                Rectangle{
-                //                    anchors.right: parent.right
-                //                    width:1
-                //                    color:"black"
-                //                    height:parent.height
-                //                }
             }
         }
         TableViewColumn {
             id:_slNo;title: "Sl No"; role: "SlNo";
-            width: _rr1.width/8.1
+            width: _rr1.width/15
 
             movable: false
             resizable: false
-            //            delegate: Rectangle{
-            //                id:_slNodel
-            //                height:20
-            //                color: styleData.row%2 ? "light gray":"white"
-            //                Text {
-            //                  //  anchors.fill: parent
-            //                      anchors.centerIn: parent
-            //                    text: styleData.value
-            //                    horizontalAlignment:Text.AlignLeft
-            //                    padding: 5
-            //                    verticalAlignment: Qt.AlignVCenter
-
-            //                    font.pixelSize: 14
-            //                }
-            //            }
         }
         TableViewColumn {
             id:_sevaName;title: "Seva Name"; role: "sevaName";
-            width: _rr1.width/3.1
+            width: _rr1.width/6
 
             movable: false
             resizable: false
-            //            delegate: Rectangle{
-            //                id:_sevaNamedel
-            //                height:20
-            //                color: styleData.row%2 ? "light gray":"white"
-            //                Text {
-            //                 //   anchors.fill: parent
-            //                      anchors.centerIn: parent
-            //                    text: styleData.value
-            //                    horizontalAlignment:Text.AlignLeft
-            //                    padding: 5
-            //                    verticalAlignment: Qt.AlignVCenter
-            //                    font.pixelSize: 14
-            //                }
-            //            }
+
         }
         TableViewColumn {
             id:_cost;title: "Cost"; role: "cost";
-            width: _rr1.width/6.1
+            width: _rr1.width/12
             horizontalAlignment: Text.AlignLeft
             movable: false
             resizable: false
-            //            delegate: Rectangle{
-            //                id:_costdel
-            //                height:20
-            //                color: styleData.row%2 ? "light gray":"white"
-            //                Text {
-            //                   // anchors.fill: parent
-            //                      anchors.centerIn: parent
-            //                    text: styleData.value
-            //                    horizontalAlignment:Text.AlignRight
-            //                    padding: _cost.width/3
-            //                    verticalAlignment: Qt.AlignVCenter
-
-            //                    font.pixelSize: 14
-            //                }
-            //            }
         }
         TableViewColumn {
             id:_sevaCount;title: "Seva Count"; role: "personCount";
-            width: _rr1.width/6.1
+            width: _rr1.width/12
             movable: false
             resizable: false
-            //            delegate: Rectangle{
-            //                id:_sevaCountdel
-            //                height:20
-            //                color: styleData.row%2 ? "light gray":"white"
-            //                Text {
-            //                    //anchors.fill: parent
-            //                      anchors.centerIn: parent
-            //                    text: styleData.value
-            //                    horizontalAlignment:Text.AlignHCenter
-            //                    // Layout.rightMargin: 30
-            //                    verticalAlignment: Qt.AlignVCenter
-
-            //                    font.pixelSize: 14
-            //                }
-            //            }
+        }
+        TableViewColumn {
+            id:_cash;title: "Cash"; role: "Cash";
+            width: _rr1.width/12
+            movable: false
+            resizable: false
+        }
+        TableViewColumn {
+            id:_cheque;title: "Cheque"; role: "Cheque";
+            width: _rr1.width/12
+            movable: false
+            resizable: false
+        }
+        TableViewColumn {
+            id:_UPI;title: "UPI"; role: "NEFT";
+            width: _rr1.width/12
+            movable: false
+            resizable: false
+        }
+        TableViewColumn {
+            id:_neft;title: "NEFT"; role: "UPI";
+            width: _rr1.width/12
+            movable: false
+            resizable: false
         }
         TableViewColumn {
             id:_totalAmount;title: "Total Amount"; role: "totalAmount";
-            width: _rr1.width/4.1
+            width: _rr1.width/6
             movable: false
             resizable: false
-            //            delegate: Rectangle{
-            //                id:_totalAmountdel
-            //                height:20
-            //                color: styleData.row%2 ? "light gray":"white"
-
-            //                Text {
-            //                   // anchors.fill: parent
-            //                      anchors.centerIn: parent
-            //                    text: styleData.value
-            //                    horizontalAlignment:Text.AlignRight
-            //                    padding: _totalAmount.width/3
-            //                    verticalAlignment: Qt.AlignVCenter
-
-            //                    font.pixelSize: 14
-            //                }
-            //            }
         }
-
     }
 
 
@@ -210,7 +143,6 @@ Rectangle{
                 font.bold : true
                 Component.onCompleted: {
                     console.log("In Component.onCompleted: of seva report page single date total text "+total.text)
-                    //  total.text = sevaProxy.sevaReport.accReportModel.grandTotal + ".00 ₹"
                 }
             }
         }
@@ -257,8 +189,6 @@ Rectangle{
     }
     Keys.onEscapePressed: {
         console.log("Esc pressed in SevaAccountReportForSingleDate ")
-        //sendReportDateRangeImputAgain();
-        // sevaProxy.sevaReport.resetAccDateRangeModel();
         if(isSingleDateSelected)
         {
             loadMenuPage();
@@ -271,22 +201,9 @@ Rectangle{
     Component.onCompleted:  {
         console.log("Component.completed: of SevaAccountReportForSingleDate.qml")
         _rr1.focus = true
-        //        sevaProxy.sevaReport.accReportModel.setGrandTotalToZero();
-        //sevaProxy.sevaReport.resetAccModel();
     }
     Component.onDestruction: {
         console.log(" Component.onDestruction of SevaAccountReportForSingleDate.qml")
-        // resetAccModel();
-        //          _rr1.focus = false
-
         sevaProxy.sevaReport.resetAccDateRangeModel();
     }
-    //    Connections
-    //    {
-    //        target: sevaProxy.sevaReport.accReportModel
-    //        function onGrandTotalChanged()
-    //        {
-    //          total.text = sevaProxy.sevaReport.accReportModel.grandTotal + ".00 ₹"
-    //        }
-    //    }
 }

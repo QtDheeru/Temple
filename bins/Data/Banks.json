@@ -1,7 +1,7 @@
 {
  "1": {
-		"BankName": "cash",
-		"Id": 1		
+		"BankName": "Karnataka Gramina Bank",
+		"Id": 1	
 	},
  "2": {
 		"BankName": "Sbi",
@@ -19,12 +19,20 @@
 		"BankName": "Canara",
 		"Id": 5		
 	},
-  "6": {
-		"BankName":  "Gpay",
+"6": {
+		"BankName": "Kotak Mahindar Bank",
 		"Id": 6		
 	},
-  "7": {
-		"BankName":   "PhonePe",
+"7": {
+		"BankName": "Punjab Natianal Bank",
 		"Id": 7		
+	},
+"8": {
+		"BankName": "Corporation/Union",
+		"Id": 8		
+	},
+"9": {
+		"BankName": "Bank Of India",
+		"Id": 9		
 	}
 }

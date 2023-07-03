@@ -96,15 +96,12 @@ Rectangle{
                         if (mouse.button == Qt.LeftButton)
                         {
                             console.log("Left")
-                            //                            var ve = sevaProxy.sevaBookingTV.getRowOfData(lv1.currentRow);
-                            //                            console.log("///////////////////"+lv1.currentRow)
-                            //                            console.log("///////////1////////"+ve.person_id)
-                            //                            console.log("////////////2///////"+ve.person.devoteeName)
+
                             var v = sevaProxy.sevaBSearchModel.getRowOfDataFromTableViewModel(lv1.currentRow);
                             console.log("///////////////////"+v)
                             var ve = sevaProxy.sevaBookingTV.getRowOfData(v);
 
-                           // _allViewDataDialog._serialNo = ve.serial_no
+                            // _allViewDataDialog._serialNo = ve.serial_no
                             _allViewDataDialog._personId = ve.person_id
                             _allViewDataDialog._devoteeName = ve.person.devoteeName
                             _allViewDataDialog._mobileNo= ve.person.mobileNumber
@@ -144,7 +141,7 @@ Rectangle{
                             console.log("///////////////////"+v)
                             var ve = sevaProxy.sevaBookingTV.getRowOfData(v);
 
-                          //  _allViewDataDialog._serialNo = ve.serial_no
+                            //  _allViewDataDialog._serialNo = ve.serial_no
                             _allViewDataDialog._personId = ve.person_id
                             _allViewDataDialog._devoteeName = ve.person.devoteeName
                             _allViewDataDialog._mobileNo= ve.person.mobileNumber
@@ -202,22 +199,11 @@ Rectangle{
                     color:"gray"
                     height:parent.height
                 }
-                //            MouseArea{
-                //                anchors.fill: parent
-                //                onClicked: {
-                //                    console.log("Clicked cell")
-                //                    var selectedRow = 2
-                //                    //itemDelRect.color = styleData.row === selectedRow ? "yellow" : "white"
-                //                }
-                //            }
             }
         }
         onClicked: {
             console.log("clicked cell in table view ",row)
-            //        var rowItem =  (sevaProxy.sevaBSearchModel).index(row)
             selectedRow = row
-            //        (sevaProxy.sevaBSearchModel)
-            //         if (mouse.button == Qt.RightButton)
             {
                 console.log("clicked cell in table view ",row)
             }
@@ -229,54 +215,13 @@ Rectangle{
         TableViewColumn {title: "Person ID"; role: "PersonID"; width: parent.width/12}
         TableViewColumn {title: "Person DbID"; role: "PersonDbID"; width: parent.width/12}
         TableViewColumn {title: "Devotee Name"; role: "DevoteeName"; width: parent.width/12
-            //            elideMode: Text.ElideLeft
-            //            delegate: Rectangle{
-            //                //id:_totalAmountdel
-            //                height:40
-            //                color: styleData.row%2 ? "light gray":"white"
-
-            //                Text {
-            //                    text: styleData.value
-            //                    //anchors.centerIn: parent
-            //                    // elide: Qt.ElideLeft
-            //                    leftPadding: 1
-            //                    font.pixelSize: 14
-
-            //                }
-            //                Rectangle{
-            //                    anchors.right: parent.right
-            //                    width:0.5
-            //                    color:"gray"
-            //                    height:parent.height
-            //                }
-            //            }
         }
         TableViewColumn {title: "Mobile Number"; role: "MobileNumber"; width: parent.width/12}
         TableViewColumn {title: "Gothra"; role: "Gothra"; width: parent.width/12}
         TableViewColumn {title: "Nakshatra"; role: "Nakshatra"; width: parent.width/12}
         TableViewColumn {title: "Seva Type"; role: "SevaType"; width: parent.width/12}
         TableViewColumn {title: "Seva Name"; role: "SevaName"; width: parent.width/12
-            //            elideMode: Text.ElideLeft
-            //            delegate: Rectangle{
-            //                //id:_totalAmountdel
-            //                height:40
-            //                color: styleData.row%2 ? "light gray":"white"
 
-            //                Text {
-            //                    text: styleData.value
-            //                    //anchors.centerIn: parent
-            //                    // elide: Qt.ElideLeft
-            //                    leftPadding: 1
-            //                    font.pixelSize: 14
-
-            //                }
-            //                Rectangle{
-            //                    anchors.right: parent.right
-            //                    width:0.5
-            //                    color:"gray"
-            //                    height:parent.height
-            //                }
-            //            }
         }
         TableViewColumn {title: "Quantity"; role: "Quantity"; width: parent.width/12}
         TableViewColumn {title: "Receipt Date"; role: "ReceiptDate"; width: parent.width/12}
@@ -304,25 +249,30 @@ Rectangle{
                 text: qsTr('Print')
                 onTriggered:_allViewDataDialog.open()
             }
+            MenuItem{
+                text: qsTr('Cancel')
+                onTriggered: {
+                    _errorDialog.showmsg("Are you sure to cancel the reciept?")
+                }
+            }
         }
-        //        ShowPrintDetails{
-        //            id:showPrintDetails
-        //            Keys.onEscapePressed: showPrintDetails.close()
+        DisplayDialog {
+            id :_errorDialog
+            visible: false
 
-        //        }
+            function showmsg(exportmsg){
+                _errorDialog.visible = true;
+                _errorDialog.text2Display = exportmsg
+                _errorDialog.open();
+            }
+            onYesAction: {
+                console.log("reciept has to be delete");
+            }
+        }
         AllViewDataDialog{
             id:_allViewDataDialog
             anchors.centerIn: parent
-            // Keys.onEscapePressed: _voucherReceiptDialog.close()
-            //                    onPaymentComplete: {
-            //                        console.log("Seva is store now..")
-            //                        _sevaContoller.bookingComplete();
-            //                        saveFullReceipt();
-            //                        sevaProxy.printReceipt();
-            //                        resetBaseScreen();
-            //                        //resetNextControls(true)
-            //                        paymentOver();
-            //                    }
+
             onCloseClicked: {
                 resetBaseScreen()
                 _allViewDataDialog.close();
@@ -333,9 +283,6 @@ Rectangle{
                 resetBaseScreen();
             }
 
-            //                    onPrintClicked: {
-            //                        //sevaProxy.printReceipt();
-            //                    }
             onRejected: {
                 resetBaseScreen()
             }
@@ -349,7 +296,7 @@ Rectangle{
             id:_sevaBookingElement
         }
         Keys.onEscapePressed: {
-            console.log(" Keys.onEscapePressed: Seva All view Page ")
+            console.log("Keys.onEscapePressed: Seva All view Page ")
             loadSevaBookingView();
         }
     }

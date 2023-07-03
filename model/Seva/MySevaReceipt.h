@@ -22,6 +22,7 @@ class MySevaReceipt : public QObject
     Q_PROPERTY(QString bank READ bank WRITE  setBank NOTIFY bankChanged)
     Q_PROPERTY(QString onlineRef READ checkOrTranscationId WRITE setCheckOrTranscationId NOTIFY onlineRefChanged)
     Q_PROPERTY(QString note READ note WRITE setNote NOTIFY noteChanged)
+    Q_PROPERTY(QString paymentMode READ paymentMode WRITE setPaymentMode NOTIFY paymentModeChanged)
 public:
     explicit MySevaReceipt(QObject *parent = nullptr);
 
@@ -71,6 +72,9 @@ public:
     const QString &sevatime() const;
     void setSevatime(const QString &newSevatime);
 
+    const QString &paymentMode() const;
+    void setPaymentMode(const QString &newPaymentMode);
+
 signals:
     void receiptNoChanged();
     void devoteeNameChanged();
@@ -92,6 +96,8 @@ signals:
 
     void sevatimeChanged();
 
+    void paymentModeChanged();
+
 private :
     QString m_receiptNo;
     QString m_devoteeName;
@@ -111,6 +117,8 @@ private :
     QString m_bank;
     QString m_checkOrTranscationId;
     QString m_note;
+    QString m_paymentMode;
+
 };
 
 #endif // MYSEVARECEIPT_H
