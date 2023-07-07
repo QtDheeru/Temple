@@ -186,3 +186,14 @@ void MySevaReceipt::setPaymentMode(const QString &newPaymentMode)
     m_paymentMode = newPaymentMode;
     emit paymentModeChanged();
 }
+
+const QString &MySevaReceipt::bookingStatus() const
+{
+    return m_bookingStatus;
+}
+
+void MySevaReceipt::setBookingStatus(const QString &newBookingStatus)
+{
+    m_bookingStatus = newBookingStatus;
+    emit bookingStatusChanged();
+}

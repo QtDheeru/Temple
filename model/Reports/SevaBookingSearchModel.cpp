@@ -112,6 +112,10 @@ bool SevaBookingSearchModel::filterAcceptsRow(int source_row, const QModelIndex 
         const QString filterElement = sourceIndex.data(SevaBookingTableModel::REFERENCE_ROLE).toString();
         return(filterElement.toLower().startsWith(m_txtTyped.toLower()));
     }
+    else if(m_comboBoxText == "Status"){
+        const QString filterElement = sourceIndex.data(SevaBookingTableModel::STATUS_ROLE).toString();
+        return(filterElement.toLower().startsWith(m_txtTyped.toLower()));
+    }
     else if(m_comboBoxText == "Address"){
         const QString filterElement = sourceIndex.data(SevaBookingTableModel::ADDRESS_ROLE).toString();
         return(filterElement.toLower().startsWith(m_txtTyped.toLower()));

@@ -1,6 +1,7 @@
 #ifndef ACCOUNTREPORTCSVPROCESSOR_H
 #define ACCOUNTREPORTCSVPROCESSOR_H
 
+#include "AccountFullreportElement.h"
 #include "AccountReportElement.h"
 #include <QObject>
 #include <QDebug>
@@ -16,9 +17,12 @@ public:
     ~AccountReportCSVProcessor();
 public slots:
     void recieveAccountReportList(QList<AccountReportElement*>); //Suman N added
+    void recieveAccountFullreportElementList(QList<AccountFullreportElement*> accntfulList);  //Suman N added
 signals:
+    void successMessage(QString exportmsg);
 private:
     static int m_addHeader;
+    const QString msg= "Export completed";
 };
 
 #endif // ACCOUNTREPORTCSVPROCESSOR_H

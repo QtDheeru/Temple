@@ -53,6 +53,7 @@ public:
                                         QString nakshatra,
                                         QString gothra);
     Q_INVOKABLE bool saveReceipt(MySevaReceipt *receipt);
+    Q_INVOKABLE void deleteRecipt(QString rcptNo);
 
     Q_INVOKABLE bool addSevaOnly(int sevaType,int sevaId,QString sevaName,
                                  double sevaCost, QString sevaDate, QString sevaTime,
@@ -93,7 +94,7 @@ public:
 
 public slots:
      void generateCSVSevaBookingReport();
-
+     void getAllAccountDetails();
 signals:
     void receiptNumberChanged();
     void allReportModelChanged();
@@ -102,6 +103,8 @@ signals:
     void sevaBookingTVChanged();
     void errorMessage(QString errMsg);
     void successMessage(QString exportmsg);
+    void collectAllAccountsdata();
+    void sendDeletedRecptNo(QString);
 private :
     SevaTypeNamesDataModel *m_sevaBookingModelData;
     SevaListViewModel *m_currentSevaModel;
@@ -115,7 +118,6 @@ private :
     SevaBookingSearchModel *m_sevaBSearchModel;
     SevaTypeViewModel *m_sevaTypeModel;
     UserManagement* m_userMngmnt;
-
 };
 
 #endif // SEVAVIEWPROXY_H

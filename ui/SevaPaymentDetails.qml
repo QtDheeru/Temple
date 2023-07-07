@@ -14,6 +14,7 @@ Rectangle {
     property string paymentMode:"Cash"
     property alias checkOrTransactionId : _bankReference._data;
     property alias note : _note._data;
+    property string  empty: ""
     function setBankList(bankList){
         _banks._datamodel = bankList;
         //_banks._datamodel =["SBI", "CanaraBank", "Karnataka","HDFC","ICICI"]
@@ -53,7 +54,7 @@ Rectangle {
                         _banks.visible = false
                         _cash.visible = true
                         paymentMode= _cash1.text
-
+                        _banks.data = empty
                     }
                 }
             }
@@ -86,6 +87,7 @@ Rectangle {
                         _banks.visible = true
                         _cash.visible = true
                          paymentMode= _neft.text
+                        _banks._data = ""
                     }
                 }
             }
@@ -102,6 +104,7 @@ Rectangle {
                         _banks.visible = false
                         _cash.visible = true
                          paymentMode= _upi.text
+                        _banks.data = empty
                     }
                 }
             }

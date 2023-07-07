@@ -1,0 +1,94 @@
+{
+    "2023_7_0001": {
+        "Chataka": {
+            "Number": 7929977,
+            "additionalCost": 0,
+            "count": 1,
+            "sevaCost": 800,
+            "sevaId": 2,
+            "sevaName": "Chataka",
+            "sevaTime": "",
+            "sevaType": 1,
+            "teerthaPrasada": 6553700
+        },
+        "address": "rrn",
+        "bookedBy": "Prasanna Rao",
+        "devoteeName": "Suman N",
+        "gothra": "Kashyapa",
+        "mobilenumber": "9481914363",
+        "momento": "Category-1",
+        "nakshtra": "Shathabhisha",
+        "receiptDate": "07-07-2023",
+        "receiptNo": "2023_7_0001",
+        "reference": ""
+    },
+    "2023_7_0002": {
+        "SRI SITA RAMANJANEYARIGE NOOTA VASTRA DHARANE pratyekavagi": {
+            "Number": 7929977,
+            "additionalCost": 0,
+            "count": 3,
+            "sevaCost": 500,
+            "sevaId": 63,
+            "sevaName": "SRI SITA RAMANJANEYARIGE NOOTA VASTRA DHARANE pratyekavagi",
+            "sevaTime": "",
+            "sevaType": 2,
+            "teerthaPrasada": 6553700
+        },
+        "address": "rrn",
+        "bookedBy": "Prasanna Rao",
+        "devoteeName": "Suman N",
+        "gothra": "Kashyapa",
+        "mobilenumber": "9481914363",
+        "momento": "Category-1",
+        "nakshtra": "Shathabhisha",
+        "receiptDate": "07-07-2023",
+        "receiptNo": "2023_7_0002",
+        "reference": ""
+    },
+    "2023_7_0003": {
+        "M Navami Pavamana Homa": {
+            "Number": 1986351904,
+            "additionalCost": 0,
+            "count": 1,
+            "sevaCost": 5000,
+            "sevaId": 24,
+            "sevaName": "M Navami Pavamana Homa",
+            "sevaTime": "",
+            "sevaType": 3,
+            "teerthaPrasada": 4456448
+        },
+        "address": "rrn",
+        "bookedBy": "",
+        "devoteeName": "Suman N",
+        "gothra": "Kashyapa",
+        "mobilenumber": "9481914363",
+        "momento": "Category-1",
+        "nakshtra": "Shathabhisha",
+        "receiptDate": "07-07-2023",
+        "receiptNo": "2023_7_0003",
+        "reference": ""
+    },
+    "2023_7_0004": {
+        "Panchamrutha/Abhisheka": {
+            "Number": 7929977,
+            "additionalCost": 0,
+            "count": 3,
+            "sevaCost": 50,
+            "sevaId": 6,
+            "sevaName": "Panchamrutha/Abhisheka",
+            "sevaTime": "",
+            "sevaType": 1,
+            "teerthaPrasada": 6553700
+        },
+        "address": "rrn",
+        "bookedBy": "",
+        "devoteeName": "Suman N",
+        "gothra": "Kashyapa",
+        "mobilenumber": "9481914363",
+        "momento": "Category-1",
+        "nakshtra": "Shathabhisha",
+        "receiptDate": "07-07-2023",
+        "receiptNo": "2023_7_0004",
+        "reference": ""
+    }
+}

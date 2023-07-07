@@ -39,15 +39,61 @@ void AccountReportCSVProcessor::recieveAccountReportList(QList<AccountReportElem
                         QString::number((*it)->getSeva_cost())+","+
                         QString::number((*it)->getSeva_ticket())+","+
                         QString::number((*it)->getCash())+","+
-                         QString::number((*it)->getCheque()) +","+
-                         QString::number((*it)->getNeft()) +","+
-                         QString::number((*it)->getUpi()) +","+
+                        QString::number((*it)->getCheque()) +","+
+                        QString::number((*it)->getNeft()) +","+
+                        QString::number((*it)->getUpi()) +","+
                         QString::number((*it)->getSeva_total())+'\n';
                 out<<storeData;
             }
             file.close();
 
             qDebug() << "File saved: " << fileName;
+        }
+        else
+        {
+            qCritical() << "Failed to open file for saving.";
+        }
+    }
+    m_addHeader =0;
+}
+
+void AccountReportCSVProcessor::recieveAccountFullreportElementList(QList<AccountFullreportElement *> accntfulList)
+{
+    qDebug()<<Q_FUNC_INFO<<Qt::endl;
+    QString todayDate ="AccountsFullDetailsReport_"+ QDate::currentDate().toString("ddd_dd_MMM_yyyy");
+    Q_UNUSED(todayDate);
+    QString fileName = QFileDialog::getSaveFileName(nullptr, "Save File","", "Text Files (*.csv)");//Suman N added
+    if (!fileName.isEmpty())
+    {
+        QFile file(fileName);
+        if (file.open(QIODevice::WriteOnly|QIODevice::Append))
+        {
+            // Perform save operation
+            QTextStream out(&file);
+            QString storeData;
+            if(m_addHeader)
+            {
+                qDebug()<<"Inside if"<<Qt::endl;
+                QString header;
+                header =  QString("Rcpt_No") + "," + "Recpt_date" + "," + "Seva_date" + "," + "Seva_name"+ "," +"Seva_count" + "," + "Seva_cost"+ "," + "Devotee_name" + "," + "Mobile"+ "," + "Payment_mode" + "," +"Total_amnt" +'\n';
+                out<<header.toUpper();
+            }
+            for(auto it =accntfulList.begin(); it != accntfulList.end(); it++){
+                storeData =(*it)->recieptnumber() +","+
+                        (*it)->recptDate()+","+
+                        (*it)->sevadate()+","+
+                        (*it)->sevaname()+","+
+                        QString::number((*it)->sevaCount())+","+
+                        QString::number((*it)->sevacost()) +","+
+                        (*it)->devoteeName() +","+
+                        (*it)->mobile() +","+
+                        (*it)->paymentmode()+ ","+
+                        QString::number((*it)->total()) + '\n';
+                out<<storeData;
+            }
+            file.close();
+            qDebug() << "File saved: " << fileName;
+            emit successMessage(msg);
         }
         else
         {

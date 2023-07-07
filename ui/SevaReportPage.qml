@@ -49,11 +49,7 @@ Rectangle{
             _load.source = "SevaAccountReportOnDateRange.qml"
 
         }
-        //        function onBookingDateRangeSelected(){
-        //            console.log("In onBookingDateRangeSelected")
-        //            _load.source = "SevaBookingReportOnDateRange.qml"
 
-        //        }
         function onMonthWiseSelected(){
             console.log("In onDateRangeSelected")
             _load.source = "SevaAccountReportMonthWise.qml"
@@ -64,13 +60,7 @@ Rectangle{
             console.log("In onLoadDateWisePage")
             _load.source = "SevaAccountReportOnDateRange.qml"
         }
-        //        function onLoadSingleDatePage()
-        //        {
-        //            console.log("In onLoadSingleDatePage")
-        //            _load.source = "SevaAccountReportForSingleDate.qml"
-        //            console.log("  ---------------1----------------------");
-        //           // -------------------------------------
-        //        }
+
         function onSendReportDateRangeInput(obj){
             console.log("In onSendReportDateRangeInput")
             sendReportDateRangeImput(obj);
@@ -90,6 +80,30 @@ Rectangle{
         function   onSendError(err){
             console.log("In onSendError")
             _errorDialog.showError(err);
+        }
+        function onSendAllDetailsReportDateRangeInput(obj){
+            console.log("Suman onSendAllDetailsReportDateRangeInput")
+            _load.source = ""
+            sevaProxy.sevaReport.accountFullReportModel.generateFullAccountReportForDateRange(obj)
+            _load.source = "AllAccountDetails.qml";
+        }
+        function onSendAllDetailsReportMonthRangeInput(obj){
+            console.log("Suman onSendAllDetailsReportMonthRangeInput")
+            _load.source = ""
+            sevaProxy.sevaReport.accountFullReportModel.generateFullAccountReportForMonth(obj)
+            _load.source = "AllAccountDetails.qml";
+        }
+        function onSendAlldetailsReportDateRangeInputForWholeMonth(obj){
+            console.log("Suman onSendAlldetailsReportDateRangeInputForWholeMonth")
+            _load.source = ""
+            sevaProxy.sevaReport.accountFullReportModel.generateFullAccountReportForMonth(obj)
+            _load.source = "AllAccountDetails.qml";
+        }
+        function onSendAllReportInputEachDate(obj){
+            console.log("Suman onSendAllReportInputEachDate")
+            _load.source = ""
+            sevaProxy.sevaReport.accountFullReportModel.generateFullAccountReportEachdate(obj)
+            _load.source = "AllAccountDetails.qml";
         }
     }
     ReportFilterItems{
@@ -141,37 +155,10 @@ Rectangle{
                             font.pixelSize: 15
                             font.family: "Helvetica"
                         }
-                        //                        Rectangle {
-                        //                            anchors.right: parent.right
-                        //                            anchors.top: parent.top
-                        //                            anchors.bottom: parent.bottom
-                        //                            width: 1
-                        //                            color: "black"
-                        //                        }
                     }
                     rowDelegate: Rectangle {
                         height:20
                     }
-                    //                    itemDelegate:Rectangle{
-                    //                        id:_itmdel
-                    //                        height:20
-                    //                        color: styleData.row%2 ? "light gray":"white"
-                    //                        Text {
-                    //                            anchors.fill: parent
-                    //                            text: styleData.value
-                    //                            horizontalAlignment: styleData.column === 0? Text.AlignLeft:Text.AlignRight
-                    //                            verticalAlignment: Qt.AlignVCenter
-
-                    //                            font.pixelSize: 14
-                    //                        }
-
-                    //                        Rectangle{
-                    //                            anchors.right: parent.right
-                    //                            width:1
-                    //                            color:"black"
-                    //                            height:parent.height
-                    //                        }
-                    //                    }
 
                     itemDelegate:Rectangle{
                         id:_itmdel
@@ -179,20 +166,10 @@ Rectangle{
                         color: styleData.selected ? "skyblue" : styleData.row%2 ? "light gray" : "white"
                         Text {
                             anchors.fill: parent
-                            //   anchors.centerIn: parent
                             text: styleData.value
-                            //                    horizontalAlignment: styleData.column === 0? Text.AlignLeft:Text.AlignRight
-                            //                    verticalAlignment: Qt.AlignVCenter
-
                             font.pixelSize: 14
                         }
 
-                        //                Rectangle{
-                        //                    anchors.right: parent.right
-                        //                    width:1
-                        //                    color:"black"
-                        //                    height:parent.height
-                        //                }
                     }
                 }
                 TableViewColumn {
@@ -201,21 +178,6 @@ Rectangle{
 
                     movable: false
                     resizable: false
-                    //                    delegate: Rectangle{
-                    //                        id:_slNodel
-                    //                        height:20
-                    //                        color: styleData.row%2 ? "light gray":"white"
-                    //                        Text {
-                    //                            anchors.fill: parent
-                    //                           // anchors.centerIn: parent
-                    //                            text: styleData.value
-                    //                            horizontalAlignment:Text.AlignLeft
-                    //                            padding: 5
-                    //                            verticalAlignment: Qt.AlignVCenter
-
-                    //                            font.pixelSize: 14
-                    //                        }
-                    //                    }
                 }
                 TableViewColumn {
                     id:_sevaName;title: "Seva Name"; role: "sevaName";
@@ -223,20 +185,6 @@ Rectangle{
 
                     movable: false
                     resizable: false
-                    //                    delegate: Rectangle{
-                    //                        id:_sevaNamedel
-                    //                        height:20
-                    //                        color: styleData.row%2 ? "light gray":"white"
-                    //                        Text {
-                    //                            anchors.fill: parent
-                    //                            text: styleData.value
-                    //                            horizontalAlignment:Text.AlignLeft
-                    //                            padding: 5
-                    //                            verticalAlignment: Qt.AlignVCenter
-
-                    //                            font.pixelSize: 14
-                    //                        }
-                    //                    }
                 }
                 TableViewColumn {
                     id:_cost;title: "Cost"; role: "cost";
@@ -244,63 +192,20 @@ Rectangle{
                     horizontalAlignment: Text.AlignLeft
                     movable: false
                     resizable: false
-                    //                    delegate: Rectangle{
-                    //                        id:_costdel
-                    //                        height:20
-                    //                        color: styleData.row%2 ? "light gray":"white"
-                    //                        Text {
-                    //                            anchors.fill: parent
-                    //                            text: styleData.value
-                    //                            horizontalAlignment:Text.AlignRight
-                    //                            padding: _cost.width/3
-                    //                            verticalAlignment: Qt.AlignVCenter
-
-                    //                            font.pixelSize: 14
-                    //                        }
-                    //                    }
                 }
                 TableViewColumn {
                     id:_sevaCount;title: "Seva Count"; role: "personCount";
                     width: (leftpart.width-_slNo.width)/6.1
                     movable: false
                     resizable: false
-                    //                    delegate: Rectangle{
-                    //                        id:_sevaCountdel
-                    //                        height:20
-                    //                        color: styleData.row%2 ? "light gray":"white"
-                    //                        Text {
-                    //                            anchors.fill: parent
-                    //                            text: styleData.value
-                    //                            horizontalAlignment:Text.AlignHCenter
-                    //                            // Layout.rightMargin: 30
-                    //                            verticalAlignment: Qt.AlignVCenter
 
-                    //                            font.pixelSize: 14
-                    //                        }
-                    //                    }
                 }
                 TableViewColumn {
                     id:_totalAmount;title: "Total Amount"; role: "totalAmount";
                     width: (leftpart.width-_slNo.width)/4.1
                     movable: false
                     resizable: false
-                    //                    delegate: Rectangle{
-                    //                        id:_totalAmountdel
-                    //                        height:20
-                    //                        color: styleData.row%2 ? "light gray":"white"
-
-                    //                        Text {
-                    //                            anchors.fill: parent
-                    //                            text: styleData.value
-                    //                            horizontalAlignment:Text.AlignRight
-                    //                            padding: _totalAmount.width/3
-                    //                            verticalAlignment: Qt.AlignVCenter
-
-                    //                            font.pixelSize: 14
-                    //                        }
-                    //                    }
                 }
-
             }
 
             Rectangle{

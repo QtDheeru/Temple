@@ -23,6 +23,7 @@
 #include"AccountReportMonthRangeElement.h"
 #include"BookingReportDateRangeElement.h"
 #include"BookingReportMonthRangeElement.h"
+#include"AccountFullreportElement.h"
 #include<QQmlEngine>
 
 //#include "voucher/VoucherFilterElements.h"
@@ -94,7 +95,7 @@ public slots:
     void modify_db_seva(int,QString,int,QString,QString,QString,int,QString,int);
     void delete_sevadb(QString, QString);
     //void sevabookingdb(QString , QString , QString , QString , QString , QString , QString , QString , QString , QString , QString , int, int , QString , QString , QString);
-    bool insertSevaBooked(QString , QString , QString ,QString , QString , QString , QString , QString , QString , QString , QString , int, int , QString , QString , QString, QString sevaType,QString reference="ref",QString address="RR nagar",QString momento="momento",QString="");
+    bool insertSevaBooked(QString , QString , QString ,QString , QString , QString , QString , QString , QString , QString , QString , int, int , QString , QString , QString, QString sevaType,QString reference="ref",QString="",QString address="RR nagar",QString momento="momento",QString="");
     void insertVoucherIssued(VoucherElement*);
     bool check_name_db(int,QString,int,QString,QString,int,QString,int);
     bool check_db(QString, int, QString seva_adder_name);
@@ -138,6 +139,10 @@ public slots:
     void voucher_report_cmonth_function(int, int, QString, QString);
     void voucher_report_dataRange_function(QString,QString,QString,QString);
 
+    void fullAccounDetailsDateWise(QString, int, QString);              //Suman
+    void fullAccounDetailsDateRangeWise(QString,int,QString,QString);   //Suman
+    void fullAccounDetailsMonthwise(QString ,int ,int ,int );           //Suman
+
     void signin_clicked(QString, QString, int);
     void old_password(QString l_userfirstname, QString l_userlastname);
     void add_new_signin_details(QString, QString, QString, QString,int ,QString);
@@ -179,6 +184,8 @@ public slots:
     void getvoucherdata();  //Suman N added
     void getAccountData();  //Suman N added
 
+    void recvDeletedRecptNo(QString recptNo); //Suman N added
+
 signals :
     void sendSevaType(SevaType *);
     void sendSevaName(SevaName *);
@@ -189,6 +196,8 @@ signals :
     void sendRolenumber(int rolenum,QString signInName);
     void sendVoucheronebyone(VoucherElement*); //Suman N
     void sendAcoountoneByone(AccountReportElement*); //Suman N
+    void sendFullAccountDataElement(AccountFullreportElement*);
+    void sendChangedDataToSevaBookingTablemodel(QString);
 private:
     explicit DBInterface(QObject *parent = nullptr);
     int val;

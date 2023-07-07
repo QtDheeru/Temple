@@ -34,8 +34,15 @@ SevaViewProxy::SevaViewProxy(QObject *parent) : QObject(parent)
     QObject::connect(DBInterface::getInstance(),&DBInterface::account_report,
                      m_ReportOnDateModel->accountreportModel(),&AccountReportModel::insertSevaRow);
 
+    QObject::connect(DBInterface::getInstance(),&DBInterface::sendFullAccountDataElement,
+                     m_ReportOnDateModel->accountFullReportModel(),&AccountFullReportModel::insertrows);
+
     QObject::connect(DBInterface::getInstance(),&DBInterface::booking_report,
                      m_ReportOnDateModel->bookingReportModel(),&BookingReportModel::insertSevaRow);
+
+    connect(this,&SevaViewProxy::collectAllAccountsdata,
+            DBInterface::getInstance(),&DBInterface::getAccountData);
+
     //    QObject::connect(m_allView,&AllViewReports::exportCsvButtonClicked,
     //                     this,&SevaViewProxy::generateCSVSevaBookingReport);
     QDir dir(".");
@@ -45,6 +52,11 @@ SevaViewProxy::SevaViewProxy(QObject *parent) : QObject(parent)
 
     QObject::connect(DBInterface::getInstance(),&DBInterface::sucessfully_added,m_userMngmnt,
                      &UserManagement::userAdded);
+
+    QObject::connect(this,&SevaViewProxy::sendDeletedRecptNo,
+                     DBInterface::getInstance(),&DBInterface::recvDeletedRecptNo);
+    QObject::connect(DBInterface::getInstance(),&DBInterface::sendChangedDataToSevaBookingTablemodel,
+                     m_sevaBookingTV,&SevaBookingTableModel::reset);
     //    QObject::connect(DBInterface::getInstance(),SIGNAL(forFUllDetails(QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>))
     //        ,m_allReportModel,SLOT(getData(QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>)));
 }
@@ -153,6 +165,13 @@ bool SevaViewProxy::saveReceipt(MySevaReceipt *receipt)
     //  return true;
 }
 
+void SevaViewProxy::deleteRecipt(QString rcptNo)
+{
+    qDebug()<<Q_FUNC_INFO<<rcptNo<<Qt::endl;
+    emit sendDeletedRecptNo(rcptNo);
+    this->m_sevaBookingTV->reset(rcptNo);
+}
+
 bool SevaViewProxy::addSevaOnly(int sevaType,int sevaId,QString sevaName,
                                 double sevaCost, QString sevaDate, QString sevaTime,
                                 int additionalCost,int count)
@@ -258,7 +277,6 @@ void SevaViewProxy::setAllReportModel(SevaDetailsTableView *allReportModel)
 bool SevaViewProxy::showAllData()
 {
     qDebug() << Q_FUNC_INFO << Qt::endl;
-    m_allView->clearModel();
     bool b = DBInterface::getInstance()->dbtable_view();
     if(b==false)
     {
@@ -311,43 +329,6 @@ QString SevaViewProxy::createNewSeva(SevaName *seva)
 
 void SevaViewProxy::print()
 {
-    //    m_sevaReceipt->print();
-    //    foreach(SevaName *seva,m_sevabookinglist){
-    //        qDebug() << Q_FUNC_INFO << " **** Print Seva Details...." << Qt::endl;
-    //        seva->print();
-    //    }
-
-    //    qDebug() << Q_FUNC_INFO << " Seva List Size =" << m_sevabookinglist.size() <<Qt::endl;
-    //    QList<Print_Detail*> printList;
-
-    //    double totalAmount= 0;
-
-    //    for(int i=0;i<m_sevabookinglist.size();i++){
-    //        print_details *p = new Print_Detail;
-    //        p->NAME.append(m_sevaReceipt->devoteeName());
-    //        p->RECPT_NO = m_sevaReceipt->receiptNo();
-    //        p->MOB_NO.append(m_sevaReceipt->mobilenumber());
-    //        p->DATE.append(m_sevaReceipt->receiptDate());
-    //        p->GOTHRA.append(m_sevaReceipt->gothra());
-    //        p->NAKSHATRA.append(m_sevaReceipt->nakshtra());
-
-    //        SevaName* seva = m_sevabookinglist.at(i);
-
-    //        double totalSevaCost = (seva->sevaCost()*seva->count()) + seva->additionalCost();
-    //        p->SEVA_DESCR.append(seva->sevaName());
-    //        p->QTY.append(QString::number(seva->count()));
-    //        p->AMT.append(QString::number(totalSevaCost));
-    //        p->CASH.append(QString::number(seva->sevaCost()));
-    //        p->RATE.append(QString::number(seva->sevaCost()));
-
-    //        p->SEVA_DATE.append(seva->sevaDate());
-    //        totalAmount += totalSevaCost;
-    //        p->TOTAL_AMT.append(QString::number(totalAmount));
-    //        p->TOTAL_IN_WORDS.append(print_file::NumberToWord(p->TOTAL_AMT.toUInt()));
-    //        printList.append(p);
-    //    }
-    //    print_file file;
-    //    file.printing_file(&printList);
 }
 
 void SevaViewProxy::generateCSVSevaBookingReport()
@@ -362,6 +343,12 @@ void SevaViewProxy::generateCSVSevaBookingReport()
     DBInterface::getInstance()->getDbData();
     qDebug() << Q_FUNC_INFO << Qt::endl;
     emit successMessage("Export Completed!");
+}
+
+void SevaViewProxy::getAllAccountDetails()
+{
+    qDebug()<<Q_FUNC_INFO<<Qt::endl;
+    emit collectAllAccountsdata();
 }
 
 

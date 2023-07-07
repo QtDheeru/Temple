@@ -19,6 +19,9 @@ class SevaBookingElement : public QObject
     Q_PROPERTY(QString totalCost READ totalCost WRITE setTotalCost CONSTANT)
     Q_PROPERTY(QString cash READ cash WRITE setCash CONSTANT)
     Q_PROPERTY(QString bank READ bank WRITE setBank CONSTANT)
+    Q_PROPERTY(QString status READ status WRITE setStatus NOTIFY statusChanged)
+    Q_PROPERTY(QString bankName READ bankName WRITE setBankName NOTIFY bankNameChanged)
+
 public:
     explicit SevaBookingElement(QObject *parent = nullptr);
 
@@ -73,10 +76,20 @@ public:
     void setSevatime(const QString &newSevatime);
 
 
+    const QString &status() const;
+    void setStatus(const QString &newStatus);
+
+    const QString &bankName() const;
+    void setBankName(const QString &newBankName);
+
 signals:
 
     void sevatimeChanged();
 
+
+    void statusChanged();
+
+    void bankNameChanged();
 
 private :
     QString m_sno;
@@ -91,10 +104,13 @@ private :
     QString m_totalCost;
     QString m_cash;
     QString m_bank;
+    QString m_bankName;
     QString m_reference;
+    QString m_status;
     QString m_address;
     QString m_momento;
     QString m_bookedBy;
+
 };
 
 #endif // SEVABOOKINGELEMENT_H

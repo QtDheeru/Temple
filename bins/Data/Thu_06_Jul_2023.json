@@ -1,0 +1,93 @@
+{
+    "2023_7_0001": {
+        "Hasthodaka": {
+            "Number": 7929977,
+            "additionalCost": 0,
+            "count": 1,
+            "sevaCost": 200,
+            "sevaId": 3,
+            "sevaName": "Hasthodaka",
+            "sevaTime": "",
+            "sevaType": 1,
+            "teerthaPrasada": 6553700
+        },
+        "PANAKA KOSAMBARI  SAMPOORNA SEVE": {
+            "Number": 7929977,
+            "additionalCost": 0,
+            "count": 1,
+            "sevaCost": 500,
+            "sevaId": 54,
+            "sevaName": "PANAKA KOSAMBARI  SAMPOORNA SEVE",
+            "sevaTime": "",
+            "sevaType": 2,
+            "teerthaPrasada": 6553700
+        },
+        "address": "rrn",
+        "bookedBy": "Prasanna Rao",
+        "devoteeName": "Suman N",
+        "gothra": "Kashyapa",
+        "mobilenumber": "9481914363",
+        "momento": "Category-1",
+        "nakshtra": "Shathabhisha",
+        "receiptDate": "06-07-2023",
+        "receiptNo": "2023_7_0001",
+        "reference": ""
+    },
+    "2023_7_0002": {
+        "SRI RAMA TARAKA HOMA": {
+            "Number": 283964152,
+            "additionalCost": 0,
+            "count": 10,
+            "sevaCost": 6000,
+            "sevaId": 56,
+            "sevaName": "SRI RAMA TARAKA HOMA",
+            "sevaTime": "",
+            "sevaType": 2,
+            "teerthaPrasada": 317004472
+        },
+        "SRI SITA RAMANJANEYARIGE NOOTA VASTRA DHARANE pratyekavagi": {
+            "Number": 5439520,
+            "additionalCost": 0,
+            "count": 1,
+            "sevaCost": 500,
+            "sevaId": 63,
+            "sevaName": "SRI SITA RAMANJANEYARIGE NOOTA VASTRA DHARANE pratyekavagi",
+            "sevaTime": "",
+            "sevaType": 2,
+            "teerthaPrasada": 4456480
+        },
+        "address": "rrn",
+        "bookedBy": "Prasanna Rao",
+        "devoteeName": "Suman N",
+        "gothra": "Kashyapa",
+        "mobilenumber": "9481914363",
+        "momento": "Category-1",
+        "nakshtra": "Shathabhisha",
+        "receiptDate": "06-07-2023",
+        "receiptNo": "2023_7_0002",
+        "reference": ""
+    },
+    "2023_7_0003": {
+        "ChatakaN": {
+            "Number": 7929977,
+            "additionalCost": 0,
+            "count": 1,
+            "sevaCost": 900,
+            "sevaId": 2015,
+            "sevaName": "ChatakaN",
+            "sevaTime": "",
+            "sevaType": 1,
+            "teerthaPrasada": 6553700
+        },
+        "address": "rrn",
+        "bookedBy": "Prasanna Rao",
+        "devoteeName": "Suman N",
+        "gothra": "Kashyapa",
+        "mobilenumber": "9481914363",
+        "momento": "Category-1",
+        "nakshtra": "Shathabhisha",
+        "receiptDate": "06-07-2023",
+        "receiptNo": "2023_7_0003",
+        "reference": ""
+    }
+}

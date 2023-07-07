@@ -180,6 +180,32 @@ void SevaBookingElement::setSevatime(const QString &newSevatime)
     emit sevatimeChanged();
 }
 
+const QString &SevaBookingElement::status() const
+{
+    return m_status;
+}
+
+void SevaBookingElement::setStatus(const QString &newStatus)
+{
+    if (m_status == newStatus)
+        return;
+    m_status = newStatus;
+    emit statusChanged();
+}
+
+const QString &SevaBookingElement::bankName() const
+{
+    return m_bankName;
+}
+
+void SevaBookingElement::setBankName(const QString &newBankName)
+{
+    if (m_bankName == newBankName)
+        return;
+    m_bankName = newBankName;
+    emit bankNameChanged();
+}
+
 
 
 

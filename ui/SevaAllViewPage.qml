@@ -9,6 +9,7 @@ Rectangle{
     width: parent.width
     height: parent.height
     signal loadSevaBookingView();
+    property var ve
     RowLayout{
         id:searchRow
         width: _root.width
@@ -99,7 +100,7 @@ Rectangle{
 
                             var v = sevaProxy.sevaBSearchModel.getRowOfDataFromTableViewModel(lv1.currentRow);
                             console.log("///////////////////"+v)
-                            var ve = sevaProxy.sevaBookingTV.getRowOfData(v);
+                            ve = sevaProxy.sevaBookingTV.getRowOfData(v);
 
                             // _allViewDataDialog._serialNo = ve.serial_no
                             _allViewDataDialog._personId = ve.person_id
@@ -139,7 +140,7 @@ Rectangle{
                             // var ve = sevaProxy.sevaBookingTV.getRowOfData(lv1.currentRow);
                             var v = sevaProxy.sevaBSearchModel.getRowOfDataFromTableViewModel(lv1.currentRow);
                             console.log("///////////////////"+v)
-                            var ve = sevaProxy.sevaBookingTV.getRowOfData(v);
+                            ve = sevaProxy.sevaBookingTV.getRowOfData(v);
 
                             //  _allViewDataDialog._serialNo = ve.serial_no
                             _allViewDataDialog._personId = ve.person_id
@@ -228,8 +229,10 @@ Rectangle{
         TableViewColumn {title: "Seva Date"; role: "SevaDate"; width: parent.width/12}
         TableViewColumn {title: "TotalCost"; role: "TotalCost"; width: parent.width/12}
         TableViewColumn {title: "Cash"; role: "Cash"; width: parent.width/12}
-        TableViewColumn {title: "Bank"; role: "Bank"; width: parent.width/12}
+        TableViewColumn {title: "PymntMode"; role: "PaymentMode"; width: parent.width/12}
+        TableViewColumn {title: "BANK"; role: "BankName"; width: parent.width/12}
         TableViewColumn {title: "Reference"; role: "Reference"; width: parent.width/12}
+        TableViewColumn{title: "Status";role:"Status";width: parent.width/12}
         TableViewColumn {title: "Address"; role: "Address"; width: parent.width/9}
         TableViewColumn {title: "Momento"; role: "Momento"; width: parent.width/12}
         TableViewColumn {title: "BookedBy"; role: "BookedBy"; width: parent.width/12}
@@ -252,6 +255,7 @@ Rectangle{
             MenuItem{
                 text: qsTr('Cancel')
                 onTriggered: {
+
                     _errorDialog.showmsg("Are you sure to cancel the reciept?")
                 }
             }
@@ -259,14 +263,15 @@ Rectangle{
         DisplayDialog {
             id :_errorDialog
             visible: false
-
             function showmsg(exportmsg){
                 _errorDialog.visible = true;
                 _errorDialog.text2Display = exportmsg
                 _errorDialog.open();
             }
             onYesAction: {
-                console.log("reciept has to be delete");
+                console.log("suman Cacel Confirmed---",ve.sno)
+                sevaProxy.deleteRecipt(ve.sno)
+                //sevaProxy.showAllData()
             }
         }
         AllViewDataDialog{
@@ -282,7 +287,6 @@ Rectangle{
                 _allViewDataDialog.close();
                 resetBaseScreen();
             }
-
             onRejected: {
                 resetBaseScreen()
             }

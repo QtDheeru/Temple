@@ -41,6 +41,11 @@ Rectangle {
     signal sendBookingReportMonthRangeInput(var obj)
     signal bookingMonthWiseSelected();
     signal loadDateWiseBookingPage();
+
+    signal sendAllDetailsReportDateRangeInput(var obj)      //suman
+    signal sendAllDetailsReportMonthRangeInput(var obj)     //Suman
+    signal sendAllReportInputEachDate(var obj)             //Suman
+    signal sendAlldetailsReportDateRangeInputForWholeMonth(var obj)   //suman
     signal sendError(string err);
     property string sevatime : "08:00 AM"
     ColumnLayout {
@@ -202,13 +207,6 @@ Rectangle {
                             _rip.iSelectedType = 0
 
                         }
-                        //                        if(sevaProxy.sevaReport.accReportModel.getAccountReportQryListSize()===0)
-                        //                        {
-                        //                            tot = sevaProxy.sevaReport.accReportModel.grandTotal + ".00 ₹"
-                        //                        }
-                        //                        else{
-                        //                            tot = sevaProxy.sevaReport.accReportModel.grandTotal + ".00 ₹"
-                        //                        }
                     }
                 }
                 MyDateEntry{
@@ -308,20 +306,6 @@ Rectangle {
                             _month.enabled = true
                             _year.enabled = true
                             _rip.iSelectedType = 2
-                            //                            _rip.sMonth = 1
-                            //                            _rip.sYear = "2015"
-                            //                            _rip.sMonth = _month.currentIndex+1
-                            //                            _rip.sYear = _year._data
-
-
-                            //                            _year.currentIndex = yearIndex
-                            //                            console.log("The indexes are----------- ",_year.currentIndex +" "+ _month.currentIndex)
-
-                            //                            _rip.bSevawise = _sevawise.checked
-                            //                            _rip.bDatewise = _datewise.checked
-                            //                            _rip.sSingleDate =  "null"
-                            //                            _rip.sStartDate =  "null"
-                            //                            _rip.sEndDate = "null"
                         }
                     }
                 }
@@ -351,7 +335,7 @@ Rectangle {
         }
         Button{
             id:_button
-            text: "Generate Report"
+            text: "Summary"
             font.pixelSize: _rootReportFilter.subComponentPixelSize
             font.bold: true
             Layout.preferredWidth: parent.width-20
@@ -368,16 +352,6 @@ Rectangle {
                         console.log("if of sevaProxy.sevaReport.accountReportMonthRangeModel.getAccountReportMonthWiseQryListSize()===0 ")
                         sendError("No Reports for this Year");
                     }
-                    //                    sendBookingReportMonthRangeInput(_rip)
-                    //                    bookingMonthWiseSelected();
-                    //                    if(sevaProxy.sevaReport.bookingReportMonthWiseModel.getBookingReportMonthWiseQryListSize()===0)
-                    //                    {
-                    //                        console.log("  if( _selectDateRadio.checked) if of mft.qml")
-                    //                        if(sevaProxy.sevaReport.accountReportMonthRangeModel.getAccountReportMonthWiseQryListSize()!==0)
-                    //                        {
-                    //                            sendError("No Reports for this Year");
-                    //                        }
-                    //                    }
                 }
 
                 if(_rangeSelectedRadio.checked == true)
@@ -404,24 +378,9 @@ Rectangle {
                             console.log("  if( _selectDateRadio.checked) if of mft.qml")
                             sendError("No Reports for this Date Range");
                         }
-                        //  sendBookingReportDateRangeInput(_rip)
-                        //                        if((sevaProxy.sevaReport.bookingReportDateRangeModel.getBookingReportDateRangeQryList()===0)&&(sevaProxy.sevaReport.accountReportDateRangeModel.getAccountReportDateRangeQryListSize()===0))
-                        //                        {
-                        //                            console.log("---------b2----------------")
-                        //                            console.log("  if( _selectDateRadio.checked) if of mft.qml")
-                        //                            if(sevaProxy.sevaReport.accountReportDateRangeModel.getAccountReportDateRangeQryListSize()!==0)
-                        //                            {
-                        //                                  console.log("---------b2----------------")
-                        //                                sendError("No Reports for this Date Range");
-                        //                            }
-                        //sendError("No Reports for this Date Range");
-                        // }
                     }
-                    //  _load.source = "SevaAccountReportOnDateRange.qml"
                     dateRangeSelected();
-                    // bookingDateRangeSelected();
                 }
-                //else
                 if( _selectDateRadio.checked)
                 {
                     console.log("---------c----------------")
@@ -438,18 +397,7 @@ Rectangle {
                         console.log(" if of sevaProxy.sevaReport.accountReportModel.getAccountReportQryListSize()===0")
                         sendError("No Reports for this Date");
                     }
-                    //                    console.log("-------------------------------------")
-                    //                    sendBookReportInput(_rip)
-                    //                    // loadSingleDatePage();
-                    //                    if(sevaProxy.sevaReport.bookReportModel.getBookingReportQryListSize()===0)
-                    //                    {
-                    //                        console.log("  if( _selectDateRadio.checked) if of mft.qml")
-                    //                        if( sevaProxy.sevaReport.accReportModel.getAccountReportQryListSize()!==0)
-                    //                        {
-                    //                            sendError("No Reports for this Date");
-                    //                        }
-                    //                    }
-                    //                    console.log("-------------------------------------")
+
                 }
                 if(( _rip.sMonth!="13")&&(_monthYearRadio.checked))
                 {
@@ -470,16 +418,7 @@ Rectangle {
                         console.log("  if ov sevaProxy.sevaReport.accountReportDateRangeModel.getAccountReportDateRangeQryListSize()===0)")
                         sendError("No Reports for this  Month & Year");
                     }
-                    //                    sendBookingReportDateRangeInputForWholeMonth(_rip)
-                    //                    if((sevaProxy.sevaReport.bookingReportDateRangeModel.getBookingReportDateRangeQryList()===0)&&(sevaProxy.sevaReport.accountReportDateRangeModel.getAccountReportDateRangeQryListSize()===0))
-                    //                    {
-                    //                        console.log("  if( _selectDateRadio.checked) if of mft.qml")
-                    //                        //                        if(sevaProxy.sevaReport.accountReportDateRangeModel.getAccountReportDateRangeQryListSize()!==0)
-                    //                        //                        {
-                    //                        //                           // sendError("No Reports for this Month & Year");
-                    //                        //                        }
-                    //                        sendError("No Reports for this Month & Year");
-                    //                    }
+
                 }
                 if(sevaProxy.sevaReport.accReportModel.getAccountReportQryListSize()===0)
                 {
@@ -492,6 +431,102 @@ Rectangle {
                 }
             }
         }
+        Button{
+            id:_allDetails
+            text: "Details"
+            font.pixelSize: _rootReportFilter.subComponentPixelSize
+            font.bold: true
+            Layout.preferredWidth: parent.width-20
+            Layout.preferredHeight: _rootReportFilter.subComponentHeight;
+            Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
+            onClicked:{
+                if((_rip.sMonth==="13")&&(_monthYearRadio.checked))
+                {
+                    console.log("rip.sMonth===All")
+                    sendAllDetailsReportMonthRangeInput(_rip)
+                    if(sevaProxy.sevaReport.accountFullReportModel.getaccountFullreportElementListSize()===0)
+                    {
+                        console.log("if of sevaProxy.sevaReport.accountReportMonthRangeModel.getAccountReportMonthWiseQryListSize()===0 ")
+                        sendError("No Reports for this Year");
+                    }
+                }
+
+                if(_rangeSelectedRadio.checked == true)
+                {
+                    console.log("---------a----------------")
+                    var date1 = Date.fromLocaleString(Qt.locale(), r2.selecteddate, "dd-MM-yyyy")
+                    var date2 = Date.fromLocaleString(Qt.locale(), r3.selecteddate, "dd-MM-yyyy")
+
+                    console.log("comparing dates : " +date1 +" "+date2)
+                    if(date1 > date2){
+                        _errorDialog.showError("Date Range Invalid")}
+                    else
+                    {
+                        console.log("---------b----------------")
+                        _rip.bSevawise = _sevawise.checked
+                        _rip.bDatewise = _datewise.checked
+                        _rip.sSingleDate =  "null"
+                        _rip.sStartDate =  r2.selecteddate
+                        _rip.sEndDate = r3.selecteddate
+                        sendAllDetailsReportDateRangeInput(_rip)
+                        if(sevaProxy.sevaReport.accountFullReportModel.getaccountFullreportElementListSize()===0)
+                        {
+                            console.log("---------b1----------------")
+                            console.log("  if( _selectDateRadio.checked) if of mft.qml")
+                            sendError("No Reports for this Date Range");
+                        }
+                    }
+                }
+                if( _selectDateRadio.checked)
+                {
+                    console.log("---------c----------------")
+                    _rip.bSevawise = _sevawise.checked
+                    _rip.bDatewise = _datewise.checked
+                    _rip.sSingleDate = r1.selecteddate
+                    _rip.sStartDate =  "null"
+                    _rip.sEndDate = "null"
+                    console.log("  _rip.sSingleDate 1 "+ _rip.sSingleDate)
+                    console.log("-------------------------------------")
+                    sendAllReportInputEachDate(_rip)
+                    if(sevaProxy.sevaReport.accountFullReportModel.getaccountFullreportElementListSize()===0)
+                    {
+                        console.log(" if of sevaProxy.sevaReport.accountReportModel.getAccountReportQryListSize()===0")
+                        sendError("No Reports for this Date");
+                    }
+                }
+                if(( _rip.sMonth!="13")&&(_monthYearRadio.checked))
+                {
+                    console.log("I am hereeee")
+                    _rip.bSevawise = _sevawise.checked
+                    _rip.bDatewise = _datewise.checked
+                    _rip.sSingleDate = r1.selecteddate
+                    _rip.sStartDate =  "null"
+                    _rip.sEndDate = "null"
+                    // sendReportInput(_rip)
+                    loadDateWisePage();
+                    console.log("---------11----------------")
+                    // loadDateWiseBookingPage();
+                    console.log("---------12----------------")
+                    sendAlldetailsReportDateRangeInputForWholeMonth(_rip)
+                    if(sevaProxy.sevaReport.accountFullReportModel.getaccountFullreportElementListSize()===0)
+                    {
+                        console.log("  if ov sevaProxy.sevaReport.accountReportDateRangeModel.getAccountReportDateRangeQryListSize()===0)")
+                        sendError("No Reports for this  Month & Year");
+                    }
+
+                }
+                if(sevaProxy.sevaReport.accReportModel.getAccountReportQryListSize()===0)
+                {
+                    console.log("---------d----------------")
+                    tot = sevaProxy.sevaReport.accReportModel.grandTotal + ".00 ₹"
+                }
+                else{
+                    console.log("---------e----------------")
+                    tot = sevaProxy.sevaReport.accReportModel.grandTotal + ".00 ₹"
+                }
+            }
+        }
+
     }
     function clearData(){
         console.log(" Clear all the selection")

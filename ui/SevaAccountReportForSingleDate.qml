@@ -109,7 +109,6 @@ Rectangle{
         }
     }
 
-
     Rectangle{
         id:_footer
         width: _rr1.width

@@ -171,6 +171,7 @@ bool SevaBookingConformationDataModel::saveReceipt(MySevaReceipt *rec)
     this->m_sevaReceipt->setBank(rec->bank());
     this->m_sevaReceipt->setCash(rec->cash());
     this->m_sevaReceipt->setCheckOrTranscationId(rec->checkOrTranscationId());
+    this->m_sevaReceipt->setBookingStatus(rec->bookingStatus());
     this->m_sevaReceipt->setNote(rec->note());
     this->m_sevaReceipt->setPaymentMode(rec->paymentMode());
     DBInterface::getInstance()->saveData(this);

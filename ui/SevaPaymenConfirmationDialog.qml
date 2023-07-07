@@ -14,6 +14,7 @@ Dialog {
     property alias amount2Pay : _sevaPayment.amount2Pay
     property string errorMessage: "Amount To Pay does not \n\n Match with Cash Paid"
     property alias paymentObject : _sevaPayment
+    property string status: "booked"
     signal paymentComplete();
     signal closeClicked();
     signal printClicked();

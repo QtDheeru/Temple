@@ -76,5 +76,6 @@
         <file>ui/assets/Images/remove.png</file>
         <file>ui/Admin/AdminRights.qml</file>
         <file>ui/Admin/UserManagement.qml</file>
+        <file>ui/AllAccountDetails.qml</file>
     </qresource>
 </RCC>

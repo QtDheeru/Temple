@@ -11,9 +11,8 @@ SevaReport::SevaReport(QObject *parent)
     m_accountReportMonthRangeModel = new AccountReportMonthWiseModel;
     m_bookingReportDateRangeModel = new BookingReportDateRangeModel;
     m_bookingReportMonthWiseModel = new BookingReportMonthWiseModel;
+    m_accountFullReportModel = new AccountFullReportModel;
 }
-
-
 
 void SevaReport::setSevaOnDateModel(SevaDetailsOnDateModel *newSevaOnDateModel)
 {
@@ -85,6 +84,19 @@ BookingReportMonthWiseModel *SevaReport::bookingReportMonthWiseModel() const
 void SevaReport::setBookingReportMonthWiseModel(BookingReportMonthWiseModel *newBookingReportMonthWiseModel)
 {
     m_bookingReportMonthWiseModel = newBookingReportMonthWiseModel;
+}
+
+AccountFullReportModel *SevaReport::accountFullReportModel() const
+{
+    return m_accountFullReportModel;
+}
+
+void SevaReport::setAccountFullReportModel(AccountFullReportModel *newAccountFullReportModel)
+{
+    if (m_accountFullReportModel == newAccountFullReportModel)
+        return;
+    m_accountFullReportModel = newAccountFullReportModel;
+    emit accountFullReportModelChanged();
 }
 
 

@@ -84,6 +84,7 @@ Rectangle {
         //   MyRowEntry {id:_note;_labelText :qsTr("Note");myWidth: parent.width/1.4}
     }
     Component.onCompleted: {
+        console.log("Hello suman Alldata get")
         //setBankList(["UPI","GPay","PonePe","SBI", "CanaraBank", "Karnataka","HDFC","ICICI"]);
         //        console.log
         //        setBankList(sevaProxy.getBankList())

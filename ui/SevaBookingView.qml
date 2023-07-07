@@ -346,6 +346,7 @@ Rectangle{
         _sevaReceipt.cash =  _paymentDialog.paymentObject.cashPaid.trim()
         _sevaReceipt.bank =  _paymentDialog.paymentObject.bankSelected.trim()
         _sevaReceipt.paymentMode = _paymentDialog.paymentObject.paymentMode.trim()
+        _sevaReceipt.bookingStatus =_paymentDialog.status
         _sevaReceipt.onlineRef =  _paymentDialog.paymentObject.checkOrTransactionId.trim()
         _sevaReceipt.note = _paymentDialog.paymentObject.note
     }

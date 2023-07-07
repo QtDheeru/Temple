@@ -168,7 +168,6 @@ void AccountReportModel::resetAccModel()
     m_accountReportQryList.clear();
     m_iGrandTotal = 0;
     endResetModel();
-
 }
 
 int AccountReportModel::iGrandTotal() const
