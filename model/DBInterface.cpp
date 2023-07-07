@@ -3567,11 +3567,6 @@ QStringList DBInterface::qryBankList()
     JsonProcessor proc;
     proc.readBanksFromJsonToList();
     return proc.bankListAsStringList();
-    //    QStringList banks;
-    //    banks << "SBI" << "HDFC"<< "ICICI"<<"CanaraBank"
-    //          << "UnionBank"<<"BankOfBaroda"<<"Karnataka"
-    //          << "PNB" << "BankOfMaharashtra" <<"HSBC";
-    //    return banks;
 }
 
 

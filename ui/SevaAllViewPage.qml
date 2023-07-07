@@ -273,6 +273,9 @@ Rectangle{
                 sevaProxy.deleteRecipt(ve.sno)
                 //sevaProxy.showAllData()
             }
+            onNoAction: {
+                _errorDialog.close()
+            }
         }
         AllViewDataDialog{
             id:_allViewDataDialog

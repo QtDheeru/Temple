@@ -45,6 +45,9 @@ ApplicationWindow {
             _errorDialog.open();
             //_errorDialog.visible = false;
         }
+        onNoAction: {
+            _errorDialog.close()
+        }
     }
 
     Connections{

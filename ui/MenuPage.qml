@@ -159,6 +159,9 @@ Rectangle {
             id:_errorDialog
             visible: false
             text2Display :"Not Implemented"
+            onNoAction: {
+                _errorDialog.close()
+            }
         }
     }
 

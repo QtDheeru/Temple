@@ -195,6 +195,9 @@ Rectangle{
             _errorDialog.text2Display = exportmsg
             _errorDialog.open();
         }
+        onNoAction: {
+            _errorDialog.close()
+        }
     }
     Keys.onEscapePressed: {
         console.log("Esc pressed in SevaAccountReportForSingleDate ")

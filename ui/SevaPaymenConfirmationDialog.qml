@@ -129,6 +129,9 @@ Dialog {
             _errorDialog.open();
             console.log("Dialog object is ccreated in SPCD2222");
         }
+        onNoAction: {
+            _errorDialog.close()
+        }
         Component.onCompleted: {
             console.log("Dialog object is ccreated in SPCD");
         }

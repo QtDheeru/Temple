@@ -41,6 +41,20 @@ Dialog {
             anchors.centerIn: parent;
             font.pixelSize: 25
         }
+        Image {
+            id: cancel
+            source: "qrc:/ui/assets/Images/remove.png"
+            height: 30
+            width: 30
+            visible: true
+            anchors.right: parent.right
+            MouseArea{
+                anchors.fill: cancel
+                onClicked: {
+                    noAction();
+                }
+            }
+        }
     }
     footer: DialogButtonBox{
         alignment: Qt.AlignCenter

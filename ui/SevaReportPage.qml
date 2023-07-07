@@ -322,6 +322,9 @@ Rectangle{
                     _errorDialog.text2Display = message
                     _errorDialog.open();
                 }
+                onNoAction: {
+                    _errorDialog.close()
+                }
             }
         }
     }

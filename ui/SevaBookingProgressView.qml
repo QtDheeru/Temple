@@ -32,8 +32,7 @@ Rectangle {
             //sevaProxy.deleteSeva(sevaid,sevaName1);
         }
         onNoAction: {
-            console.log("Not deleting the seva")
-            //sevaProxy.deleteSeva(sevaid,sevaName1);
+            _errorDialog.close()
         }
     }
 

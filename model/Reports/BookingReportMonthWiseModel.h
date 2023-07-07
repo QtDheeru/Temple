@@ -25,7 +25,7 @@ public:
     QString FormatDate(QString unformat);
     Q_INVOKABLE BookingReportMonthRangeElement *getBookingReportMonthRangeElementAt(int indx);
     void resetBookingMonthRangeModel();
-      Q_INVOKABLE int getBookingReportMonthWiseQryListSize();
+    Q_INVOKABLE int getBookingReportMonthWiseQryListSize();
 
 private:
     QList<BookingReportMonthRangeElement*> m_bookingReportMonthRangeQryList;

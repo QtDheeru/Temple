@@ -77,5 +77,6 @@
         <file>ui/Admin/AdminRights.qml</file>
         <file>ui/Admin/UserManagement.qml</file>
         <file>ui/AllAccountDetails.qml</file>
+        <file>ui/assets/Images/cancel.png</file>
     </qresource>
 </RCC>
