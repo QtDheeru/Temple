@@ -274,7 +274,6 @@ Rectangle{
                 _reference.visible = false
             else
                 _reference.visible=true
-
         }
     }
     Keys.onEscapePressed: {

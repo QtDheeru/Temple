@@ -13,7 +13,8 @@ static int RID=0;
 //static int SET=0 ;
 static int TID=0 ;
 static int VID=0;
-
+static int sevalastNo=0;
+static int sevanameLastNo=0;
 //delete from sevaname where SNO>=1000;
 DBInterface::DBInterface(QObject *parent) : QObject(parent)
 {
@@ -212,6 +213,7 @@ bool DBInterface::add_seva_type(QString seva_type, int seva_code,QString seva_ad
     bool suc= Squery.exec();
     if(suc) {
         qDebug()<<Q_FUNC_INFO<<"  Successfully modified"<<Qt::endl;
+        emit dbError("DataBase Msg: sevatype  " + seva_type + "  Added Successfully");
         this->setError(" Data Base : Seva Type Added Successfully");
     }else{
         qCritical()<<Q_FUNC_INFO<<"  Failed to be modified"<<Squery.lastError().text()<<Qt::endl;
@@ -652,7 +654,7 @@ bool DBInterface::insertSevaBooked(QString devoteMobile, QString devoteName, QSt
         qDebug() << Q_FUNC_INFO << " sevabooking insert failed!" << qry.lastError().text() <<Qt::endl;
         return false;
     }else{
-         qDebug() << Q_FUNC_INFO << " sevabooking insert Success!" << qry.lastError().text() <<Qt::endl;
+        qDebug() << Q_FUNC_INFO << " sevabooking insert Success!" << qry.lastError().text() <<Qt::endl;
     }
 
     qDebug()<<Q_FUNC_INFO<<"  exiting...\n";
@@ -813,6 +815,25 @@ int DBInterface::getLastVoucherNumber()
     return VID+1;
 }
 
+int DBInterface::getLastSevatypeNumber()
+{
+    qDebug() << Q_FUNC_INFO <<Qt::endl;
+    QString lastRecord = "select SEVACODE from seva";
+
+    QSqlQuery qry;
+    qry.exec(lastRecord);
+    while(qry.next()){
+        sevalastNo = qry.value(0).toInt();
+    }
+    qDebug() << sevalastNo<< Qt::endl;
+    return sevalastNo+1;
+}
+
+int DBInterface::getLastSevaNameNumber()
+{
+    qDebug() << Q_FUNC_INFO <<Qt::endl;
+}
+
 void DBInterface::getvoucherdata()
 {
     qDebug()<<Q_FUNC_INFO<<"^^^^^^^^^^^^^^^1111111^^^^^^^^^^^^^^^^^^"<<Qt::endl;
@@ -886,24 +907,24 @@ void DBInterface::getAccountData()
 
 void DBInterface::recvDeletedRecptNo(QString recptNo)
 {
-     qDebug()<<Q_FUNC_INFO<<recptNo<<Qt::endl;
+    qDebug()<<Q_FUNC_INFO<<recptNo<<Qt::endl;
 
-     QSqlQuery query;
-     QString str;
-     int num = recptNo.toInt();
-     qDebug()<<"suman--num--"<<num<<Qt::endl;
-      QString cmd = "canceled";
-     str =("UPDATE sevabooking SET STATUS = '%1' WHERE SNO = '%2' ;");
-     str= str.arg(cmd).arg(num);
-     query.prepare(str);
-     bool b = query.exec();
-     if(b==true){
-         qDebug()<<"Update cmd executed....!"<<query.lastError().text()<<Qt::endl;
-         emit sendChangedDataToSevaBookingTablemodel(recptNo);
-     }
-     else{
-         qDebug()<<"Update cmd failed....!"<<query.lastError().text()<<Qt::endl;
-     }
+    QSqlQuery query;
+    QString str;
+    int num = recptNo.toInt();
+    qDebug()<<"suman--num--"<<num<<Qt::endl;
+    QString cmd = "canceled";
+    str =("UPDATE sevabooking SET STATUS = '%1' WHERE SNO = '%2' ;");
+    str= str.arg(cmd).arg(num);
+    query.prepare(str);
+    bool b = query.exec();
+    if(b==true){
+        qDebug()<<"Update cmd executed....!"<<query.lastError().text()<<Qt::endl;
+        emit sendChangedDataToSevaBookingTablemodel(recptNo);
+    }
+    else{
+        qDebug()<<"Update cmd failed....!"<<query.lastError().text()<<Qt::endl;
+    }
 }
 
 void DBInterface::fullAccounDetailsDateWise(QString SEVA,int TYPE,QString formatchangedcalendar_str)
@@ -2368,7 +2389,7 @@ void DBInterface::account_report_cdate_function(QString SEVA,int TYPE,QString fo
     //    AccountReportElement ele;
     if(TYPE==0) {
         qDebug() <<"First"<<Qt::endl;
-        que1 = ("select SEVANAME,sum(QUANTITY),SEVACOST,sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where sevabooking.RECEIPT_DATE='%1' Group by sevabooking.SEVANAME; ");
+        que1 = ("select SEVANAME,sum(QUANTITY),SEVACOST,sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where sevabooking.RECEIPT_DATE='%1' Group by sevabooking.SEVANAME ; ");
         que1 = que1.arg(formatchangedcalendar_str);
 
         cashmode = ("select sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where sevabooking.BANK='cash' and sevabooking.RECEIPT_DATE='%1' Group by sevabooking.SEVANAME;");
@@ -2399,7 +2420,6 @@ void DBInterface::account_report_cdate_function(QString SEVA,int TYPE,QString fo
 
         upimode = ("select sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where BANK='UPI' and sevabooking.RECEIPT_DATE='%1' and sevabooking.SEVATYPE='%2' Group by sevabooking.SEVANAME;");
         upimode = upimode.arg(formatchangedcalendar_str).arg(TYPE);
-
     }
     else {
         qDebug() <<"Third"<<Qt::endl;
@@ -2450,10 +2470,10 @@ void DBInterface::account_report_cdate_function(QString SEVA,int TYPE,QString fo
         ele->setSeva_cost(query_other1.value(2).toFloat());//cost
         ele->setSeva_total(query_other1.value(3).toFloat());//total
 
-        //        ele->setCash(cash.value(0).toFloat());
-        //        ele->setCheque(cheque.value(0).toFloat());
-        //        ele->setNeft(neft.value(0).toFloat());
-        //        ele->setUpi(upi.value(0).toFloat());
+//                ele->setCash(query_other1.value(3).toFloat());
+//                ele->setCheque(query_other1.value(3).toFloat());
+//                ele->setNeft(query_other1.value(3).toFloat());
+//                ele->setUpi(query_other1.value(3).toFloat());
 
         while(cash.next()){
             qDebug()<<"suman cash"<<cash.value(0).toString()<<Qt::endl;
@@ -3304,14 +3324,13 @@ int DBInterface::getNextSevaId()
     QSqlQuery query_s_no;
     query_s_no.prepare("select SNO from sevaname");
     query_s_no.exec();
-    int lastId = 0;
     qDebug() << Q_FUNC_INFO << "Size of query == " << query_s_no.size()<<Qt::endl;
     while(query_s_no.next())
     {
-        lastId = query_s_no.value(0).toInt();
+        sevanameLastNo = query_s_no.value(0).toInt();
     }
-    qDebug() << Q_FUNC_INFO << "last ID == " << lastId+1<<Qt::endl;
-    return lastId+1;
+    qDebug() << Q_FUNC_INFO << "last ID == " << sevanameLastNo+1<<Qt::endl;
+    return sevanameLastNo+1;
 }
 
 QStringList DBInterface::qrySevaDates()

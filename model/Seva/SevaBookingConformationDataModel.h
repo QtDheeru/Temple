@@ -55,7 +55,7 @@ public:
     Q_INVOKABLE bool saveReceipt(MySevaReceipt *receipt);
     Q_INVOKABLE bool addSeva(SevaName *s);
     Q_INVOKABLE bool deleteSeva(SevaName *s);
-
+    bool removeSeva(int index,QString sevaname);
    Q_INVOKABLE bool reset();
     bool clearSevaList();
 
@@ -108,9 +108,10 @@ public:
     const QString &sevatime() const;
     void setSevatime(const QString &newSevatime);
 
+    void display();
 signals:
     void sevatimeChanged();
-
+    void modelChanged(int cost);
 private:
     int m_receiptNumber;
     QString m_receiptNo;

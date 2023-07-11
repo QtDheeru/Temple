@@ -73,5 +73,6 @@ Rectangle {
     }
     Component.onCompleted: {
         console.log("Admin Page is created........")
+
     }
 }

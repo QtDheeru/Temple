@@ -1,0 +1,47 @@
+{
+    "2023_7_0005": {
+        "Grutha Nanda Deepa for  9 days": {
+            "Number": 7929977,
+            "additionalCost": 0,
+            "count": 1,
+            "sevaCost": 1100,
+            "sevaId": 82,
+            "sevaName": "Grutha Nanda Deepa for  9 days",
+            "sevaTime": "8 am",
+            "sevaType": 6,
+            "teerthaPrasada": 6553700
+        },
+        "Hasthodaka": {
+            "Number": 7929977,
+            "additionalCost": 0,
+            "count": 1,
+            "sevaCost": 200,
+            "sevaId": 3,
+            "sevaName": "Hasthodaka",
+            "sevaTime": "8 am",
+            "sevaType": 1,
+            "teerthaPrasada": 6553700
+        },
+        "Panchamrutha/Abhisheka": {
+            "Number": 201209672,
+            "additionalCost": 50,
+            "count": 1,
+            "sevaCost": 50,
+            "sevaId": 6,
+            "sevaName": "Panchamrutha/Abhisheka",
+            "sevaTime": "8 am",
+            "sevaType": 1,
+            "teerthaPrasada": 201209672
+        },
+        "address": "jaynagar",
+        "bookedBy": "Venkat subai",
+        "devoteeName": "Lakshmana rao",
+        "gothra": "kashyapa",
+        "mobilenumber": "9945860832",
+        "momento": "Category-1",
+        "nakshtra": "Swati",
+        "receiptDate": "09-07-2023",
+        "receiptNo": "2023_7_0005",
+        "reference": ""
+    }
+}

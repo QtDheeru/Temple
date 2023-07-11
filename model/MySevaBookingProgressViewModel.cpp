@@ -72,6 +72,16 @@ bool MySevaBookingProgressViewModel::deleteSeva(SevaName *s)
     return true;
 }
 
+void MySevaBookingProgressViewModel::removerow(int index)
+{
+    qDebug() << Q_FUNC_INFO <<Qt::endl;
+    beginRemoveRows(QModelIndex(),index,index);
+    beginResetModel();
+    m_sevaBookingList.removeAt(index);
+    endRemoveRows();
+    endResetModel();
+}
+
 bool MySevaBookingProgressViewModel::resetModel()
 {
     m_sevaBookingList.clear();

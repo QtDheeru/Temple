@@ -73,7 +73,7 @@ public:
     Q_INVOKABLE bool showAllData();
     Q_INVOKABLE void addNewSeva(int sevaID,QString sevaName, int cost);
     Q_INVOKABLE int getNextSevaId();
-
+    Q_INVOKABLE int getNextSevaTypeID();
     Q_INVOKABLE QString addNewSevaType(QString sevaTypeName,int sevaTypeId,QString personName);
     Q_INVOKABLE QString createNewSeva(SevaName *seva);
 
@@ -91,6 +91,8 @@ public:
     UserManagement *userMngmnt() const;
 
     SevaTypeNamesDataModel *sevaBookingModelData() const;
+
+    Q_INVOKABLE bool removeSevaProgress(int index,QString);
 
 public slots:
      void generateCSVSevaBookingReport();

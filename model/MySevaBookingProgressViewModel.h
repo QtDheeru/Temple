@@ -24,6 +24,7 @@ public:
 
     Q_INVOKABLE bool resetModel();
     bool deleteSeva(SevaName *s);
+    void removerow(int index);
 
 private:
     QList<SevaName*> m_sevaBookingList;

@@ -180,6 +180,8 @@ public slots:
 
     int getLastReceiptNumber();
     int getLastVoucherNumber();
+    int getLastSevatypeNumber(); //Suman N added
+    int getLastSevaNameNumber(); //suman N added
 
     void getvoucherdata();  //Suman N added
     void getAccountData();  //Suman N added

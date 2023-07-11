@@ -8,9 +8,6 @@ class VoucherNumber: public IVoucherNumberInterface
 public:
     VoucherNumber();
     QString getNextVoucherNumber() override ;
-
-
-
 };
 
 #endif // VOUCHERNUMBER_H

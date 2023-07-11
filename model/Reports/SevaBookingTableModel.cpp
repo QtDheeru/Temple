@@ -6,6 +6,7 @@ SevaBookingTableModel::SevaBookingTableModel(QObject *parent)
     : QAbstractTableModel{parent}
 {
     qDebug()<<Q_FUNC_INFO<<Qt::endl;
+    found=0;
 }
 
 SevaBookingTableModel::~SevaBookingTableModel()
@@ -97,10 +98,17 @@ QHash<int, QByteArray> SevaBookingTableModel::roleNames() const
 void SevaBookingTableModel::addBookingDetails(SevaBookingElement *elem)
 {
     qDebug()<<Q_FUNC_INFO<<Qt::endl;
-    bool find=false;
-    beginInsertRows(QModelIndex(),m_bookedSeva.size(),m_bookedSeva.size());
-    m_bookedSeva.append(elem);
-    endInsertRows();
+    for(auto it=m_bookedSeva.begin();it!=m_bookedSeva.end();it++){
+        if(elem->sno()== (*it)->sno()){
+            found = true;
+        }
+    }
+    if(found==false){
+        QQmlEngine::setObjectOwnership(elem,QQmlEngine::CppOwnership);
+        beginInsertRows(QModelIndex(),m_bookedSeva.size(),m_bookedSeva.size());
+        m_bookedSeva.append(elem);
+        endInsertRows();
+    }
     qDebug()<<Q_FUNC_INFO<< "############# s" << m_bookedSeva.size()<< Qt::endl;
 
     //    printBookingList();

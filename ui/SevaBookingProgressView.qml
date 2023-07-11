@@ -16,7 +16,6 @@ Rectangle {
     property alias _dataModel : _bookedView.model
     property double _total  : 0.00
 
-
     DisplayDialog{
         id : _deleteDialog
         visible: false
@@ -116,47 +115,42 @@ Rectangle {
                 height: parent.height
 
                 Text {
-                    // Layout.fillWidth: true;
                     Layout.alignment: Qt.AlignLeft
                     Layout.leftMargin: 10;
-                    // elide: Text.ElideLeft
                     Layout.preferredWidth: parent.width/12.5;
                     text : (index+1)
                 }
                 Text {
-                    //  Layout.fillWidth: true;
+                    id:_sevaname
                     Layout.alignment: Qt.AlignLeft
-                    //Layout.leftMargin: 10
                     font.pixelSize:20;
                     text : sevaname
                     Layout.preferredWidth: parent.width/3
                     elide: Qt.ElideRight
-                    //wrapMode: Text.WordWrap
                 }
                 Text {
                     Layout.alignment: Qt.AlignLeft
-                    //Layout.leftMargin: 10
                     text : sevacost
-                    // Layout.fillWidth: true;
-                    // elide: Text.ElideLeft
                     Layout.preferredWidth: parent.width/6.25
                 }
                 Text {
                     Layout.alignment: Qt.AlignLeft
-                    // Layout.leftMargin: 10
                     text : additionalcost
-                    //Layout.fillWidth: true;
                     Layout.preferredWidth: parent.width/8.3333333
-                    // elide: Text.ElideLeft
                 }
-                //                CheckBox{
-                //                    checked: true
-                //                    height: 15
-                //                    width: 15
-                //                    onClicked: {
-                //                        deleteEntry(index,sevaid,sevaname)
-                //                    }
-                //                }
+                Image {
+                    id: _remv
+                    source: "qrc:/ui/assets/Images/remove.png"
+                    Layout.preferredHeight : 20
+                    Layout.preferredWidth  :  30
+                    anchors.verticalCenter : parent.verticalCenter
+                    MouseArea{
+                        anchors.fill: parent
+                        onClicked: {
+                              sevaProxy.removeSevaProgress(index,_sevaname.text)
+                        }
+                    }
+                }
                 Component.onCompleted: {
                     deleteEntry.connect(deleteSeva)
                 }

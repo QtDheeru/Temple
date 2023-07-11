@@ -17,6 +17,7 @@
 class SevaTypeNamesDataModel : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(SevaBookingConformationDataModel* sevaBookingModel READ getSevaBookingConformationDataModel WRITE setSevaBookingConformationDataModel NOTIFY SevaBookingConformationDataModelChanged)
 public:
     explicit SevaTypeNamesDataModel(QObject *parent = nullptr);
     ~SevaTypeNamesDataModel();
@@ -49,7 +50,7 @@ public:
     bool printReceipt();
     bool deleteSeva(SevaName *s);
     Q_INVOKABLE SevaBookingConformationDataModel* getSevaBookingConformationDataModel();
-
+    void setSevaBookingConformationDataModel(SevaBookingConformationDataModel* newData);
 
     QString createNewSeva(SevaName *seva);
 
@@ -57,6 +58,7 @@ public slots:
     bool processSevaTypes(SevaType *);
 signals:
     void error(QString);
+    void SevaBookingConformationDataModelChanged();
 private :
     void connectSignals();
 

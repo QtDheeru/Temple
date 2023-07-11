@@ -313,6 +313,12 @@ int SevaViewProxy::getNextSevaId()
     return DBInterface::getInstance()->getNextSevaId();
 }
 
+int SevaViewProxy::getNextSevaTypeID()
+{
+    qDebug()<<Q_FUNC_INFO<< DBInterface::getInstance()->getLastSevatypeNumber()<<Qt::endl;
+    return DBInterface::getInstance()->getLastSevatypeNumber();
+}
+
 QString SevaViewProxy::addNewSevaType(QString sevaTypeName,int sevaTypeId ,QString personName)
 {
     qDebug() << Q_FUNC_INFO << Qt::endl;
@@ -355,6 +361,14 @@ void SevaViewProxy::getAllAccountDetails()
 SevaTypeNamesDataModel *SevaViewProxy::sevaBookingModelData() const
 {
     return m_sevaBookingModelData;
+}
+
+bool SevaViewProxy::removeSevaProgress(int index,QString sevaname)
+{
+    qDebug()<<Q_FUNC_INFO<<index<<" "<<sevaname<<Qt::endl;
+    this->m_sevaBookingModelData->getSevaBookingProgress()->removerow(index);
+    m_sevaBookingModelData->getSevaBookingConformationDataModel()->removeSeva(index,sevaname);
+    return true;
 }
 
 UserManagement *SevaViewProxy::userMngmnt() const

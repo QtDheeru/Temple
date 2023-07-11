@@ -163,7 +163,7 @@ Rectangle{
             sevaProxy.printReceipt();
         }
         onRejected: {
-            resetBaseScreen
+            resetBaseScreen()
         }
         //        onNextReceip: {
         //            console.log("onNextReceip..")

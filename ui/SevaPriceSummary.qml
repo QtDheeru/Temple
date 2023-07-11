@@ -32,6 +32,14 @@ Rectangle{
         root.sum = 0;
         _t1.text = "";
     }
+    Connections{
+        target: sevaProxy.sevaBookingModelData.sevaBookingModel
+        function onModelChanged(cost){
+            console.log("price minus",cost);
+            sum = sum - cost
+            _t1.text  = "Rs : "+sum;
+        }
+    }
 
     RowLayout {
         width: parent.width
@@ -63,8 +71,8 @@ Rectangle{
     Timer{
         id : _tim
         interval: 500
-//        running: true
-//        repeat: true
+        //        running: true
+        //        repeat: true
         onTriggered: {
             _t1.visible = !_t1.visible;
         }

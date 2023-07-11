@@ -126,6 +126,12 @@ SevaBookingConformationDataModel *SevaTypeNamesDataModel::getSevaBookingConforma
     return m_sevaBookingModel;
 }
 
+void SevaTypeNamesDataModel::setSevaBookingConformationDataModel(SevaBookingConformationDataModel *newData)
+{
+    m_sevaBookingModel = newData;
+    emit SevaBookingConformationDataModelChanged();
+}
+
 QString SevaTypeNamesDataModel::createNewSeva(SevaName *seva)
 {
     DBInterface::getInstance()->createSeva(seva);

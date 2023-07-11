@@ -208,8 +208,15 @@ bool SevaBookingConformationDataModel::addSeva(SevaName *s)
         return true;
     }
     qDebug() << Q_FUNC_INFO << " end 0000000000" <<Qt::endl;
+    this->display();
 }
-
+void SevaBookingConformationDataModel::display(){
+    qDebug() << Q_FUNC_INFO <<Qt::endl;
+    for(int var=0;var<m_sevabookinglist.size();var++){
+        qDebug()<<m_sevabookinglist[var]->sevaName()<<Qt::endl;
+        qDebug()<<m_sevabookinglist[var]->sevaCost()<<Qt::endl;
+    }
+}
 bool SevaBookingConformationDataModel::deleteSeva(SevaName *s)
 {
     for(int i=0;i<this->m_sevabookinglist.size();i++){
@@ -222,10 +229,20 @@ bool SevaBookingConformationDataModel::deleteSeva(SevaName *s)
     return true;
 }
 
+bool SevaBookingConformationDataModel::removeSeva(int index,QString sevaname)
+{
+    qDebug() << Q_FUNC_INFO<<index<<" "<<sevaname << Qt::endl;
+    beginRemoveRows(QModelIndex(),index,index);
+    int cost = m_sevabookinglist.at(index)->sevaCost();
+    m_sevabookinglist.removeAt(index);
+    emit modelChanged(cost);
+    endRemoveRows();
+    return true;
+}
+
 bool SevaBookingConformationDataModel::reset()
 {
     qDebug() << Q_FUNC_INFO << " 7777777777" <<m_sevabookinglist.size()<<Qt::endl;
-    //this->m_sevaReceipt
     this->m_sevabookinglist.clear();
     qDebug() << Q_FUNC_INFO << " 7777777777" <<m_sevabookinglist.size()<<Qt::endl;
     beginResetModel();

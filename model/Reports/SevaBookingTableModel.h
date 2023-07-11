@@ -65,6 +65,7 @@ private:
     static int y;
     static int z;
     const QString status="cancelled";
+    bool found;
 
 };
 

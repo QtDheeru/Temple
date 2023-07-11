@@ -1,15 +1,14 @@
 {
 
-"1000" : {
+"23" : {
 "Name" : "Regular Seva",
-"SevaCode" : "1000",
+"SevaCode" : "23",
 "UserName" : "Raj"
 },
 
-"2000" : {
+"24" : {
 "Name" : "Aradhana Seva",
-"SevaCode" : "2000",
+"SevaCode" : "24",
 "UserName" : "Abhi"
 }
-
 }

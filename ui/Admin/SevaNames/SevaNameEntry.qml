@@ -69,6 +69,8 @@ Item {
                 id:sevaId;_labelText :qsTr("Seva ID")
                 myHeight:parent.height/_c1.hScaleFactor
                 myWidth: parent.width
+                _data:sevaProxy.getNextSevaId()
+                _editable : false
             }
             MyRowEntry {
                 id:sevaCost;_labelText :qsTr("Seva Cost")

@@ -9,10 +9,11 @@ Rectangle{
 
     function setSevaType(sevaType){
         console.log("Seva Type ="+sevaType.sevaTypeName);
-        sevatypeName._data = sevaType.sevaTypeName;
-        sevaCode._data = sevaType.sevaTypeId
+        //        sevatypeName._data = sevaType.sevaTypeName;
+        //        sevaCode._data = sevaType.sevaTypeId
+        sevatypeName._data = ""
+        sevaCode._data = sevaProxy.getNextSevaTypeID()
     }
-
     Column{
         id:col
         height:parent.height
@@ -44,6 +45,7 @@ Rectangle{
                     myWidth: parent.width
                     fontPixelSize: parent.width/18
                     anchors.horizontalCenter: parent.horizontalCenter
+                    _editable:false
                 }
                 MyRowEntry {
                     id:userName;_labelText :qsTr("UserName")
@@ -64,7 +66,7 @@ Rectangle{
                         onClicked: {
                             console.log("Add userclicked")
                             var message = sevaProxy.addNewSevaType(sevatypeName._data,sevaCode._data,userName._data)
-                             sevaProxy.sevaBookingModelData.querySevaType();
+                            sevaProxy.sevaBookingModelData.querySevaType();
                             _errorDialog.showError(message)
                         }
                     }
@@ -117,5 +119,9 @@ Rectangle{
                 _errorDialog.showError(errMsg)
             }
         }
+    }
+    Component.onCompleted:{
+        console.log("Suman.........");
+
     }
 }

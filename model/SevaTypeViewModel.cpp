@@ -50,7 +50,9 @@ QVariant SevaTypeViewModel::data(const QModelIndex &index, int role) const
 bool SevaTypeViewModel::init()
 {
     qDebug() << Q_FUNC_INFO << Qt::endl;
+    beginInsertRows(QModelIndex(),m_sevaTypes.size(),m_sevaTypes.size());
     m_sevaTypes.append(SevaTypeNamesDataModel::self()->getSevaTypes());
+    endInsertRows();
     qDebug() << Q_FUNC_INFO << " Number of Seva Types =" << m_sevaTypes.size() <<Qt::endl;
     return true;
 }

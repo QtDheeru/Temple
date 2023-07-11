@@ -21,6 +21,11 @@ private :
 private :
     //QString m_lastReceiptNumber;
     int   m_receiptNumber;
+
+    // ISevaReceiptNumberInterface interface
+public:
+    virtual QString getNextSevaTypeCode() override;
+    virtual QString getNextSevanameID() override;
 };
 
 #endif // SEVARECEIPTNUMBER_H

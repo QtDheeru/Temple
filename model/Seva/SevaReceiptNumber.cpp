@@ -48,3 +48,13 @@ QString SevaReceiptNumber::getLastReceiptNumber() const
     return rNumber;
 }
 
+QString SevaReceiptNumber::getNextSevaTypeCode()
+{
+
+}
+
+QString SevaReceiptNumber::getNextSevanameID()
+{
+
+}
+
