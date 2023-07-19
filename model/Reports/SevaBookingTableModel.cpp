@@ -162,3 +162,14 @@ void SevaBookingTableModel::reset(QString receiptNo)
     QModelIndex topRight = createIndex(row,20);
     emit dataChanged(topLeft, topRight);
 }
+bool SevaBookingTableModel::checkStatus(QString receiptNo){
+    bool check = false;
+    for(int var=0;var<m_bookedSeva.size();var++) {
+        if(m_bookedSeva[var]->sno()== receiptNo){
+            if(m_bookedSeva[var]->status()==status){
+                check= true;
+            }
+        }
+    }
+    return check;
+}

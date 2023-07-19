@@ -42,7 +42,7 @@ DBInterface::DBInterface(QObject *parent) : QObject(parent)
     db.setDatabaseName(currentPath);
 
     bool ok = db.open();
-    qDebug()<<Q_FUNC_INFO<<"******************* DB"<<currentPath<<endl;
+    qDebug()<<Q_FUNC_INFO<<"******************* DB"<<currentPath<<Qt::endl;
     QSqlQuery qry;
     if(ok)
     {
@@ -106,7 +106,8 @@ DBInterface::DBInterface(QObject *parent) : QObject(parent)
                      "NAKSHATRA,"
                      "DATE,"
                      "MOBILE,"
-                     "EMAIL);";
+                     "EMAIL,"
+                     "ADDRESS);";
 
     QString query4 = "CREATE TABLE signindetails("
                      "SNO,"
@@ -607,7 +608,7 @@ bool DBInterface::insertSevaBooked(QString devoteMobile, QString devoteName, QSt
     qDebug() << Q_FUNC_INFO << " Name =" << devoteSevaName << " Query Size ="<<qury.size() << " Type=" << devoteSevaType <<  Qt::endl;
 
     // Check if devotee exist in DB.
-    int personId = insertPersonDetails(devoteMobile,devoteName,devoteNakshatra,devoteGotra);
+    int personId = insertPersonDetails(devoteMobile,devoteName,devoteNakshatra,devoteGotra,address);
     QString Person_id = QString(personId);
 
     QDate sevaDate = QDate::fromString(devoteSevadate,"dd-MM-yyyy");
@@ -697,7 +698,7 @@ void DBInterface::insertVoucherIssued(VoucherElement *ele)
     qDebug()<<Q_FUNC_INFO<<"  exiting...\n";
 }
 
-int DBInterface::insertPersonDetails(QString devoteMobile,QString devoteName,QString devoteNakshatra,QString devoteGotra)
+int DBInterface::insertPersonDetails(QString devoteMobile,QString devoteName,QString devoteNakshatra,QString devoteGotra,QString address)
 {
     qDebug()<<Q_FUNC_INFO<<" entered\n";
 
@@ -731,14 +732,15 @@ int DBInterface::insertPersonDetails(QString devoteMobile,QString devoteName,QSt
         qDebug() << Q_FUNC_INFO << " Size =" << qry1.size() << " Person ID="<<personId << " Value ="<<qry1.value(0)<<Qt::endl;
 
         QSqlQuery qry;
-        qry.prepare("INSERT INTO persondetails(SNO,PERSONNAME,GOTHRA,NAKSHATRA,DATE,MOBILE)"
-                    "VALUES (:sno, :person_name, :gothra, :nakshatra, :date, :mobile)");
+        qry.prepare("INSERT INTO persondetails(SNO,PERSONNAME,GOTHRA,NAKSHATRA,DATE,MOBILE,ADDRESS)"
+                    "VALUES (:sno, :person_name, :gothra, :nakshatra, :date, :mobile, :address)");
         qry.bindValue(":sno",personId);
         qry.bindValue(":person_name",devoteName);
         qry.bindValue(":gothra",devoteGotra);
         qry.bindValue(":nakshatra",devoteNakshatra );
         qry.bindValue(":date",QDate::currentDate().toString("dd-MMM-yyyy"));
         qry.bindValue(":mobile",devoteMobile);
+        qry.bindValue(":address",address);
         if( qry.exec()){
             qDebug() << Q_FUNC_INFO << " Person insert success full"<< devoteMobile <<Qt::endl;
         }
@@ -1325,7 +1327,7 @@ bool DBInterface::dbtable_view()
         QString note=query_other1.value(16).toString();
         QString cash = query_other1.value(17).toString();
         QString bank =query_other1.value(18).toString();
-
+        elem->setSevacost(seva_cost);
         elem->setTotalCost(total_cost);
         elem->setCash(cash);
         elem->setBank(bank);
@@ -1594,15 +1596,15 @@ bool DBInterface::saveData(QObject *obj)
         SevaName *seva = sevas.at(i);
         qDebug() << Q_FUNC_INFO <<  "Add ############ ="<< seva->additionalCost() << Qt::endl;
         b =   this->insertSevaBooked(rec->mobilenumber(),rec->devoteeName(),
-                                     rec->nakshtra(),rec->gothra(),
-                                     QString::number(seva->sevaCost()),QString::number(seva->additionalCost()),
-                                     QString::number(seva->count()),rec->receiptDate(),
-                                     seva->sevaStartDate(),rec->note(),
-                                     seva->sevaName(),(seva->sevaCost()*seva->count())+seva->additionalCost(),
-                                     rcptNum,rec->cash(),
-                                     rec->paymentMode(),rec->bank(),
-                                     QString("%1").arg(seva->sevaType()),
-                                     rec->checkOrTranscationId(),rec->bookingStatus(),rec->address(),rec->momento(),QString("%1").arg(seva->sevaStartTime()));
+                                   rec->nakshtra(),rec->gothra(),
+                                   QString::number(seva->sevaCost()),QString::number(seva->additionalCost()),
+                                   QString::number(seva->count()),rec->receiptDate(),
+                                   seva->sevaStartDate(),rec->note(),
+                                   seva->sevaName(),(seva->sevaCost()*seva->count())+seva->additionalCost(),
+                                   rcptNum,rec->cash(),
+                                   rec->paymentMode(),rec->bank(),
+                                   QString("%1").arg(seva->sevaType()),
+                                   rec->checkOrTranscationId(),rec->bookingStatus(),rec->address(),rec->momento(),QString("%1").arg(seva->sevaStartTime()));
         qDebug() << Q_FUNC_INFO << " Inserting the data in for loop into DB b is "<<b<<Qt::endl;
     }
     qDebug() << Q_FUNC_INFO << " Inserting the data into DB b is "<<b<<Qt::endl;
@@ -2379,7 +2381,7 @@ void DBInterface::account_report_cdate_function(QString SEVA,int TYPE,QString fo
 {
     qDebug()<<Q_FUNC_INFO<<Qt::endl;
     qDebug()<<formatchangedcalendar_str<<"^^^^^^^^^^^^^^^^^^^^^^^^^^ "<<SEVA<< "  "<<TYPE<<Qt::endl;
-    QList<QString> list_name;
+    QList<QString> pay_mode={"cash","Cheque","NEFT","UPI"};
     QList<int> list_ticket;
     QList<float> list_cost,list_total;
     QSqlQuery query_other1;
@@ -2387,56 +2389,56 @@ void DBInterface::account_report_cdate_function(QString SEVA,int TYPE,QString fo
     QString que1;
     QString cashmode,cheqmode,neftmode,upimode;
     //    AccountReportElement ele;
+
     if(TYPE==0) {
         qDebug() <<"First"<<Qt::endl;
-        que1 = ("select SEVANAME,sum(QUANTITY),SEVACOST,sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where sevabooking.RECEIPT_DATE='%1' Group by sevabooking.SEVANAME ; ");
+
+        //        que1 = ("select SEVANAME,sum(QUANTITY),SEVACOST,sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where sevabooking.RECEIPT_DATE='%1' Group by sevabooking.SEVANAME;");
+      /*  que1 = ("select SEVANAME,sum(QUANTITY),SEVACOST,sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) AS total_cost,"
+                "CASE "
+                "WHEN sevabooking.BANK = 'cash' THEN SUM(CASE WHEN sevabooking.BANK = 'cash' THEN ADDITIONALCOST+(QUANTITY*SEVACOST) ELSE 0 END) "
+                "WHEN sevabooking.BANK = 'NEFT' THEN SUM(CASE WHEN sevabooking.BANK = 'NEFT' THEN ADDITIONALCOST+(QUANTITY*SEVACOST) ELSE 0 END) "
+                "WHEN sevabooking.BANK = 'Cheque' THEN SUM(CASE WHEN sevabooking.BANK = 'Cheque' THEN ADDITIONALCOST+(QUANTITY*SEVACOST) ELSE 0 END) "
+                "WHEN sevabooking.BANK = 'UPI' THEN SUM(CASE WHEN sevabooking.BANK = 'UPI' THEN ADDITIONALCOST+(QUANTITY*SEVACOST) ELSE 0 END) "
+                "END AS total_price FROM sevabooking WHERE (sevabooking.BANK = 'cash' OR sevabooking.BANK = 'NEFT' OR sevabooking.BANK='Cheque' OR sevabooking.BANK='UPI') "
+                "and sevabooking.RECEIPT_DATE='%1' Group by sevabooking.SEVANAME;"); */
+
+        que1 = ("select SEVANAME,sum(QUANTITY),SEVACOST,sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) AS SEVATOTALPRICE from sevabooking where sevabooking.RECEIPT_DATE='%1' Group by sevabooking.BANK and sevabooking.SEVANAME;");
         que1 = que1.arg(formatchangedcalendar_str);
 
-        cashmode = ("select sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where sevabooking.BANK='cash' and sevabooking.RECEIPT_DATE='%1' Group by sevabooking.SEVANAME;");
-        cashmode = cashmode.arg(formatchangedcalendar_str);
 
-        cheqmode = ("select sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where BANK='Cheque' and sevabooking.RECEIPT_DATE='%1' Group by sevabooking.SEVANAME;");
-        cheqmode = cheqmode.arg(formatchangedcalendar_str);
-
-        neftmode = ("select sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where BANK='NEFT' and sevabooking.RECEIPT_DATE='%1' Group by sevabooking.SEVANAME;");
-        neftmode = neftmode.arg(formatchangedcalendar_str);
-
-        upimode = ("select sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where BANK='UPI' and sevabooking.RECEIPT_DATE='%1' Group by sevabooking.SEVANAME;");
-        upimode = upimode.arg(formatchangedcalendar_str);
     }
     else if (SEVA==ALLSEVANAME) {
         qDebug() <<"Second"<<Qt::endl;
-        que1 = ("select SEVANAME,sum(QUANTITY),SEVACOST,sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where sevabooking.RECEIPT_DATE='%1' and sevabooking.SEVATYPE='%2' Group by sevabooking.SEVANAME; ");
+//        que1 = ("select SEVANAME,sum(QUANTITY),SEVACOST,sum(ADDITIONALCOST+(QUANTITY*SEVACOST))  from sevabooking where  sevabooking.RECEIPT_DATE='%1' and sevabooking.SEVATYPE='%2' Group by sevabooking.SEVANAME; ");
+      /*  que1 = ("select SEVANAME,sum(QUANTITY),SEVACOST,sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) AS total_cost,"
+                "CASE "
+                "WHEN sevabooking.BANK = 'cash' THEN SUM(CASE WHEN sevabooking.BANK = 'cash' THEN ADDITIONALCOST+(QUANTITY*SEVACOST) ELSE 0 END) "
+                "WHEN sevabooking.BANK = 'NEFT' THEN SUM(CASE WHEN sevabooking.BANK = 'NEFT' THEN ADDITIONALCOST+(QUANTITY*SEVACOST) ELSE 0 END) "
+                "WHEN sevabooking.BANK = 'Cheque' THEN SUM(CASE WHEN sevabooking.BANK = 'Cheque' THEN ADDITIONALCOST+(QUANTITY*SEVACOST) ELSE 0 END) "
+                "WHEN sevabooking.BANK = 'UPI' THEN SUM(CASE WHEN sevabooking.BANK = 'UPI' THEN ADDITIONALCOST+(QUANTITY*SEVACOST) ELSE 0 END) "
+                "END AS total_price FROM sevabooking WHERE (sevabooking.BANK = 'cash' OR sevabooking.BANK = 'NEFT' OR sevabooking.BANK='Cheque' OR sevabooking.BANK='UPI') "
+                "and sevabooking.RECEIPT_DATE='%1' and sevabooking.SEVATYPE='%2' Group by sevabooking.SEVANAME;"); */
+
+        que1 = ("select SEVANAME,sum(QUANTITY) ,SEVACOST,sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) AS SEVATOTALPRICE from sevabooking where sevabooking.RECEIPT_DATE='%1' and sevabooking.SEVATYPE='%2' Group by sevabooking.SEVANAME;");
         que1 = que1.arg(formatchangedcalendar_str).arg(TYPE);
 
-        cashmode = ("select sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where sevabooking.BANK='cash' and sevabooking.RECEIPT_DATE='%1' and sevabooking.SEVATYPE='%2' Group by sevabooking.SEVANAME;");
-        cashmode = cashmode.arg(formatchangedcalendar_str).arg(TYPE);
 
-        cheqmode = ("select sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where BANK='Cheque' and sevabooking.RECEIPT_DATE='%1' and sevabooking.SEVATYPE='%2' Group by sevabooking.SEVANAME;");
-        cheqmode = cheqmode.arg(formatchangedcalendar_str).arg(TYPE);
-
-        neftmode = ("select sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where BANK='NEFT' and sevabooking.RECEIPT_DATE='%1' and sevabooking.SEVATYPE='%2' Group by sevabooking.SEVANAME;");
-        neftmode = neftmode.arg(formatchangedcalendar_str).arg(TYPE);
-
-        upimode = ("select sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where BANK='UPI' and sevabooking.RECEIPT_DATE='%1' and sevabooking.SEVATYPE='%2' Group by sevabooking.SEVANAME;");
-        upimode = upimode.arg(formatchangedcalendar_str).arg(TYPE);
     }
     else {
         qDebug() <<"Third"<<Qt::endl;
-        que1 = ("select SEVANAME,sum(QUANTITY),SEVACOST,sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where sevabooking.RECEIPT_DATE='%1' and sevabooking.SEVATYPE='%2' and sevabooking.SEVANAME = '%3' Group by sevabooking.SEVANAME; ");
+//        que1 = ("select SEVANAME,sum(QUANTITY),SEVACOST,sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where  sevabooking.RECEIPT_DATE='%1' and sevabooking.SEVATYPE='%2' and sevabooking.SEVANAME = '%3' Group by sevabooking.SEVANAME; ");
+      /*  que1 = ("select SEVANAME,sum(QUANTITY),SEVACOST,sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) AS total_cost,"
+                "CASE "
+                "WHEN sevabooking.BANK = 'cash' THEN SUM(CASE WHEN sevabooking.BANK = 'cash' THEN ADDITIONALCOST+(QUANTITY*SEVACOST) ELSE 0 END) "
+                "WHEN sevabooking.BANK = 'NEFT' THEN SUM(CASE WHEN sevabooking.BANK = 'NEFT' THEN ADDITIONALCOST+(QUANTITY*SEVACOST) ELSE 0 END) "
+                "WHEN sevabooking.BANK = 'Cheque' THEN SUM(CASE WHEN sevabooking.BANK = 'Cheque' THEN ADDITIONALCOST+(QUANTITY*SEVACOST) ELSE 0 END) "
+                "WHEN sevabooking.BANK = 'UPI' THEN SUM(CASE WHEN sevabooking.BANK = 'UPI' THEN ADDITIONALCOST+(QUANTITY*SEVACOST) ELSE 0 END) "
+                "END AS total_price FROM sevabooking WHERE (sevabooking.BANK = 'cash' OR sevabooking.BANK = 'NEFT' OR sevabooking.BANK='Cheque' OR sevabooking.BANK='UPI') "
+                "and sevabooking.RECEIPT_DATE='%1' and sevabooking.SEVATYPE='%2' and sevabooking.SEVANAME = '%3' Group by sevabooking.SEVANAME;");*/
+
+        que1 = ("select SEVANAME,sum(QUANTITY),SEVACOST,sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) AS SEVATOTALPRICE from sevabooking where sevabooking.RECEIPT_DATE='%1' and sevabooking.SEVATYPE='%2' and sevabooking.SEVANAME = '%3' Group by sevabooking.SEVANAME;");
         que1 = que1.arg(formatchangedcalendar_str).arg(TYPE).arg(SEVA);
-
-        cashmode = ("select sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where sevabooking.BANK='cash' and sevabooking.RECEIPT_DATE='%1' and sevabooking.SEVATYPE='%2' and sevabooking.SEVANAME = '%3' Group by sevabooking.SEVANAME;");
-        cashmode = cashmode.arg(formatchangedcalendar_str).arg(TYPE).arg(SEVA);
-
-        cheqmode = ("select sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where BANK='Cheque' and sevabooking.RECEIPT_DATE='%1' and sevabooking.SEVATYPE='%2' and sevabooking.SEVANAME = '%3' Group by sevabooking.SEVANAME;");
-        cheqmode = cheqmode.arg(formatchangedcalendar_str).arg(TYPE).arg(SEVA);
-
-        neftmode = ("select sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where BANK='NEFT' and sevabooking.RECEIPT_DATE='%1' and sevabooking.SEVATYPE='%2' and sevabooking.SEVANAME = '%3' Group by sevabooking.SEVANAME;");
-        neftmode = neftmode.arg(formatchangedcalendar_str).arg(TYPE).arg(SEVA);
-
-        upimode = ("select sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where BANK='UPI' and sevabooking.RECEIPT_DATE='%1' and sevabooking.SEVATYPE='%2' and sevabooking.SEVANAME = '%3' Group by sevabooking.SEVANAME;");
-        upimode = upimode.arg(formatchangedcalendar_str).arg(TYPE).arg(SEVA);
     }
 
     qDebug() << " Query string =" << que1 <<Qt::endl;
@@ -2449,8 +2451,11 @@ void DBInterface::account_report_cdate_function(QString SEVA,int TYPE,QString fo
 
     neft.prepare(neftmode);
     neft.exec();
+
     upi.prepare(upimode);
     upi.exec();
+
+
     if(cash.exec()){
         qDebug()<<"inside cash true"<<Qt::endl;
     }
@@ -2470,32 +2475,18 @@ void DBInterface::account_report_cdate_function(QString SEVA,int TYPE,QString fo
         ele->setSeva_cost(query_other1.value(2).toFloat());//cost
         ele->setSeva_total(query_other1.value(3).toFloat());//total
 
-//                ele->setCash(query_other1.value(3).toFloat());
-//                ele->setCheque(query_other1.value(3).toFloat());
-//                ele->setNeft(query_other1.value(3).toFloat());
-//                ele->setUpi(query_other1.value(3).toFloat());
+        ele->setCash(query_other1.value("SEVATOTALPRICE").toFloat());
+        ele->setNeft(query_other1.value("SEVATOTALPRICE").toFloat());
+        ele->setCheque(query_other1.value("SEVATOTALPRICE").toFloat());
+        ele->setUpi(query_other1.value("SEVATOTALPRICE").toFloat());
 
-        while(cash.next()){
-            qDebug()<<"suman cash"<<cash.value(0).toString()<<Qt::endl;
-            ele->setCash(cash.value(0).toFloat());
-        }
-        while(cheque.next()){
-            qDebug()<<"suman cheque"<<cheque.value(0).toString()<<Qt::endl;
-            ele->setCheque(cheque.value(0).toFloat());
-        }
-        while(neft.next()){
-            qDebug()<<"suman neft"<<neft.value(0).toString()<<Qt::endl;
-            ele->setNeft(neft.value(0).toFloat());
-        }
-        while(upi.next()){
-            qDebug()<<"suman upi"<<upi.value(0).toString()<<Qt::endl;
-            ele->setUpi(upi.value(0).toFloat());
-        }
+
 
         qDebug() << query_other1.value(0).toString()<<Qt::endl;
         qDebug() << query_other1.value(1).toString()<<Qt::endl;
         qDebug() << query_other1.value(2).toString()<<Qt::endl;
         qDebug() << query_other1.value(3).toString()<<Qt::endl;
+        qDebug()<<"The 4th query Value"<< query_other1.value(4).toFloat()<<Qt::endl;
         qDebug() <<"before emitting signal  account_report ''''''''" <<Qt::endl;
         emit account_report(ele);
         qDebug() <<"after emitting signal  account_report ''''''''"<<Qt::endl;
@@ -3253,10 +3244,10 @@ QList<print_details *> DBInterface::printWithReceiptNumber(int receiptNumber)
 QString DBInterface::NumberToWord(const unsigned int number)
 {
     const std::vector<QString> first14=
-    {"Zero", "One","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten","Eleven",
-     "Twelve", "Thirteen", "Fourteen" };
+        {"Zero", "One","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten","Eleven",
+         "Twelve", "Thirteen", "Fourteen" };
     const std::vector<QString> prefixes=
-    {"Twen","Thir","For","Fif","Six","Seven","Eigh","Nine"};
+        {"Twen","Thir","For","Fif","Six","Seven","Eigh","Nine"};
 
     if( number <= 14 )
     {
@@ -3294,18 +3285,20 @@ QString DBInterface::NumberToWord(const unsigned int number)
 
 bool DBInterface::checkCredentials(QString userID, QString pass)
 {
+    qDebug()<<Q_FUNC_INFO<<Qt::endl;
     QSqlQuery query_s_no;
     query_s_no.prepare("select SNO,FIRSTNAME,LASTNAME,USERNAME,PASSWORD,ROLENUMBER,DATE from signindetails");
     query_s_no.exec();
     //    qDebug() << Q_FUNC_INFO << "Size of query == " << query_s_no.size()<<Qt::endl;
     while(query_s_no.next())
     {
+        qDebug()<<"The while id and password "<< userID << userID<<Qt::endl;
         QString first_name= query_s_no.value(1).toString();
         QString last_name=query_s_no.value(2).toString();
         QString user_name=query_s_no.value(3).toString();
         QString pass_word=query_s_no.value(4).toString();
         int rolenumber= query_s_no.value(5).toString().toInt();
-        //        qDebug() << Q_FUNC_INFO << "db id and password ==  " << user_name << pass_word;
+                qDebug() << Q_FUNC_INFO << "suman db id and password ==  " << user_name << pass_word;
         if(userID==user_name && pass == pass_word){
             emit success();
             qDebug()<<"The role number is"<<rolenumber<<Qt::endl;
@@ -3525,8 +3518,8 @@ void DBInterface::readSevaNamesFromJson() {
     qDebug() << Q_FUNC_INFO <<Qt::endl;
     connect(m_proc,&SevaTypeJsonProcessor::sendSevaName,
             this,[this](SevaName* sevaName){
-        this->createSeva(sevaName);
-    });
+                this->createSeva(sevaName);
+            });
     qDebug() << Q_FUNC_INFO <<Qt::endl;
     m_proc->readSevasFromJsonFormate();
     qDebug() << Q_FUNC_INFO <<Qt::endl;
@@ -3539,8 +3532,8 @@ void DBInterface::readSevaTypesFromJson()
     //SevaTypeJsonProcessor proc;
     connect(m_proc,&SevaTypeJsonProcessor::sendSevaType,
             this,[this](SevaType* sevaType){
-        this->add_seva_type(sevaType);
-    });
+                this->add_seva_type(sevaType);
+            });
     m_proc->readSevaTypeFromJsonFormate();
     m_proc->printSevaTypeNames();
 
@@ -3550,12 +3543,12 @@ QStringList DBInterface::qryNakshatras()
 {
     QStringList nakshatras;
     nakshatras<<"" << "Ashwini" << "Bharani" << "Krittika" << "Rohini"
-             << "Mrigashira" << "Ardra" << "Punarvasu" << "Pushya"
-             << "Ashlesha" << "Magha" << "Purvaphalguni"<<"Uttaraphalguni"
-             << "Hasta" << "Chitra" << "Swati"<<"Vishakha"<<"Anuradha"
-             << "Jyeshtha"<<"Moola"<<"Purvashadha"<<"Uttarashadha"
-             << "Shravana"<< "Dhanishtha" <<"Shathabhisha" <<"Purvabhadrapada"
-             << "Uttarabhadrapada"<<"Revati";
+               << "Mrigashira" << "Ardra" << "Punarvasu" << "Pushya"
+               << "Ashlesha" << "Magha" << "Purvaphalguni"<<"Uttaraphalguni"
+               << "Hasta" << "Chitra" << "Swati"<<"Vishakha"<<"Anuradha"
+               << "Jyeshtha"<<"Moola"<<"Purvashadha"<<"Uttarashadha"
+               << "Shravana"<< "Dhanishtha" <<"Shathabhisha" <<"Purvabhadrapada"
+               << "Uttarabhadrapada"<<"Revati";
     return nakshatras;
 }
 

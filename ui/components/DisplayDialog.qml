@@ -8,7 +8,7 @@ Dialog {
     width: 400;height: 250
 
     standardButtons: Dialog.Ok | Dialog.Close
-
+    property int context : 0
     closePolicy: Popup.NoAutoClose
     signal yesAction();
     signal noAction();

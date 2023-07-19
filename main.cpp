@@ -22,6 +22,7 @@
 #include"BookingReportDateRangeElement.h"
 #include"SevaTypeNamesDataModel.h"
 #include"SevaBookingConformationDataModel.h"
+#include "devoteeproxy.h"
 
 QScopedPointer<QFile>   m_logFile;
 QMutex   mlock;
@@ -48,6 +49,7 @@ int main(int argc, char *argv[])
     qmlRegisterAnonymousType<SevaType>("SevaType",1);
     qmlRegisterType<MySevaReceipt>("Utils",1,0,"SevaReceipt");
     qmlRegisterType<DevotePersnalDetails>("Utils",1,0,"DevoteDetails");
+
     qmlRegisterUncreatableType<QAbstractItemModel>("Utils",1,0,"Abc","DontCreate");
     qmlRegisterType<ReportFilterElements>("ReportElements",1,0,"ReportFilterItems");
     qmlRegisterType<VoucherElement>("VoucherElement",1,0,"VouEle");
@@ -60,7 +62,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<SevaTypeNamesDataModel>("SevaTypeNamesDataModel",1,0,"SevaTypeNamesDataModel");
     qmlRegisterType<SevaBookingConformationDataModel>("SevaBookingConformationDataModel",1,0,"SevaBookingConformationDataModel");
     SevaViewProxy *proxy ;
-
+    DevoteeProxy *devoteeProxy;
     SevaListViewModel *sevaModel ;
     DBChecker *dbchecker ;
     ConfigureApp *confApp;
@@ -91,7 +93,9 @@ int main(int argc, char *argv[])
         sevaDetailsOnDateModel = new SevaDetailsOnDateModel;
         vou = new saveVoucher;
         vouRepModel = new VoucherReportModel;
+        devoteeProxy = new DevoteeProxy;
         engine.rootContext()->setContextProperty("sevaProxy",proxy);
+        engine.rootContext()->setContextProperty("devoteeProxy",devoteeProxy);
         //    engine.rootContext()->setContextProperty("sevaTypeModel",mod);
         engine.rootContext()->setContextProperty("sevaDateCount",sevaCountOnDateModel);
         engine.rootContext()->setContextProperty("sevaDetailsonDateCount",sevaDetailsOnDateModel);

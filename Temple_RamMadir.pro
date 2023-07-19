@@ -64,13 +64,12 @@ HEADERS += \
     model/SevaName.h \
     model/SevaType.h \
     model/SevaTypeViewModel.h \
-    model/UserManagement.h \
-    model/common.h
+    model/UserManagement.h
 
 include(model/Print/Print.pri)
 include(model/Seva/seva.pri)
 include(model/DataSave/DataSave.pri)
 include(model/voucher/voucher.pri)
-
+include(model/DevoteeManager/Devotee.pri)
 #Reports integrated for all views
 #

@@ -93,7 +93,7 @@ ApplicationWindow {
             console.log("Welcome screen TimeTriggered");
             loader.source= "Login.qml"
         }
-  /*      function onLoadLogin(pagecount)
+        /*      function onLoadLogin(pagecount)
         {
             console.log("Login Page loaded");
             loader.setSource("Login.qml",{pageNumber:pagecount,loginPageImage:"",height:300,width:300})
@@ -271,6 +271,19 @@ ApplicationWindow {
         function onLoadAdminrights(){
             console.log("loading from main")
             loader.source = "qrc:/ui/Admin/AdminRights.qml"
+        }
+        function onLoadLogOut(){
+            console.log("loading loagout from main")
+            loader.source = "qrc:/ui/Login.qml";
+        }
+        function onLoadDevoteeSelection(){
+            loader.source = "";
+            loader.source = "qrc:/ui/Devotee/DevoteeSelectionPage.qml";
+        }
+        function onLoadSevabooking( d_name,d_mobile,d_gothra,d_nakshatra){
+            console.log("main loadSevabooking-----",d_nakshatra)
+            loader.source = "";
+            loader.setSource("SevaBookingView.qml",{dname:d_name,dmobile:d_mobile,dgothra:d_gothra,d_Nakshtra:d_nakshatra})
         }
     }
     Connections{

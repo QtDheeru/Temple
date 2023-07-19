@@ -38,6 +38,7 @@ QString DevotePersnalDetails::gothra() const
 void DevotePersnalDetails::setGothra(const QString &gothra)
 {
     m_gothra = gothra;
+    gothraChanged();
 }
 
 QString DevotePersnalDetails::nakshatra() const
@@ -48,6 +49,7 @@ QString DevotePersnalDetails::nakshatra() const
 void DevotePersnalDetails::setNakshatra(const QString &nakshatra)
 {
     m_nakshatra = nakshatra;
+    nakshatraChanged();
 }
 
 void DevotePersnalDetails::print()

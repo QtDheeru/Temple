@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QMap>
 #include <QDebug>
-#include "../common.h"
+#include "../../Print/common.h"
 #include "../DBInterface.h"
 #include "../SevaType.h"
 #include "ISevaReceiptNumberInterface.h"

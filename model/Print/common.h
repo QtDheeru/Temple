@@ -65,13 +65,15 @@ struct print_bookingDetails
     QString  nakshatra;
     QString  seva_Type;
     QString  seva_Name;
+    QString sevacost;
+    QString seva_time;
     QString  quantity;
     QString  receipt_Date;
-    QString  seva_Date;
+    QString  seva_Date  ;
     QString  total_Cost;
     QString  cash;
     QString  bank;
-     QString note;
+    QString note;
 };
 struct PersonDetails{
     QString NAME;

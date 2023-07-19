@@ -8,8 +8,8 @@ class DevotePersnalDetails : public QObject
     Q_OBJECT
     Q_PROPERTY(QString devoteeName READ devoteeName WRITE setDevoteeName CONSTANT)
     Q_PROPERTY(QString mobileNumber READ mobileNumber WRITE setMobileNumber CONSTANT)
-    Q_PROPERTY(QString gothra READ gothra WRITE setGothra CONSTANT)
-    Q_PROPERTY(QString nakshatra READ nakshatra WRITE setNakshatra CONSTANT)
+    Q_PROPERTY(QString gothra READ gothra WRITE setGothra NOTIFY gothraChanged)
+    Q_PROPERTY(QString nakshatra READ nakshatra WRITE setNakshatra NOTIFY nakshatraChanged)
 public:
     explicit DevotePersnalDetails(QObject *parent = nullptr);
 
@@ -25,13 +25,14 @@ public:
     QString nakshatra() const;
     void setNakshatra(const QString &nakshatra);
 
-    void print();
+    Q_INVOKABLE void print();
 
     QString personDbId() const;
     void setPersonDbId(const QString &personDbId);
 
 signals:
-
+    void gothraChanged();
+    void nakshatraChanged();
 private :
     QString m_personDbId;
     QString m_devoteeName;

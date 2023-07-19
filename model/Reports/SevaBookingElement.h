@@ -82,6 +82,9 @@ public:
     const QString &bankName() const;
     void setBankName(const QString &newBankName);
 
+    QString sevacost() const;
+    void setSevacost(const QString &newSevacost);
+
 signals:
 
     void sevatimeChanged();
@@ -98,6 +101,7 @@ private :
     QString m_sevatype;
     QString m_sevaname;
     QString m_quantity;
+    QString m_sevacost;
     QString m_receiptDate;
     QString m_sevaDate;
     QString m_sevatime;

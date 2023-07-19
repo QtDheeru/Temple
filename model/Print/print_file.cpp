@@ -697,6 +697,7 @@ int print_file::prin2PixMap(Print_BookingDetail *pbd)
         painter.drawText(margin+295,top_margin+105,pbd->serial_No);
 
         painter.drawText(margin+230,top_margin+130,"Date:");
+        qDebug()<<"suman getting rcpet date--"<<pbd->receipt_Date<<Qt::endl;
         painter.drawText(margin+295,top_margin+130,pbd->receipt_Date);
 
         painter.drawText(margin+230,top_margin+155,"Seva Date:");
@@ -726,8 +727,8 @@ int print_file::prin2PixMap(Print_BookingDetail *pbd)
         while(query_other1.next()){
             QString  sName= query_other1.value(3).toString().trimmed();
             QString  sQty= query_other1.value(4).toString().trimmed();
-            QString  sCost= query_other1.value(13).toString().trimmed();
-            double  sTotAmt= query_other1.value(15).toDouble();
+            QString  sCost= query_other1.value(14).toString().trimmed();
+            double  sTotAmt= query_other1.value(16).toDouble();
             SevaName* sn = new SevaName;
             sn->setSevaName(sName);
             sn->setSevaCost(sCost.toDouble());
@@ -743,7 +744,7 @@ int print_file::prin2PixMap(Print_BookingDetail *pbd)
             next_slot_y = next_slot_y + 20;
             painter.drawText(next_slot_x,next_slot_y, QString::number(i+1));
             painter.setFont(QFont("Arial",9));
-            painter.drawText(next_slot_x+27,next_slot_y,listOfSevaName.at(i)->sevaName());
+            painter.drawText(next_slot_x+27,next_slot_y,260,320,Qt::AlignLeft|Qt::AlignTop|Qt::TextWordWrap,listOfSevaName.at(i)->sevaName());
             //            painter.setFont(QFont("Arial",9));
             painter.drawText(next_slot_x+293,next_slot_y,QString::number(listOfSevaName.at(i)->sevaCost()));
             qDebug() << Q_FUNC_INFO << " **** rate =" << listOfSevaName.at(i)->sevaCost() <<Qt::endl;
@@ -776,7 +777,7 @@ int print_file::prin2PixMap(Print_BookingDetail *pbd)
         painter.drawText(margin+108,top_margin+386,print_file::NumberToWord(totalAmount)+" only");
         qDebug() << Q_FUNC_INFO << " **** Amount = 4" << Qt::endl;
         painter.drawText(margin+2,top_margin+405,"Note:");
-        painter.drawText(margin+37,top_margin+405,pbd->note);
+        painter.drawText(margin+37,top_margin+405,"");
         qDebug() << Q_FUNC_INFO << " **** Amount = 5" << Qt::endl;
         QPixmap mypix(":/Images/Rules.png");
         qDebug() << Q_FUNC_INFO << " **** Amount = 6" << Qt::endl;

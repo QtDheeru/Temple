@@ -14,9 +14,10 @@ Rectangle {
     signal accountDetails();
     signal bookingreport();
     signal admin();
-    signal closeProject();
     signal loadAdminrights()
-    //signal loadMenuPage();
+    signal loadLogOut()
+    signal loadMenuPage();
+    signal loadDevoteeSelection()
     signal voucher();
     signal errorOccur(string errorMsg);
     property int countIfSevaNamesPresentInSevaTypes:0;
@@ -37,35 +38,9 @@ Rectangle {
             color: "aqua"
             buttonText: "SEVA BOOKING"
             onButtonClikcked: {
-                console.log("Seva Booking Button Clicked");
-                if(sevaProxy.getSevaTypeModel().getSevaTypeListSize()===0)
-                {
-                    console.log("clicked on Sevabooking if(sevaTypeModel===0)")
-                    errorOccur("seva types not present");
-                }
-                for(var i=0;i<sevaProxy.getSevaTypeModel().getSevaTypeListSize();i++)
-                {
-                    if((sevaProxy.getSevaModel(sevaProxy.getSevaTypeModel().sevaTypes[i].sevaTypeId).getSevaListViewSize()===0))
-                    {
-                        console.log("seveListModel  for if((sevaProxy.getSevaModel(100).getSevaListViewModel/*.getSevaListViewModel*/===0))")
-                        // errorOccur("SevaNames not present");
-                        countIfSevaNamesPresentInSevaTypes++;
-                        console.log(" countIfSevaNamesPresentInSevaTypes++ "+countIfSevaNamesPresentInSevaTypes)
-                    }
-                }
-                if(countIfSevaNamesPresentInSevaTypes===sevaProxy.getSevaTypeModel().getSevaTypeListSize())
-                {
-                    console.log(" if of === countIfSevaNamesPresentInSevaTypes++ "+countIfSevaNamesPresentInSevaTypes)
-                    errorOccur("SevaNames not present for any seva types");
-                }
-                if(countIfSevaNamesPresentInSevaTypes<sevaProxy.getSevaTypeModel().getSevaTypeListSize())
-                {
-                    console.log(" if of <<< countIfSevaNamesPresentInSevaTypes++ "+countIfSevaNamesPresentInSevaTypes)
-                    sevabooking();
-                }
-                else{
-                    sevabooking();
-                }
+                loadDevoteeSelection()
+//               console.log("Seva Booking Button Clicked");
+
             }
         }
         TempleButton{
@@ -133,13 +108,10 @@ Rectangle {
             width:_menupage.width/4
             height: _menupage.height/5
             color: "aqua"
-            buttonText: "CLOSE APPLICATION"
+            buttonText: "LOGOUT"
             border.width: _menupage.width/300
             onButtonClikcked: {
-                console.log("close button clicked");
-                Qt.quit();
-                closeProject();
-                //                _errorDialog.open()
+                loadLogOut()
             }
         }
         TempleButton{
@@ -214,5 +186,11 @@ Rectangle {
     }
     Component.onCompleted: {
         console.log("the accounts enable",button2.enabled)
+    }
+    Connections{
+        target:button1
+    function onLoadMenuPage(){
+        loadMenuPage()
+    }
     }
 }

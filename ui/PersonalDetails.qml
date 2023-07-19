@@ -15,7 +15,7 @@ Rectangle {
     property alias receiptNumber :_receipt._data
     property alias devoteeName : _name._data
     property alias mobileNo : _mobile._data
-
+    property alias isRcptvisible: _receipt.visible
     property alias devoteeNameEditable : _name._editable
     property alias mobileNoEditable : _mobile._editable
 
@@ -51,6 +51,12 @@ Rectangle {
             _nakshatra._dataModel = nakshatraList;
         }
     }
+    function setNakshatraCombo(nakshatra){
+         _nakshatra.currentIndex = _nakshatra.findTextInComboBox(nakshatra);
+    }
+    function setGothraCombo(gothra){
+        _gotra.currentIndex = _gotra.findTextInComboBox(gothra);
+    }
     ColumnLayout {
         Layout.leftMargin: 10
         width: parent.width
@@ -77,7 +83,6 @@ Rectangle {
             fontPixelSize: _r1.subComponentPixelSize
             _labelText:qsTr("Reciept Number")
             _editable:false
-
         }
         MyRowEntry{
             id:_mobile;

@@ -1,0 +1,25 @@
+{
+    "2023_7_0007": {
+        "Serva Seva": {
+            "Number": 7929977,
+            "additionalCost": 0,
+            "count": 1,
+            "sevaCost": 500,
+            "sevaId": 37,
+            "sevaName": "Serva Seva",
+            "sevaTime": "",
+            "sevaType": 1,
+            "teerthaPrasada": 6553700
+        },
+        "address": "",
+        "bookedBy": "Prasanna Rao",
+        "devoteeName": "Suman N",
+        "gothra": "Kashyapa",
+        "mobilenumber": "9481914363",
+        "momento": "Category-1",
+        "nakshtra": "Shathabhisha",
+        "receiptDate": "07-07-2023",
+        "receiptNo": "2023_7_0007",
+        "reference": ""
+    }
+}

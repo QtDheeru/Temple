@@ -20,13 +20,18 @@ Rectangle{
     //    modal: true
     //    closePolicy: Popup.CloseOnEscape
     signal loadMenuPage()
+    signal loadDevoteeSelection()
     //signal nextReceipt();
     //    focus: true
     property string sevaname
     property string sevatype
     property string sevaid
     property var sevaObject
-
+    property string d_Nakshtra: _personal.nakshatra
+    property alias dname: _personal.devoteeName
+    property alias dmobile: _personal.mobileNo
+    property alias dgothra: _personal.gothra
+    property alias dnakshatra: _personal.nakshatra
     onSevaTypeChanged: {
         console.log(" Popup - Seva Type ="+sevaType)
         _sevaListView.sevaType = sevaType;
@@ -63,6 +68,9 @@ Rectangle{
                         KeyNavigation.tab: _sevaDate
                         Layout.alignment: Qt.AlignTop
                         focus: true
+                        isRcptvisible: true
+                        devoteeNameEditable: false
+                        mobileNoEditable: false
                     }
                     SevaDateTime{id:_sevaDate;Layout.fillWidth: true
                         KeyNavigation.tab: _sevaD}
@@ -374,6 +382,7 @@ Rectangle{
         console.log("Esc pressed in select seva type view")
         //forcFocuseActive();
         loadMenuPage()
+//        loadDevoteeSelection()
     }
     SevaReceipt{
         id : _sevaReceipt
@@ -473,9 +482,12 @@ Rectangle{
     //    }
     //  }
     Component.onCompleted: {
-        console.log("Component.onCompleted: of seva booking view")
+        console.log("Component.onCompleted: of seva booking view",dgothra,d_Nakshtra)
+        _personal.setNakshatraCombo(d_Nakshtra)
+        _personal.setGothraCombo(dgothra)
         forceActiveFocus()
         _sevaDate.bookedby = sevaProxy.userManagement.signIn_Name
+
         //        sevaProxy.getBookedView().resetModel();
         //        sevaProxy.getSevaTypeNamesDataModel().getSevaBookingConformationDataModel().reset();
         //  _sevaContoller.enablePaymentButton = false

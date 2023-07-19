@@ -206,6 +206,16 @@ void SevaBookingElement::setBankName(const QString &newBankName)
     emit bankNameChanged();
 }
 
+QString SevaBookingElement::sevacost() const
+{
+    return m_sevacost;
+}
+
+void SevaBookingElement::setSevacost(const QString &newSevacost)
+{
+    m_sevacost = newSevacost;
+}
+
 
 
 

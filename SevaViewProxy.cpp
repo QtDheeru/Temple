@@ -1,16 +1,18 @@
 #include "SevaViewProxy.h"
 #include "./model/SevaListViewModel.h"
 #include "./model/SevaTypeViewModel.h"
-#include  "model/common.h"
+#include "../../Print/common.h"
+
 #include "SevaTypeNamesDataModel.h"
 #include <AllViewReports.h>
 #include <QScreen>
 #include "print_file.h"
 SevaViewProxy::SevaViewProxy(QObject *parent) : QObject(parent)
-  ,m_sevaBookingModelData(SevaTypeNamesDataModel::self())
-  ,m_receiptNumber("-1")
-  ,m_sevaTypeModel(nullptr)
+    ,m_sevaBookingModelData(SevaTypeNamesDataModel::self())
+    ,m_receiptNumber("-1")
+    ,m_sevaTypeModel(nullptr)
 {
+
     m_userMngmnt = new UserManagement;
     m_allReportModel  = new SevaDetailsTableView;
     m_allView = new AllViewReports;
@@ -57,6 +59,7 @@ SevaViewProxy::SevaViewProxy(QObject *parent) : QObject(parent)
                      DBInterface::getInstance(),&DBInterface::recvDeletedRecptNo);
     QObject::connect(DBInterface::getInstance(),&DBInterface::sendChangedDataToSevaBookingTablemodel,
                      m_sevaBookingTV,&SevaBookingTableModel::reset);
+
     //    QObject::connect(DBInterface::getInstance(),SIGNAL(forFUllDetails(QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>))
     //        ,m_allReportModel,SLOT(getData(QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>)));
 }
@@ -230,7 +233,8 @@ bool SevaViewProxy::printVoucherReceipt(VoucherElement *voucherElement)
 bool SevaViewProxy::printBookingReceipt(SevaBookingElement *sevaBookingElement)
 {
     qDebug() << Q_FUNC_INFO << Qt::endl;
-    //print_details* p = new Print_Detail;
+
+    QQmlEngine::setObjectOwnership(sevaBookingElement,QQmlEngine::CppOwnership);
     print_bookingDetails* p = new Print_BookingDetail;
     p->serial_No = sevaBookingElement->sno();
     p->person_Id = sevaBookingElement->person_id();
@@ -240,17 +244,17 @@ bool SevaViewProxy::printBookingReceipt(SevaBookingElement *sevaBookingElement)
     p->nakshatra = sevaBookingElement->person()->nakshatra();
     p->seva_Type = sevaBookingElement->sevatype();
     p->seva_Name = sevaBookingElement->sevaname();
+    p->sevacost = sevaBookingElement->sevacost();
     p->quantity = sevaBookingElement->quantity();
     p->receipt_Date = sevaBookingElement->receiptDate();
     p->seva_Date = sevaBookingElement->sevaDate();
     p->seva_time = sevaBookingElement->sevatime();
-    p->total_Cost = sevaBookingElement->totalCost();
+    p->total_Cost = sevaBookingElement->cash();
     p->cash = sevaBookingElement->cash();
     p->bank = sevaBookingElement->bank();
-    print_file file;
-    file.printing_file(p);
+    print_file *file=new print_file;
+    file->printing_file(p);
     return true ;
-
 }
 
 QString SevaViewProxy::getReceiptNumber() const

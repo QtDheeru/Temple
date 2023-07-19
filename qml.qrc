@@ -78,5 +78,9 @@
         <file>ui/Admin/UserManagement.qml</file>
         <file>ui/AllAccountDetails.qml</file>
         <file>ui/assets/Images/cancel.png</file>
+        <file>ui/Devotee/DevoteeDetailsPage.qml</file>
+        <file>ui/Devotee/DevoteeSelectionPage.qml</file>
+        <file>ui/Devotee/SearchCriteriaComboBox.qml</file>
+        <file>ui/Devotee/SevaSearchBar.qml</file>
     </qresource>
 </RCC>

@@ -241,6 +241,7 @@ Rectangle{
         Menu{
             id: contextMenu
             MenuItem {
+                id:_modify
                 text: qsTr('Modify')
                 onTriggered:
                 {
@@ -249,15 +250,24 @@ Rectangle{
                 }
             }
             MenuItem {
+                id:_print
                 text: qsTr('Print')
                 onTriggered:_allViewDataDialog.open()
             }
             MenuItem{
+                id:_cancel
                 text: qsTr('Cancel')
                 onTriggered: {
-
                     _errorDialog.showmsg("Are you sure to cancel the reciept?")
                 }
+            }
+            Component.onCompleted: {
+                console.log("Suman evening....",sevaProxy.sevaBookingTV.checkStatus(ve.sno))
+               if(sevaProxy.sevaBookingTV.checkStatus(ve.sno)){
+                   _cancel.visible = false
+               }else{
+                    _cancel.visible = true
+               }
             }
         }
         DisplayDialog {

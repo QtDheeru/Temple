@@ -176,7 +176,7 @@ public slots:
     void readSevaTypesFromJson();
     DevotePersnalDetails* getPersonDetails(QString person_id);
     bool saveData(QObject *);
-    int insertPersonDetails(QString devoteMobile, QString devoteName, QString devoteNakshatra, QString devoteGotra);
+    int insertPersonDetails(QString devoteMobile, QString devoteName, QString devoteNakshatra, QString devoteGotra,QString address);
 
     int getLastReceiptNumber();
     int getLastVoucherNumber();

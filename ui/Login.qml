@@ -158,7 +158,7 @@ Item {
                 radius: columnrect3.width/4
                 palette {  button:"#9B26B6" }
                 onClicked: {
-                    //dbchecker.checkCredentials(userNameID.text,passwordInput.text)
+//                    dbchecker.checkCredentials(userNameID.text,passwordInput.text)
                     sevaProxy.userManagement.authorize(userNameID.text,passwordInput.text)
                     userNameID.text = ""
                     passwordInput.text = ""

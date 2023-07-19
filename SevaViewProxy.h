@@ -10,6 +10,7 @@
 #include "./model/Seva/MySevaReceipt.h"
 #include "./model/Reports/SevaDetailsTableViewModel.h"
 #include "AllViewReports.h"
+
 #include "SevaReport.h"
 #include "SevaReceiptCsvProcessor.h"
 #include "SevaBookingTableModel.h"
@@ -29,6 +30,7 @@ class SevaViewProxy : public QObject
     Q_PROPERTY(SevaBookingTableModel* sevaBookingTV READ sevaBookingTV NOTIFY sevaBookingTVChanged)
     Q_PROPERTY(UserManagement* userManagement READ userMngmnt CONSTANT)
     Q_PROPERTY(SevaTypeNamesDataModel *sevaBookingModelData READ sevaBookingModelData CONSTANT)
+
 public:
     explicit SevaViewProxy(QObject *parent = nullptr);
     Q_INVOKABLE QAbstractItemModel* getSevaModel(int sevaType);
@@ -107,6 +109,11 @@ signals:
     void successMessage(QString exportmsg);
     void collectAllAccountsdata();
     void sendDeletedRecptNo(QString);
+
+    void devoteeTableModelChanged();
+
+    void devoteeSearchModelChanged();
+
 private :
     SevaTypeNamesDataModel *m_sevaBookingModelData;
     SevaListViewModel *m_currentSevaModel;
@@ -120,6 +127,7 @@ private :
     SevaBookingSearchModel *m_sevaBSearchModel;
     SevaTypeViewModel *m_sevaTypeModel;
     UserManagement* m_userMngmnt;
+
 };
 
 #endif // SEVAVIEWPROXY_H
