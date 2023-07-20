@@ -38,6 +38,9 @@ public:
     float getUpi() const;
     void setUpi(float newUpi);
 
+    QString getTransaction_mode() const;
+    void setTransaction_mode(const QString &newTransaction_mode);
+
 signals:
 
 private:
@@ -50,6 +53,7 @@ private:
     float neft;
     float cheque;
     float upi;
+    QString transaction_mode;
 
 };
 

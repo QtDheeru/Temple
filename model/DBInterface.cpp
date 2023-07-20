@@ -2394,7 +2394,7 @@ void DBInterface::account_report_cdate_function(QString SEVA,int TYPE,QString fo
         qDebug() <<"First"<<Qt::endl;
 
         //        que1 = ("select SEVANAME,sum(QUANTITY),SEVACOST,sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where sevabooking.RECEIPT_DATE='%1' Group by sevabooking.SEVANAME;");
-      /*  que1 = ("select SEVANAME,sum(QUANTITY),SEVACOST,sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) AS total_cost,"
+        /*  que1 = ("select SEVANAME,sum(QUANTITY),SEVACOST,sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) AS total_cost,"
                 "CASE "
                 "WHEN sevabooking.BANK = 'cash' THEN SUM(CASE WHEN sevabooking.BANK = 'cash' THEN ADDITIONALCOST+(QUANTITY*SEVACOST) ELSE 0 END) "
                 "WHEN sevabooking.BANK = 'NEFT' THEN SUM(CASE WHEN sevabooking.BANK = 'NEFT' THEN ADDITIONALCOST+(QUANTITY*SEVACOST) ELSE 0 END) "
@@ -2403,15 +2403,15 @@ void DBInterface::account_report_cdate_function(QString SEVA,int TYPE,QString fo
                 "END AS total_price FROM sevabooking WHERE (sevabooking.BANK = 'cash' OR sevabooking.BANK = 'NEFT' OR sevabooking.BANK='Cheque' OR sevabooking.BANK='UPI') "
                 "and sevabooking.RECEIPT_DATE='%1' Group by sevabooking.SEVANAME;"); */
 
-        que1 = ("select SEVANAME,sum(QUANTITY),SEVACOST,sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) AS SEVATOTALPRICE from sevabooking where sevabooking.RECEIPT_DATE='%1' Group by sevabooking.BANK and sevabooking.SEVANAME;");
+        que1 = ("select SEVANAME,sum(QUANTITY) AS Qauntity,SEVACOST,sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) AS SEVATOTALPRICE,BANK AS Tran_type from sevabooking where sevabooking.RECEIPT_DATE='%1' Group by sevabooking.BANK and sevabooking.SEVANAME,BANK;");
         que1 = que1.arg(formatchangedcalendar_str);
 
 
     }
     else if (SEVA==ALLSEVANAME) {
         qDebug() <<"Second"<<Qt::endl;
-//        que1 = ("select SEVANAME,sum(QUANTITY),SEVACOST,sum(ADDITIONALCOST+(QUANTITY*SEVACOST))  from sevabooking where  sevabooking.RECEIPT_DATE='%1' and sevabooking.SEVATYPE='%2' Group by sevabooking.SEVANAME; ");
-      /*  que1 = ("select SEVANAME,sum(QUANTITY),SEVACOST,sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) AS total_cost,"
+        //        que1 = ("select SEVANAME,sum(QUANTITY),SEVACOST,sum(ADDITIONALCOST+(QUANTITY*SEVACOST))  from sevabooking where  sevabooking.RECEIPT_DATE='%1' and sevabooking.SEVATYPE='%2' Group by sevabooking.SEVANAME; ");
+        /*  que1 = ("select SEVANAME,sum(QUANTITY),SEVACOST,sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) AS total_cost,"
                 "CASE "
                 "WHEN sevabooking.BANK = 'cash' THEN SUM(CASE WHEN sevabooking.BANK = 'cash' THEN ADDITIONALCOST+(QUANTITY*SEVACOST) ELSE 0 END) "
                 "WHEN sevabooking.BANK = 'NEFT' THEN SUM(CASE WHEN sevabooking.BANK = 'NEFT' THEN ADDITIONALCOST+(QUANTITY*SEVACOST) ELSE 0 END) "
@@ -2420,15 +2420,13 @@ void DBInterface::account_report_cdate_function(QString SEVA,int TYPE,QString fo
                 "END AS total_price FROM sevabooking WHERE (sevabooking.BANK = 'cash' OR sevabooking.BANK = 'NEFT' OR sevabooking.BANK='Cheque' OR sevabooking.BANK='UPI') "
                 "and sevabooking.RECEIPT_DATE='%1' and sevabooking.SEVATYPE='%2' Group by sevabooking.SEVANAME;"); */
 
-        que1 = ("select SEVANAME,sum(QUANTITY) ,SEVACOST,sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) AS SEVATOTALPRICE from sevabooking where sevabooking.RECEIPT_DATE='%1' and sevabooking.SEVATYPE='%2' Group by sevabooking.SEVANAME;");
+        que1 = ("select SEVANAME,sum(QUANTITY) AS Qauntity ,SEVACOST,sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) AS SEVATOTALPRICE,BANK AS Tran_type from sevabooking where sevabooking.RECEIPT_DATE='%1' and sevabooking.SEVATYPE='%2' Group by sevabooking.SEVANAME,BANK;");
         que1 = que1.arg(formatchangedcalendar_str).arg(TYPE);
-
-
     }
     else {
         qDebug() <<"Third"<<Qt::endl;
-//        que1 = ("select SEVANAME,sum(QUANTITY),SEVACOST,sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where  sevabooking.RECEIPT_DATE='%1' and sevabooking.SEVATYPE='%2' and sevabooking.SEVANAME = '%3' Group by sevabooking.SEVANAME; ");
-      /*  que1 = ("select SEVANAME,sum(QUANTITY),SEVACOST,sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) AS total_cost,"
+        //        que1 = ("select SEVANAME,sum(QUANTITY),SEVACOST,sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where  sevabooking.RECEIPT_DATE='%1' and sevabooking.SEVATYPE='%2' and sevabooking.SEVANAME = '%3' Group by sevabooking.SEVANAME; ");
+        /*  que1 = ("select SEVANAME,sum(QUANTITY),SEVACOST,sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) AS total_cost,"
                 "CASE "
                 "WHEN sevabooking.BANK = 'cash' THEN SUM(CASE WHEN sevabooking.BANK = 'cash' THEN ADDITIONALCOST+(QUANTITY*SEVACOST) ELSE 0 END) "
                 "WHEN sevabooking.BANK = 'NEFT' THEN SUM(CASE WHEN sevabooking.BANK = 'NEFT' THEN ADDITIONALCOST+(QUANTITY*SEVACOST) ELSE 0 END) "
@@ -2437,7 +2435,7 @@ void DBInterface::account_report_cdate_function(QString SEVA,int TYPE,QString fo
                 "END AS total_price FROM sevabooking WHERE (sevabooking.BANK = 'cash' OR sevabooking.BANK = 'NEFT' OR sevabooking.BANK='Cheque' OR sevabooking.BANK='UPI') "
                 "and sevabooking.RECEIPT_DATE='%1' and sevabooking.SEVATYPE='%2' and sevabooking.SEVANAME = '%3' Group by sevabooking.SEVANAME;");*/
 
-        que1 = ("select SEVANAME,sum(QUANTITY),SEVACOST,sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) AS SEVATOTALPRICE from sevabooking where sevabooking.RECEIPT_DATE='%1' and sevabooking.SEVATYPE='%2' and sevabooking.SEVANAME = '%3' Group by sevabooking.SEVANAME;");
+        que1 = ("select SEVANAME,sum(QUANTITY) AS Qauntity,SEVACOST,sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) AS SEVATOTALPRICE,BANK AS Tran_type from sevabooking where sevabooking.RECEIPT_DATE='%1' and sevabooking.SEVATYPE='%2' and sevabooking.SEVANAME = '%3' Group by sevabooking.SEVANAME,BANK;");
         que1 = que1.arg(formatchangedcalendar_str).arg(TYPE).arg(SEVA);
     }
 
@@ -2474,13 +2472,19 @@ void DBInterface::account_report_cdate_function(QString SEVA,int TYPE,QString fo
         ele->setSeva_ticket( query_other1.value(1).toInt());
         ele->setSeva_cost(query_other1.value(2).toFloat());//cost
         ele->setSeva_total(query_other1.value(3).toFloat());//total
+        qDebug()<<"suman bank query---"<<query_other1.value("Tran_type").toString()<<Qt::endl;
 
-        ele->setCash(query_other1.value("SEVATOTALPRICE").toFloat());
-        ele->setNeft(query_other1.value("SEVATOTALPRICE").toFloat());
-        ele->setCheque(query_other1.value("SEVATOTALPRICE").toFloat());
-        ele->setUpi(query_other1.value("SEVATOTALPRICE").toFloat());
+        if(query_other1.value("Tran_type").toString()==pay_mode[0]){
+            ele->setCash(query_other1.value("SEVATOTALPRICE").toFloat());
+        }
+        else if(query_other1.value("Tran_type").toString()==pay_mode[1]){
+            ele->setCheque(query_other1.value("SEVATOTALPRICE").toFloat());}
 
+        else if(query_other1.value("Tran_type").toString()==pay_mode[2]){
+                ele->setNeft(query_other1.value("SEVATOTALPRICE").toFloat());}
 
+        else if(query_other1.value("Tran_type").toString()==pay_mode[3]){
+                ele->setUpi(query_other1.value("SEVATOTALPRICE").toFloat());}
 
         qDebug() << query_other1.value(0).toString()<<Qt::endl;
         qDebug() << query_other1.value(1).toString()<<Qt::endl;
@@ -3298,7 +3302,7 @@ bool DBInterface::checkCredentials(QString userID, QString pass)
         QString user_name=query_s_no.value(3).toString();
         QString pass_word=query_s_no.value(4).toString();
         int rolenumber= query_s_no.value(5).toString().toInt();
-                qDebug() << Q_FUNC_INFO << "suman db id and password ==  " << user_name << pass_word;
+        qDebug() << Q_FUNC_INFO << "suman db id and password ==  " << user_name << pass_word;
         if(userID==user_name && pass == pass_word){
             emit success();
             qDebug()<<"The role number is"<<rolenumber<<Qt::endl;

@@ -100,3 +100,13 @@ void AccountReportElement::setUpi(float newUpi)
     upi = newUpi;
 }
 
+QString AccountReportElement::getTransaction_mode() const
+{
+    return transaction_mode;
+}
+
+void AccountReportElement::setTransaction_mode(const QString &newTransaction_mode)
+{
+    transaction_mode = newTransaction_mode;
+}
+
