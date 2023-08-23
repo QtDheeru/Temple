@@ -20,22 +20,18 @@ SOURCES += \
         Trust.cpp \
         TrustConfiguration.cpp \
         TrustListModel.cpp \
-        VoucherData/MainHead/VoucherHeadsDataBase.cpp \
         VoucherData/MainHead/VoucherHeadsDataModel.cpp \
         VoucherData/MainHead/VoucherHeadsTableModel.cpp \
         VoucherData/MainHead/VoucherHeadsTypeDetails.cpp \
         VoucherData/SubHead/VoucherSubHead.cpp \
         VoucherData/SubHead/VoucherSubHeadsDataModel.cpp \
         VoucherData/SubHead/VoucherSubHeadsTableModel.cpp \
-        VoucherData/SubHead/vouchersubheaddatabase.cpp \
         VoucherProxy.cpp \
         main.cpp \
         model/BankDetails.cpp \
-        model/BankRegistration_m/cashentrydatabase.cpp \
         model/BankRegistration_m/cashtransaction.cpp \
         model/BankRegistration_m/cheque_entryModel.cpp \
         model/BankRegistration_m/cheque_entry_data.cpp \
-        model/BankRegistration_m/chequeentrydb.cpp \
         model/DBInterface.cpp \
         model/DevotePersnalDetails.cpp \
         model/MomentoCategory.cpp \
@@ -69,21 +65,17 @@ HEADERS += \
     Trust.h \
     TrustConfiguration.h \
     TrustListModel.h \
-    VoucherData/MainHead/VoucherHeadsDataBase.h \
     VoucherData/MainHead/VoucherHeadsDataModel.h \
     VoucherData/MainHead/VoucherHeadsTableModel.h \
     VoucherData/MainHead/VoucherHeadsTypeDetails.h \
     VoucherData/SubHead/VoucherSubHead.h \
     VoucherData/SubHead/VoucherSubHeadsDataModel.h \
     VoucherData/SubHead/VoucherSubHeadsTableModel.h \
-    VoucherData/SubHead/vouchersubheaddatabase.h \
     VoucherProxy.h \
     model/BankDetails.h \
-    model/BankRegistration_m/cashentrydatabase.h \
     model/BankRegistration_m/cashtransaction.h \
     model/BankRegistration_m/cheque_entryModel.h \
     model/BankRegistration_m/cheque_entry_data.h \
-    model/BankRegistration_m/chequeentrydb.h \
     model/DBInterface.h \
     model/DevotePersnalDetails.h \
     model/MomentoCategory.h \
