@@ -15,7 +15,7 @@ ApplicationWindow {
     //property var tot ;
     property var constant: Constants{}
     title: constant.addressText1
-    color: "black"
+    color: "cyan"
     flags: Qt.Dialog
     Component.onCompleted: {
         //        console.log("=====" + confApp.appPath + "/" + confApp.welcomescreenImg );
