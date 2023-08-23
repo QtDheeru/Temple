@@ -184,12 +184,12 @@ ColumnLayout{
         }
         onLowBalance:{
             dlog.visible=true
-            dlog.dTxt="Insufficient Balance"
+            dlog.dTxt="Cash In Hand Is Low"
             setImageForFail()
         }
         onAddedData:{
             dlog.visible=true
-            dlog.dTxt="Added Data Successfully"
+            dlog.dTxt="Cash Entry Successfull"
             setImageForSuccess()
         }
     }
