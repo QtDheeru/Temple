@@ -27,7 +27,6 @@
 #include<QQmlEngine>
 
 //#include "voucher/VoucherFilterElements.h"
-
 #include "IDataWriter.h"
 #include "TrustListModel.h"
 
@@ -37,7 +36,6 @@ class  DBInterface: public QObject
 {
     Q_OBJECT
 public:
-
     static DBInterface* init;
     static DBInterface* getInstance();
 
@@ -46,6 +44,21 @@ public:
 
     QString getError() const;
     void setError(const QString &error);
+    void addChequeToDataBase(QString db_receiptDate, QString db_chequeDate, QString db_bankName, QString db_recepitNumber, QString db_amount);
+    void addCashTOdatabase(QString a_date, QString a_lastreci, QString a_cashinhand, QString a_tobank, QString a_transType, QString a_bank, QString a_person, QString a_status, QString a_notes);
+    void databaseToCashEntry();
+    void lastDataToCashEntry();
+    void addData(QString,QString,QString);
+    void selectDataInMain();
+    void addMyDB(QString,QString,QString);
+    void selectData(QString);
+    void updateData(QString,QString,QString);
+    void removeData(QString);
+
+    void updateToDb(QString,QString,QString);
+    void deleteData(QString,QString,QString);
+
+    void getChequeData();
 
 signals:
     void send_seva_details(QString,int);
@@ -86,6 +99,26 @@ signals:
     void wrongCred();
     void show_username_password(QString,QString);
     void sucessfully_added(QString msg);
+
+    void selectSignalFromDB(QString serial,QString voucherId ,QString voucherName);
+    void mySelectSignal(QString serl_no,QString vid,QString vcat);
+    void toModelDialog();
+    void update_Failed();
+    void deletion_Failed();
+    void update_Success();
+    void deletion_Success();
+
+    void signalToCashEntry(QString ,QString,QString);
+    void signalToCashTransaction(QString,QString,QString,QString);
+    void clearChequeList();
+    void sendDataToModel(QString bankname,QString receiptNumber, QString receiptDate, QString amount, QString chequeDate);
+
+    void addSuccessInDB(QString,QString,QString);
+    void addFailInDB();
+    void updateSuccessInDB(QString,QString,QString);
+    void updateFailedInDB();
+    void deletionSuccessInDB(QString);
+    void deletionFailedInDB();
 
 
 public slots:
@@ -200,8 +233,10 @@ signals :
     void sendAcoountoneByone(AccountReportElement*); //Suman N
     void sendFullAccountDataElement(AccountFullreportElement*);
     void sendChangedDataToSevaBookingTablemodel(QString);
+    void insert_Success();
+
 private:
-    explicit DBInterface(QObject *parent = nullptr);
+    explicit DBInterface(QObject *parent=nullptr);
     int val;
     int last_s_no;
     QList<QString> l_sno,l_person_id,l_sevatype,l_sevaname,l_quantity,l_s_date,l_s_month,l_s_year ,l_sevadate,l_r_date,l_r_month,l_r_year,l_receiptdate,l_seva_cost,l_add_cost,l_total_cost,l_note;
@@ -211,6 +246,7 @@ private:
     QDate yy_date;
     PersonDetails *m_person;
     SevaTypeJsonProcessor* m_proc;
+
 
 
     QString m_error;
