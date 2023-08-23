@@ -8,7 +8,7 @@ Rectangle {
     anchors.fill: parent
     signal timerTriggered()
     Timer {
-        interval: 5000; running: true;
+        interval: 500; running: true;
         repeat: false
         onTriggered: timerTriggered()
     }
