@@ -12,9 +12,6 @@ VoucherSubHeadsTableModel::VoucherSubHeadsTableModel(QObject *parent)
     connect(m_voucherSubHeadsDataModel,&VoucherSubHeadsDataModel::onUpdated_Success,this,&VoucherSubHeadsTableModel::UpdateSuccessProxy);
     connect(m_voucherSubHeadsDataModel,&VoucherSubHeadsDataModel::onDeletion_Success,this,&VoucherSubHeadsTableModel::deletion_SuccessProxy);
     connect(m_voucherSubHeadsDataModel,&VoucherSubHeadsDataModel::onInsert_Success,this,&VoucherSubHeadsTableModel::Insert_SuccessProxy);
-
-    //m_voucherSubHeadsDataModel->clickModel();
-
 }
 
 

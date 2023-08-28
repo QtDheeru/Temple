@@ -6,15 +6,7 @@ VoucherSubHeadsDataModel::VoucherSubHeadsDataModel(QObject *parent)
     : QObject{parent}
 {
 
-    //connect(DBInterface::init,&DBInterface::mySelectSignal,this,&VoucherSubHeadsDataModel::onMySelectSignal);
-    //    connect(DBInterface::init,&DBInterface::toModelDialog,this,&VoucherSubHeadsDataModel::onModelDialog);
-    // connect(DBInterface::init,&DBInterface::mySelectSignal,this,&VoucherSubHeadsDataModel::onMySelectSignal);
-
-    //connect(DBInterface::init,&DBInterface::deletion_Failed,this,&VoucherSubHeadsDataModel::onDeletion_Failed);
-    //connect(DBInterface::init,&DBInterface::update_Failed,this,&VoucherSubHeadsDataModel::onUpdated_Failed);
-    //connect(DBInterface::init,&DBInterface::toModelDialog,this,&VoucherSubHeadsDataModel::onModelDialog);
-
-    qDebug()<<"Hello There";
+    qDebug()<<"Hello There Inside VoucherSubHeadsData Model";
 
 }
 
@@ -23,9 +15,8 @@ void VoucherSubHeadsDataModel::init()
     qDebug()<<"Voucher Subheads data model init called"<<voucherId;
     if(voucherId != "")
     {
-        //connect(DBInterface::init,&DBInterface::mySelectSignal,this,&VoucherSubHeadsDataModel::onMySelectSignal);
-        qDebug()<<"Inside if Voucher Subheads data model init called"<<voucherId;
 
+        qDebug()<<"Inside if Voucher Subheads data model init called"<<voucherId;
         DBInterface::init->selectData(voucherId);
     }
 }
@@ -104,7 +95,7 @@ int VoucherSubHeadsDataModel::my_columnCount(const QModelIndex &parent) const
 QVariant VoucherSubHeadsDataModel::data(const QModelIndex &index, int role) const
 {
     qDebug()<<Q_FUNC_INFO<<" indexValInTBM "<<index.row()<<role;
-    // VoucherSubHead *table = new VoucherSubHead;
+
     if(role == 0 )
     {
         qDebug()<<"inside myt data"<<m_table2Data.at(index.row())->getVSubid();
