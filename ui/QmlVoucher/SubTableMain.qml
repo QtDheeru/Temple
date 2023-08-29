@@ -14,8 +14,9 @@ Rectangle
         MainTableCategory
         {
             id:tb
-            width: parent.width / 3
-            height: parent.height
+            Layout.preferredWidth: parent.width / 3
+            Layout.preferredHeight: parent.height
+
             onMyTableClicked:
             {
 
@@ -42,6 +43,10 @@ Rectangle
     }
 
 }
+
+
+
+
 
 
 
