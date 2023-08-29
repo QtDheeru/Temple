@@ -1,17 +1,16 @@
 import QtQuick 2.15
-import QtQuick.Window 2.15
 import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.3
 
-
-Rectangle
-{
+Rectangle{
+    id:main_rect
+    color: "#FFFFFF"
+    border.color:"black"
+    border.width: 2
     width:parent.width
     height:parent.height
-    color:"white"
     anchors.left: parent.right
-    border.color: "black"
-    border.width: 1
+
     Component.onCompleted:
     {
         voucherProxy.toDataModel()
@@ -25,307 +24,234 @@ Rectangle
             console.log("subcat"+subcat)
             console.log("subname"+subname)
             console.log("voucherId"+voucherId)
-            myid.text=voucherId
-            t3.text=subname
-            t2.text=subcat
+            t2.text=voucherId
+            t5.text=subname
+            t4.text=subcat
         }
 
     }
 
-    Rectangle
+    MyDialogBox{
+        id:dlog
+        anchors.centerIn: parent
+        visible: false
+    }
+
+    Label
     {
+        text:"ADD,UPDATE AND DELETE OPERATION"
+        anchors.top: parent.top
+        anchors.topMargin: 70
+        color: "black"
+        font.pixelSize:parent.width/40
+        font.underline: true
+        anchors.horizontalCenter: parent.horizontalCenter
+    }
 
-        width: 400
-        height: 630
-        color: "white"
-        x:160
-        y:150
-        id:myRect
+    ColumnLayout
+    {
+        anchors.centerIn: parent
 
-        Label
-        {
-            text:"ADD,UPDATE AND DELETE OPERATION"
-            anchors.top: parent.top
-            anchors.topMargin: 1
-            color: "black"
-            font.pixelSize:20
-            font.underline: true
-            anchors.horizontalCenter: parent.horizontalCenter
+        spacing: 20
+        RowLayout{
+            spacing: 17
+            Label{
+                text: "Serial Number:"
+                font.pixelSize: 15
+                font.bold: true
+                color: "black"
+            }
+            TextField{
+                id:t1
+                Layout.preferredWidth: 180
 
+                placeholderText: "S.No"
+                placeholderTextColor: "#000000"
+                font.pixelSize: 16
+                KeyNavigation.down: t2
+                color: "black"
+                text: voucherProxy.my_serial
+                validator:IntValidator{ bottom: 0;top:9999999}
+                background: Rectangle{color: "Transparent"}
+                UnderLine{}
+            }
+//            Component.onCompleted:
+//            {
+//              console.log("height",t1.text.h)
+//            }
+        }
+        RowLayout{
+            spacing: 17
+            Label{
+                text: "Category ID:"
+                font.pixelSize: 15
+                color: "black"
+                font.bold: true
+            }
+            TextField{
+                id:t2
+                Layout.preferredWidth: 180
+                placeholderText: "Category Id"
+                placeholderTextColor: "#000000"
+                font.pixelSize: 16
+                KeyNavigation.down: t3
+                color: "black"
+                background: Rectangle{color: "Transparent"}
+                validator:IntValidator{ bottom: 0;top:9999999}
+                UnderLine{}
+            }
+        }
+        RowLayout{
+            spacing: 17
+            Label{
+                text: "Category Name:"
+                font.pixelSize: 15
+                color: "black"
+                font.bold: true
+            }
+            TextField{
+                id:t3
+                Layout.preferredWidth: 180
+                placeholderText: "Category Name"
+                placeholderTextColor: "#000000"
+                font.pixelSize: 16
+                KeyNavigation.down: t3
+                text: voucherProxy.my_vname
+                color: "black"
+                background: Rectangle{color: "Transparent"}
+                UnderLine{}
+            }
+        }
+        RowLayout{
+            spacing: 17
+            Label{
+                text: "SubCategory Id"
+                font.pixelSize: 15
+                color: "black"
+                font.bold: true
+            }
+            TextField{
+                id:t4
+                Layout.preferredWidth: 180
+                placeholderText: "SubCategory Id"
+                placeholderTextColor: "#000000"
+                font.pixelSize: 16
+                KeyNavigation.down: t3
+                color: "black"
+                background: Rectangle{color: "Transparent"}
+                UnderLine{}
+            }
         }
 
+        RowLayout{
+            spacing: 17
+            Label{
+                text: "SubCategory Name"
+                font.pixelSize: 15
+                color: "black"
+                font.bold: true
+            }
+            TextField{
+                id:t5
+                Layout.preferredWidth: 180
+                placeholderText: "SubCategory Name"
+                placeholderTextColor: "#000000"
+                font.pixelSize: 16
+                KeyNavigation.down: t3
+                color: "black"
+                background: Rectangle{color: "Transparent"}
+                UnderLine{}
+            }
+        }
 
-        ColumnLayout
+        MyButton
         {
-            anchors.fill: parent
-            spacing:-200
-            RowLayout
+            id:add_button
+            text: "ADD"
+            onMouseClicked:
             {
-                spacing: 195
-                ColumnLayout
-                {
-                    spacing: 30
-                    Rectangle{
-                        width: 20
-                        height: 20
-                        Label{
-                            text: "SNO : "
-                            font.bold: true
-                        }
-                    }
-                    Rectangle{
-                        width: 20
-                        height: 20
-                        Label{
-                            text: "CATEGORY ID : "
-                            font.bold: true
-
-                        }
-                    }
-                    Rectangle{
-                        width: 20
-                        height: 20
-                        Label{
-                            text: "CATEGORY NAME : "
-                            font.bold: true
-
-                        }
-                    }
-                    Rectangle{
-                        width: 20
-                        height: 20
-                        Label{
-                            text: "SUB CATEGORY ID : "
-                            font.bold: true
-                        }
-                    }
-
-                    Rectangle{
-                        width: 20
-                        height: 20
-                        Label{
-                            text: "SUB CATEGORY NAME : "
-                            font.bold: true
-
-                        }
-                    }
-
-                }
-                ColumnLayout{
-                    spacing: 30
-                    Rectangle{
-                        width: 170
-                        height: 20
-                        Rectangle{
-                            id: rec1
-                            width: 170
-                            height: 2
-                            color: "black"
-                            anchors.bottom: parent.bottom
-                            TextArea{
-                                placeholderText: "Serial Number"
-                                anchors.bottom: rec1.top
-                                anchors.left: parent.left
-                                //anchors.leftMargin: 10
-                                text: voucherProxy.my_serial
-                                font.pixelSize: 16
-                            }
-                        }
-                    }
-                    Rectangle{
-                        width: 170
-                        height: 20
-                        Rectangle{
-                            id: rec2
-                            width: 170
-                            height: 2
-                            color: "black"
-                            anchors.bottom: parent.bottom
-                            TextArea{
-                                id:myid
-                                placeholderText: "Category ID"
-                                anchors.bottom: rec2.top
-                                anchors.left: parent.left
-                                //anchors.leftMargin: 10
-                                text: ""
-                                font.pixelSize: 16
-                            }
-                        }
-                    }
-                    Rectangle
-                    {
-                        width: 170
-                        height: 20
-                        Rectangle{
-                            id: rec3
-                            width: 170
-                            height: 2
-                            color: "black"
-                            anchors.bottom: parent.bottom
-                            TextArea{
-                                id:t1
-                                placeholderText: "CATEGORY NAME"
-                                anchors.bottom: rec3.top
-                                anchors.left: parent.left
-                                //anchors.leftMargin: 10
-                                text: voucherProxy.my_vname
-                                font.pixelSize: 16
-                            }
-                        }
-                    }
-                    Rectangle
-                    {
-                        id: _rec4
-                        width: 170
-                        height: 20
-                        Rectangle
-                        {
-
-                            id: rec4
-                            width: 170
-                            height: 2
-                            color: "black"
-                            anchors.bottom: parent.bottom
-                            TextArea
-                            {
-                                id:t2
-                                placeholderText: "Subcategory Id"
-                                anchors.bottom: rec4.top
-                                anchors.left: parent.left
-                                //anchors.leftMargin: 10
-                                text: ""
-                                font.pixelSize: 16
-                            }
-                        }
-                    }
-
-                    Rectangle
-                    {
-                        id: _rec5
-                        width: 170
-                        height: 20
-                        Rectangle
-                        {
-
-                            id: rec5
-                            width: 170
-                            height: 2
-                            color: "black"
-                            anchors.bottom: parent.bottom
-                            TextArea
-                            {
-                                id:t3
-                                placeholderText: "SUB CATEGORY NAME"
-                                anchors.bottom: rec5.top
-                                anchors.left: parent.left
-                                //anchors.leftMargin: 10
-                                text: ""
-                                font.pixelSize: 16
-                            }
-
-                        }
-                    }
-                }
-
+                voucherProxy.clearProxy();
+                voucherProxy.addToDb(t2.text,t4.text,t5.text)
             }
+        }
 
-
-            ColumnLayout
+        MyButton
+        {
+            id:myupdate
+            text: "UPDATE"
+            onMouseClicked:
             {
-                spacing: 15
-
-                MyButton
-                {
-                    id:add_button
-                    text: "ADD"
-                    onMouseClicked:
-                    {
-                        voucherProxy.clearProxy();
-                        voucherProxy.addToDb(myid.text,t2.text,t3.text)
-                    }
-
-                }
-
-                MyButton
-                {
-                    id:_update
-                    text: "UPDATE"
-                    onMouseClicked:
-                    {
-                        voucherProxy.clearProxy();
-                        voucherProxy.updateToDb(myid.text,t2.text,t3.text);
-
-                    }
-
-                }
-                MyButton
-                {
-                    id:_delete
-
-                    text: "DELETE"
-                    onMouseClicked:
-                    {
-                        voucherProxy.clearProxy();
-                        voucherProxy.deleteToDb(myid.text,t2.text,t3.text)
-                        t3.clear()
-                        t2.clear()
-                    }
-
-
-                }
-
-            }
-
-            Connections
-            {
-                target:voucherProxy
-                onQmlDialog:
-                {
-                    myD.dTxt = "Insertion Failed"
-                    myD.dImage="qrc:/Images/fail.png"
-                    myD.visible = "true";
-
-
-                }
-                onProxyUpdate:
-                {
-                    myD.dTxt = "Update Failed"
-                    myD.visible = "true";
-                    myD.dImage="qrc:/Images/fail.png"
-
-                }
-                onUpdateQml:
-                {
-                    myD.dTxt = "Update Success"
-                    myD.visible = "true";
-                    myD.dImage="qrc:/Images/good.png"
-
-                }
-                onProxyDelete:
-                {
-                    console.log("Inside onProxyDelete qml slot")
-                    myD.dTxt = "Deletion Failed"
-                    myD.dImage="qrc:/Images/fail.png"
-                    myD.visible = "true";
-                }
-                onDeleteQml:
-                {
-                    myD.dTxt = "Delete Success"
-                    myD.visible = "true";
-                    myD.dImage="qrc:/Images/good.png"
-
-
-                }
-                onInsertQml:
-                {
-                    myD.dTxt = "Insert Success"
-                    myD.visible = "true";
-                    myD.dImage="qrc:/Images/good.png"
-
-                }
+                voucherProxy.clearProxy();
+                voucherProxy.updateToDb(t2.text,t4.text,t5.text);
 
             }
         }
+
+        MyButton
+        {
+            id:mydelete
+
+            text: "DELETE"
+            onMouseClicked:
+            {
+                voucherProxy.clearProxy();
+                voucherProxy.deleteToDb(t2.text,t4.text,t5.text)
+                t5.clear()
+                t4.clear()
+            }
+
+        }
+    }
+
+
+    Connections
+    {
+        target:voucherProxy
+        onQmlDialog:
+        {
+            myD.dTxt = "Insertion Failed"
+            myD.dImage="qrc:/Images/fail.png"
+            myD.visible = "true";
+
+
+        }
+        onProxyUpdate:
+        {
+            myD.dTxt = "Update Failed"
+            myD.visible = "true";
+            myD.dImage="qrc:/Images/fail.png"
+
+        }
+        onUpdateQml:
+        {
+            myD.dTxt = "Update Success"
+            myD.visible = "true";
+            myD.dImage="qrc:/Images/good.png"
+
+        }
+        onProxyDelete:
+        {
+            console.log("Inside onProxyDelete qml slot")
+            myD.dTxt = "Deletion Failed"
+            myD.dImage="qrc:/Images/fail.png"
+            myD.visible = "true";
+        }
+        onDeleteQml:
+        {
+            myD.dTxt = "Delete Success"
+            myD.visible = "true";
+            myD.dImage="qrc:/Images/good.png"
+
+
+        }
+        onInsertQml:
+        {
+            myD.dTxt = "Insert Success"
+            myD.visible = "true";
+            myD.dImage="qrc:/Images/good.png"
+
+        }
+
     }
 
     MyDialogBox
@@ -335,5 +261,7 @@ Rectangle
         anchors.centerIn: parent
     }
 
-}
 
+
+
+}
