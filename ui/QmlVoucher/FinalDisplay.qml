@@ -206,7 +206,7 @@ Rectangle{
         target:voucherProxy
         onQmlDialog:
         {
-            myD.dTxt = "Insertion Failed SubcategoryID already Present"
+            myD.dTxt = "SubcategoryID already Present"
             myD.dImage="qrc:/Images/fail.png"
             myD.visible = "true";
 
@@ -214,7 +214,7 @@ Rectangle{
         }
         onProxyUpdate:
         {
-            myD.dTxt = "Update Failed SubcategoryID not present"
+            myD.dTxt = "SubcategoryID not present"
             myD.visible = "true";
             myD.dImage="qrc:/Images/fail.png"
 
@@ -229,7 +229,7 @@ Rectangle{
         onProxyDelete:
         {
             console.log("Inside onProxyDelete qml slot")
-            myD.dTxt = "Deletion Failed SubcategoryID Not Present"
+            myD.dTxt = "SubcategoryID Not Present"
             myD.dImage="qrc:/Images/fail.png"
             myD.visible = "true";
         }
