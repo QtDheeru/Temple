@@ -70,12 +70,6 @@ void VoucherProxy::addToDb(QString vid, QString sid, QString sname)
     qDebug()<<"add TO Table called vadiraj";
 
 }
-
-void VoucherProxy::clickedVoucher()
-{
-    m_voucherSubHeadsTableModel->clickTable();
-}
-
 void VoucherProxy::addVoucherMainType(QString slno,QString v_id,QString v_name)
 {
     m_voucherHeadsTableModel->addDetailsInTable(slno,v_id,v_name);
@@ -178,6 +172,18 @@ void VoucherProxy::onAddFailInTable()
 void VoucherProxy::onVoucherNameErrorInTable()
 {
     emit voucherNameErrorInProxy();
+}
+
+void VoucherProxy::listAppendProxy()
+{
+    m_voucherSubHeadsTableModel->listAppendTable();
+}
+
+void VoucherProxy::proxyList()
+{
+    qDebug()<<"Inside proxtList()";
+    m_voucherSubHeadsTableModel->ToTableListAppend();
+
 }
 
 void VoucherProxy::updateVoucherInProxy(QString a_slno, QString a_vid, QString a_vname)

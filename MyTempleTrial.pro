@@ -27,7 +27,6 @@ SOURCES += \
         VoucherData/SubHead/VoucherSubHead.cpp \
         VoucherData/SubHead/VoucherSubHeadsDataModel.cpp \
         VoucherData/SubHead/VoucherSubHeadsTableModel.cpp \
-        VoucherData/SubHead/vouchersubheaddatabase.cpp \
         VoucherProxy.cpp \
         main.cpp \
         model/BankDetails.cpp \
@@ -76,7 +75,6 @@ HEADERS += \
     VoucherData/SubHead/VoucherSubHead.h \
     VoucherData/SubHead/VoucherSubHeadsDataModel.h \
     VoucherData/SubHead/VoucherSubHeadsTableModel.h \
-    VoucherData/SubHead/vouchersubheaddatabase.h \
     VoucherProxy.h \
     model/BankDetails.h \
     model/BankRegistration_m/cashentrydatabase.h \

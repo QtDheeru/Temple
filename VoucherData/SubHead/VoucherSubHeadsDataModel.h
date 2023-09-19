@@ -1,15 +1,13 @@
 #ifndef VOUCHERSUBHEADSDATAMODEL_H
 #define VOUCHERSUBHEADSDATAMODEL_H
 
-
 #include<QList>
 #include "VoucherData/SubHead/VoucherSubHead.h"
 #include <QString>
 #include <QModelIndex>
-#include "VoucherData/SubHead/vouchersubheaddatabase.h"
 #include "model/DBInterface.h"
 
-class VoucherSubHeadsDataModel : public QObject//, public IVoucherDataModel
+class VoucherSubHeadsDataModel : public QObject
 {
     Q_OBJECT
 public:
@@ -18,14 +16,17 @@ public:
 
     explicit VoucherSubHeadsDataModel(QObject *parent = nullptr);
     QList <VoucherSubHead*> m_table2Data;
+    QList <VoucherSubHead*> m_tableAllData;
     QString voucherId;
     QString sub_cat_id;
     QString sub_name;
     void init();
-    void clickModel();
     void clearModel();
     void updateToModel(QString,QString,QString);
     void deleteToModel(QString,QString,QString);
+    void myInit();
+    void listAppendDataModel();
+    void onMySelectSignal(QString,QString,QString);
 
     // QAbstractItemModel interface
 public:
@@ -45,13 +46,13 @@ public:
     void set_data(int);
     void getFromModel();
     void addFromModel(QString,QString,QString);
-    //void display_sub();
+
 public slots:
-
-    void onMySelectSignal(QString,QString,QString);
     void onModelDialog();
-
-    //void set_data(QString);
+    void onSelectAll(QString,QString,QString);
+    void onAddToList(QString,QString,QString);
+    void onUpdated_List(QString,QString,QString);
+    void onDeletion_item(QString,QString,QString);
 
 signals:
     void subcat_Changed();
@@ -66,7 +67,9 @@ signals:
     void onUpdated_Success();
     void onDeletion_Success();
     void onInsert_Success();
-
+    void updateToSubTableModel(int);
+    void removeToSubTableModel(int);
+    void ResetMList();
 
 };
 

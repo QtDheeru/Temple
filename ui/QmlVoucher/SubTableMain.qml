@@ -25,6 +25,7 @@ Rectangle
             }
             onRefresh:
             {
+
                 myld.source = ""
                 myld.source="qrc:/ui/QmlVoucher/SubTableCategory.qml"
             }

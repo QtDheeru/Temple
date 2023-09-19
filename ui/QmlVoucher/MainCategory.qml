@@ -2,13 +2,15 @@ import QtQuick 2.15
 import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.3
 
-Rectangle{
+Rectangle
+{
     id:main_rect
     color: "#FFFFFF"
     border.color:"black"
     border.width: 2
 
-    MyDialogBox{
+    MyDialogBox
+    {
         id:dlog
         anchors.centerIn: parent
         visible: false
@@ -25,7 +27,8 @@ Rectangle{
         anchors.horizontalCenter: parent.horizontalCenter
     }
 
-    ColumnLayout{
+    ColumnLayout
+    {
         anchors.centerIn: parent
         spacing: 15
         RowLayout{
@@ -38,7 +41,7 @@ Rectangle{
             }
             TextField{
                 id:t1
-                Layout.preferredWidth: 180
+                Layout.preferredWidth: 170
                 placeholderText: "Enter S.No"
                 placeholderTextColor: "#000000"
                 font.pixelSize: 16
@@ -59,7 +62,7 @@ Rectangle{
             }
             TextField{
                 id:t2
-                Layout.preferredWidth: 180
+                Layout.preferredWidth: 170
                 placeholderText: "Enter Id"
                 placeholderTextColor: "#000000"
                 font.pixelSize: 16
@@ -80,7 +83,7 @@ Rectangle{
             }
             TextField{
                 id:t3
-                Layout.preferredWidth: 180
+                Layout.preferredWidth: 170
                 placeholderText: "Enter Name"
                 placeholderTextColor: "#000000"
                 font.pixelSize: 16

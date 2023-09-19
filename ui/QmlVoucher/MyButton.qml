@@ -11,10 +11,12 @@ Button{
     Layout.fillWidth: true
     Layout.preferredHeight: 35
 
-    background:Rectangle{
+    background:Rectangle
+    {
         radius:20
         color:"lightgrey"
-        MouseArea{
+        MouseArea
+        {
             anchors.fill: parent
             onClicked:{
                 mouseClicked()

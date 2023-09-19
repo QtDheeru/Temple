@@ -326,7 +326,8 @@ void DBInterface::selectDataInMain()
     else
         qDebug()<<"Select fail";
 
-    while(myquery.next()){
+    while(myquery.next())
+    {
         QString serial=myquery.value(0).toString();
         QString voucherId=myquery.value(1).toString();
         QString voucherName=myquery.value(2).toString();
@@ -398,7 +399,7 @@ void DBInterface::updateToDb(QString vid, QString sid, QString sname)
     }
     else
     {
-        emit update_Success();
+        emit update_Success(vid,sid,sname);
     }
 }
 
@@ -428,7 +429,7 @@ void DBInterface::deleteData(QString vid, QString sid, QString sname)
     }
     else
     {
-        emit deletion_Success();
+        emit deletion_Success(vid,sid,sname);
     }
 }
 
@@ -508,7 +509,7 @@ void DBInterface::addMyDB(QString vid, QString sid, QString sname)
     Myquery.bindValue(":sname",sname);
     if(Myquery.exec())
     {
-        emit insert_Success();
+        emit insert_Success(vid,sid,sname);
         qDebug()<<"InseIrt Query executed In SubHeadsDataBase"<<Qt::endl;
 
     }
@@ -520,41 +521,47 @@ void DBInterface::addMyDB(QString vid, QString sid, QString sname)
     }
 }
 
-void DBInterface::selectData(QString VOUCHERID)
+void DBInterface::selectDataAll(QString MYVOUCHER)
 {
     bool value=false;
     QSqlQuery Myquery;
-    qDebug()<<"Select Data Called";
+
+    qDebug()<<"Select Data All Called";
     Myquery.prepare("SELECT VOUCHERID,SUBCATEGORY_ID,SUBCATEGORY_NAME FROM SUBVOUCHER_DATA ");
-    if(Myquery.exec()){
+    if(Myquery.exec())
+    {
         qDebug()<<"Retrieve Query executed in Subhead"<<Qt::endl;
     }
     else
     {
         qDebug()<<"Retrieve Query exe..failed in Subhead"<<Qt::endl;
     }
-    qDebug()<<"VOUCHER IS IN SELECTDATA"<<VOUCHERID;
-
-    qDebug()<<"VOUCHER IS IN SELECTDATA"<<VOUCHERID;
 
     while(Myquery.next())
     {
+        qDebug("Inside selectData of VoucherSubheadDatabase");
         QString voucherID=Myquery.value(0).toString();
-        if(VOUCHERID == voucherID)
+        QString subID=Myquery.value(1).toString();
+        QString subName=Myquery.value(2).toString();
+        if(MYVOUCHER == voucherID)
         {
-            value=true;
-            qDebug("Inside selectData of VoucherSubheadDatabase");
-            QString subID=Myquery.value(1).toString();
-            QString subName=Myquery.value(2).toString();
-            qDebug()<<"SUBID IN selectData()"+subID;
-            qDebug()<<"SUBNAME IN selectData()"+subName;
-            emit mySelectSignal(voucherID,subID,subName);
+            qDebug()<<"The Clicked Voucher Id is found in SubVoucher DB";
+            value = true;
         }
+
+        qDebug()<<"SUBID IN selectDataAll()"+subID;
+        qDebug()<<"SUBNAME IN selectDataAll()"+subName;
+
+        emit mySelectSignalAll(voucherID,subID,subName);
+
     }
     if(!value)
     {
-        emit mySelectSignal("Data not found","","");
+        qDebug()<<"Emitting empty Data";
+        emit mySelectSignalAll(MYVOUCHER,"","");
     }
+
+
 }
 
 void DBInterface::addChequeToDataBase(QString db_receiptDate, QString db_chequeDate, QString db_bankName, QString db_recepitNumber, QString db_amount)

@@ -49,7 +49,8 @@ Rectangle{
                     _labelText:qsTr("Voucher Number")
                     _editable:false
                 }
-                MyRowEntry{id:_name;
+                MyRowEntry
+                {id:_name;
                     myHeight:subComponentHeight;
                     myWidth: parent.width/1.25
                     fontPixelSize: _r1.subComponentPixelSize
@@ -79,13 +80,20 @@ Rectangle{
                     KeyNavigation.tab: _item
                     _dataModel:voucherProxy.voucherHeadsTableModel
                     _dataModelRole:"vcategory"
-                    Component.onCompleted: {
+                    Component.onCompleted:
+                    {
+                        voucherProxy.voucherHeadsTableModel.rowClicked(0);
+                        voucherProxy.proxyList();
                         console.log("voucherTypemodel---",voucherProxy.voucherHeadsTableModel)
                     }
                     onCurrentIndexChanged:
                     {
+                        console.log("my current Index",currentIndex)
+
                         voucherProxy.voucherHeadsTableModel.rowClicked(currentIndex);
-                        //                        console.log("submname",)
+                        voucherProxy.listAppendProxy();
+
+                        // console.log("my current Index",currentIndex)
                     }
 
                     //                    _dataModel:["Financial","Groceries","Vegetables","Fruits and Flowers","Dairy Items","Computers & Digital","Misc","Others"]
@@ -102,8 +110,8 @@ Rectangle{
                         console.log("voucher name="+a_vouch_name);
                         voucherProxy.send_Voucher(a_voucherId);
                         voucherProxy.clearProxy();
-                        voucherProxy.clickedVoucher();
-                        myitem.currentIndex = 0
+
+                        myitem.currentIndex = 0 ;
 
                     }
                 }

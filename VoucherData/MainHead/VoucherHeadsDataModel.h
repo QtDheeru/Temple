@@ -3,7 +3,6 @@
 
 #include <QObject>
 #include "VoucherData/MainHead/VoucherHeadsTypeDetails.h"
-#include "VoucherData/MainHead/VoucherHeadsDataBase.h"
 #include "model/DBInterface.h"
 
 class VoucherHeadsDataModel : public QObject

@@ -27,10 +27,11 @@ public:
     void voucher_data(QString);
     void selectRow(int);
     void toTableModel();
-    void clickTable();
     void clearTable();
     void updateToTable(QString,QString,QString);
     void deleteToTable(QString,QString,QString);
+    void listAppendTable();
+    void ToTableListAppend();
 
 private:
     VoucherSubHeadsDataModel *m_voucherSubHeadsDataModel = new VoucherSubHeadsDataModel;
@@ -50,6 +51,8 @@ public slots:
     void addToTable(QString,QString,QString);
     void onAddToTableModel(int,int);
     void onTableDialog();
+    void onUpdateToSubTableModel(int);
+    void onRemoveToSubTableModel(int);
 
 
     // QAbstractItemModel interface

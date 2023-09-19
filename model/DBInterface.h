@@ -51,7 +51,7 @@ public:
     void addData(QString,QString,QString);
     void selectDataInMain();
     void addMyDB(QString,QString,QString);
-    void selectData(QString);
+    void selectDataAll(QString);
     void updateData(QString,QString,QString);
     void removeData(QString);
 
@@ -105,8 +105,9 @@ signals:
     void toModelDialog();
     void update_Failed();
     void deletion_Failed();
-    void update_Success();
-    void deletion_Success();
+    void update_Success(QString,QString,QString);
+    void deletion_Success(QString,QString,QString);
+
 
     void signalToCashEntry(QString ,QString,QString);
     void signalToCashTransaction(QString,QString,QString,QString);
@@ -119,6 +120,8 @@ signals:
     void updateFailedInDB();
     void deletionSuccessInDB(QString);
     void deletionFailedInDB();
+
+    void mySelectSignalAll(QString,QString,QString);
 
 
 public slots:
@@ -233,7 +236,7 @@ signals :
     void sendAcoountoneByone(AccountReportElement*); //Suman N
     void sendFullAccountDataElement(AccountFullreportElement*);
     void sendChangedDataToSevaBookingTablemodel(QString);
-    void insert_Success();
+    void insert_Success(QString,QString,QString);
 
 private:
     explicit DBInterface(QObject *parent=nullptr);

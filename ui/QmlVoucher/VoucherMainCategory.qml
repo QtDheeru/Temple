@@ -4,7 +4,8 @@ import QtQuick.Layouts 1.3
 RowLayout{
     anchors.fill: parent
     spacing: 0
-    MainTableCategory{
+    MainTableCategory
+    {
         id:tb
         Layout.fillWidth: true
         Layout.fillHeight: true

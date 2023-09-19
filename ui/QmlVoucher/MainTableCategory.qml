@@ -19,6 +19,7 @@ Rectangle{
         tv.selection.select(tv.currentRow);
         voucherProxy.loadTbViewInProxy();
         voucherProxy.voucherHeadsTableModel.rowClicked(0);
+        voucherProxy.proxyList();
         myTableClicked()
     }
 
@@ -31,6 +32,7 @@ Rectangle{
             {
                 console.log("Row CLicked="+row);
                 voucherProxy.voucherHeadsTableModel.rowClicked(row);
+                voucherProxy.listAppendProxy();
                 refresh();
             }
             headerDelegate: MyHeaderDelegate{}
@@ -71,7 +73,7 @@ Rectangle{
             console.log("voucher name="+a_vouch_name);
             voucherProxy.send_Voucher(a_voucherId);
             voucherProxy.clearProxy();
-            voucherProxy.clickedVoucher();
+
         }
     }
 }

@@ -6,12 +6,17 @@ VoucherSubHeadsTableModel::VoucherSubHeadsTableModel(QObject *parent)
     m_voucherSubHeadsDataModel = new VoucherSubHeadsDataModel();
     connect(m_voucherSubHeadsDataModel,&VoucherSubHeadsDataModel::onDeletion_Failed,this,&VoucherSubHeadsTableModel::toTableDelete);
     connect(m_voucherSubHeadsDataModel,&VoucherSubHeadsDataModel::toTableDialog,this,&VoucherSubHeadsTableModel::onTableDialog);
+
+    connect(m_voucherSubHeadsDataModel,&VoucherSubHeadsDataModel::updateToSubTableModel,this,&VoucherSubHeadsTableModel::onUpdateToSubTableModel);
+    connect(m_voucherSubHeadsDataModel,&VoucherSubHeadsDataModel::removeToSubTableModel,this,&VoucherSubHeadsTableModel::onRemoveToSubTableModel);
+
     connect(m_voucherSubHeadsDataModel,&VoucherSubHeadsDataModel::onUpdated_Failed,this,&VoucherSubHeadsTableModel::toFailedUpdate);
     connect(m_voucherSubHeadsDataModel,&VoucherSubHeadsDataModel::updated_data,this,&VoucherSubHeadsTableModel::row_Slot);
     connect(m_voucherSubHeadsDataModel,&VoucherSubHeadsDataModel::addToTableModel,this,&VoucherSubHeadsTableModel::onAddToTableModel);
     connect(m_voucherSubHeadsDataModel,&VoucherSubHeadsDataModel::onUpdated_Success,this,&VoucherSubHeadsTableModel::UpdateSuccessProxy);
     connect(m_voucherSubHeadsDataModel,&VoucherSubHeadsDataModel::onDeletion_Success,this,&VoucherSubHeadsTableModel::deletion_SuccessProxy);
     connect(m_voucherSubHeadsDataModel,&VoucherSubHeadsDataModel::onInsert_Success,this,&VoucherSubHeadsTableModel::Insert_SuccessProxy);
+
 }
 
 
@@ -36,7 +41,7 @@ QVariant VoucherSubHeadsTableModel::data(const QModelIndex &index, int role) con
 
 QHash<int, QByteArray> VoucherSubHeadsTableModel::roleNames() const
 {
-    qDebug()<<Q_FUNC_INFO<<" TBM "<<m_voucherSubHeadsDataModel->roleNames();;
+    qDebug()<<Q_FUNC_INFO<<" TBM "<<m_voucherSubHeadsDataModel->roleNames();
     return m_voucherSubHeadsDataModel->roleNames();
 
 }
@@ -66,11 +71,6 @@ void VoucherSubHeadsTableModel::toTableModel()
 
 }
 
-void VoucherSubHeadsTableModel::clickTable()
-{
-    m_voucherSubHeadsDataModel->clickModel();
-}
-
 void VoucherSubHeadsTableModel::clearTable()
 {
     this->beginResetModel();
@@ -88,10 +88,22 @@ void VoucherSubHeadsTableModel::deleteToTable(QString vid, QString sid, QString 
 {
     m_voucherSubHeadsDataModel->deleteToModel(vid,sid,sname);
 }
+
+void VoucherSubHeadsTableModel::listAppendTable()
+{
+
+    m_voucherSubHeadsDataModel->listAppendDataModel();
+}
+
+void VoucherSubHeadsTableModel::ToTableListAppend()
+{
+      qDebug()<<"ToTableListAppend()";
+      m_voucherSubHeadsDataModel->myInit();
+}
 void VoucherSubHeadsTableModel::addToTable(QString vid, QString sid, QString sname)
 {
-    m_voucherSubHeadsDataModel->addFromModel(vid,sid,sname);
-
+     connect(m_voucherSubHeadsDataModel,VoucherSubHeadsDataModel::ResetMList,this,&VoucherSubHeadsTableModel::clearTable);
+     m_voucherSubHeadsDataModel->addFromModel(vid,sid,sname);
 }
 
 void VoucherSubHeadsTableModel::onAddToTableModel(int first, int last)
@@ -104,6 +116,20 @@ void VoucherSubHeadsTableModel::onAddToTableModel(int first, int last)
 void VoucherSubHeadsTableModel::onTableDialog()
 {
     emit toProxyDialog();
+}
+
+void VoucherSubHeadsTableModel::onUpdateToSubTableModel(int position)
+{
+    QModelIndex l_left=createIndex(position,0);
+    emit dataChanged(l_left,l_left);
+
+}
+
+void VoucherSubHeadsTableModel::onRemoveToSubTableModel(int position)
+{
+    beginRemoveRows(QModelIndex(),position,position);
+    endRemoveRows();
+
 }
 
 void VoucherSubHeadsTableModel::row_Slot(QString subid,QString name)

@@ -42,7 +42,6 @@ public slots:
     void toDataModel();
     void toMyQml(QString,QString,QString);
     void addToDb(QString,QString,QString);
-    void clickedVoucher();
     void clearProxy();
     void deleteToDb(QString,QString,QString);
     void updateToDb(QString,QString,QString);
@@ -60,6 +59,9 @@ public slots:
     void rowClickedInProxy(int row);
     void onAddFailInTable();
     void onVoucherNameErrorInTable();
+    void listAppendProxy();
+    void proxyList();
+
 signals:
     void voucherSubHeadTableModelChanged();
     void voucherHeadsTableModelChanged();

@@ -22,6 +22,16 @@ void VoucherSubHead::setVscn(const QString &newVscn)
 }
 
 
+QString VoucherSubHead::getVoucher() const
+{
+    return Voucher;
+}
+
+void VoucherSubHead::setVoucher(const QString &newVoucher)
+{
+    Voucher = newVoucher;
+}
+
 VoucherSubHead::VoucherSubHead()
 {
     qDebug()<<"Inside VoucherSubhead";

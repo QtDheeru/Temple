@@ -48,9 +48,9 @@ Rectangle{
         anchors.horizontalCenter: parent.horizontalCenter
     }
 
-    ColumnLayout{
+    ColumnLayout
+    {
         anchors.centerIn: parent
-
         spacing: 20
         RowLayout{
             spacing: 17
@@ -63,6 +63,7 @@ Rectangle{
             TextField{
                 id:t1
                 Layout.preferredWidth: 180
+
                 placeholderText: "S.No"
                 placeholderTextColor: "#000000"
                 font.pixelSize: 16
@@ -73,6 +74,7 @@ Rectangle{
                 background: Rectangle{color: "Transparent"}
                 UnderLine{}
             }
+
         }
         RowLayout{
             spacing: 17
@@ -164,8 +166,9 @@ Rectangle{
             text: "ADD"
             onMouseClicked:
             {
-                voucherProxy.clearProxy();
+
                 voucherProxy.addToDb(t2.text,t4.text,t5.text)
+
             }
         }
 
@@ -175,7 +178,7 @@ Rectangle{
             text: "UPDATE"
             onMouseClicked:
             {
-                voucherProxy.clearProxy();
+
                 voucherProxy.updateToDb(t2.text,t4.text,t5.text);
 
             }
@@ -188,8 +191,8 @@ Rectangle{
             text: "DELETE"
             onMouseClicked:
             {
-                voucherProxy.clearProxy();
-                voucherProxy.deleteToDb(t2.text,t4.text,t5.text)
+
+                voucherProxy.deleteToDb(t2.text,t4.text,t5.text);
                 t5.clear()
                 t4.clear()
             }
@@ -203,7 +206,7 @@ Rectangle{
         target:voucherProxy
         onQmlDialog:
         {
-            myD.dTxt = "Insertion Failed"
+            myD.dTxt = "Insertion Failed SubcategoryID already Present"
             myD.dImage="qrc:/Images/fail.png"
             myD.visible = "true";
 
@@ -211,7 +214,7 @@ Rectangle{
         }
         onProxyUpdate:
         {
-            myD.dTxt = "Update Failed"
+            myD.dTxt = "Update Failed SubcategoryID not present"
             myD.visible = "true";
             myD.dImage="qrc:/Images/fail.png"
 
@@ -226,7 +229,7 @@ Rectangle{
         onProxyDelete:
         {
             console.log("Inside onProxyDelete qml slot")
-            myD.dTxt = "Deletion Failed"
+            myD.dTxt = "Deletion Failed SubcategoryID Not Present"
             myD.dImage="qrc:/Images/fail.png"
             myD.visible = "true";
         }
