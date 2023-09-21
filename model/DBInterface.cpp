@@ -5,8 +5,11 @@
 #include "SevaBookingConformationDataModel.h"
 #include "SevaName.h"
 #include "SevaJson/JsonProcessor.h"
+#include <QSqlError>
+
 
 DBInterface *DBInterface::init =nullptr;
+
 static int BID=0;
 static int SID=0;
 static int RID=0;
@@ -140,6 +143,36 @@ DBInterface::DBInterface(QObject *parent) : QObject(parent)
                      "S_MONTH,"
                      "S_YEAR);";
 
+    QString query7 = "CREATE TABLE CHEQUE_DATA("
+                     "RECEIPT_DATE,"
+                     "CHEQUE_DATE, "
+                     "BANK_NAME, "
+                     "RECEIPT_NUMBER, "
+                     "AMOUNT);";
+
+    QString query8="CREATE TABLE BANK("
+                     "DATE VARCHAR[10],"
+                     "LAST_RECEIPT VARCHAR[10],"
+                     "CASH_IN_HAND VARCHAR[15],"
+                     "TO_BANK VARCHAR[15],"
+                     "TRANSACTION_TYPE VARCHAR[10],"
+                     "BANK_NAME VARCHAR[15],"
+                     "PERSON VARCHAR[20],"
+                     "STATUS VARCHAR[20],"
+                     "NOTES VARCHAR[30])";
+
+    QString query9=" CREATE TABLE VOUCHER_DATA("
+                     "SL_NO,"
+                     "VOUCHER_ID,"
+                     "VOUCHER_CATEGORY);";
+    //                     "PRIMARY KEY(SL_NO,VOUCHER_ID,VOUCHER_CATEGORY);";
+
+    QString query10="CREATE TABLE SUBVOUCHER_DATA("
+                      "VOUCHERID VARCHAR[5],"
+                      "SUBCATEGORY_ID VARCHAR[20],"
+                      "SUBCATEGORY_NAME VARCHAR[20] UNIQUE,"
+                      "PRIMARY KEY(SUBCATEGORY_ID));";
+
     qry.prepare(query);
     qry.prepare(query1);
     qry.prepare(query2);
@@ -152,7 +185,26 @@ DBInterface::DBInterface(QObject *parent) : QObject(parent)
     }
     qry.prepare(query5);
     qry.prepare(query6);
-    //    qry.exec();
+    qry.prepare(query7);
+    if(qry.exec()){
+        qDebug()<<"Cheque entry table created";
+    }
+    qry.prepare(query8);
+    if(qry.exec()){
+        qDebug()<<"Cash Entry  table created";
+    }
+    qry.prepare(query9);
+    if(qry.exec()){
+        qDebug()<<"VoucherMain table created";
+    }else{
+        qDebug()<<"VoucherMain table not created";
+
+    }
+    qry.prepare(query10);
+    if(qry.exec())
+    {
+        qDebug()<<" VoucherSub table created";
+    }
 
     m_proc = new SevaTypeJsonProcessor;
     readSevaTypesFromJson();
@@ -168,6 +220,365 @@ QString DBInterface::getError() const
 void DBInterface::setError(const QString &error)
 {
     m_error = error;
+}
+void DBInterface::addCashTOdatabase(QString a_date, QString a_lastreci, QString a_cashinhand, QString a_tobank, QString a_transType, QString a_bank, QString a_person, QString a_status, QString a_notes)
+{
+    qDebug()<<"The receieved data"<<Qt::endl;
+
+    if(a_tobank!=""){
+        QSqlQuery m_sqlquery ;
+        m_sqlquery.prepare("INSERT INTO BANK(DATE ,LAST_RECEIPT ,CASH_IN_HAND ,TO_BANK ,TRANSACTION_TYPE ,BANK_NAME ,PERSON ,STATUS ,NOTES) VALUES(:date,:lastreci,:cashinhand,:tobank,:transtype,:bank,:person,:status,:notes)");
+        m_sqlquery.bindValue(":date",a_date);
+        m_sqlquery.bindValue(":lastreci",a_lastreci);
+        m_sqlquery.bindValue(":cashinhand",a_cashinhand);
+        m_sqlquery.bindValue(":tobank",a_tobank);
+        m_sqlquery.bindValue(":transtype",a_transType);
+        m_sqlquery.bindValue(":bank",a_bank);
+        m_sqlquery.bindValue(":person",a_person);
+        m_sqlquery.bindValue(":status",a_status);
+        m_sqlquery.bindValue(":notes",a_notes);
+        if(m_sqlquery.exec()){
+            qDebug()<<"query executed";
+        }
+    }
+}
+
+void DBInterface::databaseToCashEntry()
+{
+    QSqlQuery myquery;
+    qDebug()<<"Select data called";
+    myquery.prepare("Select * FROM sevabooking");
+    bool val=myquery.exec();
+    qDebug() << "The last error = "<<myquery.lastError();
+    if(val){
+        qDebug()<<"Select success";
+    }
+    else
+        qDebug()<<"Select fail";
+
+    while(myquery.next()){
+        QString recieptNumber=myquery.value(0).toString();
+        QString amount=myquery.value(18).toString();
+        QString cashType=myquery.value(19).toString();
+        qDebug()<<"recieptNumber="<<recieptNumber<<"amount="<<amount<<"cashType="<<cashType<<Qt::endl;
+        if(cashType=="cash" || cashType=="Cash"){
+            emit signalToCashEntry(recieptNumber,amount,cashType);
+        }
+    }
+}
+
+void DBInterface::lastDataToCashEntry()
+{
+    QSqlQuery myquery;
+    qDebug()<<"Select data called";
+    myquery.prepare("Select * FROM BANK");
+    bool val=myquery.exec();
+    qDebug() << "The last error = "<<myquery.lastError();
+    if(val){
+        qDebug()<<"Select success";
+    }
+    else
+        qDebug()<<"Select fail";
+    QString recieptNumber;
+    QString amount;
+    QString toBank;
+    QString TransactionType;
+    while(myquery.next()){
+        recieptNumber=myquery.value(1).toString();
+        amount=myquery.value(2).toString();
+        toBank=myquery.value(3).toString();
+        TransactionType=myquery.value(4).toString();
+    }
+    qDebug()<<"recieptNumber="<<recieptNumber<<"amount="<<amount<<Qt::endl;
+    emit signalToCashTransaction(recieptNumber,amount,toBank,TransactionType);
+}
+
+
+void DBInterface::addData(QString slno, QString vid, QString vname)
+{
+    qDebug()<<Q_FUNC_INFO;
+    QSqlQuery query ;
+    query.prepare("INSERT INTO VOUCHER_DATA(SL_NO,VOUCHER_ID,VOUCHER_CATEGORY) VALUES(:slno,:vid,:vname)");
+    query.bindValue(":slno",slno);
+    query.bindValue(":vid",vid);
+    query.bindValue(":vname",vname);
+    if(query.exec())
+    {
+        qDebug()<<"Insert Query executed"<<Qt::endl;
+        emit addSuccessInDB(slno,vid,vname);
+    }
+    else{
+        qDebug()<<"Insert Query exe..failed"<<Qt::endl;
+        emit addFailInDB();
+    }
+}
+
+void DBInterface::selectDataInMain()
+{
+    QSqlQuery myquery;
+    qDebug()<<"Select data called";
+    myquery.prepare("Select * FROM VOUCHER_DATA");
+    bool val=myquery.exec();
+    qDebug() << "The last error = "<<myquery.lastError();
+    if(val){
+        qDebug()<<"Select success";
+    }
+    else
+        qDebug()<<"Select fail";
+
+    while(myquery.next())
+    {
+        QString serial=myquery.value(0).toString();
+        QString voucherId=myquery.value(1).toString();
+        QString voucherName=myquery.value(2).toString();
+        qDebug()<<"ser="<<serial<<"vouc="<<voucherId<<"Name="<<voucherName<<endl;
+        emit selectSignalFromDB(serial,voucherId,voucherName);
+    }
+}
+
+void DBInterface::updateData(QString slno, QString vid, QString vname)
+{
+    qDebug()<<Q_FUNC_INFO;
+    QSqlQuery query;
+    query.prepare("UPDATE VOUCHER_DATA SET SL_NO=:slno,VOUCHER_CATEGORY=:vname WHERE VOUCHER_ID =:vid ");
+    query.bindValue(":slno",slno);
+    query.bindValue(":vid",vid);
+    query.bindValue(":vname",vname);
+    if(query.exec()){
+        qDebug()<<"Update Query executed"<<Qt::endl;
+    }
+    else{
+        qDebug()<<"Update Query exe..failed"<<Qt::endl;
+    }
+    if(!query.numRowsAffected())
+        emit updateFailedInDB();
+    else
+        emit updateSuccessInDB(slno,vid,vname);
+
+}
+
+void DBInterface::removeData(QString vid)
+{
+    qDebug()<<"Remove Data Called";
+    QSqlQuery query;
+    query.prepare("DELETE FROM VOUCHER_DATA WHERE VOUCHER_ID=:vid");
+    query.bindValue(":vid",vid);
+    if(query.exec()){
+        qDebug()<<"Remove Query executed"<<Qt::endl;
+    }
+    else{
+        qDebug()<<"Remove Query exe..failed"<<Qt::endl;
+    }
+    if(!query.numRowsAffected())
+        emit deletionFailedInDB();
+    else
+        emit deletionSuccessInDB(vid);
+
+}
+
+void DBInterface::updateToDb(QString vid, QString sid, QString sname)
+{
+    QSqlQuery Myquery;
+    Myquery.prepare("UPDATE SUBVOUCHER_DATA SET SUBCATEGORY_NAME=:sname WHERE VOUCHERID=:vid AND SUBCATEGORY_ID=:sid ");
+    Myquery.bindValue(":sid",sid);
+    Myquery.bindValue(":sname",sname);
+    Myquery.bindValue(":vid",vid);
+
+    if(Myquery.exec())
+    {
+        qDebug()<<"Update Query executed in Subhead"<<Qt::endl;
+    }
+    else
+    {
+        qDebug()<<"Update Query exe..failed in Subhead"<<Myquery.lastError()<<Qt::endl;
+    }
+    qDebug()<<"number of Rows affected"<<Myquery.numRowsAffected();
+    if(!(Myquery.numRowsAffected()))
+    {
+        emit update_Failed();
+    }
+    else
+    {
+        emit update_Success(vid,sid,sname);
+    }
+}
+
+void DBInterface::deleteData(QString vid, QString sid, QString sname)
+{
+    QSqlQuery Myquery;
+    qDebug()<<"vid in deleteData"<<vid;
+    qDebug()<<"sid in deleteData"<<sid;
+    qDebug()<<"sname in deleteData"<<sname;
+
+    qDebug()<<"Remove Data Called in SubheadDatabase";
+    Myquery.prepare("DELETE FROM SUBVOUCHER_DATA WHERE VOUCHERID=:vid AND SUBCATEGORY_ID=:sid ");
+    Myquery.bindValue(":vid",vid);
+    Myquery.bindValue(":sid",sid);
+
+    if(Myquery.exec())
+    {
+        qDebug()<<"Remove Query executed in deleteData"<<Qt::endl;
+    }
+    else{
+        qDebug()<<"Remove Query exe..failed deleteData"<<Qt::endl;
+    }
+    qDebug()<<"numRowsAffected("<<Myquery.numRowsAffected();
+    if(!(Myquery.numRowsAffected()))
+    {
+        emit deletion_Failed();
+    }
+    else
+    {
+        emit deletion_Success(vid,sid,sname);
+    }
+}
+
+void DBInterface::getChequeData()
+{
+    emit clearChequeList();
+
+    qDebug()<<"Get Cheque Data";
+    QList <QString> checkDbRecptNum;
+    QString recptNum;
+    QSqlQuery qry3,qry2;
+
+    qry2.prepare("select * from CHEQUE_DATA");
+    qry3.prepare("select * from sevabooking");
+
+    if(qry2.exec())
+    {
+        qDebug()<<"Query2EXE";
+        while(qry2.next())
+        {
+            recptNum = qry2.value(3).toString();
+            checkDbRecptNum.append(recptNum);
+        }
+    }
+
+    for(int i=0;i<checkDbRecptNum.count();i++)
+    {
+        qDebug()<<"ELEOFLIST="<<checkDbRecptNum.at(i);
+    }
+
+    if(qry3.exec())
+    {
+        qDebug()<<"Query1EXE";
+        while(qry3.next())
+        {
+            recptNum = qry3.value(0).toString();
+            QString bank = qry3.value(19).toString();
+            QString bankName = qry3.value(20).toString();
+            QString receiptNumber = qry3.value(0).toString();
+            QString r_date =  qry3.value(5).toString() ;
+            QString r_month = qry3.value(6).toString();
+            QString r_year = qry3.value(7).toString();
+            QString amount = qry3.value(18).toString();
+
+            QString reciptdate = r_date +"-"+ r_month +"-"+ r_year ;
+            QString chequeDate = "17-08-2023";
+
+            if(checkDbRecptNum.contains(recptNum))
+            {
+                qDebug()<<recptNum<<" already contains";
+            }
+            else
+            {
+                if(bank == "Cheque" || bank == "cheque")
+                {
+                    qDebug()<<"DONTCONTAINS"<<recptNum;
+                    qDebug()<<"BnkName = "<<receiptNumber;
+                    emit sendDataToModel(bankName,receiptNumber,reciptdate,amount,chequeDate);
+                }
+            }
+        }
+    }
+
+}
+
+void DBInterface::addMyDB(QString vid, QString sid, QString sname)
+{
+    qDebug()<<Q_FUNC_INFO;
+    QSqlQuery Myquery;
+    qDebug()<<"vid = "<<vid;
+    qDebug()<<"sid = "<<sid;
+    qDebug()<<"sname="<<sname;
+    Myquery.prepare("INSERT INTO SUBVOUCHER_DATA(VOUCHERID,SUBCATEGORY_ID,SUBCATEGORY_NAME) VALUES(:vid,:sid,:sname)");
+
+    Myquery.bindValue(":vid",vid);
+    Myquery.bindValue(":sid",sid);
+    Myquery.bindValue(":sname",sname);
+    if(Myquery.exec())
+    {
+        emit insert_Success(vid,sid,sname);
+        qDebug()<<"InseIrt Query executed In SubHeadsDataBase"<<Qt::endl;
+
+    }
+    else
+    {
+        qDebug()<<"Insert Query exe..failed in addMyDB SubHeads"<<Qt::endl;
+        emit toModelDialog();
+
+    }
+}
+
+void DBInterface::selectDataAll(QString MYVOUCHER)
+{
+    bool value=false;
+    QSqlQuery Myquery;
+
+    qDebug()<<"Select Data All Called";
+    Myquery.prepare("SELECT VOUCHERID,SUBCATEGORY_ID,SUBCATEGORY_NAME FROM SUBVOUCHER_DATA ");
+    if(Myquery.exec())
+    {
+        qDebug()<<"Retrieve Query executed in Subhead"<<Qt::endl;
+    }
+    else
+    {
+        qDebug()<<"Retrieve Query exe..failed in Subhead"<<Qt::endl;
+    }
+
+    while(Myquery.next())
+    {
+        qDebug("Inside selectData of VoucherSubheadDatabase");
+        QString voucherID=Myquery.value(0).toString();
+        QString subID=Myquery.value(1).toString();
+        QString subName=Myquery.value(2).toString();
+        if(MYVOUCHER == voucherID)
+        {
+            qDebug()<<"The Clicked Voucher Id is found in SubVoucher DB";
+            value = true;
+        }
+
+        qDebug()<<"SUBID IN selectDataAll()"+subID;
+        qDebug()<<"SUBNAME IN selectDataAll()"+subName;
+
+        emit mySelectSignalAll(voucherID,subID,subName);
+
+    }
+    if(!value)
+    {
+        qDebug()<<"Emitting empty Data";
+        emit mySelectSignalAll(MYVOUCHER,"","");
+    }
+
+
+}
+
+void DBInterface::addChequeToDataBase(QString db_receiptDate, QString db_chequeDate, QString db_bankName, QString db_recepitNumber, QString db_amount)
+{
+    QSqlQuery Squery;
+    Squery.prepare("INSERT INTO CHEQUE_DATA(RECEIPT_DATE ,CHEQUE_DATE ,BANK_NAME ,RECEIPT_NUMBER ,AMOUNT) VALUES(:receiptDate,:chequeDate,:bankName,:receiptNumber,:amount)");
+    Squery.bindValue(":receiptDate",db_receiptDate);
+    Squery.bindValue(":chequeDate",db_chequeDate);
+    Squery.bindValue(":bankName",db_bankName);
+    Squery.bindValue(":receiptNumber",db_recepitNumber);
+    Squery.bindValue(":amount",db_amount);
+    if(Squery.exec()){
+        qDebug()<<"cheque data query executed";
+    }
+    else{
+        qDebug()<<"cheque insert query not executed"<<Squery.lastError()<<Qt::endl;
+    }
 }
 
 bool DBInterface::add_seva_type(QString seva_type, int seva_code,QString seva_adder_name)
@@ -246,7 +657,6 @@ bool DBInterface::add_seva_type(SevaType *sevaType)
     Squery.bindValue(":seva_name",sevaType->sevaTypeName());
     Squery.bindValue(":seva_code",sevaType->sevaTypeId());
     Squery.bindValue(":person_name",sevaType->userName());
-
     Squery.exec();
     return true;
 }
@@ -2374,7 +2784,7 @@ void DBInterface::booking_report_eachDateDataRange_function(QString SEVA,int TYP
 
 DBInterface::~DBInterface()
 {
-    qDebug() <<Q_FUNC_INFO<<Qt::endl;
+    qDebug() <<"DBInterface Destructor is called"<<Qt::endl;
 }
 
 void DBInterface::account_report_cdate_function(QString SEVA,int TYPE,QString formatchangedcalendar_str)
@@ -2481,10 +2891,10 @@ void DBInterface::account_report_cdate_function(QString SEVA,int TYPE,QString fo
             ele->setCheque(query_other1.value("SEVATOTALPRICE").toFloat());}
 
         else if(query_other1.value("Tran_type").toString()==pay_mode[2]){
-                ele->setNeft(query_other1.value("SEVATOTALPRICE").toFloat());}
+            ele->setNeft(query_other1.value("SEVATOTALPRICE").toFloat());}
 
         else if(query_other1.value("Tran_type").toString()==pay_mode[3]){
-                ele->setUpi(query_other1.value("SEVATOTALPRICE").toFloat());}
+            ele->setUpi(query_other1.value("SEVATOTALPRICE").toFloat());}
 
         qDebug() << query_other1.value(0).toString()<<Qt::endl;
         qDebug() << query_other1.value(1).toString()<<Qt::endl;

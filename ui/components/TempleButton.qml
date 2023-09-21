@@ -11,7 +11,7 @@ Rectangle {
     Text {
         id: txt
         text:buttonText
-        font.pixelSize: parent.width/12
+        font.pixelSize: parent.width/14
         anchors.centerIn: parent
     }
     MouseArea{
