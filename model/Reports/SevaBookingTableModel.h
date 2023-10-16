@@ -59,7 +59,7 @@ public slots:
     Q_INVOKABLE SevaBookingElement* getRowOfData(int row);
     void reset(QString receiptNo);
     bool checkStatus(QString receiptNo);
-
+    void referseshTheModel(QString rownum);
 private:
     QList<SevaBookingElement*> m_bookedSeva;
     static int x;

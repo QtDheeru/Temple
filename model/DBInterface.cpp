@@ -5,8 +5,11 @@
 #include "SevaBookingConformationDataModel.h"
 #include "SevaName.h"
 #include "SevaJson/JsonProcessor.h"
+#include <QSqlError>
+
 
 DBInterface *DBInterface::init =nullptr;
+
 static int BID=0;
 static int SID=0;
 static int RID=0;
@@ -73,6 +76,7 @@ DBInterface::DBInterface(QObject *parent) : QObject(parent)
 
     QString query2 = "CREATE TABLE sevabooking("
                      "SNO,"
+                     "RECPT_NUM,"
                      "PERSONID,"
                      "SEVATYPE,"
                      "SEVANAME,"
@@ -96,8 +100,8 @@ DBInterface::DBInterface(QObject *parent) : QObject(parent)
                      "REFERENCE TEXT(30),"
                      "STATUS TEXT(30),"
                      "ADDRESS TEXT(30),"
-                     "MOMENTO TEXT(30));";
-
+                     "MOMENTO TEXT(30),"
+                     "RECPT_NUM TEXT);";
 
     QString query3 = "CREATE TABLE persondetails("
                      "SNO,"
@@ -140,6 +144,36 @@ DBInterface::DBInterface(QObject *parent) : QObject(parent)
                      "S_MONTH,"
                      "S_YEAR);";
 
+    QString query7 = "CREATE TABLE CHEQUE_DATA("
+                     "RECEIPT_DATE,"
+                     "CHEQUE_DATE, "
+                     "BANK_NAME, "
+                     "RECEIPT_NUMBER, "
+                     "AMOUNT);";
+
+    QString query8="CREATE TABLE BANK("
+                     "DATE VARCHAR[10],"
+                     "LAST_RECEIPT VARCHAR[10],"
+                     "CASH_IN_HAND VARCHAR[15],"
+                     "TO_BANK VARCHAR[15],"
+                     "TRANSACTION_TYPE VARCHAR[10],"
+                     "BANK_NAME VARCHAR[15],"
+                     "PERSON VARCHAR[20],"
+                     "STATUS VARCHAR[20],"
+                     "NOTES VARCHAR[30])";
+
+    QString query9=" CREATE TABLE VOUCHER_DATA("
+                     "SL_NO,"
+                     "VOUCHER_ID,"
+                     "VOUCHER_CATEGORY);";
+    //                     "PRIMARY KEY(SL_NO,VOUCHER_ID,VOUCHER_CATEGORY);";
+
+    QString query10="CREATE TABLE SUBVOUCHER_DATA("
+                      "VOUCHERID VARCHAR[5],"
+                      "SUBCATEGORY_ID VARCHAR[20],"
+                      "SUBCATEGORY_NAME VARCHAR[20] UNIQUE,"
+                      "PRIMARY KEY(SUBCATEGORY_ID));";
+
     qry.prepare(query);
     qry.prepare(query1);
     qry.prepare(query2);
@@ -152,7 +186,26 @@ DBInterface::DBInterface(QObject *parent) : QObject(parent)
     }
     qry.prepare(query5);
     qry.prepare(query6);
-    //    qry.exec();
+    qry.prepare(query7);
+    if(qry.exec()){
+        qDebug()<<"Cheque entry table created";
+    }
+    qry.prepare(query8);
+    if(qry.exec()){
+        qDebug()<<"Cash Entry  table created";
+    }
+    qry.prepare(query9);
+    if(qry.exec()){
+        qDebug()<<"VoucherMain table created";
+    }else{
+        qDebug()<<"VoucherMain table not created";
+
+    }
+    qry.prepare(query10);
+    if(qry.exec())
+    {
+        qDebug()<<" VoucherSub table created";
+    }
 
     m_proc = new SevaTypeJsonProcessor;
     readSevaTypesFromJson();
@@ -168,6 +221,365 @@ QString DBInterface::getError() const
 void DBInterface::setError(const QString &error)
 {
     m_error = error;
+}
+void DBInterface::addCashTOdatabase(QString a_date, QString a_lastreci, QString a_cashinhand, QString a_tobank, QString a_transType, QString a_bank, QString a_person, QString a_status, QString a_notes)
+{
+    qDebug()<<"The receieved data"<<Qt::endl;
+
+    if(a_tobank!=""){
+        QSqlQuery m_sqlquery ;
+        m_sqlquery.prepare("INSERT INTO BANK(DATE ,LAST_RECEIPT ,CASH_IN_HAND ,TO_BANK ,TRANSACTION_TYPE ,BANK_NAME ,PERSON ,STATUS ,NOTES) VALUES(:date,:lastreci,:cashinhand,:tobank,:transtype,:bank,:person,:status,:notes)");
+        m_sqlquery.bindValue(":date",a_date);
+        m_sqlquery.bindValue(":lastreci",a_lastreci);
+        m_sqlquery.bindValue(":cashinhand",a_cashinhand);
+        m_sqlquery.bindValue(":tobank",a_tobank);
+        m_sqlquery.bindValue(":transtype",a_transType);
+        m_sqlquery.bindValue(":bank",a_bank);
+        m_sqlquery.bindValue(":person",a_person);
+        m_sqlquery.bindValue(":status",a_status);
+        m_sqlquery.bindValue(":notes",a_notes);
+        if(m_sqlquery.exec()){
+            qDebug()<<"query executed";
+        }
+    }
+}
+
+void DBInterface::databaseToCashEntry()
+{
+    QSqlQuery myquery;
+    qDebug()<<"Select data called";
+    myquery.prepare("Select * FROM sevabooking");
+    bool val=myquery.exec();
+    qDebug() << "The last error = "<<myquery.lastError();
+    if(val){
+        qDebug()<<"Select success";
+    }
+    else
+        qDebug()<<"Select fail";
+
+    while(myquery.next()){
+        QString recieptNumber=myquery.value(0).toString();
+        QString amount=myquery.value(18).toString();
+        QString cashType=myquery.value(19).toString();
+        qDebug()<<"recieptNumber="<<recieptNumber<<"amount="<<amount<<"cashType="<<cashType<<Qt::endl;
+        if(cashType=="cash" || cashType=="Cash"){
+            emit signalToCashEntry(recieptNumber,amount,cashType);
+        }
+    }
+}
+
+void DBInterface::lastDataToCashEntry()
+{
+    QSqlQuery myquery;
+    qDebug()<<"Select data called";
+    myquery.prepare("Select * FROM BANK");
+    bool val=myquery.exec();
+    qDebug() << "The last error = "<<myquery.lastError();
+    if(val){
+        qDebug()<<"Select success";
+    }
+    else
+        qDebug()<<"Select fail";
+    QString recieptNumber;
+    QString amount;
+    QString toBank;
+    QString TransactionType;
+    while(myquery.next()){
+        recieptNumber=myquery.value(1).toString();
+        amount=myquery.value(2).toString();
+        toBank=myquery.value(3).toString();
+        TransactionType=myquery.value(4).toString();
+    }
+    qDebug()<<"recieptNumber="<<recieptNumber<<"amount="<<amount<<Qt::endl;
+    emit signalToCashTransaction(recieptNumber,amount,toBank,TransactionType);
+}
+
+
+void DBInterface::addData(QString slno, QString vid, QString vname)
+{
+    qDebug()<<Q_FUNC_INFO;
+    QSqlQuery query ;
+    query.prepare("INSERT INTO VOUCHER_DATA(SL_NO,VOUCHER_ID,VOUCHER_CATEGORY) VALUES(:slno,:vid,:vname)");
+    query.bindValue(":slno",slno);
+    query.bindValue(":vid",vid);
+    query.bindValue(":vname",vname);
+    if(query.exec())
+    {
+        qDebug()<<"Insert Query executed"<<Qt::endl;
+        emit addSuccessInDB(slno,vid,vname);
+    }
+    else{
+        qDebug()<<"Insert Query exe..failed"<<Qt::endl;
+        emit addFailInDB();
+    }
+}
+
+void DBInterface::selectDataInMain()
+{
+    QSqlQuery myquery;
+    qDebug()<<"Select data called";
+    myquery.prepare("Select * FROM VOUCHER_DATA");
+    bool val=myquery.exec();
+    qDebug() << "The last error = "<<myquery.lastError();
+    if(val){
+        qDebug()<<"Select success";
+    }
+    else
+        qDebug()<<"Select fail";
+
+    while(myquery.next())
+    {
+        QString serial=myquery.value(0).toString();
+        QString voucherId=myquery.value(1).toString();
+        QString voucherName=myquery.value(2).toString();
+        qDebug()<<"ser="<<serial<<"vouc="<<voucherId<<"Name="<<voucherName<<endl;
+        emit selectSignalFromDB(serial,voucherId,voucherName);
+    }
+}
+
+void DBInterface::updateData(QString slno, QString vid, QString vname)
+{
+    qDebug()<<Q_FUNC_INFO;
+    QSqlQuery query;
+    query.prepare("UPDATE VOUCHER_DATA SET SL_NO=:slno,VOUCHER_CATEGORY=:vname WHERE VOUCHER_ID =:vid ");
+    query.bindValue(":slno",slno);
+    query.bindValue(":vid",vid);
+    query.bindValue(":vname",vname);
+    if(query.exec()){
+        qDebug()<<"Update Query executed"<<Qt::endl;
+    }
+    else{
+        qDebug()<<"Update Query exe..failed"<<Qt::endl;
+    }
+    if(!query.numRowsAffected())
+        emit updateFailedInDB();
+    else
+        emit updateSuccessInDB(slno,vid,vname);
+
+}
+
+void DBInterface::removeData(QString vid)
+{
+    qDebug()<<"Remove Data Called";
+    QSqlQuery query;
+    query.prepare("DELETE FROM VOUCHER_DATA WHERE VOUCHER_ID=:vid");
+    query.bindValue(":vid",vid);
+    if(query.exec()){
+        qDebug()<<"Remove Query executed"<<Qt::endl;
+    }
+    else{
+        qDebug()<<"Remove Query exe..failed"<<Qt::endl;
+    }
+    if(!query.numRowsAffected())
+        emit deletionFailedInDB();
+    else
+        emit deletionSuccessInDB(vid);
+
+}
+
+void DBInterface::updateToDb(QString vid, QString sid, QString sname)
+{
+    QSqlQuery Myquery;
+    Myquery.prepare("UPDATE SUBVOUCHER_DATA SET SUBCATEGORY_NAME=:sname WHERE VOUCHERID=:vid AND SUBCATEGORY_ID=:sid ");
+    Myquery.bindValue(":sid",sid);
+    Myquery.bindValue(":sname",sname);
+    Myquery.bindValue(":vid",vid);
+
+    if(Myquery.exec())
+    {
+        qDebug()<<"Update Query executed in Subhead"<<Qt::endl;
+    }
+    else
+    {
+        qDebug()<<"Update Query exe..failed in Subhead"<<Myquery.lastError()<<Qt::endl;
+    }
+    qDebug()<<"number of Rows affected"<<Myquery.numRowsAffected();
+    if(!(Myquery.numRowsAffected()))
+    {
+        emit update_Failed();
+    }
+    else
+    {
+        emit update_Success(vid,sid,sname);
+    }
+}
+
+void DBInterface::deleteData(QString vid, QString sid, QString sname)
+{
+    QSqlQuery Myquery;
+    qDebug()<<"vid in deleteData"<<vid;
+    qDebug()<<"sid in deleteData"<<sid;
+    qDebug()<<"sname in deleteData"<<sname;
+
+    qDebug()<<"Remove Data Called in SubheadDatabase";
+    Myquery.prepare("DELETE FROM SUBVOUCHER_DATA WHERE VOUCHERID=:vid AND SUBCATEGORY_ID=:sid ");
+    Myquery.bindValue(":vid",vid);
+    Myquery.bindValue(":sid",sid);
+
+    if(Myquery.exec())
+    {
+        qDebug()<<"Remove Query executed in deleteData"<<Qt::endl;
+    }
+    else{
+        qDebug()<<"Remove Query exe..failed deleteData"<<Qt::endl;
+    }
+    qDebug()<<"numRowsAffected("<<Myquery.numRowsAffected();
+    if(!(Myquery.numRowsAffected()))
+    {
+        emit deletion_Failed();
+    }
+    else
+    {
+        emit deletion_Success(vid,sid,sname);
+    }
+}
+
+void DBInterface::getChequeData()
+{
+    emit clearChequeList();
+
+    qDebug()<<"Get Cheque Data";
+    QList <QString> checkDbRecptNum;
+    QString recptNum;
+    QSqlQuery qry3,qry2;
+
+    qry2.prepare("select * from CHEQUE_DATA");
+    qry3.prepare("select * from sevabooking");
+
+    if(qry2.exec())
+    {
+        qDebug()<<"Query2EXE";
+        while(qry2.next())
+        {
+            recptNum = qry2.value(3).toString();
+            checkDbRecptNum.append(recptNum);
+        }
+    }
+
+    for(int i=0;i<checkDbRecptNum.count();i++)
+    {
+        qDebug()<<"ELEOFLIST="<<checkDbRecptNum.at(i);
+    }
+
+    if(qry3.exec())
+    {
+        qDebug()<<"Query1EXE";
+        while(qry3.next())
+        {
+            recptNum = qry3.value(0).toString();
+            QString bank = qry3.value(19).toString();
+            QString bankName = qry3.value(20).toString();
+            QString receiptNumber = qry3.value(0).toString();
+            QString r_date =  qry3.value(5).toString() ;
+            QString r_month = qry3.value(6).toString();
+            QString r_year = qry3.value(7).toString();
+            QString amount = qry3.value(18).toString();
+
+            QString reciptdate = r_date +"-"+ r_month +"-"+ r_year ;
+            QString chequeDate = "17-08-2023";
+
+            if(checkDbRecptNum.contains(recptNum))
+            {
+                qDebug()<<recptNum<<" already contains";
+            }
+            else
+            {
+                if(bank == "Cheque" || bank == "cheque")
+                {
+                    qDebug()<<"DONTCONTAINS"<<recptNum;
+                    qDebug()<<"BnkName = "<<receiptNumber;
+                    emit sendDataToModel(bankName,receiptNumber,reciptdate,amount,chequeDate);
+                }
+            }
+        }
+    }
+
+}
+
+void DBInterface::addMyDB(QString vid, QString sid, QString sname)
+{
+    qDebug()<<Q_FUNC_INFO;
+    QSqlQuery Myquery;
+    qDebug()<<"vid = "<<vid;
+    qDebug()<<"sid = "<<sid;
+    qDebug()<<"sname="<<sname;
+    Myquery.prepare("INSERT INTO SUBVOUCHER_DATA(VOUCHERID,SUBCATEGORY_ID,SUBCATEGORY_NAME) VALUES(:vid,:sid,:sname)");
+
+    Myquery.bindValue(":vid",vid);
+    Myquery.bindValue(":sid",sid);
+    Myquery.bindValue(":sname",sname);
+    if(Myquery.exec())
+    {
+        emit insert_Success(vid,sid,sname);
+        qDebug()<<"InseIrt Query executed In SubHeadsDataBase"<<Qt::endl;
+
+    }
+    else
+    {
+        qDebug()<<"Insert Query exe..failed in addMyDB SubHeads"<<Qt::endl;
+        emit toModelDialog();
+
+    }
+}
+
+void DBInterface::selectDataAll(QString MYVOUCHER)
+{
+    bool value=false;
+    QSqlQuery Myquery;
+
+    qDebug()<<"Select Data All Called";
+    Myquery.prepare("SELECT VOUCHERID,SUBCATEGORY_ID,SUBCATEGORY_NAME FROM SUBVOUCHER_DATA ");
+    if(Myquery.exec())
+    {
+        qDebug()<<"Retrieve Query executed in Subhead"<<Qt::endl;
+    }
+    else
+    {
+        qDebug()<<"Retrieve Query exe..failed in Subhead"<<Qt::endl;
+    }
+
+    while(Myquery.next())
+    {
+        qDebug("Inside selectData of VoucherSubheadDatabase");
+        QString voucherID=Myquery.value(0).toString();
+        QString subID=Myquery.value(1).toString();
+        QString subName=Myquery.value(2).toString();
+        if(MYVOUCHER == voucherID)
+        {
+            qDebug()<<"The Clicked Voucher Id is found in SubVoucher DB";
+            value = true;
+        }
+
+        qDebug()<<"SUBID IN selectDataAll()"+subID;
+        qDebug()<<"SUBNAME IN selectDataAll()"+subName;
+
+        emit mySelectSignalAll(voucherID,subID,subName);
+
+    }
+    if(!value)
+    {
+        qDebug()<<"Emitting empty Data";
+        emit mySelectSignalAll(MYVOUCHER,"","");
+    }
+
+
+}
+
+void DBInterface::addChequeToDataBase(QString db_receiptDate, QString db_chequeDate, QString db_bankName, QString db_recepitNumber, QString db_amount)
+{
+    QSqlQuery Squery;
+    Squery.prepare("INSERT INTO CHEQUE_DATA(RECEIPT_DATE ,CHEQUE_DATE ,BANK_NAME ,RECEIPT_NUMBER ,AMOUNT) VALUES(:receiptDate,:chequeDate,:bankName,:receiptNumber,:amount)");
+    Squery.bindValue(":receiptDate",db_receiptDate);
+    Squery.bindValue(":chequeDate",db_chequeDate);
+    Squery.bindValue(":bankName",db_bankName);
+    Squery.bindValue(":receiptNumber",db_recepitNumber);
+    Squery.bindValue(":amount",db_amount);
+    if(Squery.exec()){
+        qDebug()<<"cheque data query executed";
+    }
+    else{
+        qDebug()<<"cheque insert query not executed"<<Squery.lastError()<<Qt::endl;
+    }
 }
 
 bool DBInterface::add_seva_type(QString seva_type, int seva_code,QString seva_adder_name)
@@ -246,7 +658,6 @@ bool DBInterface::add_seva_type(SevaType *sevaType)
     Squery.bindValue(":seva_name",sevaType->sevaTypeName());
     Squery.bindValue(":seva_code",sevaType->sevaTypeId());
     Squery.bindValue(":person_name",sevaType->userName());
-
     Squery.exec();
     return true;
 }
@@ -585,7 +996,7 @@ void DBInterface::delete_db(int d_sno)
 }
 
 //void DBInterface::sevabookingdb(QString devoteMobile, QString devoteName, QString devoteNakshatra, QString devoteGotra, QString devoteSevacharge, QString devoteAdditionalcharges, QString devoteCount, QString devotereceiptdate, QString devoteSevadate, QString devoteNote, QString devoteSevaName, int cost, int rspt_no, QString cash, QString bank_ref, QString bank_name)
-bool DBInterface::insertSevaBooked(QString devoteMobile, QString devoteName, QString devoteNakshatra, QString devoteGotra, QString devoteSevacharge, QString devoteAdditionalcharges, QString devoteCount, QString devotereceiptdate, QString devoteSevadate,QString devoteNote, QString devoteSevaName, int cost, int rspt_no, QString cash, QString bank_ref, QString bank_name,
+bool DBInterface::insertSevaBooked(QString rcptNumI,QString devoteMobile, QString devoteName, QString devoteNakshatra, QString devoteGotra, QString devoteSevacharge, QString devoteAdditionalcharges, QString devoteCount, QString devotereceiptdate, QString devoteSevadate,QString devoteNote, QString devoteSevaName, int cost, int rspt_no, QString cash, QString bank_ref, QString bank_name,
                                    QString sevaType,QString reference,QString status ,QString address,QString momento,QString sevatime)
 {
     qDebug()<<Q_FUNC_INFO << " Mobile number is "<<devoteMobile<<"\n";
@@ -623,8 +1034,8 @@ bool DBInterface::insertSevaBooked(QString devoteMobile, QString devoteName, QSt
     int ryear = receiptDate.year();
     devotereceiptdate = receiptDate.toString("yyyy-MM-dd");
     QSqlQuery qry;
-    qry.prepare("INSERT INTO sevabooking(SNO,PERSONID,SEVATYPE,SEVANAME,QUANTITY,S_DATE,S_MONTH,S_YEAR,SEVA_DATE,R_DATE,R_MONTH,R_YEAR,RECEIPT_DATE,S_TIME,SEVACOST,ADDITIONALCOST,SEVATOTALPRICE, NOTE, CASH, BANK, BANKDETAILS, REFERENCE,STATUS ,ADDRESS, MOMENTO)"
-                "VALUES (:sno, :person_id, :sevatype, :sevaname, :quantity, :s_date, :s_month, :s_year, :seva_date, :r_date, :r_month,:r_year, :receipt_date, :s_time, :seva_cost, :additionalcost, :sevatotalprice, :note, :cash, :bank, :bankdetails, :reference, :status ,:address, :momento)");
+    qry.prepare("INSERT INTO sevabooking(SNO,PERSONID,SEVATYPE,SEVANAME,QUANTITY,S_DATE,S_MONTH,S_YEAR,SEVA_DATE,R_DATE,R_MONTH,R_YEAR,RECEIPT_DATE,S_TIME,SEVACOST,ADDITIONALCOST,SEVATOTALPRICE, NOTE, CASH, BANK, BANKDETAILS, REFERENCE,STATUS ,ADDRESS, MOMENTO,RECPT_NUM)"
+                "VALUES (:sno, :person_id, :sevatype, :sevaname, :quantity, :s_date, :s_month, :s_year, :seva_date, :r_date, :r_month,:r_year, :receipt_date, :s_time, :seva_cost, :additionalcost, :sevatotalprice, :note, :cash, :bank, :bankdetails, :reference, :status ,:address, :momento, :recpt_num)");
     qry.bindValue(":sno",rspt_no);
     qry.bindValue(":person_id",personId);
     qry.bindValue(":sevatype",sevaType );
@@ -650,6 +1061,8 @@ bool DBInterface::insertSevaBooked(QString devoteMobile, QString devoteName, QSt
     qry.bindValue(":status",status);
     qry.bindValue(":address",address);
     qry.bindValue(":momento",momento);
+    qry.bindValue(":recpt_num",rcptNumI);
+
     bool retVal = qry.exec();
     if (!retVal){
         qDebug() << Q_FUNC_INFO << " sevabooking insert failed!" << qry.lastError().text() <<Qt::endl;
@@ -905,6 +1318,24 @@ void DBInterface::getAccountData()
 {
     qDebug()<<Q_FUNC_INFO<<Qt::endl;
 
+}
+
+void DBInterface::deleteWrongData(QString rcptNum)
+{
+    qDebug()<<Q_FUNC_INFO<< rcptNum<<Qt::endl;
+    QSqlQuery query;
+    QString str;
+    str =("delete from sevabooking where RECPT_NUM = '%1' ;");
+    str= str.arg(rcptNum);
+    query.prepare(str);
+    bool b = query.exec();
+    if(b==true){
+        qDebug()<<"delete cmd executed....!"<<query.lastError().text()<<Qt::endl;
+        emit refreshModel(rcptNum);
+    }
+    else{
+        qDebug()<<"delete cmd failed....!"<<query.lastError().text()<<Qt::endl;
+    }
 }
 
 void DBInterface::recvDeletedRecptNo(QString recptNo)
@@ -1279,7 +1710,7 @@ bool DBInterface::dbtable_view()
     QString str;
     qDebug()<<Q_FUNC_INFO<<"^^^^^^^^^^^^^^^222222^^^^^^^^^^^^^^^^^^"<<Qt::endl;
     //str = ("select SNO,PERSONID,SEVATYPE,SEVANAME,QUANTITY,S_DATE,S_MONTH,S_YEAR,SEVA_DATE,R_DATE,R_MONTH,R_YEAR,RECEIPT_DATE,SEVACOST,ADDITIONALCOST,SEVATOTALPRICE,NOTE from sevabooking;" );
-    str = ("select SNO,PERSONID,SEVATYPE,SEVANAME,QUANTITY,S_DATE,S_MONTH,S_YEAR,SEVA_DATE,R_DATE,R_MONTH,R_YEAR,RECEIPT_DATE,SEVACOST,ADDITIONALCOST,SEVATOTALPRICE,NOTE,CASH,BANK,BANKDETAILS,REFERENCE,STATUS,ADDRESS,MOMENTO from sevabooking;" );
+    str = ("select SNO,PERSONID,SEVATYPE,SEVANAME,QUANTITY,S_DATE,S_MONTH,S_YEAR,SEVA_DATE,R_DATE,R_MONTH,R_YEAR,RECEIPT_DATE,SEVACOST,ADDITIONALCOST,SEVATOTALPRICE,NOTE,CASH,BANK,BANKDETAILS,REFERENCE,STATUS,ADDRESS,MOMENTO,RECPT_NUM from sevabooking;" );
     QSqlQuery query_other1;
     query_other1.prepare(str);
     bool b = query_other1.exec();
@@ -1298,7 +1729,7 @@ bool DBInterface::dbtable_view()
         QString sevaname =query_other1.value(3).toString();
         QString quantity=query_other1.value(4).toString();
 
-        elem->setSno(sno);
+        elem->setSno(query_other1.value(24).toString());
         elem->setPerson_id(person_id);
         elem->setSevatype(sevatype);
         elem->setSevaname(sevaname);
@@ -1571,6 +2002,7 @@ bool DBInterface::saveData(QObject *obj)
     QString que;
     que = ("select * from sevabooking where sevabooking.SNO = '%1';");
     QStringList recieptNumber=rec->receiptNo().split("_");
+    QString rcptNo=rec->receiptNo();
     int rcptNum=recieptNumber[2].toInt();
     qDebug()<<"The reciept number: "<<rcptNum<<Qt::endl;
 
@@ -1595,7 +2027,7 @@ bool DBInterface::saveData(QObject *obj)
     for(int i=0;i<sevas.size();i++){
         SevaName *seva = sevas.at(i);
         qDebug() << Q_FUNC_INFO <<  "Add ############ ="<< seva->additionalCost() << Qt::endl;
-        b =   this->insertSevaBooked(rec->mobilenumber(),rec->devoteeName(),
+        b =   this->insertSevaBooked(rcptNo,rec->mobilenumber(),rec->devoteeName(),
                                    rec->nakshtra(),rec->gothra(),
                                    QString::number(seva->sevaCost()),QString::number(seva->additionalCost()),
                                    QString::number(seva->count()),rec->receiptDate(),
@@ -1922,22 +2354,21 @@ void DBInterface::booking_report_cdate_function(QString formatchangedcalendar_st
     QString que;
     if(TYPE==0) {
         qDebug()<<"In type 0: "<<Qt::endl;
-        que = ("select persondetails.PERSONNAME,persondetails.GOTHRA,persondetails.NAKSHATRA,sevabooking.SEVANAME,persondetails.MOBILE,sevabooking.NOTE,sevabooking.SEVATYPE,sevabooking.SEVA_DATE,sevabooking.RECEIPT_DATE,sevabooking.SEVATOTALPRICE,sevabooking.BANK,sevabooking.REFERENCE,sevabooking.ADDRESS,sevabooking.QUANTITY from sevabooking,persondetails where sevabooking.PERSONID = persondetails.SNO and sevabooking.RECEIPT_DATE='%1';");
+        que = ("select persondetails.PERSONNAME,persondetails.GOTHRA,persondetails.NAKSHATRA,sevabooking.SEVANAME,persondetails.MOBILE,sevabooking.NOTE,sevabooking.SEVATYPE,sevabooking.SEVA_DATE,sevabooking.RECEIPT_DATE,sevabooking.SEVATOTALPRICE,sevabooking.BANK,sevabooking.REFERENCE,sevabooking.ADDRESS,sevabooking.QUANTITY from sevabooking,persondetails where sevabooking.PERSONID = persondetails.SNO and sevabooking.SEVA_DATE='%1';");
         que = que.arg(formatchangedcalendar_str);
         //            que = ("select persondetails.PERSONNAME,persondetails.GOTHRA,persondetails.NAKSHATRA,sevabooking.SEVANAME,sevaname.THEERTHAPRASADA,persondetails.MOBILE,NOTE from sevabooking,persondetails,sevaname where sevabooking.PERSONID = persondetails.SNO and sevabooking.RECEIPT_DATE='%1' group by sevabooking.SEVANAME;");
         //    select persondetails.PERSONNAME,persondetails.GOTHRA,persondetails.NAKSHATRA,sevabooking.SEVANAME,persondetails.MOBILE,NOTE from sevabooking,persondetails where sevabooking.PERSONID = persondetails.SNO and sevabooking.RECEIPT_DATE='2022-12-15'
     }
     else if (SEVA==ALLSEVANAME) {
-        que = ("select persondetails.PERSONNAME,persondetails.GOTHRA,persondetails.NAKSHATRA,sevabooking.SEVANAME,persondetails.MOBILE,sevabooking.NOTE,sevabooking.SEVATYPE,sevabooking.SEVA_DATE,sevabooking.RECEIPT_DATE,sevabooking.SEVATOTALPRICE,sevabooking.BANK,sevabooking.REFERENCE,sevabooking.ADDRESS,sevabooking.QUANTITY from sevabooking,persondetails where sevabooking.PERSONID = persondetails.SNO and sevabooking.RECEIPT_DATE='%1' and sevabooking.SEVATYPE='%2'; ");
+        que = ("select persondetails.PERSONNAME,persondetails.GOTHRA,persondetails.NAKSHATRA,sevabooking.SEVANAME,persondetails.MOBILE,sevabooking.NOTE,sevabooking.SEVATYPE,sevabooking.SEVA_DATE,sevabooking.RECEIPT_DATE,sevabooking.SEVATOTALPRICE,sevabooking.BANK,sevabooking.REFERENCE,sevabooking.ADDRESS,sevabooking.QUANTITY from sevabooking,persondetails where sevabooking.PERSONID = persondetails.SNO and sevabooking.SEVA_DATE='%1' and sevabooking.SEVATYPE='%2'; ");
         que = que.arg(formatchangedcalendar_str).arg(TYPE);
         // select PERSONID,SEVANAME,QUANTITY,SEVA_DATE,SEVATOTALPRICE,NOTE from sevabooking where sevabooking.SEVA_DATE='%1' and sevabooking.SEVATYPE='%2';
-        //  select persondetails.PERSONNAME,persondetails.GOTHRA,persondetails.NAKSHATRA,sevabooking.SEVANAME,persondetails.MOBILE,NOTE,sevabooking.SEVATYPE from sevabooking,persondetails where sevabooking.PERSONID = persondetails.SNO and sevabooking.RECEIPT_DATE='%1';
+        //  select persondetails.PERSONNAME,persondetails.GOTHRA,persondetails.NAKSHATRA,sevabooking.SEVANAME,persondetails.MOBILE,NOTE,sevabooking.SEVATYPE from sevabooking,persondetails where sevabooking.PERSONID = persondetails.SNO and sevabooking.SEVA_DATE='%1';
     }
     else {
-        // que = ("select persondetails.PERSONNAME,persondetails.GOTHRA,persondetails.NAKSHATRA,sevabooking.SEVANAME,persondetails.MOBILE,NOTE,sevabooking.SEVATYPE from sevabooking,persondetails where sevabooking.PERSONID = persondetails.SNO and sevabooking.RECEIPT_DATE='%1' and sevabooking.SEVATYPE='%2' and sevabooking.SEVANAME = '%3'; ");
-        que = ("sevabooking.SEVA_DATE='%1' and sevabooking.SEVATYPE='%2' and sevabooking.SEVANAME = '%3' ; ");
+        qDebug()<<"Inside else@@@@@@"<<Qt::endl;
+        que = ("select persondetails.PERSONNAME,persondetails.GOTHRA,persondetails.NAKSHATRA,sevabooking.SEVANAME,persondetails.MOBILE,sevabooking.NOTE,sevabooking.SEVATYPE,sevabooking.SEVA_DATE,sevabooking.RECEIPT_DATE,sevabooking.SEVATOTALPRICE,sevabooking.BANK,sevabooking.REFERENCE,sevabooking.ADDRESS,sevabooking.QUANTITY from sevabooking,persondetails where sevabooking.PERSONID = persondetails.SNO and sevabooking.SEVA_DATE='%1' and sevabooking.SEVATYPE='%2' and sevabooking.SEVANAME = '%3' ; ");
         que = que.arg(formatchangedcalendar_str).arg(TYPE).arg(SEVA);
-        // select persondetails.PERSONNAME,persondetails.GOTHRA,persondetails.NAKSHATRA,sevabooking.SEVANAME,persondetails.MOBILE,NOTE,sevabooking.SEVATYPE from sevabooking,persondetails where sevabooking.PERSONID = persondetails.SNO and sevabooking.RECEIPT_DATE='%1';
     }
 
     qDebug() << " Query string =" << que <<Qt::endl;
@@ -2065,20 +2496,19 @@ void DBInterface::booking_report_cdate_function(QString formatchangedcalendar_st
         //        ele->setTeerthaPrasada(0);
         qDebug() << " kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk" <<Qt::endl;
 
-        qDebug() <<"Sl No--"<< query_other1.value(0).toString()<<Qt::endl;
-        qDebug() <<"name--"<< query_other1.value(1).toString()<<Qt::endl;
-        qDebug() <<"gothra--"<< query_other1.value(2).toString()<<Qt::endl;
-        qDebug() <<"nakshatra--"<< query_other1.value(3).toString()<<Qt::endl;
-        qDebug() <<"seva--"<< query_other1.value(4).toString()<<Qt::endl;
-        qDebug() <<"mobile--"<< query_other1.value(5).toString()<<Qt::endl;
-        qDebug() <<"note--"<< query_other1.value(6).toString()<<Qt::endl;
-        qDebug() <<"prasada--"<< query_other1.value(7).toString()<<Qt::endl;
-        qDebug() <<"SDate--"<< query_other1.value(8).toString()<<Qt::endl;
-        qDebug() <<"Rdate--"<< query_other1.value(9).toString()<<Qt::endl;
-        qDebug() <<"total--"<< query_other1.value(910).toString()<<Qt::endl;
-        qDebug() <<"paymode--"<< query_other1.value(11).toString()<<Qt::endl;
-        qDebug() <<"refrence--"<< query_other1.value(12).toString()<<Qt::endl;
-        qDebug() <<"address--"<< query_other1.value(13).toString()<<Qt::endl;
+        qDebug() <<"name--"<< query_other1.value(0).toString()<<Qt::endl;
+        qDebug() <<"gothra--"<< query_other1.value(1).toString()<<Qt::endl;
+        qDebug() <<"nakshatra--"<< query_other1.value(2).toString()<<Qt::endl;
+        qDebug() <<"seva--"<< query_other1.value(3).toString()<<Qt::endl;
+        qDebug() <<"mobile--"<< query_other1.value(4).toString()<<Qt::endl;
+        qDebug() <<"note--"<< query_other1.value(5).toString()<<Qt::endl;
+        qDebug() <<"prasada--"<< query_other1.value(6).toString()<<Qt::endl;
+        qDebug() <<"SDate--"<< query_other1.value(7).toString()<<Qt::endl;
+        qDebug() <<"Rdate--"<< query_other1.value(8).toString()<<Qt::endl;
+        qDebug() <<"total--"<< query_other1.value(9).toString()<<Qt::endl;
+        qDebug() <<"paymode--"<< query_other1.value(10).toString()<<Qt::endl;
+        qDebug() <<"refrence--"<< query_other1.value(11).toString()<<Qt::endl;
+        qDebug() <<"address--"<< query_other1.value(12).toString()<<Qt::endl;
 
         qDebug() <<"before emitting signal  booking_report ''''''''"<<Qt::endl;
         emit booking_report(ele);
@@ -2177,15 +2607,15 @@ void DBInterface::booking_report_eachDateDataRangeForMonth_function(QString SEVA
     QString readstr;
     if(TYPE == 0)
     {
-        readstr = ("select RECEIPT_DATE,sum(QUANTITY) from sevabooking where sevabooking.S_YEAR ='%1' and sevabooking.S_MONTH ='%2' Group by sevabooking.RECEIPT_DATE;" );
+        readstr = ("select SEVA_DATE,sum(QUANTITY) from sevabooking where sevabooking.S_YEAR ='%1' and sevabooking.S_MONTH ='%2' Group by sevabooking.RECEIPT_DATE;" );
         readstr  = readstr.arg(S_YEAR).arg(S_MONTH);
     }
     else if (SEVA==ALLSEVANAME) {
-        readstr = ("select RECEIPT_DATE,sum(QUANTITY) from sevabooking where sevabooking.S_YEAR ='%1' and sevabooking.S_MONTH ='%2' and sevabooking.SEVATYPE = '%3' Group by sevabooking.RECEIPT_DATE;" );
+        readstr = ("select SEVA_DATE,sum(QUANTITY) from sevabooking where sevabooking.S_YEAR ='%1' and sevabooking.S_MONTH ='%2' and sevabooking.SEVATYPE = '%3' Group by sevabooking.RECEIPT_DATE;" );
         readstr  = readstr.arg(S_YEAR).arg(S_MONTH).arg(TYPE);
     }
     else {
-        readstr = ("select RECEIPT_DATE,sum(QUANTITY) from sevabooking where sevabooking.S_YEAR ='%1' and sevabooking.S_MONTH ='%2' and sevabooking.SEVATYPE = '%3' and sevabooking.SEVANAME = '%4' Group by sevabooking.RECEIPT_DATE;" );
+        readstr = ("select SEVA_DATE,sum(QUANTITY) from sevabooking where sevabooking.S_YEAR ='%1' and sevabooking.S_MONTH ='%2' and sevabooking.SEVATYPE = '%3' and sevabooking.SEVANAME = '%4' Group by sevabooking.RECEIPT_DATE;" );
         readstr  = readstr.arg(S_YEAR).arg(S_MONTH).arg(TYPE).arg(SEVA);
     }
     qDebug() << " Query string =" << readstr <<Qt::endl;
@@ -2342,15 +2772,15 @@ void DBInterface::booking_report_eachDateDataRange_function(QString SEVA,int TYP
     QString readstr;
     if(TYPE == 0)
     {
-        readstr = ("select RECEIPT_DATE,sum(QUANTITY) from sevabooking where sevabooking.RECEIPT_DATE between '%1' and '%2' Group by sevabooking.RECEIPT_DATE;" );
+        readstr = ("select SEVA_DATE,sum(QUANTITY) from sevabooking where sevabooking.RECEIPT_DATE between '%1' and '%2' Group by sevabooking.RECEIPT_DATE;" );
         readstr  = readstr.arg(seva_Startdate).arg(seva_Enddate);
     }
     else if (SEVA==ALLSEVANAME) {
-        readstr = ("select RECEIPT_DATE,sum(QUANTITY) from sevabooking where sevabooking.RECEIPT_DATE between '%1' and '%2' and sevabooking.SEVATYPE = '%3' Group by sevabooking.RECEIPT_DATE;" );
+        readstr = ("select SEVA_DATE,sum(QUANTITY) from sevabooking where sevabooking.RECEIPT_DATE between '%1' and '%2' and sevabooking.SEVATYPE = '%3' Group by sevabooking.RECEIPT_DATE;" );
         readstr  = readstr.arg(seva_Startdate).arg(seva_Enddate).arg(TYPE);
     }
     else {
-        readstr = ("select RECEIPT_DATE,sum(QUANTITY) from sevabooking where sevabooking.RECEIPT_DATE between '%1' and '%2' and sevabooking.SEVATYPE = '%3' and sevabooking.SEVANAME = '%4' Group by sevabooking.RECEIPT_DATE;" );
+        readstr = ("select SEVA_DATE,sum(QUANTITY) from sevabooking where sevabooking.RECEIPT_DATE between '%1' and '%2' and sevabooking.SEVATYPE = '%3' and sevabooking.SEVANAME = '%4' Group by sevabooking.RECEIPT_DATE;" );
         readstr  = readstr.arg(seva_Startdate).arg(seva_Enddate).arg(TYPE).arg(SEVA);
     }
     qDebug() << " Query string =" << readstr <<Qt::endl;
@@ -2374,7 +2804,7 @@ void DBInterface::booking_report_eachDateDataRange_function(QString SEVA,int TYP
 
 DBInterface::~DBInterface()
 {
-    qDebug() <<Q_FUNC_INFO<<Qt::endl;
+    qDebug() <<"DBInterface Destructor is called"<<Qt::endl;
 }
 
 void DBInterface::account_report_cdate_function(QString SEVA,int TYPE,QString formatchangedcalendar_str)
@@ -2481,10 +2911,10 @@ void DBInterface::account_report_cdate_function(QString SEVA,int TYPE,QString fo
             ele->setCheque(query_other1.value("SEVATOTALPRICE").toFloat());}
 
         else if(query_other1.value("Tran_type").toString()==pay_mode[2]){
-                ele->setNeft(query_other1.value("SEVATOTALPRICE").toFloat());}
+            ele->setNeft(query_other1.value("SEVATOTALPRICE").toFloat());}
 
         else if(query_other1.value("Tran_type").toString()==pay_mode[3]){
-                ele->setUpi(query_other1.value("SEVATOTALPRICE").toFloat());}
+            ele->setUpi(query_other1.value("SEVATOTALPRICE").toFloat());}
 
         qDebug() << query_other1.value(0).toString()<<Qt::endl;
         qDebug() << query_other1.value(1).toString()<<Qt::endl;

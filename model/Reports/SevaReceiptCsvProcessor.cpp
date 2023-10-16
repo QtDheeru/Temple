@@ -30,7 +30,6 @@ int SevaReceiptCsvProcessor::m_addHeader =1;
 void SevaReceiptCsvProcessor::writeToCsvFormate(SevaBookingElement *sr)
 {
     qDebug()<<Q_FUNC_INFO<<Qt::endl;
-
     if(!fileName.isEmpty()){
         QFile file(fileName);
         if (file.open(QIODevice::WriteOnly|QIODevice::Append))
@@ -40,20 +39,17 @@ void SevaReceiptCsvProcessor::writeToCsvFormate(SevaBookingElement *sr)
             if(m_addHeader)
             {
                 QString header;
-                header =  QString("Sno") + "," + "Name" + "," + "Mobile" + "," + "SevaName" + "," + "SevaDate" + "," + "ReceiptDate" + "," + "SevaCount" +"," + "Total" + "," + "Cash" + "," + "Bank" + "," + "Reference" + '\n';
+                header =  QString("Sno") + "," + "Name"+","+"Nakshatra"+"," + "Gothra" + "," + "Mobile" + "," + "SevaName" + "," + "SevaDate" + "," + "SevaCount" + '\n';
                 out<<header.toUpper();
             }
             storeData = sr->sno()+","+
-                    sr->person()->devoteeName()+","+
-                    sr->person()->mobileNumber()+","+
-                    sr->sevaname()+","+
-                    sr->sevaDate()+","+
-                    sr->receiptDate()+","+
-                    sr->quantity()+","+
-                    sr->totalCost()+","+
-                    sr->cash()+","+
-                    sr->bank()+","+
-                    sr->reference()+'\n';
+                        sr->person()->devoteeName()+","+
+                        sr->person()->nakshatra()+","+
+                        sr->person()->gothra()+","+
+                        sr->person()->mobileNumber()+","+
+                        sr->sevaname()+","+
+                        sr->sevaDate()+","+
+                        sr->quantity()+'\n';
             out<<storeData;
             qDebug() << "File saved: " << fileName;
             file.close();
@@ -64,6 +60,7 @@ void SevaReceiptCsvProcessor::writeToCsvFormate(SevaBookingElement *sr)
         }
     }
     m_addHeader =0;
+
 }
 
 void SevaReceiptCsvProcessor::recieveBookingReportList(QList<BookingReportElement *> bookingReportList)
@@ -79,20 +76,18 @@ void SevaReceiptCsvProcessor::recieveBookingReportList(QList<BookingReportElemen
             if(m_addHeader)
             {
                 QString header;
-                header =  QString("Sno") + "," + "Name" + "," + "Mobile" + "," + "SevaName" + "," + "SevaDate" + "," + "ReceiptDate"+ "," + "SevaCount" + "," + "Total" + "," + "PaymentMode" + ","  + "ReferenceNo" +'\n';
+                header =  QString("Sno") + "," + "Name" + "," + "Nakshatra" + "," + "Gothra" + "," + "Mobile" + "," + "SevaName" + "," + "SevaDate" + "," + "SevaCount" + '\n';
                 out<<header.toUpper();
             }
             for(auto it=bookingReportList.begin();it != bookingReportList.end();it++){
                 storeData = QString::number(id++)+","+
-                        (*it)->name()+","+
-                        (*it)->mobileNumber()+","+
-                        (*it)->sevaName()+","+
-                        (*it)->sevaDate()+","+
-                        (*it)->receiptDate()+","+
-                        QString::number((*it)->sevaCount())+","+
-                        (*it)->total()+","+
-                        (*it)->paymntMode() +","+
-                        (*it)->referenceNo() +'\n' ;
+                            (*it)->name()+","+
+                            (*it)->nakshatra()+","+
+                            (*it)->gothra()+","+
+                            (*it)->mobileNumber()+","+
+                            (*it)->sevaName()+","+
+                            (*it)->sevaDate()+","+
+                            QString::number((*it)->sevaCount())+'\n' ;
                 out<<storeData;
             }
             qDebug() << "File saved: " << fileName;
@@ -104,6 +99,7 @@ void SevaReceiptCsvProcessor::recieveBookingReportList(QList<BookingReportElemen
         }
     }
     m_addHeader =0;
+
 }
 
 const QList<MySevaReceipt *> &SevaReceiptCsvProcessor::sevaReceiptList() const

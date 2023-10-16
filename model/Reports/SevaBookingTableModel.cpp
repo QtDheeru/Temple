@@ -162,6 +162,7 @@ void SevaBookingTableModel::reset(QString receiptNo)
     QModelIndex topRight = createIndex(row,20);
     emit dataChanged(topLeft, topRight);
 }
+
 bool SevaBookingTableModel::checkStatus(QString receiptNo){
     bool check = false;
     for(int var=0;var<m_bookedSeva.size();var++) {
@@ -172,4 +173,17 @@ bool SevaBookingTableModel::checkStatus(QString receiptNo){
         }
     }
     return check;
+}
+
+void SevaBookingTableModel::referseshTheModel(QString rownum)
+{
+    qDebug()<<Q_FUNC_INFO<<Qt::endl;
+    int count=0;
+    for(int var=0;var<m_bookedSeva.size();var++) {
+        if(m_bookedSeva[var]->sno()== rownum){
+            count = var;
+        }
+    }
+    beginRemoveRows(QModelIndex(),count,count);
+    endRemoveRows();
 }

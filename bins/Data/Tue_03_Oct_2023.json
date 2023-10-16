@@ -1,0 +1,25 @@
+{
+    "2023_10_0001": {
+        "Hasthodaka": {
+            "Number": 795440431,
+            "additionalCost": 0,
+            "count": 1,
+            "sevaCost": 200,
+            "sevaId": 3,
+            "sevaName": "Hasthodaka",
+            "sevaTime": "",
+            "sevaType": 1,
+            "teerthaPrasada": 7105905
+        },
+        "address": "",
+        "bookedBy": "Prasanna Rao",
+        "devoteeName": "Guruprasad",
+        "gothra": "Kashyapa",
+        "mobilenumber": "9739272339",
+        "momento": "Category-1",
+        "nakshtra": "Ashwini",
+        "receiptDate": "03-10-2023",
+        "receiptNo": "2023_10_0001",
+        "reference": ""
+    }
+}

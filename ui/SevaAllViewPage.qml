@@ -9,6 +9,7 @@ Rectangle{
     width: parent.width
     height: parent.height
     signal loadSevaBookingView();
+    signal loadvoucher();
     property var ve
     RowLayout{
         id:searchRow
@@ -258,30 +259,46 @@ Rectangle{
                 id:_cancel
                 text: qsTr('Cancel')
                 onTriggered: {
-                    _errorDialog.showmsg("Are you sure to cancel the reciept?")
+                    _errorDialog.showmsg("Are you sure to cancel the reciept?",1)
+                }
+            }
+            MenuItem{
+                id:_delete
+                text: qsTr('Delete')
+                onTriggered: {
+                    _errorDialog.showmsg("Are you sure to delete the data?",2)
                 }
             }
             Component.onCompleted: {
                 console.log("Suman evening....",sevaProxy.sevaBookingTV.checkStatus(ve.sno))
-               if(sevaProxy.sevaBookingTV.checkStatus(ve.sno)){
-                   _cancel.visible = false
-               }else{
+                if(sevaProxy.sevaBookingTV.checkStatus(ve.sno)){
+                    _cancel.visible = false
+                }else{
                     _cancel.visible = true
-               }
+                }
             }
         }
         DisplayDialog {
             id :_errorDialog
             visible: false
-            function showmsg(exportmsg){
+            property var page
+            function showmsg(exportmsg,pageno){
+                _errorDialog.page = pageno
                 _errorDialog.visible = true;
                 _errorDialog.text2Display = exportmsg
                 _errorDialog.open();
             }
             onYesAction: {
-                console.log("suman Cacel Confirmed---",ve.sno)
-                sevaProxy.deleteRecipt(ve.sno)
-                //sevaProxy.showAllData()
+                if(page === 1){
+                    console.log("suman Cacel Confirmed---",ve.sno,page)
+                    loadvoucher()
+//                    sevaProxy.deleteRecipt(ve.sno)
+
+                }
+                else if(page === 2){
+                    console.log("suman delete Confirmed---",ve.sno)
+                    sevaProxy.deletedata(ve.sno)
+                }
             }
             onNoAction: {
                 _errorDialog.close()

@@ -21,6 +21,7 @@ Rectangle {
     signal sevaTypeSel(int index, int sevaType)
     signal sevaTypeSelectedByIndex(int index)
     signal sevaTypeSelected(variant sevaType)
+    signal sendIndexofSevaType(int sidx)
     focus: true
 
     function changeItem(idx){
@@ -43,9 +44,10 @@ Rectangle {
         focus: true
         currentIndex: 0
         snapMode: ListView.SnapToItem
-        delegate: SevaDetailDelegate{
-                        id : del
-                        Component.onCompleted: del.itemClicked.connect(_root.changeItem);
+        delegate: SevaDetailDelegate
+        {
+            id : del
+            Component.onCompleted: del.itemClicked.connect(_root.changeItem);
         }
         model: sevaProxy.getSevaTypeModel()
 
@@ -55,10 +57,12 @@ Rectangle {
         onCurrentIndexChanged: {
             console.log(" Current Index changed" + currentIndex)
             _root.getSevaTypeDetails(currentIndex);
+            sendIndexofSevaType(currentIndex)
         }
         Component.onCompleted: {
             console.log(" List View is created....."+_listView.width + "   height="+_listView.height)
-             _root.getSevaTypeDetails(0);
+            _root.getSevaTypeDetails(0);
+
         }
     }
     Component{
@@ -68,13 +72,45 @@ Rectangle {
             height: 25
             z: 2
             color: "#00A2ED"
-            Text {
-                text :qsTr("Select Seva Type")
-                font.bold : true
-                font.italic: true
-                font.pixelSize: 20
-                anchors.centerIn: parent
+            //            Text {
+            //                text :qsTr("Select Seva Type")
+            //                font.bold : true
+            //                font.italic: true
+            //                font.pixelSize: 20
+            //                anchors.centerIn: parent
+            //            }
+            RowLayout
+            {
+                anchors.fill: parent
+                spacing: 13
+
+                Text
+                {
+                    text: "Serial No"
+                    width: parent.width / 3
+                    font.pixelSize: 17
+                    font.bold: true
+                }
+
+                Text
+                {
+                    text: "SevaType Name"
+                    width: parent.width / 3
+                    font.pixelSize: 17
+                    font.bold: true
+                }
+
+                Text
+                {
+                    Layout.alignment: Qt.AlignRight
+                    Layout.rightMargin: 10
+                    text: "SevaType Id"
+                    width: parent.width / 3
+                    font.pixelSize: 17
+                    font.bold: true
+                }
             }
+
         }
     }
     Component {

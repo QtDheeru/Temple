@@ -82,5 +82,31 @@
         <file>ui/Devotee/DevoteeSelectionPage.qml</file>
         <file>ui/Devotee/SearchCriteriaComboBox.qml</file>
         <file>ui/Devotee/SevaSearchBar.qml</file>
+        <file>ui/BankRegistration/CheckList.qml</file>
+        <file>ui/BankRegistration/CheckListTable.qml</file>
+        <file>ui/BankRegistration/IntegrateFile.qml</file>
+        <file>ui/BankRegistration/CalenderFile.qml</file>
+        <file>ui/BankRegistration/CashAdmin.qml</file>
+        <file>ui/BankRegistration/UnderLine.qml</file>
+        <file>ui/QmlVoucher/FinalDisplay.qml</file>
+        <file>ui/QmlVoucher/MainCategory.qml</file>
+        <file>ui/QmlVoucher/MainTableCategory.qml</file>
+        <file>ui/QmlVoucher/MyDialogBox.qml</file>
+        <file>ui/QmlVoucher/MyHeaderDelegate.qml</file>
+        <file>ui/QmlVoucher/MyRowDelegate.qml</file>
+        <file>ui/QmlVoucher/MyTextDelegate.qml</file>
+        <file>ui/QmlVoucher/SubHeader.qml</file>
+        <file>ui/QmlVoucher/SubRow.qml</file>
+        <file>ui/QmlVoucher/SubTableCategory.qml</file>
+        <file>ui/QmlVoucher/SubTableMain.qml</file>
+        <file>ui/QmlVoucher/UnderLine.qml</file>
+        <file>ui/QmlVoucher/VoucherApplication.qml</file>
+        <file>ui/QmlVoucher/VoucherMainCategory.qml</file>
+        <file>Images/good.png</file>
+        <file>Images/fail.png</file>
+        <file>ui/BankRegistration/DialogMyBox.qml</file>
+        <file>ui/BankRegistration/MyLabelText.qml</file>
+        <file>ui/QmlVoucher/MyButton.qml</file>
+        <file>ui/Admin/SevaNames/SevaNameDelegate.qml</file>
     </qresource>
 </RCC>

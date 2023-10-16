@@ -47,7 +47,8 @@ Rectangle {
             verticalAlignment: TextInput.AlignVCenter
             Layout.leftMargin: 10
         }
-        ComboBox{
+        ComboBox
+        {
             id :_tInput
             Layout.fillWidth: true
             Layout.preferredWidth: _root.myWidth - _label.widt

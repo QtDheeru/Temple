@@ -1,0 +1,25 @@
+{
+    "2023_10_0001": {
+        "Chataka": {
+            "Number": 795440431,
+            "additionalCost": 0,
+            "count": 1,
+            "sevaCost": 800,
+            "sevaId": 2,
+            "sevaName": "Chataka",
+            "sevaTime": "",
+            "sevaType": 1,
+            "teerthaPrasada": 7105905
+        },
+        "address": "",
+        "bookedBy": "Prasanna Rao",
+        "devoteeName": "Manjula",
+        "gothra": "Ulugulu",
+        "mobilenumber": "9448735734",
+        "momento": "Category-1",
+        "nakshtra": "Magha",
+        "receiptDate": "09-10-2023",
+        "receiptNo": "2023_10_0001",
+        "reference": ""
+    }
+}
