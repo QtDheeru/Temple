@@ -253,6 +253,7 @@ Rectangle{
             //            }
         }
 
+
         function onNextReceipt() {
             console.log("In onNextReceipt of sbv")
             root.clearData();
@@ -382,7 +383,7 @@ Rectangle{
         console.log("Esc pressed in select seva type view")
         //forcFocuseActive();
         loadMenuPage()
-//        loadDevoteeSelection()
+        //        loadDevoteeSelection()
     }
     SevaReceipt{
         id : _sevaReceipt
@@ -402,6 +403,10 @@ Rectangle{
                 console.log(" In onLoadMenuPage")
                 //_ld.source = "SevaBookingView.qml"
                 loadMenuPage();
+            }
+            function onLoadvoucher(ve,pageNo){
+                console.log("hellooooooon suman",ve," ",pageNo)
+                _ld.setSource("voucherPage.qml",{bookingElement:ve,pageNumber:pageNo})
             }
         }
     }

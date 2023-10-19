@@ -150,11 +150,9 @@ bool DevoteeDataInterface::addDevotee(DevotePersnalDetails *devotee)
 
 bool DevoteeDataInterface::updateDevotee(DevotePersnalDetails *devotee)
 {
-    qDebug() << Q_FUNC_INFO <<Qt::endl;
-
+    qDebug() <<Q_FUNC_INFO<<devotee->nakshatra()<<Qt::endl;
     QSqlQuery qry;
-
-    QString stringQry = QString("select * from persondetails where MOBILE=\'%1\'").arg(devotee->mobileNumber().trimmed());
+    QString stringQry = QString("select * from persondetails where MOBILE='%1'").arg(devotee->mobileNumber().trimmed());
     qry.prepare(stringQry);
     qDebug() << Q_FUNC_INFO << " Query Before Updating =" << stringQry <<Qt::endl;
     qry.exec();

@@ -15,7 +15,7 @@ Rectangle{
         color: "Black"
     }
     Timer {
-        interval: 5000; running: true;
+        interval: 500; running: true;
         repeat: false
         onTriggered: welcomeToAppTimeTriggered()
     }

@@ -19,6 +19,7 @@ class SevaBookingTableModel : public QAbstractTableModel
 public:
     enum{
         SNO_ROLE = Qt::UserRole+1,
+        RCPTNUM_ROLE,
         PERSON_ID_ROLE,
 
         PERSON_DBID_ROLE,
@@ -59,7 +60,7 @@ public slots:
     Q_INVOKABLE SevaBookingElement* getRowOfData(int row);
     void reset(QString receiptNo);
     bool checkStatus(QString receiptNo);
-
+    void referseshTheModel(QString rownum);
 private:
     QList<SevaBookingElement*> m_bookedSeva;
     static int x;

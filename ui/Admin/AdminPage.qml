@@ -36,8 +36,12 @@ Rectangle {
                 Layout.fillHeight: true
                 Layout.minimumWidth: 100
                 Layout.preferredWidth: 200
+                onSendIndexofSevaType:{
+                    sevaName.sendcurrentSevaidx(sidx)
+                }
             }
-            SevaTypeEntryPage{
+            SevaTypeEntryPage
+            {
                 id : sevaTypeEntry
                 Layout.fillWidth: true
                 height:  parent.height
@@ -46,6 +50,21 @@ Rectangle {
                 Layout.preferredWidth: 200
                 visible: _actionSelector.sevaTypeSelected
                 Layout.alignment: Qt.AlignVCenter
+            }
+            SevaNamesView
+            {
+                id : sevaName
+                Layout.fillWidth: true
+                height:  parent.height
+                Layout.fillHeight: true
+                Layout.minimumWidth: 100
+                Layout.preferredWidth: 200
+                visible: _actionSelector.sevaNameSelected
+                Layout.alignment: Qt.AlignVCenter
+                function sendcurrentSevaidx(indx){
+                    sevaName.sindex = indx;
+                }
+
             }
             SevaNameEntry{
                 id : sevaNameEntry
@@ -59,11 +78,11 @@ Rectangle {
         }
 
         Connections{
-             target : sevatypecomp
-             onSevaTypeSelected :{
-                 sevaTypeEntry.setSevaType(sevaType);
-                 sevaNameEntry.setSevaType(sevaType);
-             }
+            target : sevatypecomp
+            onSevaTypeSelected :{
+                sevaTypeEntry.setSevaType(sevaType);
+                sevaNameEntry.setSevaType(sevaType);
+            }
         }
     }
     Keys.onEscapePressed: {

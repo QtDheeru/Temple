@@ -55,11 +55,11 @@ Rectangle {
         MyRowEntry {id:_date;_labelText :qsTr("Date :");myWidth: parent.width/1.4;_editable : false}
         MyRowEntry {id:_name;_labelText :qsTr("Name :");myWidth: parent.width/1.4;_editable : false}
         MyRowEntry {id:_phoneNo;_labelText :qsTr("Phone No :");myWidth: parent.width/1.4;_editable : false}
-        MyRowEntry {id:_cost;_labelText :qsTr("Cost :");myWidth: parent.width/1.4;_editable : false}
+        MyRowEntry {id:_cost;_labelText :qsTr("Cost :");myWidth: parent.width/1.4;_editable : true}
         MyRowEntry {id:_voucherType;_labelText :qsTr("Voucher Type :");myWidth: parent.width/1.4;_editable : false}
-        MyRowEntry {id:_paymentMode;_labelText :qsTr("Payment Mode :");myWidth: parent.width/1.4;_editable : false}
-        MyRowEntry {id:_paymentRef;_labelText :qsTr("Payment Ref :");myWidth: parent.width/1.4;_editable : false}
-        MyRowEntry {id:_note;_labelText :qsTr("Note :");myWidth: parent.width/1.4;_editable : false}
+        MyRowEntry {id:_paymentMode;_labelText :qsTr("Payment Mode :");myWidth: parent.width/1.4;_editable : true}
+        MyRowEntry {id:_paymentRef;_labelText :qsTr("Payment Ref :");myWidth: parent.width/1.4;_editable : true}
+        MyRowEntry {id:_note;_labelText :qsTr("Note :");myWidth: parent.width/1.4;_editable : true}
         MyRowEntry {id:_itm;_labelText :qsTr("Item :");myWidth: parent.width/1.4;_editable : false}
         //   MyRowEntry {id:_note;_labelText :qsTr("Note");myWidth: parent.width/1.4}
     }

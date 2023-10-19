@@ -3,7 +3,7 @@
 BookingReportModel::BookingReportModel(QObject *parent)
     : QAbstractTableModel{parent}
 {
-     qDebug()<<Q_FUNC_INFO<<Qt::endl;
+    qDebug()<<Q_FUNC_INFO<<Qt::endl;
     sevaCSVProcessor = nullptr;
 }
 
@@ -17,7 +17,7 @@ int BookingReportModel::rowCount(const QModelIndex &parent) const
 int BookingReportModel::columnCount(const QModelIndex &parent) const
 {
     qDebug()<<Q_FUNC_INFO<<Qt::endl;
-    return 7;
+    return 8;
 }
 
 QVariant BookingReportModel::data(const QModelIndex &index, int role) const
@@ -40,12 +40,15 @@ QVariant BookingReportModel::data(const QModelIndex &index, int role) const
         qDebug()<<Q_FUNC_INFO<<_da->sevaName()<<Qt::endl;
         return _da->sevaName();}
     case 5:{
+        qDebug()<<Q_FUNC_INFO<<_da->sevaDate()<<Qt::endl;
+        return _da->sevaDate();}
+    case 6:{
         qDebug()<<Q_FUNC_INFO<<_da->teerthaPrasada()<<Qt::endl;
         return _da->sevaCount();}
-    case 6:{
+    case 7:{
         qDebug()<<Q_FUNC_INFO<<_da->mobileNumber()<<Qt::endl;
         return _da->mobileNumber();}
-    case 7:{
+    case 8:{
         qDebug()<<Q_FUNC_INFO<<_da->note()<<Qt::endl;
         return _da->note();}
     }
@@ -61,9 +64,10 @@ QHash<int, QByteArray> BookingReportModel::roleNames() const
     roles[2] = "gothra";
     roles[3] = "nakshatra";
     roles[4] = "sevaName";
-    roles[5] = "sevaCount";
-    roles[6] = "mobileNumber";
-    roles[7] = "note";
+    roles[5] = "sDate";
+    roles[6] = "sevaCount";
+    roles[7] = "mobileNumber";
+    roles[8] = "note";
 
     return roles;
 }
@@ -97,20 +101,22 @@ void BookingReportModel::generateBookReport(ReportFilterElements *elm)
 
     if(elm->iSelectedType()==0)
     {
-        qDebug()<<Q_FUNC_INFO<<"Inside c date book rep"<<Qt::endl;
+        qDebug()<<Q_FUNC_INFO<<"Inside c date book rep 0"<<Qt::endl;
         elm->setSSingleDate(FormatDate(elm->sSingleDate()));
         qDebug()<<Q_FUNC_INFO<<"elm->setSSingleDate(FormatDate(elm->sSingleDate()))"<<elm->sSingleDate()<<Qt::endl;
-        // elm->setSSingleDate(FormatDate(elm->sSingleDate()));
         DBInterface::getInstance()->booking_report_cdate_function(elm->sSingleDate(),elm->sSevaName(),elm->iSevaType());
     }
     else if(elm->iSelectedType()==1)
     {
+        qDebug()<<Q_FUNC_INFO<<"Inside c date book rep 1"<<Qt::endl;
         elm->setSStartDate(FormatDate(elm->sStartDate()));
         elm->setSEndDate(FormatDate(elm->sEndDate()));
         DBInterface::getInstance()->booking_report_dataRange_function(elm->sSevaName(),elm->iSevaType(),elm->sStartDate(),elm->sEndDate());
     }
     else
     {
+        qDebug()<<Q_FUNC_INFO<<"Inside c date book rep 2"<<Qt::endl;
+
         DBInterface::getInstance()->booking_report_cmonth_function(elm->sSevaName(),elm->iSevaType(),elm->sMonth().toInt(),elm->sYear().toInt());
     }
 }

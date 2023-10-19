@@ -113,6 +113,11 @@ Rectangle{
             movable: false
             resizable: false}
 
+        TableViewColumn {
+            id:_sevaDate;title: "Seva Date"; role: "sDate";
+            width: leftpart.width/7.1
+            movable: false
+            resizable: false}
 
         TableViewColumn {
             id:_teerthaPrasada;title: "SevaCount"; role: "sevaCount";

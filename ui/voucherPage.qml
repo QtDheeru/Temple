@@ -13,9 +13,12 @@ Rectangle{
     property int subComponentPixelSize : styles.fontSize
     signal loadMenuPage()
     signal resetVouModel()
+    property var bookingElement
+    property int  pageNumber
     signal  sendVoucherReportInput(var obj)
     // focus: true
-    VouEle{
+    VouEle
+    {
         id:_vouEle
     }
     RowLayout
@@ -48,7 +51,8 @@ Rectangle{
                     _labelText:qsTr("Voucher Number")
                     _editable:false
                 }
-                MyRowEntry{id:_name;
+                MyRowEntry
+                {id:_name;
                     myHeight:subComponentHeight;
                     myWidth: parent.width/1.25
                     fontPixelSize: _r1.subComponentPixelSize
@@ -57,7 +61,9 @@ Rectangle{
                     KeyNavigation.tab: _mobileNo
                 }
 
-                MyRowEntry{id:_mobileNo;
+                MyRowEntry
+                {
+                    id:_mobileNo;
                     myHeight:subComponentHeight;
                     myWidth: parent.width/1.25
                     fontPixelSize: _r1.subComponentPixelSize
@@ -66,24 +72,66 @@ Rectangle{
                     KeyNavigation.tab: _voucherType
                 }
 
-                MyComboEntry{id:_voucherType;
+                MyComboEntry
+                {
+                    id:_voucherType;
                     myHeight:_r1.subComponentHeight;
                     fontPixelSize: _r1.subComponentPixelSize
                     myWidth: parent.width/1.25
                     Layout.topMargin: 10;_labelText :qsTr("Voucher type")
-                    KeyNavigation.tab: _item
-                    _dataModel:["Financial","Groceries","Vegetables","Fruits and Flowers","Dairy Items","Computers & Digital","Misc","Others"]
+                    //                    KeyNavigation.tab: _item
+                    _dataModel:voucherProxy.voucherHeadsTableModel
+                    _dataModelRole:"vcategory"
+                    Component.onCompleted:
+                    {
+                        voucherProxy.voucherHeadsTableModel.rowClicked(0);
+                        voucherProxy.proxyList();
+                        console.log("voucherTypemodel---",voucherProxy.voucherHeadsTableModel)
+                    }
+                    onCurrentIndexChanged:
+                    {
+                        console.log("my current Index",currentIndex)
+
+                        voucherProxy.voucherHeadsTableModel.rowClicked(currentIndex);
+                        voucherProxy.listAppendProxy();
+
+                        // console.log("my current Index",currentIndex)
+                    }
+
+                    //                    _dataModel:["Financial","Groceries","Vegetables","Fruits and Flowers","Dairy Items","Computers & Digital","Misc","Others"]
 
                 }
-                MyComboEntry{
-                    id:_item
+
+                Connections
+                {
+                    target:voucherProxy
+                    onVouchToQml:
+                    {
+                        console.log("serial id ="+a_serial_no);
+                        console.log("Category id ="+a_voucherId);
+                        console.log("voucher name="+a_vouch_name);
+                        voucherProxy.send_Voucher(a_voucherId);
+                        voucherProxy.clearProxy();
+
+                        myitem.currentIndex = 0 ;
+
+                    }
+                }
+
+
+                MyComboEntry
+                {
+                    id:myitem
                     myHeight:_r1.subComponentHeight;
                     fontPixelSize: _r1.subComponentPixelSize
                     myWidth: parent.width/1.25
                     Layout.topMargin: 10;_labelText :qsTr("Item")
                     isEditable: true
-                    _dataModel : ["Salary","Brahmana Dakshine"]
-
+                    _dataModel : voucherProxy.voucherSubHeadTableModel
+                    _dataModelRole:"Vscn"
+                    onCurrentIndexChanged: {
+                        console.log("Changedddddddddddddddd  ", currentIndex)
+                    }
                 }
 
                 MyRowEntry{id:_note;
@@ -146,7 +194,7 @@ Rectangle{
                             _vouEle.voucherName = _name._data
                             _vouEle.mobileNo = _mobileNo._data
                             _vouEle.voucherType = _voucherType._data
-                            _vouEle.voucherItem = _item._data
+                            _vouEle.voucherItem = myitem._data
                             _vouEle.voucherNote = _note._data
                             _vouEle.voucherCost = _cost._data
                             _vouEle.voucherPaymentMode = _paymentMode._data
@@ -193,11 +241,10 @@ Rectangle{
 
             }
         }
-        Image {
-            id: voucherImage
-            source: "qrc:/ui/assets/Images/voucher.jpg"
-
-        }
+        //        Image {
+        //            id: voucherImage
+        //            source: "qrc:/ui/assets/Images/voucher.jpg"
+        //        }
     }
 
     Loader{
@@ -266,7 +313,8 @@ Rectangle{
         }
     }
 
-    Connections{
+    Connections
+    {
         target: _paymentMode
         function onItemChanged(j){
             if(j===0)
@@ -314,6 +362,39 @@ Rectangle{
     Component.onCompleted: {
         console.log("In Component.onCompleted: of ")
         //forceActiveFocus();
+        if(pageNumber == 1){
+            loadConfirmationDailog(bookingElement)
+        }
+        else{
+            console.log("Inside Default")
+        }
+    }
+    function loadConfirmationDailog(bookingElem){
+
+        _voucherReceiptDialog._vDate = voucherProxy.getCurrentDate()/*_vouEle.voucherDate*/
+        _voucherReceiptDialog._voucherNo = voucherProxy.getLastVoucherNumber()
+        _voucherReceiptDialog._voucherName= bookingElem.person.devoteeName
+        _voucherReceiptDialog._mobileNo= bookingElem.person.mobileNumber
+        _voucherReceiptDialog._voucherType=sevaProxy.getSevaTypeModel().getSevaTypeName(bookingElem.sevatype)
+        _voucherReceiptDialog._voucherItem= bookingElem.sevaname
+        _voucherReceiptDialog._voucherCost= bookingElem.totalCost
+        _voucherReceiptDialog._voucherPaymentMode= bookingElem.bank
+
+        _vouEle.voucherNo= _voucherReceiptDialog._voucherNo
+        _vouEle.voucherDate = voucherProxy.getCurrentDate()
+        _vouEle.voucherName = bookingElem.person.devoteeName
+        _vouEle.mobileNo = bookingElem.person.mobileNumber
+        _vouEle.voucherType = sevaProxy.getSevaTypeModel().getSevaTypeName(bookingElem.sevatype)
+        _vouEle.voucherItem = bookingElem.sevaname
+        _vouEle.voucherNote = _voucherReceiptDialog._voucherNote
+        _vouEle.voucherCost = bookingElem.totalCost
+        _vouEle.voucherPaymentMode = _voucherReceiptDialog._voucherPaymentMode
+        _vouEle.paymentReference =_voucherReceiptDialog._paymentReference
+        saveVoucher.saveVoucherElements(_vouEle);
+
+        _voucherReceiptDialog.open();
+
+
     }
 }
 

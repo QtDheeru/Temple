@@ -1,7 +1,6 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.5
 import QtQuick.Window 2.12
-
 import "./components"
 
 ApplicationWindow {
@@ -16,7 +15,7 @@ ApplicationWindow {
     property var constant: Constants{}
     title: constant.addressText1
     color: "black"
-    flags: Qt.Dialog
+    flags: Qt.WindowSystemMenuHint
     Component.onCompleted: {
         //        console.log("=====" + confApp.appPath + "/" + confApp.welcomescreenImg );
         //        console.log( confApp.welcomescreenImg);
@@ -222,6 +221,7 @@ ApplicationWindow {
             loader.item.width = _root.width
             loader.item.height = _root.height
         }
+
         function onCloseProject(){
             console.log("Clicked on CloseProject")
         }
@@ -284,6 +284,17 @@ ApplicationWindow {
             console.log("main loadSevabooking-----",d_nakshatra)
             loader.source = "";
             loader.setSource("SevaBookingView.qml",{dname:d_name,dmobile:d_mobile,dgothra:d_gothra,d_Nakshtra:d_nakshatra})
+        }
+        function onLoadBankRegistration(){
+            console.log("Clicked on Bank Registration")
+            loader.source = ""
+            loader.source = "qrc:/ui/BankRegistration/IntegrateFile.qml"
+//            myModel.initial();
+        }
+        function onLoadVoucherAdministration(){
+            console.log("Clicked on Voucher Registration")
+            loader.source = ""
+            loader.source = "qrc:/ui/QmlVoucher/VoucherApplication.qml"
         }
     }
     Connections{

@@ -709,6 +709,7 @@ int print_file::prin2PixMap(Print_BookingDetail *pbd)
         QLineF line2(margin,top_margin+190,printW+10,200);
         painter.drawLine(line2);
         painter.drawText(margin+5,top_margin+205,"Sl.no");
+
         painter.drawText(margin+55,top_margin+205,"Seva Name");
         painter.drawText(margin+290,top_margin+205,"Cost");
 
@@ -719,16 +720,18 @@ int print_file::prin2PixMap(Print_BookingDetail *pbd)
 
         QSqlQuery query_other1;
         QString que;
-        que = ("select * from sevabooking where sevabooking.SNO ='%1';");
+        que = ("select * from sevabooking where sevabooking.RECPT_NUM ='%1';");
         que = que.arg(pbd->serial_No);
         query_other1.prepare(que);
         query_other1.exec();
         double totalAmount= 0;
         while(query_other1.next()){
+            qDebug()<<"suman raj inside while..."<<Qt::endl;
             QString  sName= query_other1.value(3).toString().trimmed();
             QString  sQty= query_other1.value(4).toString().trimmed();
             QString  sCost= query_other1.value(14).toString().trimmed();
             double  sTotAmt= query_other1.value(16).toDouble();
+
             SevaName* sn = new SevaName;
             sn->setSevaName(sName);
             sn->setSevaCost(sCost.toDouble());

@@ -15,6 +15,7 @@ Rectangle {
     signal showLast10Transaction();
     property bool enablePaymentButton: false
     property alias nextButtonFocus:_next.focus
+    property int clickCount: 0
     GridLayout{
         anchors.fill: parent
         columns: 3

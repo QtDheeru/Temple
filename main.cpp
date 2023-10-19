@@ -23,6 +23,11 @@
 #include"SevaTypeNamesDataModel.h"
 #include"SevaBookingConformationDataModel.h"
 #include "devoteeproxy.h"
+#include "model/BankRegistration_m/cheque_entryModel.h"
+#include "model/BankRegistration_m/cashtransaction.h"
+#include "VoucherProxy.h"
+
+
 
 QScopedPointer<QFile>   m_logFile;
 QMutex   mlock;
@@ -33,13 +38,23 @@ int main(int argc, char *argv[])
 {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
+
     QApplication app(argc, argv);
     m_logFile.reset(new QFile("Data/MyLogger.txt"));
+
+    QQmlApplicationEngine engine;
+
+    Cheque_EntryModel checkEntry ;
+    CashTransaction myModel;
+
+    engine.rootContext()->setContextProperty("checkEntry",&checkEntry);
+    engine.rootContext()->setContextProperty("myModel",&myModel);
+
 
     // Open the file logging
     m_logFile.data()->open(QFile::WriteOnly | QFile::Truncate | QFile::Text);
     // Set handler
-    qInstallMessageHandler(messageHandler);
+//    qInstallMessageHandler(messageHandler);
 
 
     SevaCountOnDateModel *sevaCountOnDateModel ;
@@ -67,8 +82,9 @@ int main(int argc, char *argv[])
     DBChecker *dbchecker ;
     ConfigureApp *confApp;
     saveVoucher *vou;
+    VoucherProxy voucherProxy;
     VoucherReportModel *vouRepModel;
-    QQmlApplicationEngine engine;
+
     TrustListModel* trustListModel = TrustListModel::getTrustListModelInstance();
     engine.rootContext()->setContextProperty("trustListModel",trustListModel);
 
@@ -94,6 +110,7 @@ int main(int argc, char *argv[])
         vou = new saveVoucher;
         vouRepModel = new VoucherReportModel;
         devoteeProxy = new DevoteeProxy;
+        engine.rootContext()->setContextProperty("voucherProxy",&voucherProxy);
         engine.rootContext()->setContextProperty("sevaProxy",proxy);
         engine.rootContext()->setContextProperty("devoteeProxy",devoteeProxy);
         //    engine.rootContext()->setContextProperty("sevaTypeModel",mod);

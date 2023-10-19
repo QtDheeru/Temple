@@ -9,7 +9,7 @@ Rectangle{
     id:_rr1
     signal loadSingleDatePage(string obj);
     signal loadDateWiseForSlectedMonthPage(var obj);
-     signal loadDateWiseBookingForSlectedMonthPage(var obj);
+    signal loadDateWiseBookingForSlectedMonthPage(var obj);
     property var styles : MyStyles{}
 
     // color: "yellow"
@@ -36,7 +36,7 @@ Rectangle{
                 id:r1
                 height:20
                 // z:5
-               // color: styleData.selected ? "skyblue"  : "white"
+                // color: styleData.selected ? "skyblue"  : "white"
 
 
                 MouseArea {
@@ -50,23 +50,23 @@ Rectangle{
                         console.log("mouse clicked left styleData.selected "+styleData.selected)
                         // clear any other selected row
 
-//                        // select this row
-//                        // styleData.selected = true
-//                        //                    color= styleData.selected ? "skyblue" : "white"
-//                        console.log("clicked cell in table view ",lv1.currentRow)
+                        //                        // select this row
+                        //                        // styleData.selected = true
+                        //                        //                    color= styleData.selected ? "skyblue" : "white"
+                        //                        console.log("clicked cell in table view ",lv1.currentRow)
 
-//                        // convert mouse position from delegate to tableview coordinates
-//                        var coordinates = r1.mapToItem(lv1, mouse.x, mouse.y);
-//                        console.log("clicked cell in table view coordinates = ",coordinates)
+                        //                        // convert mouse position from delegate to tableview coordinates
+                        //                        var coordinates = r1.mapToItem(lv1, mouse.x, mouse.y);
+                        //                        console.log("clicked cell in table view coordinates = ",coordinates)
 
-//                        //   active and click the appropriate items (internal)
-//                        var clickIndex = lv1.__listView.indexAt(0, coordinates.y + lv1.__listView.contentY)
-//                        console.log("clicked cell in table view clickIndex = ",clickIndex)
-//                        if (clickIndex > -1) {
-//                            if (lv1.__activateItemOnSingleClick) lv1.activated(clickIndex)
-//                            lv1.clicked(clickIndex)
-//                        }
-//                        //       consume the mouse event
+                        //                        //   active and click the appropriate items (internal)
+                        //                        var clickIndex = lv1.__listView.indexAt(0, coordinates.y + lv1.__listView.contentY)
+                        //                        console.log("clicked cell in table view clickIndex = ",clickIndex)
+                        //                        if (clickIndex > -1) {
+                        //                            if (lv1.__activateItemOnSingleClick) lv1.activated(clickIndex)
+                        //                            lv1.clicked(clickIndex)
+                        //                        }
+                        //                        //       consume the mouse event
                         mouse.accepted = true
 
                         if (mouse.button === Qt.LeftButton)
@@ -84,56 +84,56 @@ Rectangle{
                 height:20
                 color: styleData.selected ? "skyblue" : styleData.row%2 ? "light gray" : "white"
                 Text {
-                     anchors.fill: parent
-                  //  anchors.centerIn: parent
+                    anchors.fill: parent
+                    //  anchors.centerIn: parent
                     text: styleData.value
-                //    x:_itmdel.x+25
+                    //    x:_itmdel.x+25
                     // horizontalAlignment: styleData.column === 0? Text.AlignLeft:Text.AlignRight
                     // verticalAlignment: Qt.AlignVCenter
 
                     font.pixelSize: 14
                 }
 
-//                Rectangle{
-//                    anchors.right: parent.right
-//                    width:1
-//                    color:"black"
-//                    height:parent.height
-//                }
+                //                Rectangle{
+                //                    anchors.right: parent.right
+                //                    width:1
+                //                    color:"black"
+                //                    height:parent.height
+                //                }
             }
         }
-//        onClicked: {
-//            console.log("clicked cell in table view ",row)
-//            //        var rowItem =  (sevaProxy.sevaBSearchModel).index(row)
-//            selectedRow = row
-//            //        (sevaProxy.sevaBSearchModel)
-//            //         if (mouse.button == Qt.RightButton)
-//            {
-//                console.log("clicked cell in table view ",row)
-//            }
+        //        onClicked: {
+        //            console.log("clicked cell in table view ",row)
+        //            //        var rowItem =  (sevaProxy.sevaBSearchModel).index(row)
+        //            selectedRow = row
+        //            //        (sevaProxy.sevaBSearchModel)
+        //            //         if (mouse.button == Qt.RightButton)
+        //            {
+        //                console.log("clicked cell in table view ",row)
+        //            }
 
-//        }
+        //        }
         TableViewColumn {
             id:_slNo;title: "Sl No"; role: "SlNo";
             width: _rr1.width/8.1
 
             movable: false
             resizable: false
-//            delegate: Rectangle{
-//                id:_slNodel
-//                height:20
-//                color: styleData.row%2 ? "light gray":"white"
-//                Text {
-//                  //  anchors.fill: parent
-//                      anchors.centerIn: parent
-//                    text: styleData.value
-//                    horizontalAlignment:Text.AlignLeft
-//                    padding: 5
-//                    verticalAlignment: Qt.AlignVCenter
+            //            delegate: Rectangle{
+            //                id:_slNodel
+            //                height:20
+            //                color: styleData.row%2 ? "light gray":"white"
+            //                Text {
+            //                  //  anchors.fill: parent
+            //                      anchors.centerIn: parent
+            //                    text: styleData.value
+            //                    horizontalAlignment:Text.AlignLeft
+            //                    padding: 5
+            //                    verticalAlignment: Qt.AlignVCenter
 
-//                    font.pixelSize: 14
-//                }
-//            }
+            //                    font.pixelSize: 14
+            //                }
+            //            }
         }
         TableViewColumn {
             id:_sevaName;title: "Month"; role: "month";
@@ -178,27 +178,27 @@ Rectangle{
             //            }
         }
 
-//        TableViewColumn {
-//            id:_totalAmount;title: "Total Amount"; role: "totalAmount";
-//            width:  (_rr1.width-_slNo.width)/3.1
-//            movable: false
-//            resizable: true
-            //            delegate: Rectangle{
-            //                id:_totalAmountdel
-            //                height:20
-            //                color: styleData.row%2 ? "light gray":"white"
+        //        TableViewColumn {
+        //            id:_totalAmount;title: "Total Amount"; role: "totalAmount";
+        //            width:  (_rr1.width-_slNo.width)/3.1
+        //            movable: false
+        //            resizable: true
+        //            delegate: Rectangle{
+        //                id:_totalAmountdel
+        //                height:20
+        //                color: styleData.row%2 ? "light gray":"white"
 
-            //                Text {
-            //                    anchors.fill: parent
-            //                    text: styleData.value
-            //                    horizontalAlignment:Text.AlignRight
-            //                    padding: _totalAmount.width/3
-            //                    verticalAlignment: Qt.AlignVCenter
+        //                Text {
+        //                    anchors.fill: parent
+        //                    text: styleData.value
+        //                    horizontalAlignment:Text.AlignRight
+        //                    padding: _totalAmount.width/3
+        //                    verticalAlignment: Qt.AlignVCenter
 
-            //                    font.pixelSize: 14
-            //                }
-            //            }
-     //   }
+        //                    font.pixelSize: 14
+        //                }
+        //            }
+        //   }
 
     }
     Button{
@@ -245,46 +245,46 @@ Rectangle{
             _errorDialog.close()
         }
     }
-//    Rectangle{
-//        id:_footer
-//        width: _rr1.width
-//        height: styles.screenHeight/15
-//        anchors.bottom: _rr1.bottom
-//        Rectangle{
-//            id:_grandTotalText
-//            width: parent.width/2
-//            height: parent.height
-//            color: "#72FFFF"
-//            Text {
-//                text:"Grand Total :" //+ sevaProxy.sevaReport.accReportModel.grandTotal
-//                anchors.centerIn: parent
-//                font.pixelSize: styles.headerTextFont1
-//                font.italic: true
-//                font.bold : true
-//            }
-//        }
-//        Rectangle{
-//            width: parent.width/2
-//            height: parent.height
-//            anchors.left: _grandTotalText.right
-//            color: "#72FFFF"
-//            Text {
-//                id:total
-//                text:sevaProxy.sevaReport.accountReportMonthRangeModel.grandTotal + ".00 ₹"
-//                anchors.centerIn: parent
-//                font.pixelSize: 30
-//                font.italic: true
-//                font.bold : true
-//            }
-//        }
-//    }
+    //    Rectangle{
+    //        id:_footer
+    //        width: _rr1.width
+    //        height: styles.screenHeight/15
+    //        anchors.bottom: _rr1.bottom
+    //        Rectangle{
+    //            id:_grandTotalText
+    //            width: parent.width/2
+    //            height: parent.height
+    //            color: "#72FFFF"
+    //            Text {
+    //                text:"Grand Total :" //+ sevaProxy.sevaReport.accReportModel.grandTotal
+    //                anchors.centerIn: parent
+    //                font.pixelSize: styles.headerTextFont1
+    //                font.italic: true
+    //                font.bold : true
+    //            }
+    //        }
+    //        Rectangle{
+    //            width: parent.width/2
+    //            height: parent.height
+    //            anchors.left: _grandTotalText.right
+    //            color: "#72FFFF"
+    //            Text {
+    //                id:total
+    //                text:sevaProxy.sevaReport.accountReportMonthRangeModel.grandTotal + ".00 ₹"
+    //                anchors.centerIn: parent
+    //                font.pixelSize: 30
+    //                font.italic: true
+    //                font.bold : true
+    //            }
+    //        }
+    //    }
     //    ReportFilterItems{
     //        id:_rip
     //    }
 
     Component.onCompleted:  {
         console.log("Component.completed: of SevaBookingReportMonthWise.qml")
-  forceActiveFocus();
+        forceActiveFocus();
         // sevaProxy.sevaReport.resetAccDateRangeModel();
         //sevaProxy.sevaReport.generateAccReportForEachDate(obj);
     }

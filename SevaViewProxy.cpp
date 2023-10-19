@@ -59,6 +59,7 @@ SevaViewProxy::SevaViewProxy(QObject *parent) : QObject(parent)
                      DBInterface::getInstance(),&DBInterface::recvDeletedRecptNo);
     QObject::connect(DBInterface::getInstance(),&DBInterface::sendChangedDataToSevaBookingTablemodel,
                      m_sevaBookingTV,&SevaBookingTableModel::reset);
+    QObject::connect(DBInterface::getInstance(),&DBInterface::refreshModel,m_sevaBookingTV,&SevaBookingTableModel::referseshTheModel);
 
     //    QObject::connect(DBInterface::getInstance(),SIGNAL(forFUllDetails(QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>))
     //        ,m_allReportModel,SLOT(getData(QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>)));
@@ -335,6 +336,12 @@ QString SevaViewProxy::createNewSeva(SevaName *seva)
     qDebug()<<Q_FUNC_INFO<<seva->sevaName()<<seva->sevaId()<<seva->Number()<<seva->sevaCost()<<seva->sevaStartDate()<<seva->sevaType()<<seva->sevaCost()<<seva->count()<<seva->sevaStartTime();
     seva->print();
     return m_sevaBookingModelData->createNewSeva(seva);
+}
+
+void SevaViewProxy::deletedata(QString rcptNo)
+{
+    qDebug() << Q_FUNC_INFO << Qt::endl;
+    DBInterface::getInstance()->deleteWrongData(rcptNo);
 }
 
 void SevaViewProxy::print()

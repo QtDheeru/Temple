@@ -36,7 +36,7 @@ void saveVoucher::saveVoucherElements(VoucherElement *ele)
 {
     qDebug()<<Q_FUNC_INFO<<Qt::endl;
     qDebug()<<ele->mobileNo()<<Qt::endl;
-
+    qDebug()<<"suman**********"<<ele->PaymentReference()<<Qt::endl;
    // ele->setVoucherDate(FormatDate(ele->voucherDate()));
     DBInterface::getInstance()->insertVoucherIssued(ele);
      // qDebug()<<"save voucher insert"<<b<<Qt::endl;

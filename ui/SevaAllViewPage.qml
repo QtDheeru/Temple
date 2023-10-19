@@ -9,7 +9,9 @@ Rectangle{
     width: parent.width
     height: parent.height
     signal loadSevaBookingView();
+    signal loadvoucher(var bookedObj,int pageNo);
     property var ve
+    property int  pageNumber: 1
     RowLayout{
         id:searchRow
         width: _root.width
@@ -210,20 +212,17 @@ Rectangle{
             }
 
         }
+        TableViewColumn {title: "Serial No"; role: "serialNo"; width: parent.width/12}
 
-        TableViewColumn {title: "Serial No"; role: "serialNo"; width: parent.width/12
-        }
+        TableViewColumn {title: "Rcpt No"; role: "RecieptNumber"; width: parent.width/12}
+
         TableViewColumn {title: "Person ID"; role: "PersonID"; width: parent.width/12}
-        TableViewColumn {title: "Person DbID"; role: "PersonDbID"; width: parent.width/12}
-        TableViewColumn {title: "Devotee Name"; role: "DevoteeName"; width: parent.width/12
-        }
+        TableViewColumn {title: "Devotee Name"; role: "DevoteeName"; width: parent.width/12}
         TableViewColumn {title: "Mobile Number"; role: "MobileNumber"; width: parent.width/12}
         TableViewColumn {title: "Gothra"; role: "Gothra"; width: parent.width/12}
         TableViewColumn {title: "Nakshatra"; role: "Nakshatra"; width: parent.width/12}
         TableViewColumn {title: "Seva Type"; role: "SevaType"; width: parent.width/12}
-        TableViewColumn {title: "Seva Name"; role: "SevaName"; width: parent.width/12
-
-        }
+        TableViewColumn {title: "Seva Name"; role: "SevaName"; width: parent.width/12}
         TableViewColumn {title: "Quantity"; role: "Quantity"; width: parent.width/12}
         TableViewColumn {title: "Receipt Date"; role: "ReceiptDate"; width: parent.width/12}
         TableViewColumn {title: "Seva Date"; role: "SevaDate"; width: parent.width/12}
@@ -258,30 +257,43 @@ Rectangle{
                 id:_cancel
                 text: qsTr('Cancel')
                 onTriggered: {
-                    _errorDialog.showmsg("Are you sure to cancel the reciept?")
+                    _errorDialog.showmsg("Are you sure to cancel the reciept?",1)
                 }
             }
-            Component.onCompleted: {
-                console.log("Suman evening....",sevaProxy.sevaBookingTV.checkStatus(ve.sno))
-               if(sevaProxy.sevaBookingTV.checkStatus(ve.sno)){
-                   _cancel.visible = false
-               }else{
-                    _cancel.visible = true
-               }
+            MenuItem{
+                id:_delete
+                text: qsTr('Delete')
+                onTriggered: {
+                    _errorDialog.showmsg("Are you sure to delete the data?",2)
+                }
             }
+//            Component.onCompleted: {
+//                if(sevaProxy.sevaBookingTV.checkStatus(ve.sno)){
+//                    _cancel.visible = false
+//                }else{
+//                    _cancel.visible = true
+//                }
+//            }
         }
         DisplayDialog {
             id :_errorDialog
             visible: false
-            function showmsg(exportmsg){
+            property var page
+            function showmsg(exportmsg,pageno){
+                _errorDialog.page = pageno
                 _errorDialog.visible = true;
                 _errorDialog.text2Display = exportmsg
                 _errorDialog.open();
             }
             onYesAction: {
-                console.log("suman Cacel Confirmed---",ve.sno)
-                sevaProxy.deleteRecipt(ve.sno)
-                //sevaProxy.showAllData()
+                if(page === 1){
+                    console.log("suman Cacel Confirmed---",ve.sno,page)
+                    loadvoucher(ve,pageNumber)
+                }
+                else if(page === 2){
+                    console.log("suman delete Confirmed---",ve.sno)
+                    sevaProxy.deletedata(ve.sno)
+                }
             }
             onNoAction: {
                 _errorDialog.close()

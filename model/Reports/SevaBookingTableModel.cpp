@@ -33,14 +33,15 @@ int SevaBookingTableModel::columnCount(const QModelIndex &parent) const
 QVariant SevaBookingTableModel::data(const QModelIndex &index, int role) const
 {
     qDebug()<<Q_FUNC_INFO<<z<<"row column role"<<index.row()<<index.column()<<role<<Qt::endl;
-    z++;
-    if (!index.isValid())
-        return QVariant();
+
+    //    if (!index.isValid())
+    //        return QVariant();
 
     int sevaRow = index.row();
     SevaBookingElement *tempSeva = m_bookedSeva.at(sevaRow);
     switch(role){
-    case SNO_ROLE: return tempSeva->sno();break;
+    case SNO_ROLE: return sevaRow;break;
+    case RCPTNUM_ROLE: return tempSeva->sno();break;
     case PERSON_ID_ROLE: return tempSeva->person_id();break;
     case PERSON_DBID_ROLE: return tempSeva->person()->personDbId();break;
     case DEVOTEE_NAME_ROLE: return tempSeva->person()->devoteeName();break;
@@ -62,6 +63,7 @@ QVariant SevaBookingTableModel::data(const QModelIndex &index, int role) const
     case MOMENTO_ROLE: return tempSeva->momento();break;
     case BOOKED_BY_ROLE: return tempSeva->bookedBy();break;
     }
+
     qDebug()<<Q_FUNC_INFO<<Qt::endl;
     return QVariant();
 }
@@ -71,6 +73,7 @@ QHash<int, QByteArray> SevaBookingTableModel::roleNames() const
     qDebug()<<Q_FUNC_INFO<<Qt::endl;
     QHash<int, QByteArray> roles;
     roles.insert(SNO_ROLE,"serialNo");
+    roles.insert(RCPTNUM_ROLE,"RecieptNumber");
     roles.insert(PERSON_ID_ROLE,"PersonID");
     roles.insert(PERSON_DBID_ROLE,"PersonDbID");
     roles.insert(DEVOTEE_NAME_ROLE,"DevoteeName");
@@ -98,20 +101,12 @@ QHash<int, QByteArray> SevaBookingTableModel::roleNames() const
 void SevaBookingTableModel::addBookingDetails(SevaBookingElement *elem)
 {
     qDebug()<<Q_FUNC_INFO<<Qt::endl;
-    for(auto it=m_bookedSeva.begin();it!=m_bookedSeva.end();it++){
-        if(elem->sno()== (*it)->sno()){
-            found = true;
-        }
-    }
-    if(found==false){
-        QQmlEngine::setObjectOwnership(elem,QQmlEngine::CppOwnership);
-        beginInsertRows(QModelIndex(),m_bookedSeva.size(),m_bookedSeva.size());
-        m_bookedSeva.append(elem);
-        endInsertRows();
-    }
-    qDebug()<<Q_FUNC_INFO<< "############# s" << m_bookedSeva.size()<< Qt::endl;
+    beginInsertRows(QModelIndex(),m_bookedSeva.size(),m_bookedSeva.size());
+    m_bookedSeva.append(elem);
+    endInsertRows();
+    qDebug()<<Q_FUNC_INFO<< "1" << m_bookedSeva.size()<< Qt::endl;
 
-    //    printBookingList();
+    //        printBookingList();
 }
 
 SevaBookingElement* SevaBookingTableModel::getRowOfData(int row)
@@ -121,29 +116,29 @@ SevaBookingElement* SevaBookingTableModel::getRowOfData(int row)
 
 void SevaBookingTableModel::printBookingList()
 {
-    //    for(int i=0;i<m_bookedSeva.size();i++)
-    //    {
-    //        qDebug()<<"sno"<<m_bookedSeva[i]->sno()<<Qt::endl;
-    //        qDebug()<<"person_id"<<m_bookedSeva[i]->person_id()<<Qt::endl;
-    //        qDebug()<<"sevatype"<<m_bookedSeva[i]->sevatype()<<Qt::endl;
-    //        qDebug()<<"sevaname"<<m_bookedSeva[i]->sevaname()<<Qt::endl;
-    //        qDebug()<<"quantity"<<m_bookedSeva[i]->quantity()<<Qt::endl;
-    //        qDebug()<<"personDbId"<<m_bookedSeva[i]->person()->personDbId()<<Qt::endl;
-    //        qDebug()<<"devoteeName"<<m_bookedSeva[i]->person()->devoteeName()<<Qt::endl;
-    //        qDebug()<<"mobileNumber"<<m_bookedSeva[i]->person()->mobileNumber()<<Qt::endl;
-    //        qDebug()<<"gothra"<<m_bookedSeva[i]->person()->gothra()<<Qt::endl;
-    //        qDebug()<<"nakshatra"<<m_bookedSeva[i]->person()->nakshatra()<<Qt::endl;
-    //        qDebug()<<"receiptDate"<<m_bookedSeva[i]->receiptDate()<<Qt::endl;
-    //        qDebug()<<"sevaDate"<<m_bookedSeva[i]->sevaDate()<<Qt::endl;
-    //        qDebug()<<"totalCost"<<m_bookedSeva[i]->totalCost()<<Qt::endl;
-    //        qDebug()<<"cash"<<m_bookedSeva[i]->cash()<<Qt::endl;
-    //        qDebug()<<"bank"<<m_bookedSeva[i]->bank()<<Qt::endl;
-    //        qDebug()<<"reference"<<m_bookedSeva[i]->reference()<<Qt::endl;
-    //        qDebug()<<"Suman Status"<<m_bookedSeva[i]->status()<<Qt::endl;
-    //        qDebug()<<"address"<<m_bookedSeva[i]->address()<<Qt::endl;
-    //        qDebug()<<"momento"<<m_bookedSeva[i]->momento()<<Qt::endl;
-    //        qDebug()<<"bookedBy"<<m_bookedSeva[i]->bookedBy()<<Qt::endl;
-    //    }
+    for(int i=0;i<m_bookedSeva.size();i++)
+    {
+        qDebug()<<"sno"<<m_bookedSeva[i]->sno()<<Qt::endl;
+        qDebug()<<"person_id"<<m_bookedSeva[i]->person_id()<<Qt::endl;
+        qDebug()<<"sevatype"<<m_bookedSeva[i]->sevatype()<<Qt::endl;
+        qDebug()<<"sevaname"<<m_bookedSeva[i]->sevaname()<<Qt::endl;
+        qDebug()<<"quantity"<<m_bookedSeva[i]->quantity()<<Qt::endl;
+        qDebug()<<"personDbId"<<m_bookedSeva[i]->person()->personDbId()<<Qt::endl;
+        qDebug()<<"devoteeName"<<m_bookedSeva[i]->person()->devoteeName()<<Qt::endl;
+        qDebug()<<"mobileNumber"<<m_bookedSeva[i]->person()->mobileNumber()<<Qt::endl;
+        qDebug()<<"gothra"<<m_bookedSeva[i]->person()->gothra()<<Qt::endl;
+        qDebug()<<"nakshatra"<<m_bookedSeva[i]->person()->nakshatra()<<Qt::endl;
+        qDebug()<<"receiptDate"<<m_bookedSeva[i]->receiptDate()<<Qt::endl;
+        qDebug()<<"sevaDate"<<m_bookedSeva[i]->sevaDate()<<Qt::endl;
+        qDebug()<<"totalCost"<<m_bookedSeva[i]->totalCost()<<Qt::endl;
+        qDebug()<<"cash"<<m_bookedSeva[i]->cash()<<Qt::endl;
+        qDebug()<<"bank"<<m_bookedSeva[i]->bank()<<Qt::endl;
+        qDebug()<<"reference"<<m_bookedSeva[i]->reference()<<Qt::endl;
+        qDebug()<<"Suman Status"<<m_bookedSeva[i]->status()<<Qt::endl;
+        qDebug()<<"address"<<m_bookedSeva[i]->address()<<Qt::endl;
+        qDebug()<<"momento"<<m_bookedSeva[i]->momento()<<Qt::endl;
+        qDebug()<<"bookedBy"<<m_bookedSeva[i]->bookedBy()<<Qt::endl;
+    }
 }
 void SevaBookingTableModel::reset(QString receiptNo)
 {
@@ -162,6 +157,7 @@ void SevaBookingTableModel::reset(QString receiptNo)
     QModelIndex topRight = createIndex(row,20);
     emit dataChanged(topLeft, topRight);
 }
+
 bool SevaBookingTableModel::checkStatus(QString receiptNo){
     bool check = false;
     for(int var=0;var<m_bookedSeva.size();var++) {
@@ -172,4 +168,17 @@ bool SevaBookingTableModel::checkStatus(QString receiptNo){
         }
     }
     return check;
+}
+
+void SevaBookingTableModel::referseshTheModel(QString rownum)
+{
+    qDebug()<<Q_FUNC_INFO<<Qt::endl;
+    int count=0;
+    for(int var=0;var<m_bookedSeva.size();var++) {
+        if(m_bookedSeva[var]->sno()== rownum){
+            count = var;
+        }
+    }
+    beginRemoveRows(QModelIndex(),count,count);
+    endRemoveRows();
 }

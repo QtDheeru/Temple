@@ -78,7 +78,7 @@ public:
     Q_INVOKABLE int getNextSevaTypeID();
     Q_INVOKABLE QString addNewSevaType(QString sevaTypeName,int sevaTypeId,QString personName);
     Q_INVOKABLE QString createNewSeva(SevaName *seva);
-
+    Q_INVOKABLE void deletedata(QString rcptNo);
     void print();
     Q_INVOKABLE QAbstractItemModel* getSevaModelForErrorHandling();
     SevaReport *reportOnDateModel() const;

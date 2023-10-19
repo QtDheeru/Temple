@@ -4,35 +4,44 @@ import "../../components"
 import "../../Admin"
 import QtQuick.Layouts 1.3
 
-Rectangle {
+Rectangle
+{
     id:_root
     width: 200;
-    color: "transparent"
+    color: "skyblue"
     anchors.margins: 20
     signal errorOccur(string errorMsg);
     property int sevaType :-1
     border.width: 0.5;
     border.color: "black"
     property alias currentIndex: _listView.currentIndex
-
+    property int sindex
     property int myHeight : 30
     property int fontPixelSize : 20
+    property var sevaTypeObject
 
     signal sevaTypeSel(int index, int sevaType)
     signal sevaTypeSelectedByIndex(int index)
     signal sevaTypeSelected(variant sevaType)
     focus: true
 
-    function changeItem(idx){
+    function changeItem(idx)
+    {
         _listView.currentIndex  = idx
     }
 
     function getSevaTypeDetails(idx){
-        var sevaTypeObject = sevaProxy.getSevaTypeByIndex(currentIndex);
+        sevaTypeObject = sevaProxy.getSevaTypeByIndex(idx);
         _root.sevaTypeSelected(sevaTypeObject);
     }
+    onSindexChanged: {
+        console.log("hello world.....",sindex);
+        _root.getSevaTypeDetails(sindex);
+        _listView.model= sevaProxy.getSevaModel(sevaTypeObject.sevaTypeId)
+    }
 
-    ListView{
+    ListView
+    {
         id : _listView
         anchors.fill: parent
         anchors.centerIn: parent
@@ -41,42 +50,83 @@ Rectangle {
         spacing: 1
         clip: true
         focus: true
+
         currentIndex: 0
         snapMode: ListView.SnapToItem
-        delegate: SevaDetailDelegate{
-                        id : del
-                        Component.onCompleted: del.itemClicked.connect(_root.changeItem);
+        delegate: SevaNameDelegate{
+            id : del
+            Component.onCompleted: del.itemClicked.connect(_root.changeItem);
         }
-        model: sevaProxy.getSevaTypeModel()
+        model: sevaProxy.getSevaModel(sevaTypeObject.sevaTypeId)
 
         header :_headerComp
         headerPositioning: ListView.OverlayHeader
         highlightFollowsCurrentItem: true
-        onCurrentIndexChanged: {
+        onCurrentIndexChanged:
+        {
             console.log(" Current Index changed" + currentIndex)
-            _root.getSevaTypeDetails(currentIndex);
+
+
         }
-        Component.onCompleted: {
-             _root.getSevaTypeDetails(0);
+        Component.onCompleted:
+        {
+            _root.getSevaTypeDetails(0);
         }
     }
-    Component{
+    Component
+    {
         id : _headerComp
-        Rectangle{
+        Rectangle
+        {
             width: _root.width
             height: 25
             z: 2
             color: "#00A2ED"
-            Text {
-                text :qsTr("Select Seva Type")
-                font.bold : true
-                font.italic: true
-                font.pixelSize: 20
-                anchors.centerIn: parent
+            //                    Text {
+            //                        text :qsTr("Seva Name")
+            //                        font.bold : true
+            //                        font.italic: true
+            //                        font.pixelSize: 20
+            //                        anchors.centerIn: parent
+            //                    }
+
+            RowLayout
+            {
+                anchors.fill: parent
+                spacing: 13
+
+                Text
+                {
+                    text: "Serial No"
+                    width: parent.width / 3
+                    font.pixelSize: 17
+                    font.bold: true
+                }
+
+                Text
+                {
+                    text: "Seva Name"
+                    width: parent.width / 3
+                    font.pixelSize: 17
+                    font.bold: true
+                }
+
+                Text
+                {
+                    Layout.alignment: Qt.AlignRight
+                    Layout.rightMargin: 12
+                    text: "SevaID"
+                    width: parent.width / 3
+                    font.pixelSize: 17
+                    font.bold: true
+                }
             }
+
         }
+
     }
-    Component {
+    Component
+    {
         id: highlightBar
         Rectangle {
             height: 20
@@ -86,7 +136,8 @@ Rectangle {
             z:5
         }
     }
-    Component.onCompleted: {
+    Component.onCompleted:
+    {
         console.log("Component.onCompleted: of seva list view")
     }
 }

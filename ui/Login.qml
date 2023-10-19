@@ -190,6 +190,7 @@ Item {
         {
             console.log("Credentials are correct")
             loginSuccess(pageNumber)
+            callLoad();
         }
         function onWrongCredentials()
         {
@@ -243,5 +244,9 @@ Item {
         passwordInput.text = ""
     }
 
+    function callLoad(){
+        voucherProxy.loadTbViewInProxy();
+        voucherProxy.voucherHeadsTableModel.rowClicked(0);
+    }
 }
 
