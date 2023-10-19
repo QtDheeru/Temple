@@ -30,6 +30,8 @@ public:
 
     SevaType* getSevaTypeByIndex(int index);
 
+    Q_INVOKABLE QString getSevaTypeName(int id);
+
 private :
     bool init();
 

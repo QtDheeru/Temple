@@ -2439,7 +2439,7 @@ void DBInterface::booking_report_cdate_function(QString formatchangedcalendar_st
         listOfSevaNames.append(query_other1.value(3).toString());
         qDebug() << "999999999999999999999999" << query_other1.value(3).toString() <<Qt::endl;
         listOfSevaType.append(query_other1.value(6).toInt());
-        qDebug() << "88888888888888888888888888" << query_other1.value(7).toInt() <<Qt::endl;
+        qDebug() << "88888888888888888888888888" << query_other1.value(6).toInt() <<Qt::endl;
     }
     QSqlQuery query_other2;
     int i = 0;
@@ -2448,9 +2448,9 @@ void DBInterface::booking_report_cdate_function(QString formatchangedcalendar_st
     {
         qDebug() << "query while/**********" <<Qt::endl;
         qu = ("select sevaname.THEERTHAPRASADA from sevaname where SEVANAME = '%1' and SEVATYPE = '%2';");
+        qu = qu.arg(listOfSevaNames.at(i)).arg(listOfSevaType.at(i));
         qDebug() << "query while/******1****" <<Qt::endl;
 
-        qu = qu.arg(listOfSevaNames.at(i)).arg(listOfSevaType.at(i));
         qDebug() << "query while/*****2*****" <<Qt::endl;
 
         bool b1 =   query_other2.prepare(qu);
@@ -2463,9 +2463,9 @@ void DBInterface::booking_report_cdate_function(QString formatchangedcalendar_st
             qDebug() << "query ifeee/*****5*****" <<Qt::endl;
             listOfPrasada.append(query_other2.value(0).toInt());
         }
-        //        else{
-        //             listOfPrasada.append(-1);
-        //        }
+//                else{
+//                     listOfPrasada.append(-1);
+//                }
         qDebug() << "query while/*****5*****" <<Qt::endl;
 
         i++;
@@ -2513,7 +2513,7 @@ void DBInterface::booking_report_cdate_function(QString formatchangedcalendar_st
         qDebug() <<"before emitting signal  booking_report ''''''''"<<Qt::endl;
         emit booking_report(ele);
         qDebug() <<"after emitting signal  booking_report ''''''''"<<Qt::endl;
-        i++;
+//        i++;
         qDebug()<<"after increment"<<i<<Qt::endl;
     }
 }
@@ -3053,9 +3053,10 @@ void DBInterface::voucher_report_cdate_function(QString formatchangedcalendar_st
     qDebug() << " Query string =111111" << que1 <<Qt::endl;
     bool b = query_other1.exec();
     qDebug() << " Query string =222222" << b <<Qt::endl;
+    qDebug()<<query_other1.lastError()<<Qt::endl;
     while(query_other1.next())
     {
-        qDebug() << " Query string inside while =" << que1 <<Qt::endl;
+        qDebug() << "Voucher Cdate inside while =" << que1 <<Qt::endl;
         VoucherElement *ele = new VoucherElement;
         ele->setVoucherNo(query_other1.value(0).toInt());
         ele->setVoucherName(query_other1.value(1).toString());
@@ -3119,8 +3120,10 @@ void DBInterface::voucher_report_cmonth_function(int month, int year, QString vo
     qDebug() << " Query string =" << que1 <<Qt::endl;
     query_other1.prepare(que1);
     query_other1.exec();
+    qDebug()<<query_other1.lastError()<<Qt::endl;
     while(query_other1.next())
     {
+          qDebug() << " Inside voucher Month while"<<Qt::endl;
         VoucherElement *ele = new VoucherElement;
         ele->setVoucherNo(query_other1.value(0).toInt());
         ele->setVoucherName(query_other1.value(1).toString());

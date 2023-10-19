@@ -13,6 +13,8 @@ Rectangle{
     property int subComponentPixelSize : styles.fontSize
     signal loadMenuPage()
     signal resetVouModel()
+    property var bookingElement
+    property int  pageNumber
     signal  sendVoucherReportInput(var obj)
     // focus: true
     VouEle
@@ -77,7 +79,7 @@ Rectangle{
                     fontPixelSize: _r1.subComponentPixelSize
                     myWidth: parent.width/1.25
                     Layout.topMargin: 10;_labelText :qsTr("Voucher type")
-                    KeyNavigation.tab: _item
+                    //                    KeyNavigation.tab: _item
                     _dataModel:voucherProxy.voucherHeadsTableModel
                     _dataModelRole:"vcategory"
                     Component.onCompleted:
@@ -239,10 +241,10 @@ Rectangle{
 
             }
         }
-//        Image {
-//            id: voucherImage
-//            source: "qrc:/ui/assets/Images/voucher.jpg"
-//        }
+        //        Image {
+        //            id: voucherImage
+        //            source: "qrc:/ui/assets/Images/voucher.jpg"
+        //        }
     }
 
     Loader{
@@ -360,7 +362,39 @@ Rectangle{
     Component.onCompleted: {
         console.log("In Component.onCompleted: of ")
         //forceActiveFocus();
+        if(pageNumber == 1){
+            loadConfirmationDailog(bookingElement)
+        }
+        else{
+            console.log("Inside Default")
+        }
     }
+    function loadConfirmationDailog(bookingElem){
 
+        _voucherReceiptDialog._vDate = voucherProxy.getCurrentDate()/*_vouEle.voucherDate*/
+        _voucherReceiptDialog._voucherNo = voucherProxy.getLastVoucherNumber()
+        _voucherReceiptDialog._voucherName= bookingElem.person.devoteeName
+        _voucherReceiptDialog._mobileNo= bookingElem.person.mobileNumber
+        _voucherReceiptDialog._voucherType=sevaProxy.getSevaTypeModel().getSevaTypeName(bookingElem.sevatype)
+        _voucherReceiptDialog._voucherItem= bookingElem.sevaname
+        _voucherReceiptDialog._voucherCost= bookingElem.totalCost
+        _voucherReceiptDialog._voucherPaymentMode= bookingElem.bank
+
+        _vouEle.voucherNo= _voucherReceiptDialog._voucherNo
+        _vouEle.voucherDate = voucherProxy.getCurrentDate()
+        _vouEle.voucherName = bookingElem.person.devoteeName
+        _vouEle.mobileNo = bookingElem.person.mobileNumber
+        _vouEle.voucherType = sevaProxy.getSevaTypeModel().getSevaTypeName(bookingElem.sevatype)
+        _vouEle.voucherItem = bookingElem.sevaname
+        _vouEle.voucherNote = _voucherReceiptDialog._voucherNote
+        _vouEle.voucherCost = bookingElem.totalCost
+        _vouEle.voucherPaymentMode = _voucherReceiptDialog._voucherPaymentMode
+        _vouEle.paymentReference =_voucherReceiptDialog._paymentReference
+        saveVoucher.saveVoucherElements(_vouEle);
+
+        _voucherReceiptDialog.open();
+
+
+    }
 }
 

@@ -15,7 +15,7 @@ ApplicationWindow {
     property var constant: Constants{}
     title: constant.addressText1
     color: "black"
-    flags: Qt.Dialog
+    flags: Qt.WindowSystemMenuHint
     Component.onCompleted: {
         //        console.log("=====" + confApp.appPath + "/" + confApp.welcomescreenImg );
         //        console.log( confApp.welcomescreenImg);

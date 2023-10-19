@@ -52,7 +52,7 @@ Rectangle {
         }
     }
     function setNakshatraCombo(nakshatra){
-         _nakshatra.currentIndex = _nakshatra.findTextInComboBox(nakshatra);
+        _nakshatra.currentIndex = _nakshatra.findTextInComboBox(nakshatra);
     }
     function setGothraCombo(gothra){
         _gotra.currentIndex = _gotra.findTextInComboBox(gothra);
@@ -90,7 +90,7 @@ Rectangle {
             myWidth: parent.width/1.25
             fontPixelSize: _r1.subComponentPixelSize
             _labelText:qsTr("Mobile Number")
-
+            _editable:true
             KeyNavigation.tab: _name
             regExpValidator : RegExpValidator{regExp:/[0-9]{10}/}
             onEditDone: {
@@ -119,6 +119,7 @@ Rectangle {
             fontPixelSize: _r1.subComponentPixelSize
             _labelText:qsTr("Name");regExpValidator: RegExpValidator{regExp:/^[a-zA-Z ]*$/}
             focus: true
+            _editable:true
             KeyNavigation.tab: _nakshatra
         }
         MyComboEntry{id:_nakshatra;

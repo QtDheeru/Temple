@@ -4,8 +4,8 @@ SevaDetailsTableView::SevaDetailsTableView(QObject *parent) : QAbstractTableMode
 {
     qDebug() << Q_FUNC_INFO << Qt::endl;
     list = new QStringList;
-     *list <<"SNO"<< "PERSONID"<< "SEVATYPE"<< "SEVANAME"<< "SEVA_DATE"<< "RECEIPT_DATE"<< "SEVACOST"
-            << "SEVATOTALPRICE"<< "CASH"<< "BANK"<< "BANKDETAILS"<< "REFERENCE"<< "ADDRESS"<< "MOMENTO"<< "NOTE";
+    *list <<"SNO"<< "PERSONID"<< "SEVATYPE"<< "SEVANAME"<< "SEVA_DATE"<< "RECEIPT_DATE"<< "SEVACOST"
+          << "SEVATOTALPRICE"<< "CASH"<< "BANK"<< "BANKDETAILS"<< "REFERENCE"<< "ADDRESS"<< "MOMENTO"<< "NOTE";
     m_deatailsList.append(list);
 }
 
@@ -44,11 +44,11 @@ QVariant SevaDetailsTableView::data(const QModelIndex &index, int role) const
             return elem->person()->mobileNumber();
         break;
     case HeaderRole: {
-         if (index.row()==0)
+        if (index.row()==0)
             return true;
-         else
+        else
             return false;
-        }
+    }
     }
     return QVariant();
 }
@@ -78,7 +78,9 @@ bool SevaDetailsTableView::insertRows(int row, int count, const QModelIndex &par
 bool SevaDetailsTableView::insertSevaRow(SevaBookingElement *elm)
 {
     qDebug() << Q_FUNC_INFO << " ***** Inserting the element ***** Current Size= " << this->m_sevaBookedList.size() << Qt::endl;
+    beginInsertRows(QModelIndex(),0,0);
     this->m_sevaBookedList.append(elm);
+    endInsertRows();
     elm->print();
     return true;
 }
@@ -89,7 +91,7 @@ void SevaDetailsTableView::getData(QList<QString>sno, QList<QString>personid, QL
     for(int i=0;i<sno.size();i++){
         list = new QStringList;
         *list << sno.at(i) << personid.at(i) << sevatype.at(i) << sevaname.at(i) << seva_date.at(i)
-        << receipt_date.at(i) << sevacost.at(i) << sevatotalprice.at(i) << cash.at(i) << bank.at(i) << bankdetails.at(i) << reference.at(i) << address.at(i) << momento.at(i) << note.at(i) ;
+              << receipt_date.at(i) << sevacost.at(i) << sevatotalprice.at(i) << cash.at(i) << bank.at(i) << bankdetails.at(i) << reference.at(i) << address.at(i) << momento.at(i) << note.at(i) ;
         insertRows(1,1,QModelIndex());
     }
 }

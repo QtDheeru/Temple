@@ -31,6 +31,8 @@ public:
     QString getVouchername() const;
     void setVouchername(const QString &newVouchername);
 
+    Q_INVOKABLE int getLastVoucherNumber();
+    Q_INVOKABLE QString getCurrentDate();
 public slots:
     void addVoucherMainType(QString,QString,QString);
     void updateVoucherInProxy(QString,QString,QString);

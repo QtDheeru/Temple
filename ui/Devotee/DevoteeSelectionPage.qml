@@ -132,7 +132,7 @@ Item {
     function addDevotee() {
         console.log(" Mobile    ="+_devoteeView.mobileNo);
         console.log(" Name      = "+_devoteeView.devoteeName);
-        console.log(" Nakshatra ="+_devoteeView.enteredNakshatra)
+        console.log(" Nakshatra ="+_devoteeView.nakshatra)
         console.log(" Gothra    ="+_devoteeView.gothra)
         var devotee = {devoteeName : _devoteeView.devoteeName,
             mobileNumber : _devoteeView.mobileNo,
@@ -166,13 +166,13 @@ Item {
         _errorDialog.visible = false;
         console.log(" Mobile    ="+_devoteeView.mobileNo);
         console.log(" Name      = "+_devoteeView.devoteeName);
-        console.log(" Nakshatra ="+_devoteeView.enteredNakshatra)
+        console.log(" Nakshatra ="+_devoteeView.nakshatra)
         console.log(" Gothra    ="+_devoteeView.gothra)
         var devotee = {devoteeName : _devoteeView.devoteeName,
             mobileNumber : _devoteeView.mobileNo,
             gothra: _devoteeView.gothra,
-            nakshatra:_devoteeView.enteredNakshatra};
-        if (!peopleDataModel.updateDevoteeJSObject(devotee)) {
+            nakshatra:_devoteeView.nakshatra};
+        if (!devoteeProxy.devoteeDataModel.updateDevoteeJSObject(devotee)) {
             console.log(" Error Update Devotee ="+peopleDataModel.lastError());
             _errorDialog.context = 0;
             _errorDialog.text2Display = peopleDataModel.lastError();
@@ -186,16 +186,17 @@ Item {
     function deleteDevotee() {
         console.log(" Mobile    ="+_devoteeView.mobileNo);
         console.log(" Name      = "+_devoteeView.devoteeName);
-        console.log(" Nakshatra ="+_devoteeView.enteredNakshatra)
+        console.log(" Nakshatra ="+_devoteeView.nakshatra)
         console.log(" Gothra    ="+_devoteeView.gothra)
         var devotee = {devoteeName : _devoteeView.devoteeName,
             mobileNumber : _devoteeView.mobileNo,
             gothra: _devoteeView.gothra,
-            nakshatra:_devoteeView.enteredNakshatra};
-        if (!peopleDataModel.deleteDevoteeJSObject(devotee)) {
+            nakshatra:_devoteeView.nakshatra};
+        if (!!devoteeProxy.devoteeDataModel.deleteDevoteeJSObject(devotee)) {
             console.log(" Error Delete Devotee ="+peopleDataModel.lastError());
             _errorDialog.text2Display = peopleDataModel.lastError();
             _errorDialog.context = 0;
+
         }else {
             _errorDialog.context = 0;
             _errorDialog.text2Display = " Delete successful";
@@ -252,18 +253,17 @@ Item {
     }
 
     function onYesAction(context) {
-        console.log( "Yes clicked. Context ="+context)
+        console.log( "Yes clicked. Context ="+ context)
         switch (context){
         case 1 :updateDevotee(); break;
         case 2 :deleteDevotee(); break;
         default: _errorDialog.close();break;
         }
     }
-    Component.onCompleted: {
+    Component.onCompleted:{
         _devoteeView.setGothras(sevaProxy.getGothras());
         _devoteeView.setNakshatras(sevaProxy.getNakshatras());
     }
-
     Keys.onEscapePressed: {
         console.log("Esc pressed")
         loadMenuPage()

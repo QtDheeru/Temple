@@ -1,0 +1,36 @@
+{
+    "2023_10_14683": {
+        "Chataka": {
+            "Number": 795440431,
+            "additionalCost": 0,
+            "count": 1,
+            "sevaCost": 800,
+            "sevaId": 2,
+            "sevaName": "Chataka",
+            "sevaTime": "",
+            "sevaType": 1,
+            "teerthaPrasada": 7105905
+        },
+        "Dwadashi Hasthodaka": {
+            "Number": 795440431,
+            "additionalCost": 0,
+            "count": 1,
+            "sevaCost": 50,
+            "sevaId": 4,
+            "sevaName": "Dwadashi Hasthodaka",
+            "sevaTime": "",
+            "sevaType": 1,
+            "teerthaPrasada": 7105905
+        },
+        "address": "rrn",
+        "bookedBy": "Prasanna Rao",
+        "devoteeName": "Anugrahi",
+        "gothra": "Bharadwaja",
+        "mobilenumber": "9900328000",
+        "momento": "Category-1",
+        "nakshtra": "Ashlesha",
+        "receiptDate": "18-10-2023",
+        "receiptNo": "2023_10_14683",
+        "reference": ""
+    }
+}

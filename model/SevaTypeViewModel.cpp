@@ -23,9 +23,9 @@ int SevaTypeViewModel::rowCount(const QModelIndex &parent) const
     qDebug() << Q_FUNC_INFO << " Row Count == " <<  m_sevaTypes.size()  << Qt::endl;
     // For list models only the root node (an invalid parent) should return the list's size. For all
     // other (valid) parents, rowCount() should return 0 so that it does not become a tree model.
-//    if (parent.isValid())
-//        //return 0;
-        return m_sevaTypes.size();
+    //    if (parent.isValid())
+    //        //return 0;
+    return m_sevaTypes.size();
     // FIXME: Implement me!
 }
 
@@ -38,8 +38,8 @@ QVariant SevaTypeViewModel::data(const QModelIndex &index, int role) const
 
     SevaType *s = this->m_sevaTypes.at(index.row());
     switch(role){
-        case 1 : return s->sevaTypeId();break;
-        case 2 : return s->sevaTypeName();break;
+    case 1 : return s->sevaTypeId();break;
+    case 2 : return s->sevaTypeName();break;
     }
 
     //return QVariant::fromValue(m_sevaTypes.at(index.row()));
@@ -70,6 +70,17 @@ void SevaTypeViewModel::setSevaTypes(const QList<SevaType *> &newSevaTypes)
 SevaType *SevaTypeViewModel::getSevaTypeByIndex(int index)
 {
     return  m_sevaTypes.at(index);
+}
+
+QString SevaTypeViewModel::getSevaTypeName(int id)
+{
+    QString SevatypeName;
+    for(auto it = m_sevaTypes.begin(); it != m_sevaTypes.end();it++){
+        if(id==(*it)->sevaTypeId()){
+            SevatypeName = (*it)->sevaTypeName();
+        }
+    }
+    return SevatypeName;
 }
 
 

@@ -404,8 +404,9 @@ Rectangle{
                 //_ld.source = "SevaBookingView.qml"
                 loadMenuPage();
             }
-            function onLoadvoucher(){
-                _ld.source = "voucherPage.qml"
+            function onLoadvoucher(ve,pageNo){
+                console.log("hellooooooon suman",ve," ",pageNo)
+                _ld.setSource("voucherPage.qml",{bookingElement:ve,pageNumber:pageNo})
             }
         }
     }

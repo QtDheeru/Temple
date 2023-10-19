@@ -84,7 +84,7 @@ Dialog {
                 Layout.fillWidth: true;text :"Print"
                 Layout.maximumHeight: parent.height-15
                 font.pixelSize: 20
-                enabled: _sevaPayment.isDataExist
+                enabled: _sevaPayment.isDataExists
                 visible: false
                 onClicked: {
                     //    printClicked();

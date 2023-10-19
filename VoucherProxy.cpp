@@ -1,4 +1,5 @@
 #include "VoucherProxy.h"
+#include <QDate>
 #include <QQmlEngine>
 VoucherProxy::VoucherProxy(QObject *parent)
     : QObject{parent}
@@ -47,6 +48,19 @@ QString VoucherProxy::getVouchername() const
 void VoucherProxy::setVouchername(const QString &newVouchername)
 {
     vouchername = newVouchername;
+}
+
+int VoucherProxy::getLastVoucherNumber()
+{
+    int vouchernum = DBInterface::getInstance()->getLastVoucherNumber();
+    return vouchernum;
+}
+
+QString VoucherProxy::getCurrentDate()
+{
+    QDate tDate = QDate::currentDate();
+    QString voucherDate = QString::number(tDate.day()) + "-" + QString::number(tDate.month()) + "-" + QString::number(tDate.year());
+    return voucherDate;
 }
 
 void VoucherProxy::clearProxy()

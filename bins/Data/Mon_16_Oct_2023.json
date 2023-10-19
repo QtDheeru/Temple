@@ -1,0 +1,48 @@
+{
+    "2023_10_0001": {
+        "Chataka": {
+            "Number": 795440431,
+            "additionalCost": 0,
+            "count": 1,
+            "sevaCost": 800,
+            "sevaId": 2,
+            "sevaName": "Chataka",
+            "sevaTime": "",
+            "sevaType": 1,
+            "teerthaPrasada": 7105905
+        },
+        "address": "rrn",
+        "bookedBy": "Prasanna Rao",
+        "devoteeName": "B K Sudheendra",
+        "gothra": "",
+        "mobilenumber": "5000000005",
+        "momento": "Category-1",
+        "nakshtra": "Pushya",
+        "receiptDate": "16-10-2023",
+        "receiptNo": "2023_10_0001",
+        "reference": ""
+    },
+    "2023_10_0002": {
+        "Dwadashi Hasthodaka": {
+            "Number": 795440431,
+            "additionalCost": 0,
+            "count": 1,
+            "sevaCost": 50,
+            "sevaId": 4,
+            "sevaName": "Dwadashi Hasthodaka",
+            "sevaTime": "",
+            "sevaType": 1,
+            "teerthaPrasada": 7105905
+        },
+        "address": "rrn",
+        "bookedBy": "Prasanna Rao",
+        "devoteeName": "Prafulla Jagannath",
+        "gothra": "Srivathsa",
+        "mobilenumber": "9945260999",
+        "momento": "Category-1",
+        "nakshtra": "Jyeshtha",
+        "receiptDate": "16-10-2023",
+        "receiptNo": "2023_10_0002",
+        "reference": ""
+    }
+}
