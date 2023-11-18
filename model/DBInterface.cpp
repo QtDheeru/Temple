@@ -72,7 +72,8 @@ DBInterface::DBInterface(QObject *parent) : QObject(parent)
                      "PERSON,"
                      "THEERTHAPRASADA,"
                      "POOJATIMEING,"
-                     "SANKALAPAPOOJA);";
+                     "SANKALAPAPOOJA,"
+                     "STATUS);";
 
     QString query2 = "CREATE TABLE sevabooking("
                      "SNO,"
@@ -839,7 +840,6 @@ void DBInterface::modify_db_type(int r_s_no,QString r_seva_name,int r_seva_code,
 
 void DBInterface::modify_db_seva(int ser_no, QString r_seva_name, int r_seva_code, QString seva_type, QString dateold, QString sevaadder_name, int mod_theertha_prasada, QString modifaid_ptime, int modifaidpooja)
 {
-    
     QDate Date1 = QDate::fromString(dateold,"dd-MM-yyyy");
     QString date  = Date1.toString("yyyy-MM-dd");
     qWarning()<<Q_FUNC_INFO<<ser_no<<Qt::endl;
@@ -850,7 +850,7 @@ void DBInterface::modify_db_seva(int ser_no, QString r_seva_name, int r_seva_cod
     qDebug()<<Q_FUNC_INFO<<r_seva_code<<Qt::endl;
     qDebug()<<Q_FUNC_INFO<<seva_type<<Qt::endl;
     qDebug()<<Q_FUNC_INFO<<date<<Qt::endl;
-    
+
     qry.prepare("UPDATE sevaname SET SNO=:sno,SEVANAME=:seva_name,SEVATYPE=:seva_type,SEVACOST=:seva_cost,SEVADATE=:seva_date,PERSON=:seav_adder, THEERTHAPRASADA=:terthaprasada,POOJATIMEING=:poojatiming,SANKALAPAPOOJA=:pooja  WHERE SNO=:s_no");
     
     qry.bindValue(":s_no",ser_no);
@@ -1357,6 +1357,46 @@ void DBInterface::recvDeletedRecptNo(QString recptNo)
     }
     else{
         qDebug()<<"Update cmd failed....!"<<query.lastError().text()<<Qt::endl;
+    }
+}
+
+void DBInterface::modifySeva(int sevaId, QString sevaName, int cost, QString Date)
+{
+    qDebug()<<Q_FUNC_INFO<<Qt::endl;
+    QSqlQuery query;
+    QString str;
+    qDebug()<<"suman--ModifysevaId--"<<sevaId<<Qt::endl;
+    str =("UPDATE sevaname SET SEVANAME = '%1',SEVACOST= '%2',SEVADATE='%3' WHERE SNO = '%4' ;");
+    str= str.arg(sevaName).arg(cost).arg(Date).arg(sevaId);
+    query.prepare(str);
+    bool b = query.exec();
+    if(b==true){
+        qDebug()<<"cost Update cmd executed....!"<<query.lastError().text()<<Qt::endl;
+        emit sendUpdateStatus("The Seva id:"+QString::number(sevaId)+" Update Success");
+    }
+    else{
+        qDebug()<<"cost Update cmd failed....!"<<query.lastError().text()<<Qt::endl;
+    }
+
+}
+
+void DBInterface::closeSeva(int SevaId)
+{
+    QSqlQuery query;
+    QString str;
+    qDebug()<<"suman--sevaId--"<<SevaId<<Qt::endl;
+    QString cmd = "close";
+    str =("UPDATE sevaname SET STATUS = '%1' WHERE SNO = '%2' ;");
+    str= str.arg(cmd).arg(SevaId);
+    query.prepare(str);
+    bool b = query.exec();
+    if(b==true){
+        qDebug()<<"close Update cmd executed....!"<<query.lastError().text()<<Qt::endl;
+        emit signalClose(SevaId);
+        emit signalClosedStatus("The SevaId "+QString::number(SevaId)+" Closed");
+    }
+    else{
+        qDebug()<<"close Update cmd failed....!"<<query.lastError().text()<<Qt::endl;
     }
 }
 
@@ -2463,9 +2503,9 @@ void DBInterface::booking_report_cdate_function(QString formatchangedcalendar_st
             qDebug() << "query ifeee/*****5*****" <<Qt::endl;
             listOfPrasada.append(query_other2.value(0).toInt());
         }
-//                else{
-//                     listOfPrasada.append(-1);
-//                }
+        //                else{
+        //                     listOfPrasada.append(-1);
+        //                }
         qDebug() << "query while/*****5*****" <<Qt::endl;
 
         i++;
@@ -2513,7 +2553,7 @@ void DBInterface::booking_report_cdate_function(QString formatchangedcalendar_st
         qDebug() <<"before emitting signal  booking_report ''''''''"<<Qt::endl;
         emit booking_report(ele);
         qDebug() <<"after emitting signal  booking_report ''''''''"<<Qt::endl;
-//        i++;
+        //        i++;
         qDebug()<<"after increment"<<i<<Qt::endl;
     }
 }
@@ -3026,24 +3066,28 @@ void DBInterface::voucher_report_cdate_function(QString formatchangedcalendar_st
     QString que1;
     if(voucher_type =="ALL" && payment_mode=="ALL")
     {
+        qDebug() << "inside voucherdate 1" <<Qt::endl;
         que1 = ("select V_NO,NAME,PAYMENT_MODE,NOTE,PHONE,PRODUCT,COST,DATES,VOUCHER_TYPE,REFERENCE_NO from VOUCHER_DETAILS where VOUCHER_DETAILS.DATES='%1';");
         que1 = que1.arg(formatchangedcalendar_str);
     }
 
     if(voucher_type =="ALL" && payment_mode!="ALL")
     {
+        qDebug() << "inside voucherdate 2" <<Qt::endl;
         que1 = ("select V_NO,NAME,PAYMENT_MODE,NOTE,PHONE,PRODUCT,COST,DATES,VOUCHER_TYPE,REFERENCE_NO from VOUCHER_DETAILS where VOUCHER_DETAILS.DATES='%1' and VOUCHER_DETAILS.PAYMENT_MODE='%2';");
         que1 = que1.arg(formatchangedcalendar_str).arg(payment_mode);
     }
 
     if(voucher_type !="ALL" && payment_mode=="ALL")
     {
+        qDebug() << "inside voucherdate 3" <<Qt::endl;
         que1 = ("select V_NO,NAME,PAYMENT_MODE,NOTE,PHONE,PRODUCT,COST,DATES,VOUCHER_TYPE,REFERENCE_NO from VOUCHER_DETAILS where VOUCHER_DETAILS.DATES='%1' and VOUCHER_DETAILS.VOUCHER_TYPE='%2';");
         que1 = que1.arg(formatchangedcalendar_str).arg(voucher_type);
     }
 
     if(voucher_type !="ALL" && payment_mode!="ALL")
     {
+        qDebug() << "inside voucherdate 4" <<Qt::endl;
         que1 = ("select V_NO,NAME,PAYMENT_MODE,NOTE,PHONE,PRODUCT,COST,DATES,VOUCHER_TYPE,REFERENCE_NO from VOUCHER_DETAILS where VOUCHER_DETAILS.DATES='%1' and VOUCHER_DETAILS.VOUCHER_TYPE='%2' and VOUCHER_DETAILS.PAYMENT_MODE='%3';");
         que1 = que1.arg(formatchangedcalendar_str).arg(voucher_type).arg(payment_mode);
     }
@@ -3123,7 +3167,7 @@ void DBInterface::voucher_report_cmonth_function(int month, int year, QString vo
     qDebug()<<query_other1.lastError()<<Qt::endl;
     while(query_other1.next())
     {
-          qDebug() << " Inside voucher Month while"<<Qt::endl;
+        qDebug() << " Inside voucher Month while"<<Qt::endl;
         VoucherElement *ele = new VoucherElement;
         ele->setVoucherNo(query_other1.value(0).toInt());
         ele->setVoucherName(query_other1.value(1).toString());
@@ -3931,20 +3975,26 @@ bool DBInterface::querySevaType()
 
 bool DBInterface::querySevaNames()
 {
+    const QString status= "active";
     QSqlQuery qry;
-    qry.prepare("select SNO,SEVANAME,SEVATYPE,SEVACOST,SEVADATE,PERSON,THEERTHAPRASADA from sevaname ");
+    qry.prepare("select SNO,SEVANAME,SEVATYPE,SEVACOST,SEVADATE,PERSON,THEERTHAPRASADA,STATUS from sevaname ");
     qry.exec();
     while(qry.next()){
         int sevaId = qry.value(0).toInt();
-        // if (sevaId < 1000) continue;
-        SevaName *sevaNames = new SevaName;
-        sevaNames->setSevaId(sevaId);
-        sevaNames->setNumber(qry.value(0).toInt());
-        sevaNames->setSevaName(qry.value(1).toString());
-        sevaNames->setSevaType(qry.value(2).toInt());
-        sevaNames->setSevaCost(qry.value(3).toInt());
-        sevaNames->setSevaStartDate(qry.value(4).toString());
-        emit sendSevaName(sevaNames);
+        QString Sevastatus = qry.value(7).toString();
+        if(Sevastatus == status){
+            SevaName *sevaNames = new SevaName;
+            sevaNames->setSevaId(sevaId);
+            sevaNames->setNumber(qry.value(0).toInt());
+            sevaNames->setSevaName(qry.value(1).toString());
+            sevaNames->setSevaType(qry.value(2).toInt());
+            sevaNames->setSevaCost(qry.value(3).toInt());
+            sevaNames->setSevaStartDate(qry.value(4).toString());
+            emit sendSevaName(sevaNames);
+        }
+        else{
+            qDebug()<<"Status are closed"<<Qt::endl;
+        }
     }
     qDebug() << Q_FUNC_INFO << "querying seva names done" << Qt::endl;
     return true;

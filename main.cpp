@@ -120,6 +120,7 @@ int main(int argc, char *argv[])
         engine.rootContext()->setContextProperty("saveVoucher",vou);
         engine.rootContext()->setContextProperty("voucherReportModel",vouRepModel);
 
+
         engine.rootContext()->setContextProperty("dbchecker",dbchecker);});
     const QUrl url(QStringLiteral("qrc:/ui/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,

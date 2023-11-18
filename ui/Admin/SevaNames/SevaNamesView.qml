@@ -19,10 +19,10 @@ Rectangle
     property int myHeight : 30
     property int fontPixelSize : 20
     property var sevaTypeObject
-
     signal sevaTypeSel(int index, int sevaType)
     signal sevaTypeSelectedByIndex(int index)
     signal sevaTypeSelected(variant sevaType)
+    signal sendSevaCurrentIndex(int idx)
     focus: true
 
     function changeItem(idx)
@@ -64,9 +64,8 @@ Rectangle
         highlightFollowsCurrentItem: true
         onCurrentIndexChanged:
         {
-            console.log(" Current Index changed" + currentIndex)
-
-
+            console.log("hello Current Index changed" + currentIndex)
+            sendSevaCurrentIndex(currentIndex)
         }
         Component.onCompleted:
         {
@@ -121,9 +120,7 @@ Rectangle
                     font.bold: true
                 }
             }
-
         }
-
     }
     Component
     {

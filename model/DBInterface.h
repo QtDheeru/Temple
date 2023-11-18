@@ -122,7 +122,7 @@ signals:
     void deletionFailedInDB();
 
     void mySelectSignalAll(QString,QString,QString);
-
+    void signalClosedStatus(QString);
 
 public slots:
     bool add_seva_type(QString seva_type, int seva_code, QString seva_adder_name);
@@ -223,6 +223,8 @@ public slots:
     void getAccountData();  //Suman N added
     void deleteWrongData(QString rcptNum); //Suman N Added
     void recvDeletedRecptNo(QString recptNo); //Suman N added
+    void modifySeva(int sevaId, QString sevaName,int cost,QString Date); //Suman N added
+    void closeSeva(int SevaId);                                          //Suman N added
 
 signals :
     void sendSevaType(SevaType *);
@@ -238,6 +240,9 @@ signals :
     void sendChangedDataToSevaBookingTablemodel(QString);
     void insert_Success(QString,QString,QString);
     void refreshModel(QString);
+    void sendUpdateStatus(QString);
+    void signalClose(int);
+
 private:
     explicit DBInterface(QObject *parent=nullptr);
     int val;

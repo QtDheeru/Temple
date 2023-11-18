@@ -62,6 +62,8 @@ public:
                                  int additionalCost=0,int count=1);
 
     Q_INVOKABLE bool deleteSeva(int sevaId, QString sevaName);
+    Q_INVOKABLE bool closeSeva(int sevaId);
+    Q_INVOKABLE bool modifySeva(int sevaId, QString sevaName,int cost,QString Date);
     Q_INVOKABLE bool printReceipt();
     Q_INVOKABLE bool printVoucherReceipt(VoucherElement* voucherElement);
     Q_INVOKABLE bool printBookingReceipt(SevaBookingElement* sevaBookingElement);
@@ -99,6 +101,8 @@ public:
 public slots:
      void generateCSVSevaBookingReport();
      void getAllAccountDetails();
+     void rcvclosedStatus(QString status);
+     void recvUpdateStatus(QString);
 signals:
     void receiptNumberChanged();
     void allReportModelChanged();
@@ -113,6 +117,8 @@ signals:
     void devoteeTableModelChanged();
 
     void devoteeSearchModelChanged();
+    void sendStatustoQml(QString status);
+    void sendUpdateStatustoQml(QString updateStatus);
 
 private :
     SevaTypeNamesDataModel *m_sevaBookingModelData;

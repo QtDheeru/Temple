@@ -127,7 +127,7 @@ void SevaTypeJsonProcessor::printSevaTypeNames()
     while (it.hasNext()) {
         it.next();
         qDebug()<<it.key() << ": " << it.value()->sevaTypeName()<<","<<it.value()->sevaTypeId()<<","
-               << it.value()->userName()<< Qt::endl;
+                 << it.value()->userName()<< Qt::endl;
 
     }
 }
@@ -403,10 +403,10 @@ void SevaTypeJsonProcessor::printSevasNames()
     {
         it.next();
         qDebug()<<it.key() << ": " << it.value()->sevaName()<<","<<it.value()->sevaId() <<","
-               <<it.value()->Number()<<","<<it.value()->sevaType()<<","<<it.value()->sevaCost()
-              <<","<<it.value()->teerthaPrasada()<<","<<it.value()->sevaStartDate()<<","<<it.value()->count()
-             <<","<<it.value()->additionalCost()<<","<<it.value()->sevaStartTime()<<","<<it.value()->userName()
-            <<","<<it.value()->sankalpa()<<Qt::endl;
+                 <<it.value()->Number()<<","<<it.value()->sevaType()<<","<<it.value()->sevaCost()
+                 <<","<<it.value()->teerthaPrasada()<<","<<it.value()->sevaStartDate()<<","<<it.value()->count()
+                 <<","<<it.value()->additionalCost()<<","<<it.value()->sevaStartTime()<<","<<it.value()->userName()
+                 <<","<<it.value()->sankalpa()<<Qt::endl;
     }
 }
 
