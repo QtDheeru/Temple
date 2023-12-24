@@ -4,7 +4,6 @@
 SevaBookingElement::SevaBookingElement(QObject *parent) : QObject(parent)
 {
     m_person = new DevotePersnalDetails;
-
 }
 
 QString SevaBookingElement::sno() const

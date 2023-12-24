@@ -10,6 +10,8 @@ Rectangle{
     height: parent.height
     signal loadSevaBookingView();
     signal loadvoucher(var bookedObj,int pageNo);
+    signal loadCancelReceipt()
+    signal getCancelReceiptDetails(var clickedObj)
     property var ve
     property int  pageNumber: 1
     RowLayout{
@@ -258,7 +260,9 @@ Rectangle{
                 id:_cancel
                 text: qsTr('Cancel')
                 onTriggered: {
-                    _errorDialog.showmsg("Are you sure to cancel the reciept?",1)
+//                    _errorDialog.showmsg("Are you sure to cancel the reciept?",1)
+                    getCancelReceiptDetails(ve)
+                    loadCancelReceipt()
                 }
             }
             MenuItem{

@@ -804,8 +804,8 @@ void DBInterface::addsevaname(int sevatype, QString sevaName, int seva_cost, QSt
 
     SID = SID +1;
     QSqlQuery Squery;
-    Squery.prepare("INSERT INTO sevaname(SNO,SEVANAME,SEVATYPE,SEVACOST,SEVADATE,PERSON,THEERTHAPRASADA,POOJATIMEING,SANKALAPAPOOJA)"
-                   "VALUES (:sno, :seva_name, :seva_type, :seva_cost, :seva_date, :seva_adder_name, :t_prasada, :pooja_time, :pooja  )");
+    Squery.prepare("INSERT INTO sevaname(SNO,SEVANAME,SEVATYPE,SEVACOST,SEVADATE,PERSON,THEERTHAPRASADA,POOJATIMEING,SANKALAPAPOOJA,STATUS)"
+                   "VALUES (:sno, :seva_name, :seva_type, :seva_cost, :seva_date, :seva_adder_name, :t_prasada, :pooja_time, :pooja )");
     Squery.bindValue(":sno",SID);
     Squery.bindValue(":seva_name",sevaName);
     Squery.bindValue(":seva_type",sevatype );
@@ -847,8 +847,8 @@ bool DBInterface::createSeva(SevaName* sevaName)
     }
 
     QSqlQuery Squery;
-    Squery.prepare("INSERT INTO sevaname(SNO,SEVANAME,SEVATYPE,SEVACOST,SEVADATE,PERSON,THEERTHAPRASADA,POOJATIMEING,SANKALAPAPOOJA)"
-                   "VALUES (:sno, :seva_name, :seva_type, :seva_cost, :seva_date, :seva_adder_name, :t_prasada, :pooja_time, :pooja  )");
+    Squery.prepare("INSERT INTO sevaname(SNO,SEVANAME,SEVATYPE,SEVACOST,SEVADATE,PERSON,THEERTHAPRASADA,POOJATIMEING,SANKALAPAPOOJA,STATUS)"
+                   "VALUES (:sno, :seva_name, :seva_type, :seva_cost, :seva_date, :seva_adder_name, :t_prasada, :pooja_time, :pooja , :pooja_status )");
     Squery.bindValue(":sno",sevaName->sevaId());
     Squery.bindValue(":seva_name",sevaName->sevaName());
     Squery.bindValue(":seva_type",sevaName->sevaType());
@@ -858,6 +858,7 @@ bool DBInterface::createSeva(SevaName* sevaName)
     Squery.bindValue(":t_prasada",sevaName->teerthaPrasada());
     Squery.bindValue(":pooja_time",sevaName->sevaStartTime());
     Squery.bindValue(":pooja",sevaName->sankalpa());
+    Squery.bindValue(":pooja_status",sevaName->status());
 
     bool retVal = Squery.exec();
     if (!retVal) {
@@ -874,6 +875,10 @@ bool DBInterface::createSeva(SevaName* sevaName)
 
 void DBInterface::modify_db_type(int r_s_no,QString r_seva_name,int r_seva_code,QString sevaadder_name,int m_s_no)
 {
+
+
+
+
     qWarning()<<Q_FUNC_INFO<<r_s_no<<Qt::endl;
     QSqlQuery qry;
     qry.prepare("UPDATE seva SET SNO=:sno,SEVATYPE=:seva_type,SEVACODE=:seva_code,PERSON=:seva_adder_name WHERE SNO=:s_no");

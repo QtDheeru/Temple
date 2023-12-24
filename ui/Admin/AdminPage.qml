@@ -68,7 +68,6 @@ Rectangle {
                     console.log("hello mahesha")
                     sevaNameEntry.getSevaNameDetail(idx)
                 }
-
             }
             SevaNameEntry{
                 id : sevaNameEntry

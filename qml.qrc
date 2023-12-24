@@ -108,5 +108,9 @@
         <file>ui/BankRegistration/MyLabelText.qml</file>
         <file>ui/QmlVoucher/MyButton.qml</file>
         <file>ui/Admin/SevaNames/SevaNameDelegate.qml</file>
+        <file>ui/SevaCancelReceipt.qml</file>
+        <file>Images/check-mark.png</file>
+        <file>ui/components/MyCheckBox.qml</file>
+        <file>ui/components/MyButton.qml</file>
     </qresource>
 </RCC>

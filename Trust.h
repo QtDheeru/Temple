@@ -18,7 +18,6 @@ public:
     const QString &trustCode() const;
     void setTrustCode(const QString &newTrustCode);
 
-signals:
 private:
     QString m_trustName;
     QString m_trustCode;

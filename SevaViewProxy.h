@@ -59,6 +59,7 @@ public:
                                         QString nakshatra,
                                         QString gothra);
     Q_INVOKABLE bool saveReceipt(MySevaReceipt *receipt);
+
     Q_INVOKABLE void deleteRecipt(QString rcptNo);
 
     Q_INVOKABLE bool addSevaOnly(int sevaType,int sevaId,QString sevaName,
@@ -132,9 +133,7 @@ signals:
     void successMessage(QString exportmsg);
     void collectAllAccountsdata();
     void sendDeletedRecptNo(QString);
-
     void devoteeTableModelChanged();
-
     void devoteeSearchModelChanged();
     void sendStatustoQml(QString status);
     void sendUpdateStatustoQml(QString updateStatus);

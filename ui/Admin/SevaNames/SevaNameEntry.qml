@@ -8,12 +8,14 @@ Item {
     id  : _root
     Layout.fillWidth: true
     property var sevaNameObject
+    property int index
     function setSevaType(sevaType){
         console.log("Seva Type ="+sevaType.sevaTypeName);
         sevatypeName._data = sevaType.sevaTypeName;
         sevaCode._data = sevaType.sevaTypeId
     }
     function getSevaNameDetail(idx){
+        index=idx
         console.log("inside suman getSevaNameDetail ",idx)
         sevaNameObject = sevaProxy.getSevaByIndex(idx)
         sevaName._data = sevaNameObject.sevaName
@@ -188,10 +190,12 @@ Item {
                 }
                 else if(buttonNum == 2){
                     sevaProxy.closeSeva(parseInt(sevaId._data))
+                    getSevaNameDetail(index)
                 }
                 else{
                     console.log("default")
                 }
+
             }
         }
         Component{

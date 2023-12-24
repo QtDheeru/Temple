@@ -5,6 +5,7 @@
 
 #include "SevaTypeNamesDataModel.h"
 #include <AllViewReports.h>
+//#include <CancelModel>
 #include <QScreen>
 #include "print_file.h"
 SevaViewProxy::SevaViewProxy(QObject *parent) : QObject(parent)
@@ -260,7 +261,6 @@ bool SevaViewProxy::modifySeva(int sevaId, QString sevaName,int cost, QString Da
 bool SevaViewProxy::printReceipt()
 {
     return m_sevaBookingModelData->printReceipt();
-    //return true;
 }
 
 bool SevaViewProxy::printVoucherReceipt(VoucherElement *voucherElement)
@@ -389,6 +389,7 @@ QString SevaViewProxy::createNewSeva(SevaName *seva)
 {
     qDebug()<<Q_FUNC_INFO<<seva->sevaName()<<seva->sevaId()<<seva->Number()<<seva->sevaCost()<<seva->sevaStartDate()<<seva->sevaType()<<seva->sevaCost()<<seva->count()<<seva->sevaStartTime();
     seva->print();
+    seva->setStatus("active");
     return m_sevaBookingModelData->createNewSeva(seva);
 }
 
