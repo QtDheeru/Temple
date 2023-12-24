@@ -6,19 +6,19 @@ SevaCancelModel::SevaCancelModel(QObject *parent)
     qDebug()<<"Inside SevaCancelModel Class"<<Qt::endl;
 }
 
-bool SevaCancelModel::sevaChecked() const
-{
-    return m_sevaChecked;
-}
+//bool SevaCancelModel::sevaChecked() const
+//{
+//    return m_sevaChecked;
+//}
 
-void SevaCancelModel::setSevaChecked(bool newSevaChecked)
-{
-    m_sevaChecked = newSevaChecked;
-}
+//void SevaCancelModel::setSevaChecked(bool newSevaChecked)
+//{
+//    m_sevaChecked = newSevaChecked;
+//}
 
 int SevaCancelModel::rowCount(const QModelIndex &parent) const
 {
-   m_recptList.count();
+    m_recptList.count();
 }
 
 QVariant SevaCancelModel::data(const QModelIndex &index, int role) const
@@ -33,7 +33,10 @@ QVariant SevaCancelModel::data(const QModelIndex &index, int role) const
     {
         return m_recptList.at(index.row())->sevacost();
     }
-
+    if(role == 2)
+    {
+        return m_recptList.at(index.row())->sevaChecked();
+    }
 }
 
 QHash<int, QByteArray> SevaCancelModel::roleNames() const
@@ -42,13 +45,15 @@ QHash<int, QByteArray> SevaCancelModel::roleNames() const
     QHash<int, QByteArray> roles;
     roles[0] = "SevaName";
     roles[1] = "SevaAmount";
+    roles[2] = "SevaChecked";
 
     qDebug()<<Q_FUNC_INFO<<" 2 " <<roles;
     return roles;
 
 }
 
-void SevaCancelModel::setData(QList<SevaBookingElement*> l_recptList)
+int SevaCancelModel::setData(QList<SevaBookingElement*> l_recptList)
 {
-   m_recptList =l_recptList;
+    m_recptList =l_recptList;
+    qDebug()<<"emitted setData";
 }

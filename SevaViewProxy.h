@@ -61,6 +61,7 @@ public:
     Q_INVOKABLE bool saveReceipt(MySevaReceipt *receipt);
 
     Q_INVOKABLE void deleteRecipt(QString rcptNo);
+    Q_INVOKABLE void setStatusToCancel(QString rcptNo);
 
     Q_INVOKABLE bool addSevaOnly(int sevaType,int sevaId,QString sevaName,
                                  double sevaCost, QString sevaDate, QString sevaTime,
@@ -116,11 +117,11 @@ public:
     void getDataReceipt(QString);
 
 public slots:
-     void generateCSVSevaBookingReport();
-     void getAllAccountDetails();
-     void rcvclosedStatus(QString status);
-     void recvUpdateStatus(QString);
-     void cancelReceipt(QString);
+    void generateCSVSevaBookingReport();
+    void getAllAccountDetails();
+    void rcvclosedStatus(QString status);
+    void recvUpdateStatus(QString);
+    void cancelReceipt(QString);
 
 
 signals:
@@ -137,7 +138,6 @@ signals:
     void devoteeSearchModelChanged();
     void sendStatustoQml(QString status);
     void sendUpdateStatustoQml(QString updateStatus);
-
     void mydataChanged();
 
 private :

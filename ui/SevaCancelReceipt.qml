@@ -79,27 +79,9 @@ Item {
                     Layout.maximumWidth: parent.width
                     Layout.maximumHeight: parent.height
 
-                    ListModel{
-                        id:_model
-                        ListElement{name:"Sam";txt:"1000"}
-                        ListElement{name:"Mark";txt:"2000"}
-                        ListElement{name:"Alen";txt:"3000"}
-                        ListElement{name:"Alex";txt:"3000"}
-                        ListElement{name:"Alex";txt:"1000"}
-                    }
-
-//                    function setAmount(){
-//                        console.log("came inside")
-//                        myTotalAmount = 0;
-//                        for (var i = 0; i < _model.count; ++i) {
-//                            if (_model.get(i).checked)
-//                                myTotalAmount += parseInt(_model.get(i).txt);
-//                        }
-//                    }
-
                     ListView{
                         anchors.fill:parent
-                        model: _model
+                        model: sevaProxy.mysevacancelmodel
                         delegate: _comp
                         clip:true
                     }
@@ -121,7 +103,7 @@ Item {
                                         RowLayout{
                                             anchors.fill: parent
                                             Label{
-                                                text: name
+                                                text: SevaName
                                                 color: "black"
                                                 Layout.leftMargin: 10
                                                 font{
@@ -130,11 +112,12 @@ Item {
                                                 }
                                             }
                                             CheckBox {
-                                                checked: model.checked
+                                                id: _checkBox
+                                                checked: SevaChecked
                                                 Layout.alignment: Qt.AlignRight
                                                 onClicked: {
-                                                    model.checked = checked;
-                                                    myTotalAmount += checked ? +parseInt(model.txt) : -parseInt(model.txt);
+                                                    SevaChecked = checked;
+                                                    myTotalAmount += checked ? +parseInt(SevaAmount) : -parseInt(SevaAmount);
                                                 }
                                             }
                                         }
@@ -149,7 +132,7 @@ Item {
                                         Layout.fillHeight: true
                                         Layout.fillWidth: true
                                         Label{
-                                            text: txt
+                                            text: SevaAmount
                                             anchors.centerIn: parent
                                             color: "black"
                                             font{
@@ -191,7 +174,7 @@ Item {
                             Layout.fillWidth: true
                             border.color: "#9370db"
                             Label{
-                                text: myTotalAmount.toString()
+                                text:myTotalAmount.toString()
                                 anchors.centerIn: parent
                                 color: "black"
                                 font{
@@ -233,4 +216,5 @@ Item {
             }
         }
     }
+
 }

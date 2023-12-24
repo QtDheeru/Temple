@@ -69,8 +69,8 @@ SevaViewProxy::SevaViewProxy(QObject *parent) : QObject(parent)
     //    QObject::connect(DBInterface::getInstance(),SIGNAL(forFUllDetails(QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>))
     //        ,m_allReportModel,SLOT(getData(QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>)));
 
-    QString receiptno = "11592";
-    getDataReceipt(receiptno);
+//    QString receiptno = "11592";
+//    getDataReceipt(receiptno);
 }
 
 QAbstractItemModel *SevaViewProxy::getSevaModel(int sevaType)
@@ -179,14 +179,22 @@ bool SevaViewProxy::saveReceipt(MySevaReceipt *receipt)
     //  return true;
 }
 
-
+void SevaViewProxy::cancelReceipt(QString a_recptno)
+{
+    qDebug()<<"Receipt no in cancelReceipt "<<a_recptno<<Qt::endl;
+    this->getDataReceipt(a_recptno);
+}
 
 void SevaViewProxy::deleteRecipt(QString rcptNo)
 {
     qDebug()<<Q_FUNC_INFO<<"rcptNo"<<rcptNo<<Qt::endl;
     emit sendDeletedRecptNo(rcptNo);
     this->m_sevaBookingTV->reset(rcptNo);
+}
 
+void SevaViewProxy::setStatusToCancel(QString rcptNo){
+    qDebug()<<Q_FUNC_INFO<<"rcptNo"<<rcptNo<<Qt::endl;
+    DBInterface::getInstance()->recvDeletedRecptNo(rcptNo);
 }
 
 void SevaViewProxy::getDataReceipt(QString receipt_no)
@@ -197,15 +205,14 @@ void SevaViewProxy::getDataReceipt(QString receipt_no)
     qDebug()<<"Iterating QList "<<Qt::endl;
     for(SevaBookingElement *ele : m_recpt_details)
     {
-
         qDebug()<<"s_no in QList"<<ele->sno()<<Qt::endl;
         qDebug()<<"person_id in QList"<<ele->person_id()<<Qt::endl;
         qDebug()<<"seva_type in QList"<<ele->sevatype()<<Qt::endl;
         qDebug()<<"seva_namein QList "<<ele->sevaname()<<Qt::endl;
         qDebug()<<"seva_costin QList "<<ele->sevacost()<<Qt::endl;
+        qDebug()<<"Seva checked = "<<ele->sevaChecked();
     }
     m_sevacancelmodel->setData(m_recpt_details);
-
 }
 
 QList<SevaBookingElement *> SevaViewProxy::recpt_details() const
@@ -433,13 +440,6 @@ void SevaViewProxy::recvUpdateStatus(QString updatestatus)
 {
     qDebug()<<Q_FUNC_INFO<<Qt::endl;
     emit sendUpdateStatustoQml(updatestatus);
-}
-
-void SevaViewProxy::cancelReceipt(QString a_recptno)
-{
-    qDebug()<<"Receipt no in cancelReceipt "<<a_recptno<<Qt::endl;
-    this->getDataReceipt(a_recptno);
-   //emit sendDeletedRecptNo(rcptNo);
 }
 
 SevaTypeNamesDataModel *SevaViewProxy::sevaBookingModelData() const

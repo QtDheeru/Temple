@@ -4,6 +4,7 @@
 SevaBookingElement::SevaBookingElement(QObject *parent) : QObject(parent)
 {
     m_person = new DevotePersnalDetails;
+    this->setSevaChecked(false);
 }
 
 QString SevaBookingElement::sno() const
@@ -213,6 +214,19 @@ QString SevaBookingElement::sevacost() const
 void SevaBookingElement::setSevacost(const QString &newSevacost)
 {
     m_sevacost = newSevacost;
+}
+
+bool SevaBookingElement::sevaChecked() const
+{
+    return m_sevaChecked;
+}
+
+void SevaBookingElement::setSevaChecked(bool newSevaChecked)
+{
+    if (m_sevaChecked == newSevaChecked)
+        return;
+    m_sevaChecked = newSevaChecked;
+    emit sevaCheckedChanged();
 }
 
 

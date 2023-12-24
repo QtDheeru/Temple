@@ -423,13 +423,13 @@ Rectangle{
                 _ld.source=""
             }
             function onCancelClicked(){
-
+                sevaProxy.setStatusToCancel(storeObject.sno)
             }
             //call vadirajs cancel func below
             function onGetCancelReceiptDetails(canceledObj){
                 storeObject=canceledObj
                 console.log(" In get receipt details")
-                //                sevaProxy.deleteRecipt(canceledObj.sno);
+                sevaProxy.cancelReceipt(canceledObj.sno);
             }
         }
     }
