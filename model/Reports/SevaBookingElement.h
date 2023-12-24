@@ -86,12 +86,8 @@ public:
     void setSevacost(const QString &newSevacost);
 
 signals:
-
     void sevatimeChanged();
-
-
     void statusChanged();
-
     void bankNameChanged();
 
 private :

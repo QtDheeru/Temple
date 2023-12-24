@@ -22,8 +22,6 @@ int SevaBookingSearchModel::getRowOfDataFromTableViewModel(int source_row)
     return sourceIndex.row();
 }
 
-
-
 bool SevaBookingSearchModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
 {
     qDebug()<<Q_FUNC_INFO<<">>>proxtRow>>>1>i>>>>>>>> "<<source_row<<i<<Qt::endl;

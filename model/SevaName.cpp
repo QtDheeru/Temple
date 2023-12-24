@@ -174,6 +174,19 @@ void SevaName::setSevaEndDate(const QString &sevaEndDate)
     m_sevaEndDate = sevaEndDate;
 }
 
+const QString SevaName::status() const
+{
+    return m_status;
+}
+
+void SevaName::setStatus(const QString &newStatus)
+{
+    if (m_status == newStatus)
+        return;
+    m_status = newStatus;
+    emit statusChanged();
+}
+
 QString SevaName::sevaName() const
 {
     return m_sevaName;

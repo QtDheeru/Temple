@@ -65,6 +65,7 @@ SevaName *SevaListViewModel::getSevaByIndex(int index)
 {
     qDebug() << Q_FUNC_INFO <<m_sevaList << Qt::endl;
     qDebug() << Q_FUNC_INFO << " Index requested 1=" << index  << Qt::endl;
+    qDebug()<<"Inside getSevaByIndex in ListViewModel with index"<<index<<" "<<m_sevaList.at(index)->sevaName();
     Q_ASSERT(m_sevaList.at(index) != nullptr);
     return this->m_sevaList.at(index);
     qDebug() << Q_FUNC_INFO << " Index requested 2=" << index << Qt::endl;

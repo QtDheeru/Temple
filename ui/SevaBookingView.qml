@@ -21,6 +21,9 @@ Rectangle{
     //    closePolicy: Popup.CloseOnEscape
     signal loadMenuPage()
     signal loadDevoteeSelection()
+
+    property var storeObject
+
     //signal nextReceipt();
     //    focus: true
     property string sevaname
@@ -197,10 +200,15 @@ Rectangle{
             _errorDialog.open();
             //_errorDialog.visible = false;
         }
+        onYesAction: {
+
+        }
+
         onNoAction: {
             _errorDialog.close()
         }
     }
+
 
     Connections{
         target: _sevaContoller
@@ -229,7 +237,6 @@ Rectangle{
             console.log(" Clear Receipt Data")
             clearData();
         }
-
 
         function onShowAllData(){
             console.log("Show all Data")
@@ -406,7 +413,23 @@ Rectangle{
             }
             function onLoadvoucher(ve,pageNo){
                 console.log("hellooooooon suman",ve," ",pageNo)
+                sevaProxy.deleteRecipt(ve.sno);
                 _ld.setSource("voucherPage.qml",{bookingElement:ve,pageNumber:pageNo})
+            }
+            function onLoadCancelReceipt(){
+                _ld.source="qrc:/ui/SevaCancelReceipt.qml"
+            }
+            function onBackClicked(){
+                _ld.source=""
+            }
+            function onCancelClicked(){
+
+            }
+            //call vadirajs cancel func below
+            function onGetCancelReceiptDetails(canceledObj){
+                storeObject=canceledObj
+                console.log(" In get receipt details")
+                //                sevaProxy.deleteRecipt(canceledObj.sno);
             }
         }
     }
@@ -497,4 +520,5 @@ Rectangle{
         //        sevaProxy.getSevaTypeNamesDataModel().getSevaBookingConformationDataModel().reset();
         //  _sevaContoller.enablePaymentButton = false
     }
+
 }

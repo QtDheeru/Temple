@@ -25,6 +25,7 @@ class SevaName : public QObject
     Q_PROPERTY(QString userName READ userName WRITE setUserName NOTIFY userNameChanged)
     Q_PROPERTY(bool sankalpa READ sankalpa WRITE setSankalpa NOTIFY sankalpaChanged)
     Q_PROPERTY(double enable READ enable WRITE setEnable NOTIFY enableChanged)
+    Q_PROPERTY(QString status READ status WRITE setStatus NOTIFY statusChanged FINAL)
 
 public:
     explicit SevaName(QObject *parent = nullptr);
@@ -80,6 +81,9 @@ public:
     QString sevaEndDate() const;
     void setSevaEndDate(const QString &sevaEndDate);
 
+    const QString status() const;
+    void setStatus(const QString &newStatus);
+
 signals:
     void sevaNameChanged();
     void sevaTypeChanged();
@@ -92,12 +96,11 @@ signals:
     void startTimeChanged();
     void endTimeChanged();
     void countChanged();
-
     void additionalCostChanged();
-
     void userNameChanged();
     void sankalpaChanged();
     void enableChanged();
+    void statusChanged();
 
 private :
     QString m_sevaName;
@@ -115,7 +118,7 @@ private :
     QString m_userName;
     bool    m_sankalpa;
     bool    m_enable;
-    //int 	m_Number;
+    QString m_status;
 };
 
 #endif // SEVANAME_H
