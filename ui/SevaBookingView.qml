@@ -406,7 +406,9 @@ Rectangle{
             }
             function onLoadvoucher(ve,pageNo){
                 console.log("hellooooooon suman",ve," ",pageNo)
+                 sevaProxy.cancelReceipt(ve.sno);
                 _ld.setSource("voucherPage.qml",{bookingElement:ve,pageNumber:pageNo})
+
             }
         }
     }

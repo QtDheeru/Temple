@@ -27,7 +27,8 @@ Rectangle{
             Layout.maximumHeight: 50
             onAccepted: _search.clicked()
             Keys.onDeletePressed: _clear.clicked()
-            onTextEdited: {
+            onTextEdited:
+            {
                 //                sevaProxy.sevaBSearchModel.updateTableModel(txt, _combo.currentText)
             }
             onTextChanged: sevaProxy.sevaBSearchModel.updateTableModel(txt, _combo.currentText)

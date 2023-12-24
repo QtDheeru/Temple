@@ -86,7 +86,8 @@ Dialog {
                 font.pixelSize: 20
                 enabled: _sevaPayment.isDataExists
                 visible: false
-                onClicked: {
+                onClicked:
+                {
                     //    printClicked();
                 }
             }
@@ -107,10 +108,6 @@ Dialog {
     //    x: (parent.width - width) / 2
     //   y: (parent.height - height) / 2
     contentItem: VoucherReceiptDetails{id:_voucherReceiptDetails;Layout.fillWidth: true}
-
-
-
-
 
 }
 

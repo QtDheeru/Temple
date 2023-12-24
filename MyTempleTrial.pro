@@ -39,6 +39,7 @@ SOURCES += \
         model/DevotePersnalDetails.cpp \
         model/MomentoCategory.cpp \
         model/MySevaBookingProgressViewModel.cpp \
+        model/SevaCancelModel.cpp \
         model/SevaListViewModel.cpp \
         model/SevaName.cpp \
         model/SevaType.cpp \
@@ -86,6 +87,7 @@ HEADERS += \
     model/DevotePersnalDetails.h \
     model/MomentoCategory.h \
     model/MySevaBookingProgressViewModel.h \
+    model/SevaCancelModel.h \
     model/SevaListViewModel.h \
     model/SevaName.h \
     model/SevaType.h \

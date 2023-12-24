@@ -18,6 +18,8 @@
 #include "./model/SevaTypeViewModel.h"
 #include "./model/UserManagement.h"
 #include "VoucherReportCSVProcessor.h"
+#include "model/SevaCancelModel.h"
+
 class SevaTypeNamesDataModel;
 
 class SevaViewProxy : public QObject
@@ -30,6 +32,8 @@ class SevaViewProxy : public QObject
     Q_PROPERTY(SevaBookingTableModel* sevaBookingTV READ sevaBookingTV NOTIFY sevaBookingTVChanged)
     Q_PROPERTY(UserManagement* userManagement READ userMngmnt CONSTANT)
     Q_PROPERTY(SevaTypeNamesDataModel *sevaBookingModelData READ sevaBookingModelData CONSTANT)
+    Q_PROPERTY(SevaCancelModel *mysevacancelmodel READ sevacancelmodel WRITE setSevacancelmodel NOTIFY mydataChanged )
+
 
 public:
     explicit SevaViewProxy(QObject *parent = nullptr);
@@ -98,11 +102,26 @@ public:
 
     Q_INVOKABLE bool removeSevaProgress(int index,QString);
 
+
+
+    SevaCancelModel *m_sevacancelmodel;
+
+    QList<SevaBookingElement *> recpt_details() const;
+    void setRecpt_details(const QList<SevaBookingElement *> &newRecpt_details);
+
+    SevaCancelModel *sevacancelmodel() const;
+    void setSevacancelmodel(SevaCancelModel *newSevacancelmodel);
+
+    void getDataReceipt(QString);
+
 public slots:
      void generateCSVSevaBookingReport();
      void getAllAccountDetails();
      void rcvclosedStatus(QString status);
      void recvUpdateStatus(QString);
+     void cancelReceipt(QString);
+
+
 signals:
     void receiptNumberChanged();
     void allReportModelChanged();
@@ -120,6 +139,8 @@ signals:
     void sendStatustoQml(QString status);
     void sendUpdateStatustoQml(QString updateStatus);
 
+    void mydataChanged();
+
 private :
     SevaTypeNamesDataModel *m_sevaBookingModelData;
     SevaListViewModel *m_currentSevaModel;
@@ -133,6 +154,8 @@ private :
     SevaBookingSearchModel *m_sevaBSearchModel;
     SevaTypeViewModel *m_sevaTypeModel;
     UserManagement* m_userMngmnt;
+
+    QList<SevaBookingElement*> m_recpt_details;
 
 };
 

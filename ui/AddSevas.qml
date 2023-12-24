@@ -11,7 +11,8 @@ Rectangle{
     property int subComponentPixelSize :15
     signal closeAddSeva()
     color: "#F4C430"
-    Rectangle {
+    Rectangle
+    {
         id :_rootSevaDateTime
         property var styles : MyStyles{}
         width: 500
@@ -25,7 +26,7 @@ Rectangle{
             spacing: styles.verticalSpacing
             width: parent.width
             height: parent.height
-            //            Layout.leftMargin: 10
+            //Layout.leftMargin: 10
             Rectangle{
                 id : _header
                 height: 25

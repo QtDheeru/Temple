@@ -58,6 +58,8 @@ public:
     void updateToDb(QString,QString,QString);
     void deleteData(QString,QString,QString);
 
+    QList<SevaBookingElement*> getSewaBookingEntryForReceipt(QString);//added Now
+
     void getChequeData();
 
 signals:
@@ -254,8 +256,6 @@ private:
     QDate yy_date;
     PersonDetails *m_person;
     SevaTypeJsonProcessor* m_proc;
-
-
 
     QString m_error;
 
