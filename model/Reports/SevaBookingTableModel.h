@@ -59,14 +59,19 @@ public slots:
     void addBookingDetails(SevaBookingElement *elem);
     Q_INVOKABLE SevaBookingElement* getRowOfData(int row);
     void reset(QString receiptNo);
-    bool checkStatus(QString receiptNo);
+    void checkStatus(QString receiptNo);
     void referseshTheModel(QString rownum);
+
+signals:
+    void statusCancelledSuccess();
+    void alreadyCancelled();
+    void loadCancelPage();
 private:
     QList<SevaBookingElement*> m_bookedSeva;
     static int x;
     static int y;
     static int z;
-    const QString status="cancelled";
+    const QString status="canceled";
     bool found;
 
 };

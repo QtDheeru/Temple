@@ -25,8 +25,12 @@ public:
 //    bool sevaChecked() const;
 //    void setSevaChecked(bool newSevaChecked);
 
+public slots:
+    QString getTotalAmount();
+
 private:
     QList<SevaBookingElement*> m_recptList;
+    QString m_totalAmount;
 
 signals:
     void sevaValueChanged();

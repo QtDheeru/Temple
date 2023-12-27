@@ -5,8 +5,10 @@ import QtQuick.Window 2.12
 import Utils 1.0
 import QtQuick.Controls 1.4
 import "./components"
+import "././QmlVoucher"
 import SevaTypeNamesDataModel 1.0
 import SevaBookingConformationDataModel 1.0
+
 Rectangle{
     id : root
     property var styles : MyStyles{}
@@ -156,6 +158,59 @@ Rectangle{
             //_personal.receiptNumber = sevaProxy.getNextReceiptNumber();
         }
     }
+
+    DisplayDialog {
+        id :_errorDialog1
+        visible: false
+        function showError(message,pageno){
+            _errorDialog1.page=pageno
+            _errorDialog1.text2Display = message
+            _errorDialog1.open();
+            if(page===2)
+                setButtons=true
+            if(page===1)
+                setButtons=false
+        }
+        onYesAction: {
+            if(page===1){
+                sevaProxy.setStatusToCancel(storeObject.sno)
+                _errorDialog1.close()
+            }
+            if(page===2){
+                _errorDialog1.close()
+            }
+        }
+
+        onNoAction: {
+            _errorDialog1.close()
+        }
+    }
+
+    DisplayDialog {
+        id :_errorDialog2
+        visible: false
+        rectColor: "lightgreen"
+        contentColor: "lightgreen"
+        footerVisible:false
+        function showError(message){
+            console.log("inside show error2")
+            _errorDialog2.visible = true;
+            _errorDialog2.text2Display = message
+            _errorDialog2.open();
+            _timer.start();
+        }
+    }
+
+    Timer{
+        id:_timer
+        running: false
+        interval: 1500
+        onTriggered: {
+            _errorDialog2.close();
+            _ld.setSource("voucherPage.qml",{bookingElement:storeObject,pageNumber:1})
+        }
+    }
+
     SevaPaymenConfirmationDialog{
         id : _paymentDialog
         onPaymentComplete: {
@@ -195,17 +250,44 @@ Rectangle{
         visible: false
 
         function showError(message){
+            console.log("inside show error")
             _errorDialog.visible = true;
             _errorDialog.text2Display = message
             _errorDialog.open();
-            //_errorDialog.visible = false;
         }
         onYesAction: {
-
+            _errorDialog.close()
         }
 
         onNoAction: {
             _errorDialog.close()
+        }
+    }
+
+    Connections
+    {
+        target:sevaProxy
+        onStatusAlreadyCancelled:
+        {
+            console.log("Already Cancelled status came to qml loading MyDialogBox")
+            _errorDialog2.showError("Status Already Cancelled !");
+        }
+    }
+
+    Connections
+    {
+        target:sevaProxy.sevaBookingTV
+        onStatusCancelledSuccess:
+        {
+            console.log("Status set to cancel")
+            _errorDialog2.showError("Status Set to Cancel");
+        }
+        onAlreadyCancelled:{
+            _errorDialog1.showError("Status Already Cancelled !",2);
+        }
+        onLoadCancelPage:{
+            sevaProxy.cancelReceipt(storeObject.sno);
+            _ld.source="qrc:/ui/SevaCancelReceipt.qml"
         }
     }
 
@@ -413,23 +495,18 @@ Rectangle{
             }
             function onLoadvoucher(ve,pageNo){
                 console.log("hellooooooon suman",ve," ",pageNo)
-                 sevaProxy.cancelReceipt(ve.sno);
+                sevaProxy.cancelReceipt(ve.sno);
                 _ld.setSource("voucherPage.qml",{bookingElement:ve,pageNumber:pageNo})
-            }
-            function onLoadCancelReceipt(){
-                _ld.source="qrc:/ui/SevaCancelReceipt.qml"
             }
             function onBackClicked(){
                 _ld.source=""
             }
             function onCancelClicked(){
-                sevaProxy.setStatusToCancel(storeObject.sno)
+                _errorDialog1.showError("Confirm to Cancel?",1);
             }
-            //call vadirajs cancel func below
             function onGetCancelReceiptDetails(canceledObj){
                 storeObject=canceledObj
-                console.log(" In get receipt details")
-                sevaProxy.cancelReceipt(canceledObj.sno);
+                sevaProxy.sevaBookingTV.checkStatus(canceledObj.sno);
             }
         }
     }
@@ -485,6 +562,9 @@ Rectangle{
             _errorDialog.showError(errorMsg);
         }
     }
+
+
+
     //    Connections{
 
     //        target: _paymentDialog

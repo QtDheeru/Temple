@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.3
 import "./components"
 
 Item {
-    property real myTotalAmount :0
+    property var myTotalAmount
     signal backClicked()
     signal cancelClicked()
 
@@ -119,6 +119,7 @@ Item {
                                                     SevaChecked = checked;
                                                     myTotalAmount += checked ? +parseInt(SevaAmount) : -parseInt(SevaAmount);
                                                 }
+                                                enabled: false
                                             }
                                         }
                                     }
@@ -174,7 +175,8 @@ Item {
                             Layout.fillWidth: true
                             border.color: "#9370db"
                             Label{
-                                text:myTotalAmount.toString()
+                                text:sevaProxy.mysevacancelmodel.getTotalAmount()
+//                                text:myTotalAmount
                                 anchors.centerIn: parent
                                 color: "black"
                                 font{
@@ -216,5 +218,7 @@ Item {
             }
         }
     }
-
+//    Component.onCompleted: {
+//        myTotalAmount=sevaProxy.mysevacancelmodel.getTotalAmount()
+//    }
 }

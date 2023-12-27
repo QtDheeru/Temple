@@ -332,6 +332,7 @@ Rectangle{
     VoucherReceiptDialog{
         id:_voucherReceiptDialog
         anchors.centerIn: parent
+        visible: true
         // Keys.onEscapePressed: _voucherReceiptDialog.close()
         //                    onPaymentComplete: {
         //                        console.log("Seva is store now..")

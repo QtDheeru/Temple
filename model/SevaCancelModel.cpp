@@ -57,3 +57,14 @@ int SevaCancelModel::setData(QList<SevaBookingElement*> l_recptList)
     m_recptList =l_recptList;
     qDebug()<<"emitted setData";
 }
+
+QString SevaCancelModel::getTotalAmount()
+{
+    int l_value=0;
+    for(int var=0;var<m_recptList.size();var++){
+        m_totalAmount=m_recptList.at(var)->sevacost();
+        l_value+=m_totalAmount.toInt();
+    }
+    QString l_amount=QString::number(l_value);
+    return l_amount;
+}

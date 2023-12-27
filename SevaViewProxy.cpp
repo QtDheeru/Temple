@@ -194,6 +194,7 @@ void SevaViewProxy::deleteRecipt(QString rcptNo)
 
 void SevaViewProxy::setStatusToCancel(QString rcptNo){
     qDebug()<<Q_FUNC_INFO<<"rcptNo"<<rcptNo<<Qt::endl;
+//    this->checkIfStatusAlreadyCanceled(rcptNo);
     DBInterface::getInstance()->recvDeletedRecptNo(rcptNo);
 }
 
@@ -211,8 +212,30 @@ void SevaViewProxy::getDataReceipt(QString receipt_no)
         qDebug()<<"seva_namein QList "<<ele->sevaname()<<Qt::endl;
         qDebug()<<"seva_costin QList "<<ele->sevacost()<<Qt::endl;
         qDebug()<<"Seva checked = "<<ele->sevaChecked();
+        qDebug()<<"Seva checked Status in getData"<<ele->status();
     }
     m_sevacancelmodel->setData(m_recpt_details);
+}
+
+void SevaViewProxy::checkIfStatusAlreadyCanceled(QString a_recptNo)
+{
+    const QString l_checkStatus="canceled";
+    int l_count=0;
+
+    qDebug()<<"Number of objects in list "<<m_recpt_details.size();
+    for(SevaBookingElement *ele : m_recpt_details)
+    {
+        qDebug()<<"Seva checked Status in statusCheck"<<ele->status();
+        if(ele->status()==l_checkStatus){
+            l_count++;
+        }
+    }
+    if(l_count==m_recpt_details.count()){
+        emit statusAlreadyCancelled();
+    }
+    else{
+        DBInterface::getInstance()->recvDeletedRecptNo(a_recptNo);
+    }
 }
 
 QList<SevaBookingElement *> SevaViewProxy::recpt_details() const

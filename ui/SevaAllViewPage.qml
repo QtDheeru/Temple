@@ -262,7 +262,7 @@ Rectangle{
                 onTriggered: {
 //                    _errorDialog.showmsg("Are you sure to cancel the reciept?",1)
                     getCancelReceiptDetails(ve)
-                    loadCancelReceipt()
+//                    loadCancelReceipt()
                 }
             }
             MenuItem{

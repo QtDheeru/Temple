@@ -435,53 +435,6 @@ void DBInterface::deleteData(QString vid, QString sid, QString sname)
     }
 }
 
-QList<SevaBookingElement *> DBInterface::getSewaBookingEntryForReceipt(QString receipt_no)
-{
-    QList<SevaBookingElement*> details ;
-
-    QSqlQuery query;
-
-    qDebug()<<"getSewaBookingEntryForReceipt Called receiptno is"<<receipt_no<<Qt::endl;
-    query.prepare("SELECT * FROM sevabooking WHERE RECPT_NUM=:receipt_no");
-    query.bindValue(":receipt_no", receipt_no);
-    if(query.exec())
-    {
-        qDebug()<<"Retrieve Query executed in getSewaBookingEntryForReceipt"<<Qt::endl;
-    }
-    else
-    {
-        qDebug()<<"Retrieve Query exe..failed in getSewaBookingEntryForReceipt"<<Qt::endl;
-    }
-
-    while(query.next())
-    {
-        qDebug()<<"Inside getSewaBookingEntryForReceipt of DBInterface";
-        SevaBookingElement *seva_ele = new SevaBookingElement;
-        QString s_no=query.value(0).toString();
-        QString person_id=query.value(1).toString();
-        QString seva_type=query.value(2).toString();
-        QString seva_name=query.value(3).toString();
-
-        QString seva_cost=query.value(14).toString();
-
-        qDebug()<<"s_no"<<s_no<<Qt::endl;
-        qDebug()<<"person_id"<<person_id<<Qt::endl;
-        qDebug()<<"seva_type"<<seva_type<<Qt::endl;
-        qDebug()<<"seva_name"<<seva_name<<Qt::endl;
-        qDebug()<<"seva_cost"<<seva_cost<<Qt::endl;
-
-        seva_ele->setSno(s_no);
-        seva_ele->setPerson_id(person_id);
-        seva_ele->setSevatype(seva_type);
-        seva_ele->setSevaname(seva_name);
-        seva_ele->setSevacost(seva_cost);
-        details.append(seva_ele);
-    }
-
-    return details;
-
-}
-
 void DBInterface::getChequeData()
 {
     emit clearChequeList();
@@ -1398,18 +1351,69 @@ void DBInterface::recvDeletedRecptNo(QString recptNo)
     QString str;
     int num = recptNo.toInt();
     qDebug()<<"suman--num--"<<num<<Qt::endl;
-    QString cmd = "canceled";
+    const QString cmd = "canceled";
     str =("UPDATE sevabooking SET STATUS = '%1' WHERE SNO = '%2' ;");
     str= str.arg(cmd).arg(num);
     query.prepare(str);
     bool b = query.exec();
-    if(b==true){
+    if(!(query.numRowsAffected()))
+    {
+        emit updateToDbFailed();
+    }
+    else
+    {
         qDebug()<<"Update cmd executed....!"<<query.lastError().text()<<Qt::endl;
         emit sendChangedDataToSevaBookingTablemodel(recptNo);
     }
-    else{
-        qDebug()<<"Update cmd failed....!"<<query.lastError().text()<<Qt::endl;
+}
+
+
+QList<SevaBookingElement *> DBInterface::getSewaBookingEntryForReceipt(QString receipt_no)
+{
+    QList<SevaBookingElement*> details ;
+
+    QSqlQuery query;
+
+    qDebug()<<"getSewaBookingEntryForReceipt Called receiptno is"<<receipt_no<<Qt::endl;
+    query.prepare("SELECT * FROM sevabooking WHERE RECPT_NUM=:receipt_no");
+    query.bindValue(":receipt_no", receipt_no);
+    if(query.exec())
+    {
+        qDebug()<<"Retrieve Query executed in getSewaBookingEntryForReceipt"<<Qt::endl;
     }
+    else
+    {
+        qDebug()<<"Retrieve Query exe..failed in getSewaBookingEntryForReceipt"<<Qt::endl;
+    }
+
+    while(query.next())
+    {
+        qDebug()<<"Inside getSewaBookingEntryForReceipt of DBInterface";
+        SevaBookingElement *seva_ele = new SevaBookingElement;
+        QString s_no=query.value(0).toString();
+        QString person_id=query.value(1).toString();
+        QString seva_type=query.value(2).toString();
+        QString seva_name=query.value(3).toString();
+        QString seva_cost=query.value(14).toString();
+        QString seva_status=query.value(22).toString();
+
+        qDebug()<<"s_no"<<s_no<<Qt::endl;
+        qDebug()<<"person_id"<<person_id<<Qt::endl;
+        qDebug()<<"seva_type"<<seva_type<<Qt::endl;
+        qDebug()<<"seva_name"<<seva_name<<Qt::endl;
+        qDebug()<<"seva_cost"<<seva_cost<<Qt::endl;
+        qDebug()<<"Seva status in db "<<seva_status;
+
+        seva_ele->setSno(s_no);
+        seva_ele->setPerson_id(person_id);
+        seva_ele->setSevatype(seva_type);
+        seva_ele->setSevaname(seva_name);
+        seva_ele->setSevacost(seva_cost);
+        seva_ele->setStatus(seva_status);
+        details.append(seva_ele);
+    }
+
+    return details;
 }
 
 void DBInterface::modifySeva(int sevaId, QString sevaName, int cost, QString Date)

@@ -244,6 +244,7 @@ signals :
     void refreshModel(QString);
     void sendUpdateStatus(QString);
     void signalClose(int);
+    void updateToDbFailed();
 
 private:
     explicit DBInterface(QObject *parent=nullptr);

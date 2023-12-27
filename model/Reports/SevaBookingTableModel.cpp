@@ -156,18 +156,22 @@ void SevaBookingTableModel::reset(QString receiptNo)
     QModelIndex topLeft = createIndex(row,0);
     QModelIndex topRight = createIndex(row,20);
     emit dataChanged(topLeft, topRight);
+    emit statusCancelledSuccess();
 }
 
-bool SevaBookingTableModel::checkStatus(QString receiptNo){
+void SevaBookingTableModel::checkStatus(QString receiptNo){
     bool check = false;
     for(int var=0;var<m_bookedSeva.size();var++) {
         if(m_bookedSeva[var]->sno()== receiptNo){
             if(m_bookedSeva[var]->status()==status){
                 check= true;
+                emit alreadyCancelled();
             }
         }
     }
-    return check;
+    if(!check){
+        emit loadCancelPage();
+    }
 }
 
 void SevaBookingTableModel::referseshTheModel(QString rownum)

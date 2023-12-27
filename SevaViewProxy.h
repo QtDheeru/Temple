@@ -62,6 +62,7 @@ public:
 
     Q_INVOKABLE void deleteRecipt(QString rcptNo);
     Q_INVOKABLE void setStatusToCancel(QString rcptNo);
+    void checkIfStatusAlreadyCanceled(QString);
 
     Q_INVOKABLE bool addSevaOnly(int sevaType,int sevaId,QString sevaName,
                                  double sevaCost, QString sevaDate, QString sevaTime,
@@ -104,8 +105,6 @@ public:
 
     Q_INVOKABLE bool removeSevaProgress(int index,QString);
 
-
-
     SevaCancelModel *m_sevacancelmodel;
 
     QList<SevaBookingElement *> recpt_details() const;
@@ -123,7 +122,6 @@ public slots:
     void recvUpdateStatus(QString);
     void cancelReceipt(QString);
 
-
 signals:
     void receiptNumberChanged();
     void allReportModelChanged();
@@ -139,6 +137,7 @@ signals:
     void sendStatustoQml(QString status);
     void sendUpdateStatustoQml(QString updateStatus);
     void mydataChanged();
+    void statusAlreadyCancelled();
 
 private :
     SevaTypeNamesDataModel *m_sevaBookingModelData;
