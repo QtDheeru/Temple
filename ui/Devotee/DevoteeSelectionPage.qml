@@ -11,6 +11,7 @@ Item {
     property int countIfSevaNamesPresentInSevaTypes:0;
     signal errorOccur(string errorMsg);
     signal loadSevabooking(string d_name,string d_mobile,string d_gothra,string d_nakshatra)
+    signal showAllDataView()
     property int context : 0
     RowLayout {
         anchors.fill: parent
@@ -20,6 +21,10 @@ Item {
             Layout.fillWidth: true
             Layout.fillHeight: true
             Layout.rightMargin: 10
+            onLoadMenuPage: {
+                console.log("loadMenuPage called from DevoteeSelectionPage")
+                root.loadMenuPage()
+            }
         }
         Rectangle{
             Layout.maximumWidth: 500
@@ -57,6 +62,12 @@ Item {
                         Layout.fillWidth: true
                         font.pixelSize: 20
                         onClicked: startSevaBooking();
+                    }
+                    Button {
+                        text : "All Data"
+                        Layout.fillWidth: true
+                        font.pixelSize: 20
+                        onClicked: showAllDataView()
                     }
                     Button {
                         text : "Add Devotee"
@@ -265,7 +276,7 @@ Item {
         _devoteeView.setNakshatras(sevaProxy.getNakshatras());
     }
     Keys.onEscapePressed: {
-        console.log("Esc pressed")
+        console.log("DevoteeSelectionPage :: Esc pressed")
         loadMenuPage()
     }
 }

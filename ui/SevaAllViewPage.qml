@@ -20,10 +20,12 @@ Rectangle{
         spacing: 10
         Layout.alignment: Qt.AlignHCenter
         Layout.topMargin: _root.width/20
-        SevaComboBox{
+        SevaComboBox
+        {
             id: _combo
         }
-        SevaSearchBar{
+        SevaSearchBar
+        {
             id: _searchBar
             Layout.maximumWidth: 700
             Layout.maximumHeight: 50
@@ -333,5 +335,9 @@ Rectangle{
             console.log("Keys.onEscapePressed: Seva All view Page ")
             loadSevaBookingView();
         }
+    }
+    Keys.onEscapePressed: {
+        console.log("Keys.onEscapePressed: Seva All view Page 333")
+        loadSevaBookingView()
     }
 }

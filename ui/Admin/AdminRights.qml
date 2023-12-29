@@ -8,84 +8,96 @@ Rectangle {
     color: "cornflowerblue"
     border.color: "black"
     border.width: 4
+    focus: true
     signal loadUserManagement();
     signal loadMenuPage()
     signal admin()
     signal loadBankRegistration()
     signal loadVoucherAdministration();
+    signal showAllDataView()
+    property int buttonsCount : 5
 
-    Column{
+    Grid{
         anchors.fill: parent
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.horizontalCenter: parent.horizontalCenter
+        rows: 2
+        columns: 3
+        spacing : parent.height/15
         anchors.left: parent.left
         anchors.top: parent.top
-        anchors.topMargin: parent.height/4
-        anchors.leftMargin: parent.width/7
-        spacing: 200
-        Row{
-            height: parent.height/5
-            width: parent.width/1.5
-            spacing: parent.width/10
-            TempleButton{
-                id:_usermanagement
-                width:(parent.width)/2
-                height: parent.height
-                color: "aqua"
-                buttonText: "USER MANAGEMENT"
-                border.width: _mainrect.width/300
-                onButtonClikcked: {
-                    console.log("User Management button clicked");
-                    loadUserManagement()
-                }
-            }
-            TempleButton{
-                id:_addSeva
-                width:parent.width/2
-                height: parent.height
-                color: "aqua"
-                buttonText: "ADD SEVA"
-                border.width: _mainrect.width/300
-                onButtonClikcked: {
-                    console.log("AddSeva button clicked");
-                    admin()
-                }
+        anchors.topMargin: parent.height/10
+        anchors.leftMargin: parent.width/8
+
+
+        TempleButton{
+            id:_usermanagement
+            width: parent.width/4
+            height: parent.height/3
+            color: "aqua"
+            buttonText: "USER MANAGEMENT"
+            border.width: _mainrect.width/300
+            onButtonClikcked: {
+                console.log("User Management button clicked");
+                loadUserManagement()
             }
         }
-        Row{
-            height: parent.height/5
-            width: parent.width/1.5
-            spacing: parent.width/10
-            TempleButton{
-                id:_usermanagement1
-                width:parent.width/2
-                height: parent.height
-                color: "aqua"
-                buttonText: "BANK REGISTER"
-                border.width: _mainrect.width/300
-                onButtonClikcked: {
-                    console.log("User Management button clicked");
-                    checkEntry.fetchFromDataBase()
-                    loadBankRegistration()
-                     myModel.initial();
-                }
+        TempleButton{
+            id:_addSeva
+            width:parent.width/4
+            height: parent.height/3
+            color: "aqua"
+            buttonText: "ADD SEVA"
+            border.width: _mainrect.width/300
+            onButtonClikcked: {
+                console.log("AddSeva button clicked");
+                admin()
             }
-            TempleButton{
-                id:_addSeva2
-                width:parent.width/2
-                height: parent.height
-                color: "aqua"
-                buttonText: "VOUCHER ADMINISTRATION"
-                border.width: _mainrect.width/300
-                onButtonClikcked: {
-                    console.log("voucher admin..button clicked");
-                    loadVoucherAdministration();
-                }
+        }
+        TempleButton{
+            id:_allData
+            width:parent.width/4
+            height: parent.height/3
+            color: "aqua"
+            buttonText: "ALL DATA"
+            border.width: _mainrect.width/300
+            onButtonClikcked: {
+                console.log("AddSeva button clicked");
+                showAllDataView()
             }
+        }
+        TempleButton{
+            id:_usermanagement1
+            width:parent.width/4
+            height: parent.height/3
+            color: "aqua"
+            buttonText: "BANK REGISTER"
+            border.width: _mainrect.width/300
+            onButtonClikcked: {
+                console.log("User Management button clicked");
+                checkEntry.fetchFromDataBase()
+                loadBankRegistration()
+                myModel.initial();
+            }
+        }
+        TempleButton{
+            id:_addSeva2
+            width:parent.width/4
+            height: parent.height/3
+            color: "aqua"
+            buttonText: "VOUCHER ADMINISTRATION"
+            border.width: _mainrect.width/300
+            onButtonClikcked:
+            {
+                console.log("voucher admin..button clicked");
+                loadVoucherAdministration();
+            }
+        }
+        Keys.onEscapePressed: {
+            console.log("AdminRights :: Esc pressed")
+            loadMenuPage()
         }
     }
     Keys.onEscapePressed: {
-        console.log("Esc pressed")
+        console.log("AdminRights :: Esc pressed")
         loadMenuPage()
     }
 }

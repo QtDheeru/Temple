@@ -17,6 +17,8 @@ Item {
     function getSevaNameDetail(idx){
         index=idx
         console.log("inside suman getSevaNameDetail ",idx)
+        if(idx < 0)
+            return;
         sevaNameObject = sevaProxy.getSevaByIndex(idx)
         sevaName._data = sevaNameObject.sevaName
         sevaId._data = sevaNameObject.sevaId
@@ -138,7 +140,7 @@ Item {
                     Layout.fillWidth: true
                     onClicked: {
                         addNewSeva()
-                        sevaProxy.sevaBookingModelData.querySevaNames()
+                        //sevaProxy.sevaBookingModelData.querySevaNames()
                     }
                 }
                 Button{
@@ -220,7 +222,7 @@ Item {
         onSendUpdateStatustoQml:{
             console.log("onSendUpdateStatustoQml",updateStatus)
             _ernamespacenamespacenamespacenamespacenamespacenamespacenamespacenamespacenamespacenamespacenamespacerorDialog.showError(updateStatus,defaultvar)
-        namespacenamespacenamespacenamespace}
+            namespacenamespacenamespacenamespace}
     }
     function addNewSeva(){
         console.log("SevaNameEntry.qml - Addclicked")

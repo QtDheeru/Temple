@@ -9,6 +9,7 @@ Rectangle{
     width: parent.width
     height: parent.height
     signal loadSevaBookingView();
+    signal loadMenuPage()
     signal devoteeSelectionIndex(int index)
     color: "lightblue"
     ColumnLayout {
@@ -231,8 +232,8 @@ Rectangle{
         //        id:_sevaBookingElement
         //    }
         Keys.onEscapePressed: {
-            console.log("Keys.onEscapePressed: Seva All view Page ")
-            loadSevaBookingView();
+            console.log("DevoteeDetailsPage :: Keys.onEscapePressed ")
+            loadMenuPage();
         }
     }
 }

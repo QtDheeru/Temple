@@ -159,47 +159,47 @@ Rectangle{
         }
     }
 
-    DisplayDialog {
-        id :_errorDialog1
-        visible: false
-        function showError(message,pageno){
-            _errorDialog1.page=pageno
-            _errorDialog1.text2Display = message
-            _errorDialog1.open();
-            if(page===2)
-                setButtons=true
-            if(page===1)
-                setButtons=false
-        }
-        onYesAction: {
-            if(page===1){
-                sevaProxy.setStatusToCancel(storeObject.sno)
-                _errorDialog1.close()
-            }
-            if(page===2){
-                _errorDialog1.close()
-            }
-        }
+//    DisplayDialog {
+//        id :_errorDialog1
+//        visible: false
+//        function showError(message,pageno){
+//            _errorDialog1.page=pageno
+//            _errorDialog1.text2Display = message
+//            _errorDialog1.open();
+//            if(page===2)
+//                setButtons=true
+//            if(page===1)
+//                setButtons=false
+//        }
+//        onYesAction: {
+//            if(page===1){
+//                sevaProxy.setStatusToCancel(storeObject.sno)
+//                _errorDialog1.close()
+//            }
+//            if(page===2){
+//                _errorDialog1.close()
+//            }
+//        }
 
-        onNoAction: {
-            _errorDialog1.close()
-        }
-    }
+//        onNoAction: {
+//            _errorDialog1.close()
+//        }
+//    }
 
-    DisplayDialog {
-        id :_errorDialog2
-        visible: false
-        rectColor: "lightgreen"
-        contentColor: "lightgreen"
-        footerVisible:false
-        function showError(message){
-            console.log("inside show error2")
-            _errorDialog2.visible = true;
-            _errorDialog2.text2Display = message
-            _errorDialog2.open();
-            _timer.start();
-        }
-    }
+//    DisplayDialog {
+//        id :_errorDialog2
+//        visible: false
+//        rectColor: "lightgreen"
+//        contentColor: "lightgreen"
+//        footerVisible:false
+//        function showError(message){
+//            console.log("inside show error2")
+//            _errorDialog2.visible = true;
+//            _errorDialog2.text2Display = message
+//            _errorDialog2.open();
+//            _timer.start();
+//        }
+//    }
 
     Timer{
         id:_timer
@@ -264,32 +264,47 @@ Rectangle{
         }
     }
 
-    Connections
-    {
-        target:sevaProxy
-        onStatusAlreadyCancelled:
-        {
-            console.log("Already Cancelled status came to qml loading MyDialogBox")
-            _errorDialog2.showError("Status Already Cancelled !");
+    DisplayDialog {
+        id :_errorDialog2
+        visible: false
+        rectColor: "lightgreen"
+        contentColor: "lightgreen"
+        footerVisible:false
+        function showError(message){
+            console.log("inside show error2")
+            _errorDialog2.visible = true;
+            _errorDialog2.text2Display = message
+            _errorDialog2.open();
+            _timer.start();
         }
     }
 
-    Connections
-    {
-        target:sevaProxy.sevaBookingTV
-        onStatusCancelledSuccess:
-        {
-            console.log("Status set to cancel")
-            _errorDialog2.showError("Status Set to Cancel");
-        }
-        onAlreadyCancelled:{
-            _errorDialog1.showError("Status Already Cancelled !",2);
-        }
-        onLoadCancelPage:{
-            sevaProxy.cancelReceipt(storeObject.sno);
-            _ld.source="qrc:/ui/SevaCancelReceipt.qml"
-        }
-    }
+//    Connections
+//    {
+//        target:sevaProxy
+//        onStatusAlreadyCancelled:
+//        {
+//            console.log("Already Cancelled status came to qml loading MyDialogBox")
+//            _errorDialog2.showError("Status Already Cancelled !");
+//        }
+//    }
+
+//    Connections
+//    {
+//        target:sevaProxy.sevaBookingTV
+//        onStatusCancelledSuccess:
+//        {
+//            console.log("Status set to cancel")
+//            _errorDialog2.showError("Status Set to Cancel");
+//        }
+//        onAlreadyCancelled:{
+//            _errorDialog1.showError("Status Already Cancelled !",2);
+//        }
+//        onLoadCancelPage:{
+//            sevaProxy.cancelReceipt(storeObject.sno);
+//            _ld.source="qrc:/ui/SevaCancelReceipt.qml"
+//        }
+//    }
 
 
     Connections{
@@ -498,16 +513,17 @@ Rectangle{
                 sevaProxy.cancelReceipt(ve.sno);
                 _ld.setSource("voucherPage.qml",{bookingElement:ve,pageNumber:pageNo})
             }
-            function onBackClicked(){
-                _ld.source=""
-            }
-            function onCancelClicked(){
-                _errorDialog1.showError("Confirm to Cancel?",1);
-            }
-            function onGetCancelReceiptDetails(canceledObj){
-                storeObject=canceledObj
-                sevaProxy.sevaBookingTV.checkStatus(canceledObj.sno);
-            }
+//            function onBackClicked(){
+//                _ld.source=""
+//            }
+//            function onCancelClicked(){
+//                _errorDialog1.showError("Confirm to Cancel?",1);
+//            }
+//            function onGetCancelReceiptDetails(canceledObj){
+//                console.log("canceeled came here")
+//                storeObject=canceledObj
+//                sevaProxy.sevaBookingTV.checkStatus(canceledObj.sno);
+//            }
         }
     }
 

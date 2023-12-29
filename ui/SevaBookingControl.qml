@@ -72,16 +72,16 @@ Rectangle {
                 clearReceipt();
             }
         }
-        Button {
-            id : _showData
-            Layout.fillWidth: true;text : "All Data"
-            Layout.maximumHeight: 40
-            font.pixelSize: fontSize
-            onClicked: {
-                console.log("show all button clicked")
-                showAllData();
-            }
-        }
+//        Button {
+//            id : _showData
+//            Layout.fillWidth: true;text : "All Data"
+//            Layout.maximumHeight: 40
+//            font.pixelSize: fontSize
+//            onClicked: {
+//                console.log("show all button clicked")
+//                showAllData();
+//            }
+//        }
         Button {
             id : _last10Trans
             Layout.fillWidth: true;text : "Last Transaction"

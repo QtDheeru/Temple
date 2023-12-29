@@ -829,9 +829,6 @@ bool DBInterface::createSeva(SevaName* sevaName)
 void DBInterface::modify_db_type(int r_s_no,QString r_seva_name,int r_seva_code,QString sevaadder_name,int m_s_no)
 {
 
-
-
-
     qWarning()<<Q_FUNC_INFO<<r_s_no<<Qt::endl;
     QSqlQuery qry;
     qry.prepare("UPDATE seva SET SNO=:sno,SEVATYPE=:seva_type,SEVACODE=:seva_code,PERSON=:seva_adder_name WHERE SNO=:s_no");
