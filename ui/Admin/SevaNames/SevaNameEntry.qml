@@ -200,7 +200,8 @@ Item {
 
             }
         }
-        Component{
+        Component
+        {
             id : seva
             SevaName{}
         }
@@ -212,12 +213,12 @@ Item {
         id:connection
         target: sevaProxy
         property int defaultvar: 0
-        onErrorMessage:{
-            _errorDialog.showError(errMsg,defaultvar)
-        }
+//        onErrorMessage:{
+//            _errorDialog.showError(errMsg,defaultvar)
+//        }
         onSendStatustoQml:{
             console.log("onSendStatustoQml",status)
-            _errorDialog.showError(status,defaultvar)
+            //_errorDialog.showError(status,defaultvar)
         }
         onSendUpdateStatustoQml:{
             console.log("onSendUpdateStatustoQml",updateStatus)
@@ -237,7 +238,7 @@ Item {
         sevaObj.sankalpa = sankalpa._data
         sevaObj.userName = userName._data
         var message = sevaProxy.createNewSeva(sevaObj)
-        _errorDialog.showError(message,0)
+       // _errorDialog.showError(message,0)
     }
 
     function clear(){

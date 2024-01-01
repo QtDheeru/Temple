@@ -4,8 +4,7 @@ import "../components"
 
 Rectangle{
     id:rect
-
-    color: "skyblue"
+   color: "skyblue"
 
     function setSevaType(sevaType){
         console.log("Seva Type ="+sevaType.sevaTypeName);
@@ -66,6 +65,7 @@ Rectangle{
                         onClicked: {
                             console.log("Add userclicked")
                             var message = sevaProxy.addNewSevaType(sevatypeName._data,sevaCode._data,userName._data)
+                            sevaCode._data = sevaProxy.getNextSevaTypeID()
                             sevaProxy.sevaBookingModelData.querySevaType();
                             _errorDialog.showError(message)
                         }

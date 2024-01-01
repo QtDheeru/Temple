@@ -39,6 +39,10 @@ private:
     QList<SevaType*> m_sevaTypes;
 
     // QAbstractItemModel interface
+
+public:
+   bool reflectToView(SevaType *);
+
 };
 
 #endif // SEVATYPEVIEWMODEL_H

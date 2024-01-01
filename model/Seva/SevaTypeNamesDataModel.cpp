@@ -107,7 +107,8 @@ bool SevaTypeNamesDataModel::addSevaOnly(SevaName *s)
         this->m_sevaBookingProgress->addSeva(s);
         qDebug() << Q_FUNC_INFO << "cccccc"<< Qt::endl;
         return true;
-    } else {
+    } else
+    {
         // seva already exist. Don't add anywhere
         qDebug() << Q_FUNC_INFO << "ddddddd"<< Qt::endl;
         return false;
@@ -134,8 +135,26 @@ void SevaTypeNamesDataModel::setSevaBookingConformationDataModel(SevaBookingConf
 
 QString SevaTypeNamesDataModel::createNewSeva(SevaName *seva)
 {
-    DBInterface::getInstance()->createSeva(seva);
+    QMap<int,SevaName*> sevaNameMap;
+
+    if(DBInterface::getInstance()->createSeva(seva))
+    {
+        sevaNameMap.insert(seva->Number(),seva);
+        m_sevaNameDetails.insert(seva->sevaType(),sevaNameMap);
+        emit toListView(seva);
+
+    }
     return  DBInterface::getInstance()->getError();
+}
+
+SevaType* SevaTypeNamesDataModel::addSevaTypeDetail(int seva_id, QString seva_name, QString person_name)
+{
+    SevaType* sevatype = new SevaType;
+    sevatype->setSevaTypeId(seva_id);
+    sevatype->setSevaTypeName(seva_name);
+    m_sevaTypeDetails.insert(seva_id,sevatype);
+    return sevatype;
+
 }
 
 QStringList SevaTypeNamesDataModel::getNakshatras()

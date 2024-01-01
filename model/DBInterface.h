@@ -202,6 +202,7 @@ public slots:
     bool qrySevabookingBySevaDate(QString);
     void qrySevabookingByDateRange(QString,QString);
 
+
     // Dheerendra added
     bool querySevaType();
     bool querySevaNames();
@@ -257,6 +258,7 @@ private:
     QDate yy_date;
     PersonDetails *m_person;
     SevaTypeJsonProcessor* m_proc;
+    QList<SevaBookingElement*> m_sevabooking;
 
     QString m_error;
 

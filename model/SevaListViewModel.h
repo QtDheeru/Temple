@@ -30,6 +30,7 @@ public:
 
 public slots:
     void recvClosedObj(int sevaid);
+    void onToListView(SevaName*);
 
 private:
     QList<SevaName*> m_sevaList;

@@ -57,6 +57,17 @@ bool SevaTypeViewModel::init()
     return true;
 }
 
+bool SevaTypeViewModel::reflectToView(SevaType *sevatype)
+{
+    qDebug() << Q_FUNC_INFO << Qt::endl;
+    beginInsertRows(QModelIndex(),m_sevaTypes.size(),m_sevaTypes.size());
+    m_sevaTypes.append(sevatype);
+    endInsertRows();
+    qDebug() << Q_FUNC_INFO << " Number of Seva Types =" << m_sevaTypes.size() <<Qt::endl;
+    return true;
+
+}
+
 const QList<SevaType *> &SevaTypeViewModel::sevaTypes() const
 {
     return m_sevaTypes;

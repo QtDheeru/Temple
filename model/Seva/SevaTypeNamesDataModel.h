@@ -53,12 +53,14 @@ public:
     void setSevaBookingConformationDataModel(SevaBookingConformationDataModel* newData);
 
     QString createNewSeva(SevaName *seva);
+    SevaType* addSevaTypeDetail(int,QString,QString);
 
 public slots:
     bool processSevaTypes(SevaType *);
 signals:
     void error(QString);
     void SevaBookingConformationDataModelChanged();
+    void toListView(SevaName *);
 private :
     void connectSignals();
 

@@ -4,6 +4,7 @@
 SevaListViewModel::SevaListViewModel(QObject *parent)
     : QAbstractListModel(parent)
 {
+    connect(SevaTypeNamesDataModel::self(),&SevaTypeNamesDataModel::toListView,this,&SevaListViewModel::onToListView);
     this->init();
 }
 
@@ -42,11 +43,13 @@ QVariant SevaListViewModel::data(const QModelIndex &index, int role) const
 
 void SevaListViewModel::init()
 {
-    for(int i=0;i<30;i++){
+    for(int i=0;i<30;i++)
+    {
         SevaName *sevaN = new SevaName;
         sevaN->setSevaId(i);
         sevaN->setSevaName(" Pallakki Utsava_"+QString::number(i));
         this->m_sevaList.append(sevaN);
+
     }
 }
 
@@ -90,6 +93,15 @@ void SevaListViewModel::recvClosedObj(int sevaid)
             endRemoveRows();
         }
     }
+}
+
+void SevaListViewModel::onToListView(SevaName *sevaname)
+{
+    beginInsertRows(QModelIndex(), m_sevaList.size(),m_sevaList.size());
+    m_sevaList.append(sevaname);
+    endInsertRows();
+
+
 }
 
 QHash<int, QByteArray> SevaListViewModel::roleNames() const

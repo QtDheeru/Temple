@@ -720,7 +720,7 @@ bool DBInterface::check_db(QString seva_type, int seva_code, QString sevatype_ad
 
 bool DBInterface::check_name_db(int sevatype, QString sevaName, int seva_cost, QString str_date, QString seva_adder_name,int prasada,QString pooja_time,int pooja)
 {
-    
+    qDebug()<<"Inside check_name_db "<<Qt::endl;
     bool found =false;
     QSqlQuery qry;
     qry.prepare("select SNO,SEVANAME,SEVATYPE,SEVACOST,SEVADATE,PERSON,THEERTHAPRASADA from sevaname ");
@@ -749,6 +749,7 @@ bool DBInterface::check_name_db(int sevatype, QString sevaName, int seva_cost, Q
 
 void DBInterface::addsevaname(int sevatype, QString sevaName, int seva_cost, QString strold_date, QString seva_adder_name,int prasada,QString pooja_time,int pooja)
 {
+    qDebug()<<"Inside addsevaname "<<Qt::endl;
     QSqlQuery query_sevaID;
     query_sevaID.exec();
     
@@ -823,6 +824,7 @@ bool DBInterface::createSeva(SevaName* sevaName)
         emit dbError("Database Message: sevaID " + QString::number(sevaName->sevaId()) + "  Added successfully");
         this->setError("Database Message: sevaID = " + QString::number(sevaName->sevaId()) + " Added successfully");
         qDebug() << Q_FUNC_INFO << "**** Seva Name =" << sevaName->sevaName() <<  " Added successfully " <<Qt::endl;
+        return true;
     }
 }
 
@@ -1696,6 +1698,7 @@ bool DBInterface::check_sevaname_allreadyexist(int sevatype, QString sevaName, i
     QMessageBox msgbox;
     bool found =false;
     QSqlQuery qry;
+    qDebug()<<"Inside check_sevaname_allreadyexist "<<Qt::endl;
     qry.prepare("select SNO,SEVANAME,SEVATYPE,SEVACOST,SEVADATE,PERSON from sevaname ");
     qry.exec();
     while(qry.next()){

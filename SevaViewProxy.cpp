@@ -9,9 +9,9 @@
 #include <QScreen>
 #include "print_file.h"
 SevaViewProxy::SevaViewProxy(QObject *parent) : QObject(parent)
-    ,m_sevaBookingModelData(SevaTypeNamesDataModel::self())
-    ,m_receiptNumber("-1")
-    ,m_sevaTypeModel(nullptr)
+  ,m_sevaBookingModelData(SevaTypeNamesDataModel::self())
+  ,m_receiptNumber("-1")
+  ,m_sevaTypeModel(nullptr)
 {
     m_userMngmnt = new UserManagement;
     m_allReportModel  = new SevaDetailsTableView;
@@ -23,6 +23,7 @@ SevaViewProxy::SevaViewProxy(QObject *parent) : QObject(parent)
     m_sevaBSearchModel = new SevaBookingSearchModel;
 
     m_sevacancelmodel = new SevaCancelModel;
+
 
     m_sevaBSearchModel->setSourceModel(m_sevaBookingTV);
     this->getNextReceiptNumber();
@@ -69,8 +70,8 @@ SevaViewProxy::SevaViewProxy(QObject *parent) : QObject(parent)
     //    QObject::connect(DBInterface::getInstance(),SIGNAL(forFUllDetails(QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>))
     //        ,m_allReportModel,SLOT(getData(QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>,QList<QString>)));
 
-//    QString receiptno = "11592";
-//    getDataReceipt(receiptno);
+    //    QString receiptno = "11592";
+    //    getDataReceipt(receiptno);
 }
 
 QAbstractItemModel *SevaViewProxy::getSevaModel(int sevaType)
@@ -194,7 +195,7 @@ void SevaViewProxy::deleteRecipt(QString rcptNo)
 
 void SevaViewProxy::setStatusToCancel(QString rcptNo){
     qDebug()<<Q_FUNC_INFO<<"rcptNo"<<rcptNo<<Qt::endl;
-//    this->checkIfStatusAlreadyCanceled(rcptNo);
+    //    this->checkIfStatusAlreadyCanceled(rcptNo);
     DBInterface::getInstance()->recvDeletedRecptNo(rcptNo);
 }
 
@@ -410,8 +411,20 @@ int SevaViewProxy::getNextSevaTypeID()
 
 QString SevaViewProxy::addNewSevaType(QString sevaTypeName,int sevaTypeId ,QString personName)
 {
+    bool value;
+    SevaType *sevatype;
     qDebug() << Q_FUNC_INFO << Qt::endl;
-    DBInterface::getInstance()->add_seva_type(sevaTypeName,sevaTypeId,personName);
+    if(DBInterface::getInstance()->add_seva_type(sevaTypeName,sevaTypeId,personName))
+    {
+        qDebug()<<"after DBInterface "<<Qt::endl;
+        sevatype = SevaTypeNamesDataModel::self()->addSevaTypeDetail(sevaTypeId,sevaTypeName,personName);
+
+
+        m_sevaTypeModel->reflectToView(sevatype);
+
+
+
+    }
     return DBInterface::getInstance()->getError();
 }
 
