@@ -427,7 +427,7 @@ Rectangle{
     }
     function clearData(){
         console.log(" Data is getting cleared")
-        _personal.clearData()
+//        _personal.clearData()
         //        _personal.devoteeNameEditable = true //ch
         //        _personal.mobileNoEditable = true  //ch
         _sevaD.clearData();

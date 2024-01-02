@@ -267,7 +267,8 @@ Rectangle{
 //                    loadCancelReceipt()
                 }
             }
-            MenuItem{
+            MenuItem
+            {
                 id:_delete
                 text: qsTr('Delete')
                 onTriggered: {
@@ -340,4 +341,10 @@ Rectangle{
         console.log("Keys.onEscapePressed: Seva All view Page 333")
         loadSevaBookingView()
     }
+
+    function resetBaseScreen()
+    {
+       _allViewDataDialog.opacity =1;
+    }
+
 }

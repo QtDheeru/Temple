@@ -324,7 +324,8 @@ ApplicationWindow {
             sevaProxy.sevaBookingTV.checkStatus(canceledObj.sno);
         }
         function onBackClicked(){
-            _ld.source=""
+            loader.source=""
+            loader.source = "qrc:/ui/SevaAllViewPage.qml"
         }
         function onCancelClicked(){
             _errorDialog1.showError("Confirm to Cancel?",1);

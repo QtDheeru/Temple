@@ -123,7 +123,7 @@ Rectangle {
     states:[
         State{
             name:"initial";
-            PropertyChanges{target: _addMoreSevabutton;enabled : false}
+            PropertyChanges{target: _addMoreSevabutton;enabled : true}
             PropertyChanges{target: _payButton;enabled : true}
             PropertyChanges{target: _next;enabled : false}
         },
@@ -148,8 +148,8 @@ Rectangle {
         },
         State{
             name:"paymentComplete";
-            PropertyChanges{target: _addMoreSevabutton;enabled : false}
-            PropertyChanges{target: _payButton;enabled : false}
+            PropertyChanges{target: _addMoreSevabutton;enabled : true}
+            PropertyChanges{target: _payButton;enabled : true}
             PropertyChanges{target: _next;enabled : true}
         }
     ]

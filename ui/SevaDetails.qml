@@ -46,8 +46,8 @@ Rectangle {
     }
 
     function clearData() {
-        r1.clearData()
-        r2.clearData()
+//        r1.clearData()
+//        r2.clearData()
         r3.clearData()
         countID.clearData()
         r4.clearData()
