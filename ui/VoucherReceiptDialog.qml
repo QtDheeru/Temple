@@ -80,13 +80,13 @@ Dialog {
                     //                  }
                     //                }
                     //confirmClicked();
-                    console.log("Current Date:" + voucherProxy.getCurrentDate() + ":: Vouchernumber: ")
+                    console.log("Current Date:" + voucherProxy.getCurrentDate() + ":: Vouchernumber: " + voucherProxy.getLastVoucherNumber())
                     _vouEle.receiptNumber = _receiptNumber
                     _vouEle.voucherCost = _voucherCost
                     _vouEle.voucherDate = voucherProxy.getCurrentDate()
                     _vouEle.voucherNo = voucherProxy.getLastVoucherNumber()
                     saveVoucher.saveVoucherElements(_vouEle);
-                    //sevaProxy.printVoucherReceipt(_vouEle);
+                    sevaProxy.printVoucherReceipt(_vouEle);
                 }
             }
             Button{
@@ -111,7 +111,6 @@ Dialog {
                     root.close()
                 }
             }
-
         }
     }
     VouEle
@@ -119,8 +118,6 @@ Dialog {
         id:_vouEle
     }
 
-    //    x: (parent.width - width) / 2
-    //   y: (parent.height - height) / 2
     contentItem: VoucherReceiptDetails{id:_voucherReceiptDetails;Layout.fillWidth: true}
     Component.onCompleted: {
         console.log("VoucherReceiptDialog is created........")

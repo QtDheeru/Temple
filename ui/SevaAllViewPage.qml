@@ -218,7 +218,6 @@ Rectangle{
             {
                 console.log("clicked cell in table view ",row)
             }
-
         }
         TableViewColumn {title: "Serial No"; role: "serialNo"; width: parent.width/12}
 
@@ -347,7 +346,7 @@ Rectangle{
     }
 
     SevaCancelReceipt{
-        id:sevaCancelPopup
+        id: sevaCancelPopup
         visible: false
         width: parent.width/1.5
         height: parent.height/1.5
@@ -355,8 +354,9 @@ Rectangle{
 
         onSevaReceiptcancelClicked:{
             console.log("onSevaReceiptcancelClicked ")
-            receiptCancel(storeObject.sno,totalCost);
-           // _errorDialog1.showError("Confirm to Cancel?",1);
+            sevaProxy.setStatusToCancel(storeObject.sno)
+            receiptCancel(storeObject.sno,totalCost)
+           // _errorDialog1.showError("Confirm to Cancel?",1)
 
         }
     }
@@ -398,7 +398,6 @@ Rectangle{
                 _errorDialog1.close()
             }
         }
-
         onNoAction: {
             console.log("SevAllViewPage : No Clicked")
             _errorDialog1.close()

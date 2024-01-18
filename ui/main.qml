@@ -20,7 +20,6 @@ ApplicationWindow {
     Component.onCompleted: {
         //        console.log("=====" + confApp.appPath + "/" + confApp.welcomescreenImg );
         //        console.log( confApp.welcomescreenImg);
-
         console.log("screen height= " + Screen.height)
         console.log("screen width= " + Screen.width)
         console.log("Screen MyStyles-screecnWidth size =" + styles.screenWidth)
@@ -321,7 +320,6 @@ ApplicationWindow {
         }
         function onSevaAllViewPageDestroyed(){
             console.log("onSevaAllViewPageDestroyed")
-
         }
         function onReceiptCancel(receiptNo,amount)
         {
