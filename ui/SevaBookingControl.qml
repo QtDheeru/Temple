@@ -10,7 +10,7 @@ Rectangle {
     signal addMoreSeva();
     signal nextReceipt();
     signal clearReceipt();
-    signal showAllData();
+    signal showAllDataFromSevBControl();
     signal errorOccur(string errorMsg);
     signal showLast10Transaction();
     property bool enablePaymentButton: false
@@ -154,4 +154,7 @@ Rectangle {
         }
     ]
 
+    Component.onCompleted: {
+        console.log("SevaBookingControl is created........")
+    }
 }

@@ -174,5 +174,8 @@ Rectangle {
             errorOccur("Data not cleared")
         }
     }
+    Component.onCompleted: {
+        console.log("SevaBookingProgressView is created........")
+    }
 }
 

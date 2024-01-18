@@ -32,8 +32,10 @@ int SevaDetailsTableView::columnCount(const QModelIndex &index) const
 QVariant SevaDetailsTableView::data(const QModelIndex &index, int role) const
 {
     qDebug() <<  Q_FUNC_INFO << Qt::endl; //"Row =" <<  index.row() <<  " Col=" << index.column() <<  " Data = " <<  m_data.at(index.row()).at(index.column()) << Qt::endl;
-    if( m_deatailsList.size() == 0)
+    if( m_deatailsList.size() == 0){
+        qDebug() <<  Q_FUNC_INFO <<  "detailslist size is 0" << Qt::endl;
         return QVariant();
+    }
 
     SevaBookingElement *elem = this->m_sevaBookedList.at(index.row());
     switch(role){

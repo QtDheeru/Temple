@@ -54,17 +54,47 @@ QHash<int, QByteArray> SevaCancelModel::roleNames() const
 
 int SevaCancelModel::setData(QList<SevaBookingElement*> l_recptList)
 {
-    m_recptList =l_recptList;
-    qDebug()<<"emitted setData";
+    this->beginResetModel();
+    m_recptList = l_recptList;
+    getTotalAmount();
+    this->setSevaReceiptNumber(ele->receiptNum());
+    this->endResetModel();
+    return 0;
 }
 
 QString SevaCancelModel::getTotalAmount()
 {
-    int l_value=0;
-    for(int var=0;var<m_recptList.size();var++){
-        m_totalAmount=m_recptList.at(var)->sevacost();
-        l_value+=m_totalAmount.toInt();
+    int amount=0;
+    for(int var = 0;var < m_recptList.size();var++){
+        qDebug() << Q_FUNC_INFO << "sevacost = " << m_recptList.at(var)->sevacost().toInt() << Qt::endl;
+        qDebug() << Q_FUNC_INFO << "quantity = " << m_recptList.at(var)->quantity().toInt() << Qt::endl;
+        int value = (m_recptList.at(var)->sevacost().toInt()) * (m_recptList.at(var)->quantity().toInt());
+        qDebug() << Q_FUNC_INFO << "value = " << value << Qt::endl;
+        amount += value;
+        qDebug() << Q_FUNC_INFO << "amount = " << amount << Qt::endl;
     }
-    QString l_amount=QString::number(l_value);
-    return l_amount;
+    m_totalAmount = QString::number(amount);
+    qDebug() << Q_FUNC_INFO << "Amount = " << amount << Qt::endl;
+    emit totalAmountChanged();
+    return m_totalAmount;
+}
+
+QString SevaCancelModel::sevaReceiptNumber() const
+{
+    return m_sevaReceiptNumber;
+}
+
+void SevaCancelModel::setSevaReceiptNumber(const QString &newSevaReceiptNumber)
+{
+    m_sevaReceiptNumber = newSevaReceiptNumber;
+}
+
+QList<SevaBookingElement *> SevaCancelModel::recptList() const
+{
+    return m_recptList;
+}
+
+void SevaCancelModel::setRecptList(const QList<SevaBookingElement *> &newRecptList)
+{
+    m_recptList = newRecptList;
 }

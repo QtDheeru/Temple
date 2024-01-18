@@ -16,7 +16,7 @@ SevaBookingTableModel::~SevaBookingTableModel()
 
 int SevaBookingTableModel::rowCount(const QModelIndex &parent) const
 {
-    qDebug()<<Q_FUNC_INFO << m_bookedSeva.size() <<x<< Qt::endl;
+    qDebug()<<Q_FUNC_INFO << "Row count of SevaBooking =" << m_bookedSeva.size() << " :: x=" << x<< Qt::endl;
     Q_UNUSED(parent);
     x++;
     return m_bookedSeva.size();
@@ -24,21 +24,29 @@ int SevaBookingTableModel::rowCount(const QModelIndex &parent) const
 
 int SevaBookingTableModel::columnCount(const QModelIndex &parent) const
 {
-    qDebug()<<Q_FUNC_INFO << m_bookedSeva.size() <<y<< Qt::endl;
+    qDebug() << Q_FUNC_INFO << "bookedSeva size : " << m_bookedSeva.size() << " :: y value = " << y << Qt::endl;
     Q_UNUSED(parent);
     y++;
-    return 19;
+    return 14;
 }
 
 QVariant SevaBookingTableModel::data(const QModelIndex &index, int role) const
 {
-    qDebug()<<Q_FUNC_INFO<<z<<"row column role"<<index.row()<<index.column()<<role<<Qt::endl;
+    qDebug() << Q_FUNC_INFO << z << "row :" << index.row() << " :: column : " << index.column() << " :: role"   << role << Qt::endl;
 
     //    if (!index.isValid())
     //        return QVariant();
 
     int sevaRow = index.row();
     SevaBookingElement *tempSeva = m_bookedSeva.at(sevaRow);
+    if(tempSeva == nullptr){
+        qWarning() << Q_FUNC_INFO << "Error in fetching tempseva data for row : " << sevaRow << Qt::endl;
+        return QVariant();
+    }else
+        qDebug() << Q_FUNC_INFO << "tempSeva is not null" << Qt::endl;
+
+    tempSeva->print();
+    qDebug() << Q_FUNC_INFO << " sno : " << tempSeva->sno() << Qt::endl;
     switch(role){
     case SNO_ROLE: return sevaRow;break;
     case RCPTNUM_ROLE: return tempSeva->sno();break;
@@ -64,7 +72,7 @@ QVariant SevaBookingTableModel::data(const QModelIndex &index, int role) const
     case BOOKED_BY_ROLE: return tempSeva->bookedBy();break;
     }
 
-    qDebug()<<Q_FUNC_INFO<<Qt::endl;
+    qDebug()<<Q_FUNC_INFO<< " end" <<Qt::endl;
     return QVariant();
 }
 
@@ -100,11 +108,10 @@ QHash<int, QByteArray> SevaBookingTableModel::roleNames() const
 
 void SevaBookingTableModel::addBookingDetails(SevaBookingElement *elem)
 {
-    qDebug()<<Q_FUNC_INFO<<Qt::endl;
+    qDebug()<<Q_FUNC_INFO<< elem << " :: Size = "  << m_bookedSeva.size() <<Qt::endl;
     beginInsertRows(QModelIndex(),m_bookedSeva.size(),m_bookedSeva.size());
     m_bookedSeva.append(elem);
     endInsertRows();
-    qDebug()<<Q_FUNC_INFO<< "1" << m_bookedSeva.size()<< Qt::endl;
 
     //        printBookingList();
 }
@@ -134,7 +141,7 @@ void SevaBookingTableModel::printBookingList()
         qDebug()<<"cash"<<m_bookedSeva[i]->cash()<<Qt::endl;
         qDebug()<<"bank"<<m_bookedSeva[i]->bank()<<Qt::endl;
         qDebug()<<"reference"<<m_bookedSeva[i]->reference()<<Qt::endl;
-        qDebug()<<"Suman Status"<<m_bookedSeva[i]->status()<<Qt::endl;
+        qDebug()<<"Seva Status"<<m_bookedSeva[i]->status()<<Qt::endl;
         qDebug()<<"address"<<m_bookedSeva[i]->address()<<Qt::endl;
         qDebug()<<"momento"<<m_bookedSeva[i]->momento()<<Qt::endl;
         qDebug()<<"bookedBy"<<m_bookedSeva[i]->bookedBy()<<Qt::endl;
@@ -147,7 +154,7 @@ void SevaBookingTableModel::reset(QString receiptNo)
     SevaBookingElement *sevaReceipt = nullptr;
     for(int i=0;i<m_bookedSeva.size();i++)
     {
-        if (m_bookedSeva[i]->sno() == receiptNo){
+        if (receiptNo.contains(m_bookedSeva[i]->sno())){
             row = i;
             sevaReceipt = m_bookedSeva[i];
             sevaReceipt->setStatus(status);
@@ -161,9 +168,9 @@ void SevaBookingTableModel::reset(QString receiptNo)
 
 void SevaBookingTableModel::checkStatus(QString receiptNo){
     bool check = false;
-    for(int var=0;var<m_bookedSeva.size();var++) {
-        if(m_bookedSeva[var]->sno()== receiptNo){
-            if(m_bookedSeva[var]->status()==status){
+    for(int var = 0;var < m_bookedSeva.size();var++) {
+        if(m_bookedSeva[var]->sno() == receiptNo){
+            if(m_bookedSeva[var]->status() == status){
                 check= true;
                 emit alreadyCancelled();
             }
@@ -185,4 +192,15 @@ void SevaBookingTableModel::referseshTheModel(QString rownum)
     }
     beginRemoveRows(QModelIndex(),count,count);
     endRemoveRows();
+}
+
+void SevaBookingTableModel::clearData()
+{
+    qDebug()<<Q_FUNC_INFO<<Qt::endl;
+    for(int i=0; i<m_bookedSeva.size();i++)
+    {
+        delete m_bookedSeva.at(i);
+        qDebug() << Q_FUNC_INFO << "Booked seva list is empty ? =" << m_bookedSeva.empty() << Qt::endl;
+    }
+    m_bookedSeva.clear();
 }

@@ -29,9 +29,7 @@ ApplicationWindow {
     }
     Loader{
         id:loader
-        //anchors.fill: parent
-        height: parent.height
-        width: parent.width
+        anchors.fill: parent
         source: "WelcomeToAppScreen.qml"
         signal accountDetails();
     }
@@ -314,23 +312,30 @@ ApplicationWindow {
 
         }
         function onLoadSevaBookingView(){
-
             loader.source = ""
             loader.source = "qrc:/ui/Devotee/DevoteeSelectionPage.qml";
-        }
-        function onGetCancelReceiptDetails(canceledObj){
-            console.log("canceeled came here")
-            storeObject=canceledObj
-            sevaProxy.sevaBookingTV.checkStatus(canceledObj.sno);
         }
         function onBackClicked(){
             loader.source=""
             loader.source = "qrc:/ui/SevaAllViewPage.qml"
         }
-        function onCancelClicked(){
-            _errorDialog1.showError("Confirm to Cancel?",1);
+        function onSevaAllViewPageDestroyed(){
+            console.log("onSevaAllViewPageDestroyed")
+
+        }
+        function onReceiptCancel(receiptNo,amount)
+        {
+            console.log("onReceiptCancel :: receipt No: " + receiptNo + ":: total cost: " + amount)
+            _ld.setSource("qrc:/ui/VoucherReceiptDialog.qml",{_receiptNumber:receiptNo,pageNumber:1,_voucherCost:amount})
         }
     }
+    Loader{
+        id:_ld
+        anchors.fill: parent
+        z:10
+        opacity: 0
+    }
+
     Connections{
         target: _root
         function onErrorOccur(errorMsg)
@@ -338,82 +343,6 @@ ApplicationWindow {
             console.log("In onErrorOccured of main")
             _errorDialog.showError(errorMsg);
             console.log("In onErrorOccured of main2222")
-        }
-    }
-    DisplayDialog {
-        id :_errorDialog2
-        visible: false
-        rectColor: "lightgreen"
-        contentColor: "lightgreen"
-        footerVisible:false
-        function showError(message){
-            console.log("inside show error2")
-            _errorDialog2.visible = true;
-            _errorDialog2.text2Display = message
-            _errorDialog2.open();
-            _timer.start();
-        }
-    }
-    DisplayDialog {
-        id :_errorDialog1
-        visible: false
-        function showError(message,pageno){
-            _errorDialog1.page=pageno
-            _errorDialog1.text2Display = message
-            _errorDialog1.open();
-            if(page===2)
-                setButtons=true
-            if(page===1)
-                setButtons=false
-        }
-        onYesAction: {
-            if(page===1){
-                sevaProxy.setStatusToCancel(storeObject.sno)
-                _errorDialog1.close()
-            }
-            if(page===2){
-                _errorDialog1.close()
-            }
-        }
-
-        onNoAction: {
-            _errorDialog1.close()
-        }
-    }
-    Connections
-    {
-        target:sevaProxy
-        onStatusAlreadyCancelled:
-        {
-            console.log("Already Cancelled status came to qml loading MyDialogBox")
-            _errorDialog2.showError("Status Already Cancelled !");
-        }
-    }
-
-    Connections
-    {
-        target:sevaProxy.sevaBookingTV
-        onStatusCancelledSuccess:
-        {
-            console.log("Status set to cancel")
-            _errorDialog2.showError("Status Set to Cancel");
-        }
-        onAlreadyCancelled:{
-            _errorDialog1.showError("Status Already Cancelled !",2);
-        }
-        onLoadCancelPage:{
-            sevaProxy.cancelReceipt(storeObject.sno);
-            loader.source="qrc:/ui/SevaCancelReceipt.qml"
-        }
-    }
-
-    Timer{
-        id:_timer
-        running: false
-        interval: 1500
-        onTriggered: {
-            _errorDialog2.close();
-            loader.setSource("voucherPage.qml",{bookingElement:storeObject,pageNumber:1})
         }
     }
 }

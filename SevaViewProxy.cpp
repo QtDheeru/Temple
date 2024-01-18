@@ -28,8 +28,8 @@ SevaViewProxy::SevaViewProxy(QObject *parent) : QObject(parent)
     m_sevaBSearchModel->setSourceModel(m_sevaBookingTV);
     this->getNextReceiptNumber();
 
-    QObject::connect(DBInterface::getInstance(),&DBInterface::sendOneSevaBooking,
-                     m_allReportModel,&SevaDetailsTableView::insertSevaRow);
+    //QObject::connect(DBInterface::getInstance(),&DBInterface::sendOneSevaBooking,
+      //               m_allReportModel,&SevaDetailsTableView::insertSevaRow);
 
     QObject::connect(DBInterface::getInstance(),&DBInterface::sendOneSevaBooking,
                      m_sevaBookingTV,&SevaBookingTableModel::addBookingDetails);
@@ -93,7 +93,6 @@ QAbstractItemModel *SevaViewProxy::getSevaTypeModel()
         QQmlEngine::setObjectOwnership(m_sevaTypeModel,QQmlEngine::CppOwnership);
     }
     return m_sevaTypeModel;
-
 }
 
 QAbstractItemModel *SevaViewProxy::getBookedView()
@@ -182,56 +181,85 @@ bool SevaViewProxy::saveReceipt(MySevaReceipt *receipt)
 
 void SevaViewProxy::cancelReceipt(QString a_recptno)
 {
-    qDebug()<<"Receipt no in cancelReceipt "<<a_recptno<<Qt::endl;
+    qDebug() << Q_FUNC_INFO << "Receipt no in cancelReceipt " << a_recptno << Qt::endl;
     this->getDataReceipt(a_recptno);
+}
+
+void SevaViewProxy::deleteSevaBookingTableModel()
+{
+//    m_sevaBookingTV
+    delete m_sevaBookingTV;
+}
+
+void SevaViewProxy::cleanBookingTableModel()
+{
+    qDebug() << Q_FUNC_INFO << Qt::endl;
+    m_sevaBookingTV->clearData();
+    QObject::disconnect(DBInterface::getInstance(),&DBInterface::sendOneSevaBooking,
+                     m_sevaBookingTV,&SevaBookingTableModel::addBookingDetails);
+    QObject::disconnect(DBInterface::getInstance(),&DBInterface::sendChangedDataToSevaBookingTablemodel,
+                     m_sevaBookingTV,&SevaBookingTableModel::reset);
+    QObject::disconnect(DBInterface::getInstance(),&DBInterface::refreshModel,
+                     m_sevaBookingTV,&SevaBookingTableModel::referseshTheModel);
+    delete m_sevaBookingTV;
+    m_sevaBookingTV = new SevaBookingTableModel;
+    m_sevaBSearchModel->setSourceModel(m_sevaBookingTV);
+
+    QObject::connect(DBInterface::getInstance(),&DBInterface::sendOneSevaBooking,
+                     m_sevaBookingTV,&SevaBookingTableModel::addBookingDetails);
+    QObject::connect(DBInterface::getInstance(),&DBInterface::sendChangedDataToSevaBookingTablemodel,
+                     m_sevaBookingTV,&SevaBookingTableModel::reset);
+    QObject::connect(DBInterface::getInstance(),&DBInterface::refreshModel,
+                     m_sevaBookingTV,&SevaBookingTableModel::referseshTheModel);
+
 }
 
 void SevaViewProxy::deleteRecipt(QString rcptNo)
 {
-    qDebug()<<Q_FUNC_INFO<<"rcptNo"<<rcptNo<<Qt::endl;
+    qDebug() << Q_FUNC_INFO << "rcptNo" << rcptNo << Qt::endl;
     emit sendDeletedRecptNo(rcptNo);
     this->m_sevaBookingTV->reset(rcptNo);
 }
 
 void SevaViewProxy::setStatusToCancel(QString rcptNo){
-    qDebug()<<Q_FUNC_INFO<<"rcptNo"<<rcptNo<<Qt::endl;
+    qDebug() << Q_FUNC_INFO << "rcptNo" << rcptNo << Qt::endl;
     //    this->checkIfStatusAlreadyCanceled(rcptNo);
     DBInterface::getInstance()->recvDeletedRecptNo(rcptNo);
 }
 
 void SevaViewProxy::getDataReceipt(QString receipt_no)
 {
-    qDebug()<<"Inside getDataReceipt(QString) "<<Qt::endl;
+    qDebug() << Q_FUNC_INFO << "Inside getDataReceipt(QString) " << Qt::endl;
 
-    m_recpt_details =DBInterface::getInstance()->getSewaBookingEntryForReceipt(receipt_no);
-    qDebug()<<"Iterating QList "<<Qt::endl;
+    m_recpt_details = DBInterface::getInstance()->getSewaBookingEntryForReceipt(receipt_no);
+    qDebug() << Q_FUNC_INFO << "Iterating QList " << Qt::endl;
     for(SevaBookingElement *ele : m_recpt_details)
     {
-        qDebug()<<"s_no in QList"<<ele->sno()<<Qt::endl;
-        qDebug()<<"person_id in QList"<<ele->person_id()<<Qt::endl;
-        qDebug()<<"seva_type in QList"<<ele->sevatype()<<Qt::endl;
-        qDebug()<<"seva_namein QList "<<ele->sevaname()<<Qt::endl;
-        qDebug()<<"seva_costin QList "<<ele->sevacost()<<Qt::endl;
-        qDebug()<<"Seva checked = "<<ele->sevaChecked();
-        qDebug()<<"Seva checked Status in getData"<<ele->status();
+        qDebug() << Q_FUNC_INFO << "s_no in QList" << ele->sno() << Qt::endl;
+        qDebug() << Q_FUNC_INFO << "person_id in QList" << ele->person_id() << Qt::endl;
+        qDebug() << Q_FUNC_INFO << "seva_type in QList" << ele->sevatype() << Qt::endl;
+        qDebug() << Q_FUNC_INFO << "seva_namein QList " << ele->sevaname() << Qt::endl;
+        qDebug() << Q_FUNC_INFO << "seva_costin QList " << ele->sevacost() << Qt::endl;
+        qDebug() << Q_FUNC_INFO << "Seva checked = " << ele->sevaChecked() << Qt::endl;
+        qDebug() << Q_FUNC_INFO << "Seva checked Status in getData" << ele->status() << Qt::endl;
     }
     m_sevacancelmodel->setData(m_recpt_details);
 }
 
 void SevaViewProxy::checkIfStatusAlreadyCanceled(QString a_recptNo)
 {
-    const QString l_checkStatus="canceled";
+    const QString l_checkStatus = "canceled";
     int l_count=0;
 
-    qDebug()<<"Number of objects in list "<<m_recpt_details.size();
+    qDebug() << "Number of objects in list " << m_recpt_details.size();
     for(SevaBookingElement *ele : m_recpt_details)
     {
-        qDebug()<<"Seva checked Status in statusCheck"<<ele->status();
-        if(ele->status()==l_checkStatus){
+        qDebug() << "Seva checked Status in statusCheck" << ele->status();
+        if(ele->status() == l_checkStatus){
             l_count++;
         }
     }
-    if(l_count==m_recpt_details.count()){
+    if(l_count == m_recpt_details.count()){
         emit statusAlreadyCancelled();
     }
     else{
@@ -278,7 +306,7 @@ bool SevaViewProxy::deleteSeva(int sevaid, QString sevaname){
 
 bool SevaViewProxy::closeSeva(int sevaId)
 {
-    qDebug()<<Q_FUNC_INFO<<sevaId<<Qt::endl;
+    qDebug() << Q_FUNC_INFO << sevaId << Qt::endl;
     DBInterface::getInstance()->closeSeva(sevaId);
     return true;
 }
@@ -300,8 +328,8 @@ bool SevaViewProxy::printVoucherReceipt(VoucherElement *voucherElement)
     //print_details* p = new Print_Detail;
     print_voucherDetails* p = new Print_VoucherDetail;
     int voucherNumber= voucherElement->voucherNo();
-    qDebug()<<"Suman Voucher~~~~ "<<voucherNumber<<Qt::endl;
-    p->VOUCHER_NO =QString::number(voucherNumber);
+    qDebug() << Q_FUNC_INFO << " Voucher~~~~ " << voucherNumber << Qt::endl;
+    p->VOUCHER_NO = QString::number(voucherNumber);
     p->VOUCHER_COST = voucherElement->voucherCost();
     p->VOUCHER_DATE = voucherElement->voucherDate();
     p->MOB_NO = voucherElement->mobileNo();
@@ -511,8 +539,12 @@ SevaBookingSearchModel *SevaViewProxy::sevaBSearchModel() const
     return m_sevaBSearchModel;
 }
 
-SevaBookingTableModel *SevaViewProxy::sevaBookingTV() const
+SevaBookingTableModel *SevaViewProxy::sevaBookingTV()
 {
+    if(m_sevaBookingTV == nullptr)
+    {
+        m_sevaBookingTV = new SevaBookingTableModel;
+    }
     return m_sevaBookingTV;
 }
 

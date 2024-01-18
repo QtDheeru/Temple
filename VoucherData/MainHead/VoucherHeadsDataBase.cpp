@@ -3,6 +3,11 @@
 VoucherHeadsDataBase::VoucherHeadsDataBase(QObject *parent)
     : QObject{parent}
 {
+
+}
+
+void VoucherHeadsDataBase::init()
+{
     dbase=QSqlDatabase::addDatabase("QSQLITE");
     QString currentpath=QDir::currentPath();
     qDebug()<<"Current Path"<<currentpath<<Qt::endl;

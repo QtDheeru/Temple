@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
     // Open the file logging
     m_logFile.data()->open(QFile::WriteOnly | QFile::Truncate | QFile::Text);
     // Set handler
-//    qInstallMessageHandler(messageHandler);
+    qInstallMessageHandler(messageHandler);
 
 
     SevaCountOnDateModel *sevaCountOnDateModel ;
