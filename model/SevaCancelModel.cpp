@@ -37,6 +37,11 @@ QVariant SevaCancelModel::data(const QModelIndex &index, int role) const
     {
         return m_recptList.at(index.row())->sevaChecked();
     }
+    if(role == 3)
+    {
+        return m_recptList.at(index.row())->quantity();
+    }
+    return "";
 }
 
 QHash<int, QByteArray> SevaCancelModel::roleNames() const
@@ -46,6 +51,7 @@ QHash<int, QByteArray> SevaCancelModel::roleNames() const
     roles[0] = "SevaName";
     roles[1] = "SevaAmount";
     roles[2] = "SevaChecked";
+    roles[3] = "Quantity";
 
     qDebug()<<Q_FUNC_INFO<<" 2 " <<roles;
     return roles;
@@ -56,6 +62,7 @@ int SevaCancelModel::setData(QList<SevaBookingElement*> l_recptList)
 {
     this->beginResetModel();
     m_recptList = l_recptList;
+    SevaBookingElement *ele = l_recptList.at(0);
     getTotalAmount();
     this->setSevaReceiptNumber(ele->receiptNum());
     this->endResetModel();
