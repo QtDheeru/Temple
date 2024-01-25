@@ -3,7 +3,8 @@
 BankDetails::BankDetails(QObject *parent)
     : QObject{parent}
 {
-qDebug()<<Q_FUNC_INFO<<Qt::endl;
+    qDebug()<<Q_FUNC_INFO<<Qt::endl;
+    m_bankId = 0;
 }
 
 BankDetails::~BankDetails()

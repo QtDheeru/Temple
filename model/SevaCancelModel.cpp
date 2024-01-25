@@ -37,6 +37,11 @@ QVariant SevaCancelModel::data(const QModelIndex &index, int role) const
     {
         return m_recptList.at(index.row())->sevaChecked();
     }
+    if(role == 3)
+    {
+        return m_recptList.at(index.row())->quantity();
+    }
+    return "";
 }
 
 QHash<int, QByteArray> SevaCancelModel::roleNames() const
@@ -46,6 +51,7 @@ QHash<int, QByteArray> SevaCancelModel::roleNames() const
     roles[0] = "SevaName";
     roles[1] = "SevaAmount";
     roles[2] = "SevaChecked";
+    roles[3] = "Quantity";
 
     qDebug()<<Q_FUNC_INFO<<" 2 " <<roles;
     return roles;
@@ -54,17 +60,48 @@ QHash<int, QByteArray> SevaCancelModel::roleNames() const
 
 int SevaCancelModel::setData(QList<SevaBookingElement*> l_recptList)
 {
-    m_recptList =l_recptList;
-    qDebug()<<"emitted setData";
+    this->beginResetModel();
+    m_recptList = l_recptList;
+    SevaBookingElement *ele = l_recptList.at(0);
+    getTotalAmount();
+    this->setSevaReceiptNumber(ele->receiptNum());
+    this->endResetModel();
+    return 0;
 }
 
 QString SevaCancelModel::getTotalAmount()
 {
-    int l_value=0;
-    for(int var=0;var<m_recptList.size();var++){
-        m_totalAmount=m_recptList.at(var)->sevacost();
-        l_value+=m_totalAmount.toInt();
+    int amount=0;
+    for(int var = 0;var < m_recptList.size();var++){
+        qDebug() << Q_FUNC_INFO << "sevacost = " << m_recptList.at(var)->sevacost().toInt() << Qt::endl;
+        qDebug() << Q_FUNC_INFO << "quantity = " << m_recptList.at(var)->quantity().toInt() << Qt::endl;
+        int value = (m_recptList.at(var)->sevacost().toInt()) * (m_recptList.at(var)->quantity().toInt());
+        qDebug() << Q_FUNC_INFO << "value = " << value << Qt::endl;
+        amount += value;
+        qDebug() << Q_FUNC_INFO << "amount = " << amount << Qt::endl;
     }
-    QString l_amount=QString::number(l_value);
-    return l_amount;
+    m_totalAmount = QString::number(amount);
+    qDebug() << Q_FUNC_INFO << "Amount = " << amount << Qt::endl;
+    emit totalAmountChanged();
+    return m_totalAmount;
+}
+
+QString SevaCancelModel::sevaReceiptNumber() const
+{
+    return m_sevaReceiptNumber;
+}
+
+void SevaCancelModel::setSevaReceiptNumber(const QString &newSevaReceiptNumber)
+{
+    m_sevaReceiptNumber = newSevaReceiptNumber;
+}
+
+QList<SevaBookingElement *> SevaCancelModel::recptList() const
+{
+    return m_recptList;
+}
+
+void SevaCancelModel::setRecptList(const QList<SevaBookingElement *> &newRecptList)
+{
+    m_recptList = newRecptList;
 }

@@ -726,7 +726,6 @@ int print_file::prin2PixMap(Print_BookingDetail *pbd)
         query_other1.exec();
         double totalAmount= 0;
         while(query_other1.next()){
-            qDebug()<<"suman raj inside while..."<<Qt::endl;
             QString  sName= query_other1.value(3).toString().trimmed();
             QString  sQty= query_other1.value(4).toString().trimmed();
             QString  sCost= query_other1.value(14).toString().trimmed();
@@ -775,36 +774,36 @@ int print_file::prin2PixMap(Print_BookingDetail *pbd)
         //painter.setFont(QFont("Arial",10));
         //print_file::NumberToWord(pbd->total_Cost.toUInt());
         qDebug() << Q_FUNC_INFO << " **** Amount = 2" << Qt::endl;
-        painter.drawText(margin,top_margin+387,"Total in words:₹");
+        painter.drawText(margin,top_margin + 387,"Total in words:₹");
         qDebug() << Q_FUNC_INFO << " **** Amount = 3" << Qt::endl;
-        painter.drawText(margin+108,top_margin+386,print_file::NumberToWord(totalAmount)+" only");
+        painter.drawText(margin + 108,top_margin + 386,print_file::NumberToWord(totalAmount)+" only");
         qDebug() << Q_FUNC_INFO << " **** Amount = 4" << Qt::endl;
-        painter.drawText(margin+2,top_margin+405,"Note:");
-        painter.drawText(margin+37,top_margin+405,"");
+        painter.drawText(margin + 2,top_margin + 405,"Note:");
+        painter.drawText(margin + 37,top_margin + 405,"");
         qDebug() << Q_FUNC_INFO << " **** Amount = 5" << Qt::endl;
         QPixmap mypix(":/Images/Rules.png");
         qDebug() << Q_FUNC_INFO << " **** Amount = 6" << Qt::endl;
-        painter.drawPixmap(margin,top_margin+412,370,120,mypix);
+        painter.drawPixmap(margin,top_margin + 412,370,120,mypix);
         painter.setFont(QFont("Arial",10, QFont::Bold));
         painter.setFont(QFont("Arial",PRINT_HEADER::FOOTER_4_FONT, QFont::Bold));
         qDebug() << Q_FUNC_INFO << " **** Amount = 7" << Qt::endl;
-        painter.drawText(margin+270,top_margin+416,PRINT_HEADER::TRUST_SEAL);
+        painter.drawText(margin + 270,top_margin + 416,PRINT_HEADER::TRUST_SEAL);
 
         painter.save();
         QPen pen;
         pen.setWidthF(0.5);
         painter.setPen(pen);
-        QRectF footerRect(margin,top_margin+420,printW,110);
+        QRectF footerRect(margin,top_margin + 420,printW,110);
         painter.drawRect(footerRect);
         painter.restore();
 
         painter.setFont(QFont("Arial",PRINT_HEADER::FOOTER_4_FONT, QFont::Bold));
-        painter.drawText(QRectF(margin,top_margin+420,printW,20),Qt::AlignCenter,PRINT_HEADER::FOOTER_1);
-        painter.drawText(QRectF(margin,top_margin+435,printW,20),Qt::AlignCenter,PRINT_HEADER::FOOTER_2);
-        painter.drawText(QRectF(margin,top_margin+450,printW,20),Qt::AlignCenter,PRINT_HEADER::FOOTER_3);
-        painter.drawText(QRectF(margin,top_margin+465,printW,20),Qt::AlignCenter,PRINT_HEADER::FOOTER_4);
-        painter.drawText(QRectF(margin,top_margin+480,printW,20),Qt::AlignCenter,PRINT_HEADER::FOOTER_5);
-        painter.drawText(QRectF(margin,top_margin+495,printW,20),Qt::AlignCenter,PRINT_HEADER::FOOTER_6);
+        painter.drawText(QRectF(margin,top_margin + 420,printW,20),Qt::AlignCenter,PRINT_HEADER::FOOTER_1);
+        painter.drawText(QRectF(margin,top_margin + 435,printW,20),Qt::AlignCenter,PRINT_HEADER::FOOTER_2);
+        painter.drawText(QRectF(margin,top_margin + 450,printW,20),Qt::AlignCenter,PRINT_HEADER::FOOTER_3);
+        painter.drawText(QRectF(margin,top_margin + 465,printW,20),Qt::AlignCenter,PRINT_HEADER::FOOTER_4);
+        painter.drawText(QRectF(margin,top_margin + 480,printW,20),Qt::AlignCenter,PRINT_HEADER::FOOTER_5);
+        painter.drawText(QRectF(margin,top_margin + 495,printW,20),Qt::AlignCenter,PRINT_HEADER::FOOTER_6);
         //      qDebug() << Q_FUNC_INFO << " **** Amount = 5" << Qt::endl;
         printer.setPrintRange(QPrinter::CurrentPage);
         painter.end();

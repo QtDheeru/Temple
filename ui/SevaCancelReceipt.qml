@@ -4,9 +4,9 @@ import QtQuick.Layouts 1.3
 import "./components"
 
 Item {
-    property var myTotalAmount
+    id:root
     signal backClicked()
-    signal cancelClicked()
+    signal sevaReceiptcancelClicked(var totalCost)
 
     Rectangle{
         anchors.fill: parent
@@ -21,8 +21,8 @@ Item {
 
         Rectangle{
             id:_rect
-            width:parent.width/1.5
-            height:parent.height/1.5
+            width: parent.width/1.5
+            height: parent.height/1.5
             anchors.centerIn: parent
             ColumnLayout{
                 anchors.fill: parent
@@ -133,7 +133,7 @@ Item {
                                         Layout.fillHeight: true
                                         Layout.fillWidth: true
                                         Label{
-                                            text: SevaAmount
+                                            text: SevaAmount + " X " + Quantity
                                             anchors.centerIn: parent
                                             color: "black"
                                             font{
@@ -175,8 +175,7 @@ Item {
                             Layout.fillWidth: true
                             border.color: "#9370db"
                             Label{
-                                text:sevaProxy.mysevacancelmodel.getTotalAmount()
-//                                text:myTotalAmount
+                                text: sevaProxy.mysevacancelmodel.totalAmount
                                 anchors.centerIn: parent
                                 color: "black"
                                 font{
@@ -201,7 +200,10 @@ Item {
                             myText: "Proceed To Cancel"
                             fontSize: 18
                             onMyClick:{
-                                cancelClicked()
+                                console.log("SevaCancelReceipt :: Cancel clicked")
+                                //cancelClicked()
+                                _confirmationDialog.open();
+
                             }
                         }
                         MyButton{
@@ -210,7 +212,8 @@ Item {
                             myText: "Back"
                             fontSize: 18
                             onMyClick: {
-                                backClicked()
+                                //backClicked()
+                                root.visible = false
                             }
                         }
                     }
@@ -218,7 +221,24 @@ Item {
             }
         }
     }
-//    Component.onCompleted: {
-//        myTotalAmount=sevaProxy.mysevacancelmodel.getTotalAmount()
-//    }
+
+    DisplayDialog {
+        id :_confirmationDialog
+        visible: false
+        onYesAction: {
+            console.log("SevaCancelReceipt : yes Clicked")
+            sevaReceiptcancelClicked(sevaProxy.mysevacancelmodel.totalAmount)
+            sevaProxy.setStatusToCancel(sevaProxy.mysevacancelmodel.sevaReceiptNumber)
+            _confirmationDialog.close()
+        }
+        onNoAction: {
+            console.log("SevaCancelReceipt : No Clicked")
+            _confirmationDialog.close()
+        }
+    }
+    Component.onCompleted: {
+        console.log("SevaCancelReceipt is created");
+        //myTotalAmount = sevaProxy.mysevacancelmodel.getTotalAmount()
+        //console.log("myTotalAmount = " +  myTotalAmount);
+    }
 }

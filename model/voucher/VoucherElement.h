@@ -17,6 +17,7 @@ class VoucherElement : public QObject
     Q_PROPERTY(QString voucherCost READ voucherCost WRITE setVoucherCost NOTIFY voucherCostChanged)
     Q_PROPERTY(QString voucherPaymentMode READ voucherPaymentMode WRITE setVoucherPaymentMode NOTIFY voucherPaymentModeChanged)
     Q_PROPERTY(QString paymentReference READ PaymentReference WRITE setPaymentReference NOTIFY PaymentReferenceChanged)
+    Q_PROPERTY(QString receiptNumber READ voucherCost WRITE setVoucherCost NOTIFY voucherCostChanged)
 public:
     explicit VoucherElement(QObject *parent = nullptr);
 
@@ -58,6 +59,9 @@ public:
     const QString &PaymentReference() const;
     void setPaymentReference(const QString &newPaymentReference);
 
+    QString receiptNumber() const;
+    void setReceiptNumber(const QString &newReceiptNumber);
+
 public slots:
 
 signals:
@@ -83,6 +87,7 @@ private:
     QString m_voucherCost;
     QString m_voucherPaymentMode;
     QString m_PaymentReference;
+    QString m_receiptNumber;
 
 };
 

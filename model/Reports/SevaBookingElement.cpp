@@ -59,7 +59,7 @@ void SevaBookingElement::setQuantity(const QString &quantity)
 
 void SevaBookingElement::print()
 {
-     qDebug() << Q_FUNC_INFO << " SNO      =" << this->sno() <<Qt::endl;
+     qDebug() << Q_FUNC_INFO << " SNO      =" << this->sno() << Qt::endl;
      qDebug() << Q_FUNC_INFO << " SName    =" << this->sevaname() <<Qt::endl;
      qDebug() << Q_FUNC_INFO << " Person   =" << this->person_id() <<Qt::endl;
      qDebug() << Q_FUNC_INFO << " SevaType =" << this->sevatype() <<Qt::endl;
@@ -227,6 +227,16 @@ void SevaBookingElement::setSevaChecked(bool newSevaChecked)
         return;
     m_sevaChecked = newSevaChecked;
     emit sevaCheckedChanged();
+}
+
+QString SevaBookingElement::receiptNum() const
+{
+    return m_receiptNum;
+}
+
+void SevaBookingElement::setReceiptNum(const QString &newReceiptNum)
+{
+    m_receiptNum = newReceiptNum;
 }
 
 

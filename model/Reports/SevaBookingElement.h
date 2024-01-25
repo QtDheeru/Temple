@@ -89,6 +89,9 @@ public:
     bool sevaChecked() const;
     void setSevaChecked(bool newSevaChecked);
 
+    QString receiptNum() const;
+    void setReceiptNum(const QString &newReceiptNum);
+
 signals:
     void sevatimeChanged();
     void statusChanged();
@@ -117,6 +120,7 @@ private :
     QString m_momento;
     QString m_bookedBy;
     bool m_sevaChecked;
+    QString m_receiptNum;
 
 };
 

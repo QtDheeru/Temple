@@ -59,6 +59,9 @@ RowLayout{
         }
 
     }
+    Component.onCompleted: {
+        console.log("SevaNameDelegate is created........")
+    }
 }
 
 

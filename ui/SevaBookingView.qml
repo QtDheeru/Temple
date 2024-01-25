@@ -335,8 +335,8 @@ Rectangle{
             clearData();
         }
 
-        function onShowAllData(){
-            console.log("Show all Data")
+        function onShowAllDataFromSevBControl(){
+            console.log("SevaControll : Show all Data")
             //            progressBar.visible = true;
             //            progressBar.opacity = 0.1;
             var b = sevaProxy.showAllData();
@@ -611,6 +611,7 @@ Rectangle{
         _personal.setGothraCombo(dgothra)
         forceActiveFocus()
         _sevaDate.bookedby = sevaProxy.userManagement.signIn_Name
+        console.log("SevaBookingView is created...")
 
         //        sevaProxy.getBookedView().resetModel();
         //        sevaProxy.getSevaTypeNamesDataModel().getSevaBookingConformationDataModel().reset();

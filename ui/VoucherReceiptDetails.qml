@@ -6,7 +6,7 @@ import QtQuick.Controls 1.4 as Qt14
 
 Rectangle {
     width: 450;height: 450
-    color:"lightblue"
+    color: "lightblue"
     //   property alias amount2Pay : _date._labelText
     //    property alias cashPaid : _cash.amount2Pay
     //    property bool isDataExist : _cash.isDataExist
@@ -34,6 +34,7 @@ Rectangle {
     property alias _voucherCost:_cost._data
     property alias _voucherPaymentMode:_paymentMode._data
     property alias _paymentReference:_paymentRef._data
+    property alias _receiptNumber:_recNo._data
     ColumnLayout {
         anchors.fill: parent
         //        ButtonGroup {
@@ -61,9 +62,11 @@ Rectangle {
         MyRowEntry {id:_paymentRef;_labelText :qsTr("Payment Ref :");myWidth: parent.width/1.4;_editable : true}
         MyRowEntry {id:_note;_labelText :qsTr("Note :");myWidth: parent.width/1.4;_editable : true}
         MyRowEntry {id:_itm;_labelText :qsTr("Item :");myWidth: parent.width/1.4;_editable : false}
+        MyRowEntry {id:_recNo;_labelText:qsTr("Receipt No. :");myWidth: parent.width/1.4;_editable : false}
         //   MyRowEntry {id:_note;_labelText :qsTr("Note");myWidth: parent.width/1.4}
     }
     Component.onCompleted: {
+        console.log("VoucherReceiptDetails is created...")
         //setBankList(["UPI","GPay","PonePe","SBI", "CanaraBank", "Karnataka","HDFC","ICICI"]);
         //        console.log
         //        setBankList(sevaProxy.getBankList())

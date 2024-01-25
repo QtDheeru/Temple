@@ -569,7 +569,7 @@ Rectangle{
         id:_voucherElement
     }
     Component.onCompleted: {
-         console.log("In Component.onCompleted: voucher report page")
+         console.log("VoucherReportPage is created...")
          forceActiveFocus();
     }
 }

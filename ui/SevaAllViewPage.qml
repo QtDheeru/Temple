@@ -11,9 +11,12 @@ Rectangle{
     signal loadSevaBookingView();
     signal loadvoucher(var bookedObj,int pageNo);
     signal loadCancelReceipt()
-    signal getCancelReceiptDetails(var clickedObj)
+    //signal getCancelReceiptDetails(var clickedObj)
+    property var storeObject;
     property var ve
     property int  pageNumber: 1
+    signal sevaAllViewPageDestroyed();
+    signal receiptCancel(var receiptNo, var amount)
     RowLayout{
         id:searchRow
         width: _root.width
@@ -76,7 +79,7 @@ Rectangle{
                     acceptedButtons: Qt.LeftButton | Qt.RightButton
                     propagateComposedEvents: true
                     onClicked: {
-                        console.log("mouse clicked right or left styleData.selected "+styleData.selected)
+                        console.log("mouse clicked right or left styleData.selected " + styleData.selected)
 
                         // clear any other selected row
                         lv1.selection.clear()
@@ -106,7 +109,7 @@ Rectangle{
                             console.log("Left")
 
                             var v = sevaProxy.sevaBSearchModel.getRowOfDataFromTableViewModel(lv1.currentRow);
-                            console.log("///////////////////"+v)
+                            console.log("row of data of TB :" + v)
                             ve = sevaProxy.sevaBookingTV.getRowOfData(v);
 
                             // _allViewDataDialog._serialNo = ve.serial_no
@@ -215,17 +218,16 @@ Rectangle{
             {
                 console.log("clicked cell in table view ",row)
             }
-
         }
         TableViewColumn {title: "Serial No"; role: "serialNo"; width: parent.width/12}
 
         TableViewColumn {title: "Rcpt No"; role: "RecieptNumber"; width: parent.width/12}
 
-        TableViewColumn {title: "Person ID"; role: "PersonID"; width: parent.width/12}
+        //TableViewColumn {title: "Person ID"; role: "PersonID"; width: parent.width/12}
         TableViewColumn {title: "Devotee Name"; role: "DevoteeName"; width: parent.width/12}
         TableViewColumn {title: "Mobile Number"; role: "MobileNumber"; width: parent.width/12}
-        TableViewColumn {title: "Gothra"; role: "Gothra"; width: parent.width/12}
-        TableViewColumn {title: "Nakshatra"; role: "Nakshatra"; width: parent.width/12}
+        //TableViewColumn {title: "Gothra"; role: "Gothra"; width: parent.width/12}
+        //TableViewColumn {title: "Nakshatra"; role: "Nakshatra"; width: parent.width/12}
         TableViewColumn {title: "Seva Type"; role: "SevaType"; width: parent.width/12}
         TableViewColumn {title: "Seva Name"; role: "SevaName"; width: parent.width/12}
         TableViewColumn {title: "Quantity"; role: "Quantity"; width: parent.width/12}
@@ -235,11 +237,11 @@ Rectangle{
         TableViewColumn {title: "Cash"; role: "Cash"; width: parent.width/12}
         TableViewColumn {title: "PymntMode"; role: "PaymentMode"; width: parent.width/12}
         TableViewColumn {title: "BANK"; role: "BankName"; width: parent.width/12}
-        TableViewColumn {title: "Reference"; role: "Reference"; width: parent.width/12}
+        //TableViewColumn {title: "Reference"; role: "Reference"; width: parent.width/12}
         TableViewColumn{title: "Status";role:"Status";width: parent.width/12}
-        TableViewColumn {title: "Address"; role: "Address"; width: parent.width/9}
-        TableViewColumn {title: "Momento"; role: "Momento"; width: parent.width/12}
-        TableViewColumn {title: "BookedBy"; role: "BookedBy"; width: parent.width/12}
+        //TableViewColumn {title: "Address"; role: "Address"; width: parent.width/9}
+        //TableViewColumn {title: "Momento"; role: "Momento"; width: parent.width/12}
+        //TableViewColumn {title: "BookedBy"; role: "BookedBy"; width: parent.width/12}
 
 
         Menu{
@@ -263,7 +265,9 @@ Rectangle{
                 text: qsTr('Cancel')
                 onTriggered: {
 //                    _errorDialog.showmsg("Are you sure to cancel the reciept?",1)
-                    getCancelReceiptDetails(ve)
+                    //getCancelReceiptDetails(ve)
+                    storeObject = ve;
+                    sevaProxy.sevaBookingTV.checkStatus(storeObject.sno);
 //                    loadCancelReceipt()
                 }
             }
@@ -336,7 +340,110 @@ Rectangle{
             console.log("Keys.onEscapePressed: Seva All view Page ")
             loadSevaBookingView();
         }
+        Component.onDestruction: {
+            console.log("TableView is destroyed");
+        }
     }
+
+    SevaCancelReceipt{
+        id: sevaCancelPopup
+        visible: false
+        width: parent.width/1.5
+        height: parent.height/1.5
+        anchors.centerIn: parent
+
+        onSevaReceiptcancelClicked:{
+            console.log("onSevaReceiptcancelClicked ")
+            sevaProxy.setStatusToCancel(storeObject.sno)
+            receiptCancel(storeObject.sno,totalCost)
+           // _errorDialog1.showError("Confirm to Cancel?",1)
+
+        }
+    }
+
+    DisplayDialog {
+        id :_errorDialog2
+        visible: false
+        rectColor: "lightgreen"
+        contentColor: "lightgreen"
+        footerVisible:false
+        function showError(message){
+            console.log("inside show error2")
+            _errorDialog2.visible = true;
+            _errorDialog2.text2Display = message
+            _errorDialog2.open();
+            _timer.start();
+        }
+    }
+
+    DisplayDialog {
+        id :_errorDialog1
+        visible: false
+        function showError(message,pageno){
+            _errorDialog1.page=pageno
+            _errorDialog1.text2Display = message
+            _errorDialog1.open();
+            if(page===2)
+                setButtons=true
+            if(page===1)
+                setButtons=false
+        }
+        onYesAction: {
+            console.log("SevAllViewPage : yes Clicked")
+            if(page===1){
+                sevaProxy.setStatusToCancel(storeObject.sno)
+                _errorDialog1.close()
+            }
+            if(page===2){
+                _errorDialog1.close()
+            }
+        }
+        onNoAction: {
+            console.log("SevAllViewPage : No Clicked")
+            _errorDialog1.close()
+        }
+    }
+
+    Connections
+    {
+        target: sevaProxy.sevaBookingTV
+        onStatusCancelledSuccess:
+        {
+            console.log("SevAllViewPage : Status set to cancel")
+            _errorDialog2.showError("Status Set to Cancel");
+        }
+        onAlreadyCancelled:{
+            console.log("SevAllViewPage : Status already cancelled.")
+            _errorDialog1.showError("Status Already Cancelled !",2);
+        }
+        onLoadCancelPage:{
+            console.log("SevAllViewPage : onLoadCancelPage = " + storeObject.sno)
+            sevaProxy.cancelReceipt(storeObject.sno);
+            sevaCancelPopup.visible = true
+            //"SevaCancelReceipt.qml"
+        }
+    }
+    Connections
+    {
+        target: sevaProxy
+        onStatusAlreadyCancelled:
+        {
+            console.log("SevAllViewPage : Already Cancelled status came to qml loading MyDialogBox")
+            _errorDialog2.showError("Status Already Cancelled !");
+        }
+    }
+
+    Timer{
+        id:_timer
+        running: false
+        interval: 1500
+        onTriggered: {
+            _errorDialog2.close();
+            console.log("timer is triggered #######")
+            //loader.setSource("VoucherPage.qml",{receiptNumber:storeObject.sno,pageNumber:1,totalCost:sevaProxy.mysevacancelmodel.totalAmount})
+        }
+    }
+
     Keys.onEscapePressed: {
         console.log("Keys.onEscapePressed: Seva All view Page 333")
         loadSevaBookingView()
@@ -344,7 +451,19 @@ Rectangle{
 
     function resetBaseScreen()
     {
-       _allViewDataDialog.opacity =1;
+       _allViewDataDialog.opacity = 1;
+    }
+
+    Component.onCompleted: {
+        console.log("SevaAllViewPage is created...")
+        //lv1.forceLayout()
+    }
+
+    Component.onDestruction: {
+        console.log("SevaAllViewPage is destroyed");
+        //sevaAllViewPageDestroyed();
+        sevaProxy.cleanBookingTableModel();
+//        lv1.forceLayout()
     }
 
 }

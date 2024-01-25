@@ -34,7 +34,6 @@ class SevaViewProxy : public QObject
     Q_PROPERTY(SevaTypeNamesDataModel *sevaBookingModelData READ sevaBookingModelData CONSTANT)
     Q_PROPERTY(SevaCancelModel *mysevacancelmodel READ sevacancelmodel WRITE setSevacancelmodel NOTIFY mydataChanged )
 
-
 public:
     explicit SevaViewProxy(QObject *parent = nullptr);
     Q_INVOKABLE QAbstractItemModel* getSevaModel(int sevaType);
@@ -94,8 +93,8 @@ public:
     void setReportOnDateModel(SevaReport *newReportOnDateModel);
 
     Q_INVOKABLE SevaTypeNamesDataModel * getSevaTypeNamesDataModel();
-    SevaBookingSearchModel *sevaBSearchModel() const;
-    SevaBookingTableModel *sevaBookingTV() const;
+    Q_INVOKABLE SevaBookingSearchModel *sevaBSearchModel() const;
+    Q_INVOKABLE SevaBookingTableModel *sevaBookingTV() ;
 
     Q_INVOKABLE void addNewSigninDetails(QString name,QString lastname,QString userid,QString password ,int rolenumber,QString date);
 
@@ -121,6 +120,8 @@ public slots:
     void rcvclosedStatus(QString status);
     void recvUpdateStatus(QString);
     void cancelReceipt(QString);
+    void deleteSevaBookingTableModel();
+    void cleanBookingTableModel();
 
 signals:
     void receiptNumberChanged();

@@ -1,11 +1,12 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.3
+import VoucherElement 1.0
 import "./components"
 
 Dialog {
     id : root
-    visible: false
+    visible: true
     width: 600;
     height: 600;
     //    width: Screen.width/2
@@ -13,6 +14,7 @@ Dialog {
     closePolicy: Popup.NoAutoClose
     //y:20
     modal: true
+    anchors.centerIn: parent
     //   property alias amount2Pay : _sevaPayment.amount2Pay
     //   property string errorMessage: "Amount To Pay does not \n\n Match with Cash Paid"
     // property alias paymentObject : _sevaPayment
@@ -35,6 +37,7 @@ Dialog {
     property alias _voucherCost:_voucherReceiptDetails._voucherCost
     property alias _voucherPaymentMode:_voucherReceiptDetails._voucherPaymentMode
     property alias _paymentReference:_voucherReceiptDetails._paymentReference
+    property alias _receiptNumber:_voucherReceiptDetails._receiptNumber
     title: "InitiatePrintVoucher"
     background: Rectangle{
         anchors.fill: parent
@@ -65,7 +68,7 @@ Dialog {
                 Layout.fillWidth: true;text :"Confirm"
                 Layout.maximumHeight: parent.height-15
                 font.pixelSize: 20
-                enabled: _sevaPayment.isDataExist
+                //enabled: _sevaPayment.isDataExist
                 onClicked: {
                     //                  if (checkAmoutPaid()) {
                     //                      paymentComplete();
@@ -76,7 +79,14 @@ Dialog {
                     //                      _display.visible = true;
                     //                  }
                     //                }
-                    confirmClicked();
+                    //confirmClicked();
+                    console.log("Current Date:" + voucherProxy.getCurrentDate() + ":: Vouchernumber: " + voucherProxy.getLastVoucherNumber())
+                    _vouEle.receiptNumber = _receiptNumber
+                    _vouEle.voucherCost = _voucherCost
+                    _vouEle.voucherDate = voucherProxy.getCurrentDate()
+                    _vouEle.voucherNo = voucherProxy.getLastVoucherNumber()
+                    saveVoucher.saveVoucherElements(_vouEle);
+                    sevaProxy.printVoucherReceipt(_vouEle);
                 }
             }
             Button{
@@ -84,7 +94,7 @@ Dialog {
                 Layout.fillWidth: true;text :"Print"
                 Layout.maximumHeight: parent.height-15
                 font.pixelSize: 20
-                enabled: _sevaPayment.isDataExists
+                //enabled: _sevaPayment.isDataExists
                 visible: false
                 onClicked:
                 {
@@ -98,16 +108,24 @@ Dialog {
                 font.pixelSize: 20
                 onClicked: {
                     closeClicked();
-                    _voucherReceiptDialog.close()
+                    root.close()
                 }
             }
-
         }
     }
+    VouEle
+    {
+        id:_vouEle
+    }
 
-    //    x: (parent.width - width) / 2
-    //   y: (parent.height - height) / 2
     contentItem: VoucherReceiptDetails{id:_voucherReceiptDetails;Layout.fillWidth: true}
+    Component.onCompleted: {
+        console.log("VoucherReceiptDialog is created........")
+        console.log(voucherProxy.getCurrentDate())
+        console.log(voucherProxy.getLastVoucherNumber())
+        root._vDate = voucherProxy.getCurrentDate()/*_vouEle.voucherDate*/
+        root._voucherNo = voucherProxy.getLastVoucherNumber()
+    }
 
 }
 

@@ -139,3 +139,13 @@ void VoucherElement::setPaymentReference(const QString &newPaymentReference)
     m_PaymentReference = newPaymentReference;
     emit PaymentReferenceChanged();
 }
+
+QString VoucherElement::receiptNumber() const
+{
+    return m_receiptNumber;
+}
+
+void VoucherElement::setReceiptNumber(const QString &newReceiptNumber)
+{
+    m_receiptNumber = newReceiptNumber;
+}

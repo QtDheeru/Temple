@@ -1,6 +1,7 @@
 #include "VoucherProxy.h"
 #include <QDate>
 #include <QQmlEngine>
+
 VoucherProxy::VoucherProxy(QObject *parent)
     : QObject{parent}
 {

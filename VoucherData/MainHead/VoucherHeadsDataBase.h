@@ -18,6 +18,7 @@ public:
     void updateData(QString,QString,QString);
     void selectData();
     void removeData(QString);
+    void init();
 signals:
     void selectSignal(QString,QString,QString);
     void removeSignal(QString,QString,QString);

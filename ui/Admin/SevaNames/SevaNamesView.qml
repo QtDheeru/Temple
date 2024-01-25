@@ -135,7 +135,7 @@ Rectangle
     }
     Component.onCompleted:
     {
-        console.log("Component.onCompleted: of seva list view")
+        console.log("SevaNamesView is created...")
     }
 }
 

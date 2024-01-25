@@ -207,6 +207,7 @@ Item {
         }
     }
     Component.onCompleted: {
+        console.log("SevaNameEntry is created...")
         header.width = _root.width
     }
     Connections{
