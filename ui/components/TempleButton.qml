@@ -6,8 +6,8 @@ Rectangle {
     border.width: 2
     signal buttonClikcked()
     property string buttonText;
-    property var myopacity
-    opacity:myopacity
+    //property var myopacity
+    //opacity:myopacity
     Text {
         id: txt
         text:buttonText

@@ -9,7 +9,7 @@ Rectangle {
     id:rootRect
     property alias _labelText : _label.text
     property alias _data  : _tInput.text
-    property alias _labelFontSize :_label.font.pixelSize
+    property alias _labelFontSize : _label.font.pixelSize
     property alias _editable : _tInput.editable
     property alias isDataExist : _tInput.isDataExist
     property alias regExpValidator: _tInput.regExpValidator
@@ -22,8 +22,8 @@ Rectangle {
 
     signal editDone();
 
-    implicitWidth:300;
-    implicitHeight:myHeight
+    implicitWidth: 300;
+    implicitHeight: myHeight
     //border.color: "yellow";border.width: 1
     color: "transparent"
     focus: true
@@ -59,7 +59,7 @@ Rectangle {
             Layout.alignment: Qt.AlignRight
             Layout.rightMargin: 5
             focus: true
-            activeFocusOnTab :true
+            activeFocusOnTab: true
             onEditComplete:{
                 console.log(" RowEntry - Edit is completet")
                 editDone();
@@ -68,8 +68,6 @@ Rectangle {
     }
     function clearData(){
         _tInput.clearData();
-
-
     }
     onActiveFocusChanged: {
         console.log("focus changed")

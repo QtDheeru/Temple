@@ -67,6 +67,8 @@ signals:
     void statusCancelledSuccess();
     void alreadyCancelled();
     void loadCancelPage();
+    void notAbleToCancel();
+
 private:
     QList<SevaBookingElement*> m_bookedSeva;
     static int x;

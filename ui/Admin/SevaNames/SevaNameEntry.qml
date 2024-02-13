@@ -25,6 +25,17 @@ Item {
         sevaCost._data = sevaNameObject.sevaCost
         sevaDateStart._data = sevaNameObject.sevaStartDate
     }
+
+    function getSevaNameDetailsBySevaType(sevaType, idx){
+        console.log("getSevaNameDetailsBySevaType")
+
+        sevaNameObject = sevaProxy.getSevaByIndex(sevaType,idx)
+        sevaName._data = sevaNameObject.sevaName
+        sevaId._data = sevaNameObject.sevaId
+        sevaCost._data = sevaNameObject.sevaCost
+        sevaDateStart._data = sevaNameObject.sevaStartDate
+    }
+
     Rectangle{
         id:rect
         color: "skyblue"
@@ -192,10 +203,11 @@ Item {
                 }
                 else if(buttonNum == 2){
                     sevaProxy.closeSeva(parseInt(sevaId._data))
-                    getSevaNameDetail(index)
+                    console.log("Seva Close confirmed ")
+                    //getSevaNameDetail(index)
                 }
                 else{
-                    console.log("default")
+                    console.log("Something wrong in Data Entry!!!")
                 }
 
             }
@@ -223,23 +235,29 @@ Item {
         }
         onSendUpdateStatustoQml:{
             console.log("onSendUpdateStatustoQml",updateStatus)
-            _ernamespacenamespacenamespacenamespacenamespacenamespacenamespacenamespacenamespacenamespacenamespacerorDialog.showError(updateStatus,defaultvar)
+            _errorDialog.showError(updateStatus,defaultvar)
             namespacenamespacenamespacenamespace}
     }
+
     function addNewSeva(){
         console.log("SevaNameEntry.qml - Addclicked")
+        if(sevaName._data == ""){
+            console.log("Seva Name is empty!!!");
+            _errorDialog.showError("Seva Name is Empty!!!",0)
+            return;
+        }
+
         var sevaObj = seva.createObject(null);
         sevaObj.sevaName = sevaName._data
         sevaObj.sevaId = parseInt(sevaId._data);
         sevaObj.sevaType = parseInt(sevaCode._data);
-        sevaObj.sevaCost = sevaCost._data;
+        sevaObj.sevaCost = sevaCost._data == "" ? 0 : sevaCost._data
         sevaObj.sevaStartDate = sevaDateStart._data;
         sevaObj.sevaStartTime = sevaTime._data
         sevaObj.teerthaPrasada = parseInt(teerthaPrasadaCount._data)
         sevaObj.sankalpa = sankalpa._data
         sevaObj.userName = userName._data
         var message = sevaProxy.createNewSeva(sevaObj)
-       // _errorDialog.showError(message,0)
     }
 
     function clear(){

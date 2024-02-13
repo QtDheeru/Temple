@@ -14,9 +14,9 @@ SevaTypeNamesDataModel* SevaTypeNamesDataModel::self()
 }
 
 SevaTypeNamesDataModel::SevaTypeNamesDataModel(QObject *parent) : QObject(parent)
-  ,m_receiptGenerator(new SevaReceiptNumber)
-  ,m_sevaBookingProgress(new MySevaBookingProgressViewModel)
-  ,m_sevaBookingModel(new SevaBookingConformationDataModel)
+    ,m_receiptGenerator(new SevaReceiptNumber)
+    ,m_sevaBookingProgress(new MySevaBookingProgressViewModel)
+    ,m_sevaBookingModel(new SevaBookingConformationDataModel)
 {
     qDebug() << Q_FUNC_INFO << Qt::endl;
     QQmlEngine::setObjectOwnership(m_sevaBookingProgress, QQmlEngine::CppOwnership);
@@ -27,7 +27,7 @@ SevaTypeNamesDataModel::SevaTypeNamesDataModel(QObject *parent) : QObject(parent
 
 SevaTypeNamesDataModel::~SevaTypeNamesDataModel()
 {
-    qDebug() << Q_FUNC_INFO << Qt::endl;
+    qDebug() << Q_FUNC_INFO << "Deleted $$$$$$$$$$$$$$$$$$$$$$"<< Qt::endl;
 }
 
 bool SevaTypeNamesDataModel::querySevaTypes()
@@ -46,18 +46,25 @@ bool SevaTypeNamesDataModel::querySevaNames()
 
 QList<SevaName *> SevaTypeNamesDataModel::getSevaList(int sevaType)
 {
-    qDebug() << Q_FUNC_INFO << " Seva Type =" << sevaType <<Qt::endl;
-    //    if(this->m_sevaNameDetails.value(sevaType)==)
-    //    {
+    qDebug() << Q_FUNC_INFO << " Seva Type =" << sevaType << Qt::endl;
+    qDebug() << Q_FUNC_INFO << " Is empty = " << m_sevaNameDetails.empty() << Qt::endl;
 
-    //    }
+    if(m_sevaNameDetails.empty()){
+        qCritical() << Q_FUNC_INFO << "SevaNameDetails is empty !!!" << Qt::endl;
+        exit(0);
+    }
+    qDebug() << Q_FUNC_INFO << "  m_sevaNameDetaiils is not empty." << sevaType << Qt::endl;
     QMap<int, SevaName*> map = this->m_sevaNameDetails.value(sevaType);
+    qDebug() << Q_FUNC_INFO << "  Took values of sevanames " << sevaType  << ":: Seva Name detail size : " << m_sevaNameDetails.size()<< Qt::endl;
+    qDebug() << Q_FUNC_INFO << " Sevas===== > " << this->m_sevaNameDetails << Qt::endl;
+    qDebug() << Q_FUNC_INFO << " Sevas===== > " << m_sevaNameDetails[0] << Qt::endl;
     if(map.empty())
     {
+        qCritical() << Q_FUNC_INFO << " save name details  map is empty!!!" << Qt::endl;
         m_sevaNameDetails.remove(sevaType);
         m_sevaTypeDetails.remove(sevaType);
     }
-    qDebug() << Q_FUNC_INFO << " Sevas===== > " << m_sevaNameDetails.value(sevaType) << Qt::endl << map.values() <<Qt::endl;
+    qDebug() << "Map values=" << map.values() << Qt::endl;
     return map.values();
 }
 
@@ -67,6 +74,13 @@ bool SevaTypeNamesDataModel::processSevaTypes(SevaType *st)
     QQmlEngine::setObjectOwnership(st, QQmlEngine::CppOwnership);
     this->m_sevaTypeDetails.insert(st->sevaTypeId(),st);
     return true;
+}
+
+int SevaTypeNamesDataModel::getSevaListSizeForType(int sevaType)
+{
+    int sevaCount = m_sevaNameDetails.value(sevaType).size();
+    qDebug() << Q_FUNC_INFO << " Total Sevas in Type =" << sevaType << " count =" << sevaCount ;
+    return sevaCount;
 }
 
 bool SevaTypeNamesDataModel::processSevaNames(SevaName *sn)
@@ -91,6 +105,28 @@ QList<SevaType *> SevaTypeNamesDataModel::getSevaTypes()
 SevaName *SevaTypeNamesDataModel::getSevaDetails(int sevaType, int sevaId)
 {
     return this->m_sevaNameDetails.value(sevaType).value(sevaId);
+}
+
+int SevaTypeNamesDataModel::removeSevaName(int sevaType, int sevaId)
+{
+    qDebug() << Q_FUNC_INFO << "SevaType : " << sevaType << " :: SevaNameId : " << sevaId << Qt::endl;
+
+    QMap<int,SevaName*> sevaNameMap = (m_sevaNameDetails.value(sevaType));//.value(sevaId);//.remove(sevaId);
+    if(sevaNameMap.empty()){
+        qWarning() << Q_FUNC_INFO << " Seva Name map is empty!!" << Qt::endl;
+        return -1;
+    }
+
+    QList<SevaName*> sevaList = sevaNameMap.values();
+    if(sevaList.empty()){
+        qWarning() << Q_FUNC_INFO << " Seva Name list is empty!!" << Qt::endl;
+        return -1;
+    }
+    SevaName* seva = sevaNameMap.take(sevaId);
+    m_sevaNameDetails[sevaType] = sevaNameMap;
+    int index = sevaList.indexOf(seva);
+    delete seva;
+    return index;
 }
 
 bool SevaTypeNamesDataModel::printSevaDetails(int sevaType, int sevaId)
@@ -135,14 +171,12 @@ void SevaTypeNamesDataModel::setSevaBookingConformationDataModel(SevaBookingConf
 
 QString SevaTypeNamesDataModel::createNewSeva(SevaName *seva)
 {
-    QMap<int,SevaName*> sevaNameMap;
-
-    if(DBInterface::getInstance()->createSeva(seva))
-    {
-        sevaNameMap.insert(seva->Number(),seva);
-        m_sevaNameDetails.insert(seva->sevaType(),sevaNameMap);
-        emit toListView(seva);
-
+    qDebug() << Q_FUNC_INFO << "seva = "  << seva->sevaName() << Qt::endl;
+    if(DBInterface::getInstance()->createSeva(seva)) {
+        emit newSevaAdded(seva);
+        qDebug() << Q_FUNC_INFO << "Seva Added Successfully" << Qt::endl;
+    }else{
+        qWarning() << Q_FUNC_INFO << "Error in Seva Adding" << Qt::endl;
     }
     return  DBInterface::getInstance()->getError();
 }
@@ -200,7 +234,6 @@ bool SevaTypeNamesDataModel::resetBookingProgressModel()
 {
     this->m_sevaBookingModel->reset();
     return this->m_sevaBookingProgress->resetModel();
-
 }
 
 bool SevaTypeNamesDataModel::printReceipt()

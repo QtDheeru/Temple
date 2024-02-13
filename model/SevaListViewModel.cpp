@@ -2,16 +2,18 @@
 #include "SevaTypeNamesDataModel.h"
 
 SevaListViewModel::SevaListViewModel(QObject *parent)
-    : QAbstractListModel(parent)
+    : QAbstractListModel(parent),m_sevaTypeNameModel(nullptr)
 {
-    connect(SevaTypeNamesDataModel::self(),&SevaTypeNamesDataModel::toListView,this,&SevaListViewModel::onToListView);
+    qDebug() << Q_FUNC_INFO << "Created #####################" << Qt::endl;
+    connect(SevaTypeNamesDataModel::self(),&SevaTypeNamesDataModel::newSevaAdded,this,&SevaListViewModel::sevaNameListUpdated);
     this->init();
 }
 
-//QVariant SevaListViewModel::headerData(int section, Qt::Orientation orientation, int role) const
-//{
-//    // FIXME: Implement me!
-//}
+SevaListViewModel::~SevaListViewModel()
+{
+    qDebug() << Q_FUNC_INFO << "Deleted #####################" << Qt::endl;
+}
+
 
 int SevaListViewModel::rowCount(const QModelIndex &parent) const
 {
@@ -21,87 +23,72 @@ int SevaListViewModel::rowCount(const QModelIndex &parent) const
     //    if (parent.isValid())
     //        return 0;
 
-    return this->m_sevaList.size();
-    // FIXME: Implement me!
+    return this->m_sevaTypeNameModel->getSevaListSizeForType(m_sevaType);
 }
 
 QVariant SevaListViewModel::data(const QModelIndex &index, int role) const
 {
+    qDebug() << Q_FUNC_INFO << "Seva Type = " << m_sevaType << Qt::endl;
     if (!index.isValid())
         return QVariant();
     int row = index.row();
-    SevaName *seva = m_sevaList.at(row);
+    SevaName *seva = m_sevaTypeNameModel->getSevaList(m_sevaType).at(row);
     Q_ASSERT(seva != nullptr);
     switch(role){
     case 1 : return seva->sevaName();
     case 2 : return seva->sevaId();
     case 3 : return seva->sevaType();
     }
-    // FIXME: Implement me!
     return QVariant();
 }
 
 void SevaListViewModel::init()
 {
-    for(int i=0;i<30;i++)
-    {
-        SevaName *sevaN = new SevaName;
-        sevaN->setSevaId(i);
-        sevaN->setSevaName(" Pallakki Utsava_"+QString::number(i));
-        this->m_sevaList.append(sevaN);
-
-    }
+    qDebug() << Q_FUNC_INFO << Qt::endl;
+    m_sevaTypeNameModel = SevaTypeNamesDataModel::self();
 }
 
 void SevaListViewModel::initSevaList(int sevaType)
 {
-    qDebug() << Q_FUNC_INFO <<  "hello 1 " << Qt::endl;
-    SevaTypeNamesDataModel *dataModel = SevaTypeNamesDataModel::self();
-    qDebug() << Q_FUNC_INFO <<  "hello 2" <<  Qt::endl;
-    qDebug() << Q_FUNC_INFO <<  "data model object == " << dataModel <<  Qt::endl;
-    Q_ASSERT(dataModel != nullptr);
-    qDebug() << Q_FUNC_INFO << dataModel->getSevaList(sevaType) << Qt::endl;
-    m_sevaList = dataModel->getSevaList(sevaType);
-}
-
-SevaName *SevaListViewModel::getSevaByIndex(int index)
-{
-    qDebug() << Q_FUNC_INFO <<m_sevaList << Qt::endl;
-    qDebug() << Q_FUNC_INFO << " Index requested 1=" << index  << Qt::endl;
-    qDebug()<<"Inside getSevaByIndex in ListViewModel with index"<<index<<" "<<m_sevaList.at(index)->sevaName();
-    Q_ASSERT(m_sevaList.at(index) != nullptr);
-    return this->m_sevaList.at(index);
-    qDebug() << Q_FUNC_INFO << " Index requested 2=" << index << Qt::endl;
+    qDebug() << Q_FUNC_INFO <<  "Seva Type =" << sevaType << Qt::endl;
+    Q_ASSERT(m_sevaTypeNameModel != nullptr);
+    qDebug() << Q_FUNC_INFO <<  "Seva Type =" << sevaType << Qt::endl;
+    beginResetModel();
+    m_sevaType = sevaType;
+    endResetModel();
 }
 
 int SevaListViewModel::getSevaListViewSize()
 {
     qDebug() << Q_FUNC_INFO << Qt::endl;
-    return m_sevaList.size();
+    return m_sevaTypeNameModel->getSevaListSizeForType(m_sevaType);
+}
+
+SevaName *SevaListViewModel::getSevaNameByIndex(int sevaType, int index)
+{
+    qDebug() << Q_FUNC_INFO << "SevaType:" << sevaType << " :: index:" << index << Qt::endl;
+    return m_sevaTypeNameModel->getSevaList(sevaType).at(index);
 }
 
 void SevaListViewModel::recvClosedObj(int sevaid)
 {
-    qDebug()<<Q_FUNC_INFO<<Qt::endl;
-    int index=0;
-    for(int itr=0;itr<m_sevaList.size();itr++){
-        if(sevaid==m_sevaList[itr]->sevaId()){
-            index=itr;
-            qDebug()<<"The index is.."<<index<<Qt::endl;
-            beginRemoveRows(QModelIndex(),index,index);
-            m_sevaList.removeAt(index);
-            endRemoveRows();
-        }
-    }
+    int idx = m_sevaTypeNameModel->removeSevaName(m_sevaType,sevaid);
+    beginRemoveRows(QModelIndex(),idx,idx);
+    endRemoveRows();
+    qDebug() << Q_FUNC_INFO << " Seva Type = " << m_sevaType << " :: sevaname ID :" << sevaid <<Qt::endl;
 }
 
-void SevaListViewModel::onToListView(SevaName *sevaname)
+void SevaListViewModel::sevaNameListUpdated(SevaName *sevaname)
 {
-    beginInsertRows(QModelIndex(), m_sevaList.size(),m_sevaList.size());
-    m_sevaList.append(sevaname);
-    endInsertRows();
+    qDebug() << Q_FUNC_INFO << " New Seva Added " << sevaname->sevaName() <<Qt::endl;
+    sevaname->print();
+//    beginInsertRows(QModelIndex(), m_sevaTypeNameModel->getSevaList(m_sevaType).size(),m_sevaTypeNameModel->getSevaList(m_sevaType).size());
+//    //m_sevaTypeNameModel->getSevaList(m_sevaType).append(sevaname);
+//    endInsertRows();
 
+    beginResetModel();
 
+    endResetModel();
 }
 
 QHash<int, QByteArray> SevaListViewModel::roleNames() const

@@ -422,6 +422,10 @@ Rectangle{
             sevaCancelPopup.visible = true
             //"SevaCancelReceipt.qml"
         }
+        onNotAbleToCancel:{
+            console.log("SevaAllViewPage : onNotAbleToCancel = " + storeObject.sno)
+            _errorDialog2.showError("Not able to Cancel the Receipt")
+        }
     }
     Connections
     {

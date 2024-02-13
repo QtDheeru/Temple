@@ -12,6 +12,7 @@ class SevaListViewModel : public QAbstractListModel
 
 public:
     explicit SevaListViewModel(QObject *parent = nullptr);
+    ~SevaListViewModel();
 
     // Header:
 //    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
@@ -25,16 +26,17 @@ public:
 
     QHash<int, QByteArray> roleNames() const override;
     void initSevaList(int sevaType);
-    SevaName* getSevaByIndex(int index);
     Q_INVOKABLE int getSevaListViewSize();
+    SevaName * getSevaNameByIndex(int sevaType,int index);
+
 
 public slots:
     void recvClosedObj(int sevaid);
-    void onToListView(SevaName*);
+    void sevaNameListUpdated(SevaName*);
 
 private:
-    QList<SevaName*> m_sevaList;
-    // QAbstractItemModel interface
+    SevaTypeNamesDataModel *m_sevaTypeNameModel;
+    int m_sevaType;
 
 };
 

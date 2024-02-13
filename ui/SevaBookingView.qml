@@ -19,15 +19,12 @@ Rectangle{
     property int fontPixelSize : 20
     property alias selectedReceiptDate: _sevaDate.receiptdate
     property alias selectedSevaDate: _sevaDate.sevadate
-    //    modal: true
-    //    closePolicy: Popup.CloseOnEscape
+
     signal loadMenuPage()
     signal loadDevoteeSelection()
 
     property var storeObject
 
-    //signal nextReceipt();
-    //    focus: true
     property string sevaname
     property string sevatype
     property string sevaid
@@ -36,7 +33,6 @@ Rectangle{
     property alias dname: _personal.devoteeName
     property alias dmobile: _personal.mobileNo
     property alias dgothra: _personal.gothra
-    property alias dnakshatra: _personal.nakshatra
     onSevaTypeChanged: {
         console.log(" Popup - Seva Type ="+sevaType)
         _sevaListView.sevaType = sevaType;
@@ -80,14 +76,6 @@ Rectangle{
                     SevaDateTime{id:_sevaDate;Layout.fillWidth: true
                         KeyNavigation.tab: _sevaD}
                 }
-                //                RowLayout{
-                //                    //Layout.fillHeight: true
-                //                    visible: false
-                //                    Layout.fillWidth: true
-                //                    Layout.topMargin: root.height/100
-                //                    Layout.rightMargin: root.height/100
-                //                    //SevaDetails{id:_sevaD;Layout.fillWidth: true}
-                //                }
                 RowLayout{
                     //Layout.fillHeight: true
                     Layout.fillWidth: true
@@ -117,7 +105,6 @@ Rectangle{
                     SevaPriceSummary{
                         id : _sevaPriceSummary
                         Layout.fillWidth: true
-                        //                            Layout.fillHeight: true
                         Layout.rightMargin: 0
                     }
                 }
@@ -134,12 +121,10 @@ Rectangle{
             if(sevaObject === null)
             {
                 console.log("Inside if of seva object")
-                //errorOccur("seva not found")
             }
             _sevaD.setSevaDetails(sevaObject)
             _personal.setGothras(sevaProxy.getGothras());
             _personal.setNakshatras(sevaProxy.getNakshatras());
-            //_sevaP.setBankList(sevaProxy.getBankList())
         }
         function onSevaSelectedByIndex(idx){
             console.log(" Seva Selected ="+idx)
@@ -148,58 +133,13 @@ Rectangle{
             if(sevaObject === null)
             {
                 console.log("Inside if of seva object")
-                // errorOccur("seva not found")
             }
             _sevaD.setSevaDetails(sevaObject)
             console.log("seva name  = " + sevaObject.sevaName + " Seva cost = " + sevaObject.sevaCost)
             _personal.setGothras(sevaProxy.getGothras());
             _personal.setNakshatras(sevaProxy.getNakshatras());
-            //_sevaP.setBankList(sevaProxy.getBankList())
-            //_personal.receiptNumber = sevaProxy.getNextReceiptNumber();
         }
     }
-
-//    DisplayDialog {
-//        id :_errorDialog1
-//        visible: false
-//        function showError(message,pageno){
-//            _errorDialog1.page=pageno
-//            _errorDialog1.text2Display = message
-//            _errorDialog1.open();
-//            if(page===2)
-//                setButtons=true
-//            if(page===1)
-//                setButtons=false
-//        }
-//        onYesAction: {
-//            if(page===1){
-//                sevaProxy.setStatusToCancel(storeObject.sno)
-//                _errorDialog1.close()
-//            }
-//            if(page===2){
-//                _errorDialog1.close()
-//            }
-//        }
-
-//        onNoAction: {
-//            _errorDialog1.close()
-//        }
-//    }
-
-//    DisplayDialog {
-//        id :_errorDialog2
-//        visible: false
-//        rectColor: "lightgreen"
-//        contentColor: "lightgreen"
-//        footerVisible:false
-//        function showError(message){
-//            console.log("inside show error2")
-//            _errorDialog2.visible = true;
-//            _errorDialog2.text2Display = message
-//            _errorDialog2.open();
-//            _timer.start();
-//        }
-//    }
 
     Timer{
         id:_timer
@@ -219,7 +159,6 @@ Rectangle{
             saveFullReceipt();
             sevaProxy.printReceipt();
             resetBaseScreen();
-            //resetNextControls(true)
             paymentOver();
         }
         onCloseClicked: {
@@ -231,14 +170,6 @@ Rectangle{
         onRejected: {
             resetBaseScreen()
         }
-        //        onNextReceip: {
-        //            console.log("onNextReceip..")
-        //            root.clearData();
-        //            //root.resetNextControls(false);
-        //            _sevaContoller.startNextBooking();
-        //            _sevaListView.selectFirstSeva();
-        //        }
-
     }
 
     function resetBaseScreen(){
@@ -278,33 +209,6 @@ Rectangle{
             _timer.start();
         }
     }
-
-//    Connections
-//    {
-//        target:sevaProxy
-//        onStatusAlreadyCancelled:
-//        {
-//            console.log("Already Cancelled status came to qml loading MyDialogBox")
-//            _errorDialog2.showError("Status Already Cancelled !");
-//        }
-//    }
-
-//    Connections
-//    {
-//        target:sevaProxy.sevaBookingTV
-//        onStatusCancelledSuccess:
-//        {
-//            console.log("Status set to cancel")
-//            _errorDialog2.showError("Status Set to Cancel");
-//        }
-//        onAlreadyCancelled:{
-//            _errorDialog1.showError("Status Already Cancelled !",2);
-//        }
-//        onLoadCancelPage:{
-//            sevaProxy.cancelReceipt(storeObject.sno);
-//            _ld.source="qrc:/ui/SevaCancelReceipt.qml"
-//        }
-//    }
 
 
     Connections{
@@ -471,7 +375,6 @@ Rectangle{
         _sevaContoller.setButtons(false);
     }
     function resetNextControls(value){
-        //_sevaContoller.startNextReceipt = value;
         _sevaContoller.nextReceipt();
     }
 
@@ -485,9 +388,7 @@ Rectangle{
 
     Keys.onEscapePressed: {
         console.log("Esc pressed in select seva type view")
-        //forcFocuseActive();
         loadMenuPage()
-        //        loadDevoteeSelection()
     }
     SevaReceipt{
         id : _sevaReceipt
@@ -505,7 +406,6 @@ Rectangle{
             function onLoadMenuPage()
             {
                 console.log(" In onLoadMenuPage")
-                //_ld.source = "SevaBookingView.qml"
                 loadMenuPage();
             }
             function onLoadvoucher(ve,pageNo){
@@ -513,17 +413,6 @@ Rectangle{
                 sevaProxy.cancelReceipt(ve.sno);
                 _ld.setSource("voucherPage.qml",{bookingElement:ve,pageNumber:pageNo})
             }
-//            function onBackClicked(){
-//                _ld.source=""
-//            }
-//            function onCancelClicked(){
-//                _errorDialog1.showError("Confirm to Cancel?",1);
-//            }
-//            function onGetCancelReceiptDetails(canceledObj){
-//                console.log("canceeled came here")
-//                storeObject=canceledObj
-//                sevaProxy.sevaBookingTV.checkStatus(canceledObj.sno);
-//            }
         }
     }
 
@@ -545,17 +434,14 @@ Rectangle{
         function onErrorOccur(errorMsg)
         {
             console.log("In connections of on error occur of seva booking view")
-            // errorMessage = errorMsg;
             _errorDialog.showError(errorMsg);
         }
     }
     Connections{
-        //  target:_sevaListView
         target:_personal
         function onErrorOccur(errorMsg)
         {
             console.log("In connections of on error occur of seva booking view")
-            // errorMessage = errorMsg;
             _errorDialog.showError(errorMsg);
         }
     }
@@ -564,47 +450,18 @@ Rectangle{
         function onErrorOccur(errorMsg)
         {
             console.log("In connections of on error occur of seva booking view")
-            // errorMessage = errorMsg;
             _errorDialog.showError(errorMsg);
         }
     }
     Connections{
-        //  target:_sevaListView
         target:_sevaContoller
         function onErrorOccur(errorMsg)
         {
             console.log("In connections of on error occur of seva booking view")
-            //    errorMessage = errorMsg;
             _errorDialog.showError(errorMsg);
         }
     }
 
-
-
-    //    Connections{
-
-    //        target: _paymentDialog
-    //        function onNextReceip()
-    //        {
-    //            console.log("onNextReceip..")
-    //            root.clearData();
-    //            //root.resetNextControls(false);
-    //            _sevaContoller.startNextBooking();
-    //            _sevaListView.selectFirstSeva();
-    //        }
-    //    }
-    //    Popup{
-    //        id:popap
-    //    ProgressBar{
-    //        id:pb
-    //        anchors.centerIn: parent
-    //        opacity: parent.opacity
-    //        visible: false
-    //        minimumValue: 1
-    //        maximumValue: 100
-    //        //value:
-    //    }
-    //  }
     Component.onCompleted: {
         console.log("Component.onCompleted: of seva booking view",dgothra,d_Nakshtra)
         _personal.setNakshatraCombo(d_Nakshtra)
@@ -612,10 +469,8 @@ Rectangle{
         forceActiveFocus()
         _sevaDate.bookedby = sevaProxy.userManagement.signIn_Name
         console.log("SevaBookingView is created...")
-
-        //        sevaProxy.getBookedView().resetModel();
-        //        sevaProxy.getSevaTypeNamesDataModel().getSevaBookingConformationDataModel().reset();
-        //  _sevaContoller.enablePaymentButton = false
     }
-
+    Component.onDestruction: {
+        console.log("Seva Booking view Destructed !!!")
+    }
 }

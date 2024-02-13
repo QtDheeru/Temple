@@ -22,7 +22,8 @@ Rectangle
     signal sevaTypeSel(int index, int sevaType)
     signal sevaTypeSelectedByIndex(int index)
     signal sevaTypeSelected(variant sevaType)
-    signal sendSevaCurrentIndex(int idx)
+    //signal sendSevaCurrentIndex(int idx)
+    signal sendSevaCurrentIndex(int sevaType,int index);
     focus: true
 
     function changeItem(idx)
@@ -65,7 +66,9 @@ Rectangle
         onCurrentIndexChanged:
         {
             console.log("hello Current Index changed" + currentIndex)
-            sendSevaCurrentIndex(currentIndex)
+            sendSevaCurrentIndex(sevaTypeObject.sevaTypeId,currentIndex)
+            //sendSevaCurrentIndex(currentIndex)
+            //getSevaNameDetailsBySevaType(sevaTypeObject.sevaTypeId,currentIndex)
         }
         Component.onCompleted:
         {
