@@ -1,6 +1,7 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.5
 import "../components"
+
 Rectangle {
     id:_mainrect
     height: parent.height

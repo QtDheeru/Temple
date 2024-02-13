@@ -8,7 +8,7 @@ Item {
     id : root
     anchors.fill: parent
     signal loadMenuPage()
-    property int countIfSevaNamesPresentInSevaTypes:0;
+    property int countIfSevaNamesPresentInSevaTypes:0
     signal errorOccur(string errorMsg);
     signal loadSevabooking(string d_name,string d_mobile,string d_gothra,string d_nakshatra)
     signal showAllDataView()
@@ -104,53 +104,53 @@ Item {
             return;
         }
         else{
-            if(sevaProxy.getSevaTypeModel().getSevaTypeListSize()===0)
+            if(sevaProxy.getSevaTypeModel().getSevaTypeListSize() === 0)
             {
-                console.log("clicked on Sevabooking if(sevaTypeModel===0)")
+                console.log("Clicked on Sevabooking sevaTypeModel = 0")
                 errorOccur("seva types not present");
             }
-            for(var i=0;i<sevaProxy.getSevaTypeModel().getSevaTypeListSize();i++)
+            for(var i=0;i < sevaProxy.getSevaTypeModel().getSevaTypeListSize();i++)
             {
-                if((sevaProxy.getSevaModel(sevaProxy.getSevaTypeModel().sevaTypes[i].sevaTypeId).getSevaListViewSize()===0))
+                if((sevaProxy.getSevaModel(sevaProxy.getSevaTypeModel().sevaTypes[i].sevaTypeId).getSevaListViewSize() === 0))
                 {
-                    console.log("seveListModel  for if((sevaProxy.getSevaModel(100).getSevaListViewModel/*.getSevaListViewModel*/===0))")
+                    console.log("seveListModel  is for seva type has 0 seva list" )
                     // errorOccur("SevaNames not present");
                     countIfSevaNamesPresentInSevaTypes++;
-                    console.log(" countIfSevaNamesPresentInSevaTypes++ "+countIfSevaNamesPresentInSevaTypes)
+                    console.log(" countIfSevaNamesPresentInSevaTypes++ " + countIfSevaNamesPresentInSevaTypes)
                 }
             }
-            if(countIfSevaNamesPresentInSevaTypes===sevaProxy.getSevaTypeModel().getSevaTypeListSize())
+            if(countIfSevaNamesPresentInSevaTypes === sevaProxy.getSevaTypeModel().getSevaTypeListSize())
             {
-                console.log(" if of === countIfSevaNamesPresentInSevaTypes++ "+countIfSevaNamesPresentInSevaTypes)
+                console.log(" if of === countIfSevaNamesPresentInSevaTypes++ " + countIfSevaNamesPresentInSevaTypes)
                 errorOccur("SevaNames not present for any seva types");
             }
-            if(countIfSevaNamesPresentInSevaTypes<sevaProxy.getSevaTypeModel().getSevaTypeListSize())
+            if(countIfSevaNamesPresentInSevaTypes < sevaProxy.getSevaTypeModel().getSevaTypeListSize())
             {
-                console.log(" if of <<< countIfSevaNamesPresentInSevaTypes++ "+countIfSevaNamesPresentInSevaTypes)
-                 console.log("evening suman1---",_devoteeView.nakshatra)
+                console.log(" if of <<< countIfSevaNamesPresentInSevaTypes++ " + countIfSevaNamesPresentInSevaTypes)
+                console.log("evening ---",_devoteeView.nakshatra)
                 console.log("_devoteeView.mobileNo---",_devoteeView.mobileNo)
-                var moblist=_devoteeView.mobileNo.split("_");
-                var mob= moblist[0];
+                var moblist = _devoteeView.mobileNo.split("_");
+                var mob = moblist[0];
                 loadSevabooking(_devoteeView.devoteeName,mob,_devoteeView.gothra,_devoteeView.nakshatra)
             }
             else{
-                console.log("evening suman2---",_devoteeView.nakshatra)
+                console.log("evening ---",_devoteeView.nakshatra)
                 loadSevabooking(_devoteeView.devoteeName,_devoteeView.mobileNo,_devoteeView.gothra,_devoteeView.nakshatra)
             }
         }
     }
 
     function addDevotee() {
-        console.log(" Mobile    ="+_devoteeView.mobileNo);
-        console.log(" Name      = "+_devoteeView.devoteeName);
-        console.log(" Nakshatra ="+_devoteeView.nakshatra)
-        console.log(" Gothra    ="+_devoteeView.gothra)
+        console.log(" Mobile    =" + _devoteeView.mobileNo);
+        console.log(" Name      = " + _devoteeView.devoteeName);
+        console.log(" Nakshatra =" + _devoteeView.nakshatra)
+        console.log(" Gothra    =" + _devoteeView.gothra)
         var devotee = {devoteeName : _devoteeView.devoteeName,
             mobileNumber : _devoteeView.mobileNo,
             gothra: _devoteeView.gothra,
             nakshatra:_devoteeView.nakshatra};
         if (!devoteeProxy.devoteeDataModel.addDevoteeJSObject(devotee)) {
-            console.log(" Error Adding Devotee ="+devoteeProxy.devoteeDataModel.lastError());
+            console.log(" Error Adding Devotee =" + devoteeProxy.devoteeDataModel.lastError());
             _errorDialog.text2Display = devoteeProxy.devoteeDataModel.lastError();
             _errorDialog.open();
         } else {
@@ -216,7 +216,7 @@ Item {
     }
 
     function clearData(){
-     _devoteeView.clearData()
+        _devoteeView.clearData()
     }
 
     function setDevoteeDetails(devotee){

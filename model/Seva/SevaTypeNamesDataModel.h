@@ -31,6 +31,8 @@ public:
     bool processSevaNames(SevaName *);
     QList<SevaType*> getSevaTypes();
     SevaName* getSevaDetails(int sevaType, int sevaId);
+    int removeSevaName(int sevaType,int sevaId);
+
     bool printSevaDetails(int sevaType, int sevaId);
 
     bool saveReceiptDetails(QString recNumber, QString devName, QString mobNumber, QString nakshatra, QString gothra);
@@ -57,10 +59,13 @@ public:
 
 public slots:
     bool processSevaTypes(SevaType *);
+    int  getSevaListSizeForType(int sevaType);
+
 signals:
     void error(QString);
     void SevaBookingConformationDataModelChanged();
-    void toListView(SevaName *);
+    void newSevaAdded(SevaName *);
+
 private :
     void connectSignals();
 

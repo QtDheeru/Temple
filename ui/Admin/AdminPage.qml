@@ -64,9 +64,13 @@ Rectangle {
                 function sendcurrentSevaidx(indx){
                     sevaName.sindex = indx;
                 }
-                onSendSevaCurrentIndex:{
-                    console.log("hello mahesha")
-                    sevaNameEntry.getSevaNameDetail(idx)
+//                onSendSevaCurrentIndex:{
+//                    console.log("onSendSevaCurrentIndex ")
+//                    sevaNameEntry.getSevaNameDetail(idx)
+//                }
+                onSendSevaCurrentIndex: {
+                    console.log("onSendSevaCurrentIndex")
+                    sevaNameEntry.getSevaNameDetailsBySevaType(sevaType,index)
                 }
             }
             SevaNameEntry{

@@ -20,11 +20,11 @@
 #include "Reports/BookingReportElement.h"
 #include "voucher/VoucherElement.h"
 #include "AccountReportDateRangeElement.h"
-#include"AccountReportMonthRangeElement.h"
-#include"BookingReportDateRangeElement.h"
-#include"BookingReportMonthRangeElement.h"
-#include"AccountFullreportElement.h"
-#include<QQmlEngine>
+#include "AccountReportMonthRangeElement.h"
+#include "BookingReportDateRangeElement.h"
+#include "BookingReportMonthRangeElement.h"
+#include "AccountFullreportElement.h"
+#include <QQmlEngine>
 
 //#include "voucher/VoucherFilterElements.h"
 #include "IDataWriter.h"

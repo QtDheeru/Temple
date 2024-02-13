@@ -107,5 +107,4 @@ int SevaTypeViewModel::getSevaTypeListSize()
 {
     qDebug() << Q_FUNC_INFO << Qt::endl;
     return m_sevaTypes.size();
-
 }

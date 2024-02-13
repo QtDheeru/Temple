@@ -39,7 +39,7 @@ Rectangle {
             buttonText: "SEVA BOOKING"
             onButtonClikcked: {
                 loadDevoteeSelection()
-//               console.log("Seva Booking Button Clicked");
+                //               console.log("Seva Booking Button Clicked");
             }
         }
         TempleButton{
@@ -50,7 +50,7 @@ Rectangle {
             buttonText: "ACCOUNT DETAILS"
             border.width: _menupage.width/300
             enabled: sevaProxy.userManagement.rolenum===1
-            myopacity: sevaProxy.userManagement.rolenum===1 ? 1 :0.4
+            opacity: sevaProxy.userManagement.rolenum===1 ? 1 :0.4
             onButtonClikcked: {
                 console.log("account details button clicked");
                 accountDetails();
@@ -86,11 +86,11 @@ Rectangle {
             color: "aqua"
             buttonText: "ADMIN"
             enabled: sevaProxy.userManagement.rolenum===1
-            myopacity: sevaProxy.userManagement.rolenum===1 ? 1 :0.4
+            opacity: sevaProxy.userManagement.rolenum===1 ? 1 :0.4
             border.width: _menupage.width/300
             onButtonClikcked: {
                 loadAdminrights()
-//                admin();
+                //                admin();
                 console.log("admin button clicked")
                 // _loginloader.active= true
                 // loadLogin(4)
@@ -186,10 +186,10 @@ Rectangle {
     Component.onCompleted: {
         console.log("the accounts enable",button2.enabled)
     }
-    Connections{
-        target:button1
-    function onLoadMenuPage(){
-        loadMenuPage()
-    }
-    }
+//    Connections{
+//        target:button1
+//        function onLoadMenuPage(){
+//            loadMenuPage()
+//        }
+//    }
 }

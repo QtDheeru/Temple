@@ -168,6 +168,10 @@ void SevaBookingTableModel::reset(QString receiptNo)
 
 void SevaBookingTableModel::checkStatus(QString receiptNo){
     bool check = false;
+    if(receiptNo == nullptr){
+        emit notAbleToCancel();
+        return;
+    }
     for(int var = 0;var < m_bookedSeva.size();var++) {
         if(m_bookedSeva[var]->sno() == receiptNo){
             if(m_bookedSeva[var]->status() == status){

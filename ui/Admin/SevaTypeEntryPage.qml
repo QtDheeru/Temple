@@ -64,6 +64,10 @@ Rectangle{
                         anchors.verticalCenter: parent.verticalCenter
                         onClicked: {
                             console.log("Add userclicked")
+                            if(sevatypeName._data == ""){
+                                _errorDialog.showError("Seva name is empty!!!\n Please enter the name")
+                                return;
+                            }
                             var message = sevaProxy.addNewSevaType(sevatypeName._data,sevaCode._data,userName._data)
                             sevaCode._data = sevaProxy.getNextSevaTypeID()
                             sevaProxy.sevaBookingModelData.querySevaType();
@@ -121,7 +125,7 @@ Rectangle{
         }
     }
     Component.onCompleted:{
-        console.log("Suman.........");
+        console.log("SevaTypeEntryPage Created");
 
     }
 }

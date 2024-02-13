@@ -29,7 +29,7 @@ RowLayout{
         Layout.minimumWidth: 300
         contentItem: Text {
             id : _t1
-            text : SevaName;
+            text : SevaName
             font.pixelSize: 20
             color: "black"
             wrapMode: Text.WordWrap
@@ -47,7 +47,7 @@ RowLayout{
 
         contentItem: Text {
             id : _t2
-            text : SevaId;
+            text : SevaId
             font.pixelSize: 20
             color: "black"
             wrapMode: Text.WordWrap

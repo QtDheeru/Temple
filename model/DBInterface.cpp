@@ -45,15 +45,14 @@ DBInterface::DBInterface(QObject *parent) : QObject(parent)
     db.setDatabaseName(currentPath);
 
     bool ok = db.open();
-    qDebug()<<Q_FUNC_INFO<<"******************* DB"<<currentPath<<Qt::endl;
+    qDebug()<< Q_FUNC_INFO<<"******************* DB"<<currentPath<<Qt::endl;
     QSqlQuery qry;
     if(ok)
     {
-        qDebug()<<"Database is opened " << currentPath<<Qt::endl;
+        qDebug()<<"Database is opened " << currentPath << Qt::endl;
     }
     else{
-        qDebug()<<"Database is NOT opened " <<currentPath <<Qt::endl;
-
+        qDebug()<<"Database is NOT opened " <<currentPath << Qt::endl;
         exit(0);
     }
 
@@ -187,8 +186,7 @@ DBInterface::DBInterface(QObject *parent) : QObject(parent)
     }
     qry.prepare(query5);
     qry.prepare(query6);
-    qry.prepare(query7);
-    if(qry.exec()){
+    qry.prepare(query7);  if(qry.exec()){
         qDebug()<<"Cheque entry table created";
     }
     qry.prepare(query8);
@@ -216,6 +214,7 @@ DBInterface::DBInterface(QObject *parent) : QObject(parent)
 
 QString DBInterface::getError() const
 {
+    qDebug() << Q_FUNC_INFO << " Error = " << m_error << Qt::endl;
     return m_error;
 }
 
@@ -790,10 +789,10 @@ bool DBInterface::createSeva(SevaName* sevaName)
     qry.bindValue(":sno",sevaName->sevaId());
     qry.exec();
     while(qry.next()){
-        int snu =qry.value(0).toInt();
+        int snu = qry.value(0).toInt();
         qDebug () << Q_FUNC_INFO << " Seva Name in DB =" << snu <<Qt::endl;
         if (snu == sevaName->sevaId()){
-            qCritical()<<Q_FUNC_INFO<<"Seva with ID ="<< sevaName->sevaId() <<endl;
+            qCritical()<<Q_FUNC_INFO<<"Seva with ID ="<< sevaName->sevaId() << endl;
             emit dbError("Database Message: sevaID " + QString::number(sevaName->sevaId()) + "  already exist");
             this->setError("Database Message: sevaID = " + QString::number(sevaName->sevaId()) + " already exist");
             return false;
@@ -816,14 +815,25 @@ bool DBInterface::createSeva(SevaName* sevaName)
 
     bool retVal = Squery.exec();
     if (!retVal) {
-        qCritical()<<Q_FUNC_INFO<<"Seva with ID ="<< sevaName->sevaId() <<endl;
+        qCritical() << Q_FUNC_INFO << "Erorr inn adding Seva with ID ="<< sevaName->sevaId() << ":: sql query error = " << Squery.lastError().text() <<endl;
         emit dbError("Database Message: sevaID " + QString::number(sevaName->sevaId()) + "  already exist");
         this->setError("Database Message: sevaID = " + QString::number(sevaName->sevaId()) + " already exist");
         return false;
     } else {
         emit dbError("Database Message: sevaID " + QString::number(sevaName->sevaId()) + "  Added successfully");
         this->setError("Database Message: sevaID = " + QString::number(sevaName->sevaId()) + " Added successfully");
-        qDebug() << Q_FUNC_INFO << "**** Seva Name =" << sevaName->sevaName() <<  " Added successfully " <<Qt::endl;
+        qDebug() << Q_FUNC_INFO << "**** Seva Name =" << sevaName->sevaName() << " Added successfully " <<Qt::endl;
+
+        SevaName *sevaNames = new SevaName;
+        sevaNames->setSevaId(sevaName->sevaId());
+        sevaNames->setNumber(sevaName->sevaId());
+        sevaNames->setSevaName(sevaName->sevaName());
+        sevaNames->setSevaType(sevaName->sevaType());
+        sevaNames->setSevaCost(sevaName->sevaCost());
+        sevaNames->setSevaStartDate(sevaName->sevaStartDate());
+        sevaNames->print();
+        emit sendSevaName(sevaNames);
+
         return true;
     }
 }
@@ -1046,8 +1056,8 @@ bool DBInterface::insertSevaBooked(QString rcptNumI,QString devoteMobile, QStrin
     qry.bindValue(":sevaname",devoteSevaName);
     qry.bindValue(":quantity",devoteCount);
     qry.bindValue(":s_date",sday);
-    qry.bindValue(":s_month",smonth );
-    qry.bindValue(":s_year",syear );
+    qry.bindValue(":s_month",smonth);
+    qry.bindValue(":s_year",syear);
     qry.bindValue(":seva_date",devoteSevadate);
     qry.bindValue(":r_date",rday);
     qry.bindValue(":r_month",rmonth );
@@ -1334,11 +1344,11 @@ void DBInterface::deleteWrongData(QString rcptNum)
     query.prepare(str);
     bool b = query.exec();
     if(b==true){
-        qDebug()<<"delete cmd executed....!"<<query.lastError().text()<<Qt::endl;
+        qDebug() << Q_FUNC_INFO <<"delete cmd executed....!"<<query.lastError().text()<<Qt::endl;
         emit refreshModel(rcptNum);
     }
     else{
-        qDebug()<<"delete cmd failed....!"<<query.lastError().text()<<Qt::endl;
+        qDebug() << Q_FUNC_INFO <<"delete cmd failed....!"<<query.lastError().text()<<Qt::endl;
     }
 }
 
@@ -1358,12 +1368,12 @@ void DBInterface::recvDeletedRecptNo(QString recptNo)
 
     if(!(query.numRowsAffected()))
     {
-        qDebug() << "Update too DB failed....!"<<query.lastError().text()<<Qt::endl;
+        qWarning() << Q_FUNC_INFO << "Update too DB failed....!"<<query.lastError().text()<<Qt::endl;
         emit updateToDbFailed();
     }
     else
     {
-        qDebug() << "Update cmd executed....!" << query.lastError().text() << Qt::endl;
+        qDebug() << Q_FUNC_INFO << "Update cmd executed....!" << query.lastError().text() << Qt::endl;
         emit sendChangedDataToSevaBookingTablemodel(recptNo);
     }
 }
@@ -1375,21 +1385,21 @@ QList<SevaBookingElement *> DBInterface::getSewaBookingEntryForReceipt(QString r
 
     QSqlQuery query;
 
-    qDebug()<<"getSewaBookingEntryForReceipt Called receiptno is"<<receipt_no<<Qt::endl;
+    qDebug() << Q_FUNC_INFO <<"getSewaBookingEntryForReceipt Called receiptno is"<<receipt_no<<Qt::endl;
     query.prepare("SELECT * FROM sevabooking WHERE RECPT_NUM=:receipt_no");
     query.bindValue(":receipt_no", receipt_no);
     if(query.exec())
     {
-        qDebug()<<"Retrieve Query executed in getSewaBookingEntryForReceipt"<<Qt::endl;
+        qDebug() << Q_FUNC_INFO <<"Retrieve Query executed in getSewaBookingEntryForReceipt"<<Qt::endl;
     }
     else
     {
-        qWarning()<<"Retrieve Query exe..failed in getSewaBookingEntryForReceipt"<<Qt::endl;
+        qWarning() << Q_FUNC_INFO <<"Retrieve Query exe..failed in getSewaBookingEntryForReceipt"<<Qt::endl;
     }
 
     while(query.next())
     {
-        qDebug()<<"Inside getSewaBookingEntryForReceipt of DBInterface";
+        qDebug() << Q_FUNC_INFO <<"Inside getSewaBookingEntryForReceipt of DBInterface";
         SevaBookingElement *seva_ele = new SevaBookingElement;
         QString s_no=query.value(0).toString();
         QString person_id = query.value(1).toString();
@@ -1399,7 +1409,7 @@ QList<SevaBookingElement *> DBInterface::getSewaBookingEntryForReceipt(QString r
         QString seva_cost = query.value(14).toString();
         QString seva_status = query.value(22).toString();
 
-        qDebug()<<"s_no"<<s_no<<Qt::endl;
+        qDebug() << Q_FUNC_INFO <<"s_no"<<s_no<<Qt::endl;
         qDebug()<<"person_id"<<person_id<<Qt::endl;
         qDebug()<<"seva_type"<<seva_type<<Qt::endl;
         qDebug()<<"seva_name"<<seva_name<<Qt::endl;
@@ -1431,33 +1441,39 @@ void DBInterface::modifySeva(int sevaId, QString sevaName, int cost, QString Dat
     query.prepare(str);
     bool b = query.exec();
     if(b==true){
-        qDebug()<<"cost Update cmd executed....!"<<query.lastError().text()<<Qt::endl;
+        qDebug() << Q_FUNC_INFO <<"cost Update cmd executed....!"<<query.lastError().text()<<Qt::endl;
         emit sendUpdateStatus("The Seva id:"+QString::number(sevaId)+" Update Success");
     }
     else{
-        qWarning()<<"cost Update cmd failed....!"<<query.lastError().text()<<Qt::endl;
+        qWarning() << Q_FUNC_INFO <<"cost Update cmd failed....!"<<query.lastError().text()<<Qt::endl;
     }
 
 }
 
 void DBInterface::closeSeva(int SevaId)
 {
+    qDebug() << Q_FUNC_INFO << SevaId  <<  Qt::endl;
     QSqlQuery query;
     QString str;
-    qDebug()<<"suman--sevaId--"<<SevaId<<Qt::endl;
     QString cmd = "close";
     str =("UPDATE sevaname SET STATUS = '%1' WHERE SNO = '%2' ;");
     str= str.arg(cmd).arg(SevaId);
     query.prepare(str);
     bool b = query.exec();
     if(b==true){
-        qDebug()<<"close Update cmd executed....!"<<query.lastError().text()<<Qt::endl;
+        qDebug() << Q_FUNC_INFO <<"Seva Id /Seva name is closed....! ::Seva ID:"<< SevaId << query.lastError().text()<<Qt::endl;
         emit signalClose(SevaId);
         emit signalClosedStatus("The SevaId "+QString::number(SevaId)+" Closed");
     }
     else{
-        qWarning()<<"close Update cmd failed....!"<<query.lastError().text()<<Qt::endl;
+        qWarning() << Q_FUNC_INFO << "Seva Id /Seva name close query failed....! ::Seva ID:"<< SevaId << query.lastError().text()<<Qt::endl;
     }
+
+
+
+//    str = ("SELECT SEVATYPE from Sevaname");
+//    query.prepare(str);
+
 }
 
 void DBInterface::fullAccounDetailsDateWise(QString SEVA,int TYPE,QString formatchangedcalendar_str)
@@ -3870,8 +3886,8 @@ int DBInterface::getNextSevaId()
     {
         sevanameLastNo = query_s_no.value(0).toInt();
     }
-    qDebug() << Q_FUNC_INFO << "last ID == " << sevanameLastNo+1<<Qt::endl;
-    return sevanameLastNo+1;
+    qDebug() << Q_FUNC_INFO << "last ID == " << sevanameLastNo + 1<<Qt::endl;
+    return sevanameLastNo + 1;
 }
 
 QStringList DBInterface::qrySevaDates()

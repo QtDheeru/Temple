@@ -192,45 +192,11 @@ Rectangle{
                 }
             }
         }
-        //        DisplayDialog {
-        //            id :_errorDialog
-        //            visible: false
-
-        //            function showmsg(exportmsg){
-        //                _errorDialog.visible = true;
-        //                _errorDialog.text2Display = exportmsg
-        //                _errorDialog.open();
-        //            }
-        //            onYesAction: {
-        //                console.log("reciept has to be delete");
-        //            }
-        //        }
-        //        AllViewDataDialog{
-        //            id:_allViewDataDialog
-        //            anchors.centerIn: parent
-
-        //            onCloseClicked: {
-        //                resetBaseScreen()
-        //                _allViewDataDialog.close();
-        //            }
-        //            onConfirmClicked: {
-        //                sevaProxy.printBookingReceipt(_sevaBookingElement);
-        //                _allViewDataDialog.close();
-        //                resetBaseScreen();
-        //            }
-
-        //            onRejected: {
-        //                resetBaseScreen()
-        //            }
-        //        }
 
         Component.onCompleted: {
             console.log("Seva All view Page is created")
             forceActiveFocus();
         }
-        //    SevaBookingEle{
-        //        id:_sevaBookingElement
-        //    }
         Keys.onEscapePressed: {
             console.log("DevoteeDetailsPage :: Keys.onEscapePressed ")
             loadMenuPage();

@@ -42,7 +42,7 @@ public:
     Q_INVOKABLE bool resetBookView();
 
     Q_INVOKABLE SevaName* getSeva(int sevaType, int sevaId);
-    Q_INVOKABLE SevaName* getSevaByIndex(int index);
+    Q_INVOKABLE SevaName* getSevaByIndex(int sevaType, int index);
     Q_INVOKABLE SevaType*  getSevaTypeByIndex(int index);
     Q_INVOKABLE void print(int sevaType, int sevaId);
 

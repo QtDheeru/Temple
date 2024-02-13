@@ -51,7 +51,7 @@ Rectangle {
         {
             id :_tInput
             Layout.fillWidth: true
-            Layout.preferredWidth: _root.myWidth - _label.widt
+            Layout.preferredWidth: _root.myWidth - _label.width
             Layout.preferredHeight: _root.myHeight
             Layout.minimumWidth: _root.myWidth - _label.width
             Layout.minimumHeight: _root.myHeight

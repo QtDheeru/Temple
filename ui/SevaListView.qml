@@ -76,14 +76,10 @@ Rectangle {
                 font.pixelSize: _root.fontPixelSize
                 onCurrentIndexChanged: {
                     var currentItem = delegateModel.items.get(currentIndex)
-                    console.log("--------------- onCurrentIndexChanged: of combo box sevaListView"+sevaProxy.getSevaModel(currentItem.model.sevaTypeId).getSevaListViewSize());
                     console.log(" Index =" + currentIndex)
                     if(sevaProxy.getSevaModel(currentItem.model.sevaTypeId).getSevaListViewSize()===0)
                     {
-                        console.log("if of onCurrentIndexChanged: of combo box sevaListView");
-                        console.log("before ---------------   errorOccur");
-                        errorOccur("  Sevas not present for
-     "+currentItem.model.sevaTypeName);
+                        errorOccur("  Sevas not present for "+currentItem.model.sevaTypeName);
                         _listView.model = 0;
                         console.log("after ---------------   errorOccur");
                     }
@@ -123,7 +119,7 @@ Rectangle {
         focus: true
         currentIndex: 0
         snapMode: ListView.SnapToItem
-        model : sevaListModel
+        //model : sevaProxy.getSevaModel(sevaType)
         delegate: MySevaDelegate{
             Component.onCompleted: {
                 sevaSelected.connect(recvSevaSelected);

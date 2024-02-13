@@ -19,9 +19,9 @@
 #include "model/voucher/VoucherFilterElements.h"
 #include "model/voucher/VoucherReportModel.h"
 #include "AccountReportMonthRangeElement.h"
-#include"BookingReportDateRangeElement.h"
-#include"SevaTypeNamesDataModel.h"
-#include"SevaBookingConformationDataModel.h"
+#include "BookingReportDateRangeElement.h"
+#include "SevaTypeNamesDataModel.h"
+#include "SevaBookingConformationDataModel.h"
 #include "devoteeproxy.h"
 #include "model/BankRegistration_m/cheque_entryModel.h"
 #include "model/BankRegistration_m/cashtransaction.h"
@@ -102,9 +102,10 @@ int main(int argc, char *argv[])
         confApp->loadXMLFile();
 
         //
-        sevaModel= new SevaListViewModel;
         dbchecker = new DBChecker;
         proxy = new SevaViewProxy;
+        qDebug() << Q_FUNC_INFO << "Seva ListViewMooodel is creating" << Qt::endl;
+        sevaModel= new SevaListViewModel;
         sevaCountOnDateModel = new SevaCountOnDateModel;
         sevaDetailsOnDateModel = new SevaDetailsOnDateModel;
         vou = new saveVoucher;
@@ -116,7 +117,7 @@ int main(int argc, char *argv[])
         //    engine.rootContext()->setContextProperty("sevaTypeModel",mod);
         engine.rootContext()->setContextProperty("sevaDateCount",sevaCountOnDateModel);
         engine.rootContext()->setContextProperty("sevaDetailsonDateCount",sevaDetailsOnDateModel);
-        engine.rootContext()->setContextProperty("sevaListModel",sevaModel);
+        //engine.rootContext()->setContextProperty("sevaListModel",sevaModel);
         engine.rootContext()->setContextProperty("saveVoucher",vou);
         engine.rootContext()->setContextProperty("voucherReportModel",vouRepModel);
 

@@ -9,9 +9,10 @@
 #include <QScreen>
 #include "print_file.h"
 SevaViewProxy::SevaViewProxy(QObject *parent) : QObject(parent)
-  ,m_sevaBookingModelData(SevaTypeNamesDataModel::self())
-  ,m_receiptNumber("-1")
-  ,m_sevaTypeModel(nullptr)
+    ,m_sevaBookingModelData(SevaTypeNamesDataModel::self())
+    ,m_currentSevaModel(nullptr)
+    ,m_receiptNumber("-1")
+    ,m_sevaTypeModel(nullptr)
 {
     m_userMngmnt = new UserManagement;
     m_allReportModel  = new SevaDetailsTableView;
@@ -29,7 +30,7 @@ SevaViewProxy::SevaViewProxy(QObject *parent) : QObject(parent)
     this->getNextReceiptNumber();
 
     //QObject::connect(DBInterface::getInstance(),&DBInterface::sendOneSevaBooking,
-      //               m_allReportModel,&SevaDetailsTableView::insertSevaRow);
+    //               m_allReportModel,&SevaDetailsTableView::insertSevaRow);
 
     QObject::connect(DBInterface::getInstance(),&DBInterface::sendOneSevaBooking,
                      m_sevaBookingTV,&SevaBookingTableModel::addBookingDetails);
@@ -77,10 +78,13 @@ SevaViewProxy::SevaViewProxy(QObject *parent) : QObject(parent)
 QAbstractItemModel *SevaViewProxy::getSevaModel(int sevaType)
 {
     qDebug() << Q_FUNC_INFO << " Seva Type =" << sevaType << Qt::endl;
-    m_currentSevaModel = new SevaListViewModel;
-    QObject::connect(DBInterface::getInstance(),&DBInterface::signalClose,m_currentSevaModel,&SevaListViewModel::recvClosedObj);
+    if (m_currentSevaModel == nullptr) {
+        qDebug() << Q_FUNC_INFO << " Creating new object of SevaListViewModel :: Seva Type =" << sevaType << Qt::endl;
+        m_currentSevaModel = new SevaListViewModel;
+        QObject::connect(DBInterface::getInstance(),&DBInterface::signalClose,m_currentSevaModel,&SevaListViewModel::recvClosedObj);
 
-    QQmlEngine::setObjectOwnership(m_currentSevaModel,QQmlEngine::CppOwnership);
+        QQmlEngine::setObjectOwnership(m_currentSevaModel,QQmlEngine::CppOwnership);
+    }
     m_currentSevaModel->initSevaList(sevaType);
     return m_currentSevaModel;
 }
@@ -112,13 +116,13 @@ SevaName* SevaViewProxy::getSeva(int sevaType, int sevaId)
     return SevaTypeNamesDataModel::self()->getSevaDetails(sevaType,sevaId);
 }
 
-SevaName *SevaViewProxy::getSevaByIndex(int index)
+SevaName *SevaViewProxy::getSevaByIndex(int sevaType,int index)
 {
     qDebug() << Q_FUNC_INFO<<index << Qt::endl;
     qDebug()<<"current.... seva model"<<Qt::endl;
     Q_ASSERT(m_currentSevaModel != nullptr);
     qDebug()<<"current seva model"<<m_currentSevaModel<<Qt::endl;
-    return this->m_currentSevaModel->getSevaByIndex(index);
+    return this->m_currentSevaModel->getSevaNameByIndex(sevaType,index);
 }
 
 SevaType *SevaViewProxy::getSevaTypeByIndex(int index)
@@ -187,7 +191,7 @@ void SevaViewProxy::cancelReceipt(QString a_recptno)
 
 void SevaViewProxy::deleteSevaBookingTableModel()
 {
-//    m_sevaBookingTV
+    //    m_sevaBookingTV
     delete m_sevaBookingTV;
 }
 
@@ -196,11 +200,11 @@ void SevaViewProxy::cleanBookingTableModel()
     qDebug() << Q_FUNC_INFO << Qt::endl;
     m_sevaBookingTV->clearData();
     QObject::disconnect(DBInterface::getInstance(),&DBInterface::sendOneSevaBooking,
-                     m_sevaBookingTV,&SevaBookingTableModel::addBookingDetails);
+                        m_sevaBookingTV,&SevaBookingTableModel::addBookingDetails);
     QObject::disconnect(DBInterface::getInstance(),&DBInterface::sendChangedDataToSevaBookingTablemodel,
-                     m_sevaBookingTV,&SevaBookingTableModel::reset);
+                        m_sevaBookingTV,&SevaBookingTableModel::reset);
     QObject::disconnect(DBInterface::getInstance(),&DBInterface::refreshModel,
-                     m_sevaBookingTV,&SevaBookingTableModel::referseshTheModel);
+                        m_sevaBookingTV,&SevaBookingTableModel::referseshTheModel);
     delete m_sevaBookingTV;
     m_sevaBookingTV = new SevaBookingTableModel;
     m_sevaBSearchModel->setSourceModel(m_sevaBookingTV);
