@@ -4,14 +4,14 @@
 SevaListViewModel::SevaListViewModel(QObject *parent)
     : QAbstractListModel(parent),m_sevaTypeNameModel(nullptr)
 {
-    qDebug() << Q_FUNC_INFO << "Created #####################" << Qt::endl;
+    qDebug() << Q_FUNC_INFO << "Created SevaListViewModel" << Qt::endl;
     connect(SevaTypeNamesDataModel::self(),&SevaTypeNamesDataModel::newSevaAdded,this,&SevaListViewModel::sevaNameListUpdated);
     this->init();
 }
 
 SevaListViewModel::~SevaListViewModel()
 {
-    qDebug() << Q_FUNC_INFO << "Deleted #####################" << Qt::endl;
+    qDebug() << Q_FUNC_INFO << "Deleted SevaListViewModel" << Qt::endl;
 }
 
 

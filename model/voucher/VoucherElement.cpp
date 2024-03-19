@@ -148,4 +148,5 @@ QString VoucherElement::receiptNumber() const
 void VoucherElement::setReceiptNumber(const QString &newReceiptNumber)
 {
     m_receiptNumber = newReceiptNumber;
+    emit receiptNumberChanged();
 }

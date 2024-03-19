@@ -9,10 +9,7 @@ Dialog {
     visible: true
     width: 600;
     height: 600;
-    //    width: Screen.width/2
-    //    height: Screen.height/1.5
     closePolicy: Popup.NoAutoClose
-    //y:20
     modal: true
     anchors.centerIn: parent
     //   property alias amount2Pay : _sevaPayment.amount2Pay
@@ -22,11 +19,7 @@ Dialog {
     signal closeClicked();
     signal printClicked();
     signal confirmClicked();
-    //   signal errorOccur(string errorMsg);
-    //    function clearData() {
-    //        console.log(" ")
-    //        _sevaPayment.clearData()
-    //    }
+    signal voucherReceiptDialogClosed()
     property alias _vDate : _voucherReceiptDetails._vDate
     property alias _voucherNo:_voucherReceiptDetails._voucherNo
     property alias _voucherName: _voucherReceiptDetails._voucherName
@@ -81,12 +74,26 @@ Dialog {
                     //                }
                     //confirmClicked();
                     console.log("Current Date:" + voucherProxy.getCurrentDate() + ":: Vouchernumber: " + voucherProxy.getLastVoucherNumber())
+
+                    console.log("_receiptNumber" + _receiptNumber + ":: Vouchernumber: " + voucherProxy.getLastVoucherNumber())
                     _vouEle.receiptNumber = _receiptNumber
                     _vouEle.voucherCost = _voucherCost
                     _vouEle.voucherDate = voucherProxy.getCurrentDate()
                     _vouEle.voucherNo = voucherProxy.getLastVoucherNumber()
+
+                    _vouEle.voucherDate = _vDate
+                    _vouEle.voucherName = _voucherName
+                    _vouEle.mobileNo = _mobileNo
+                    _vouEle.voucherType = _voucherType
+                    _vouEle.voucherItem = _voucherItem
+                    _vouEle.voucherNote = _voucherNote
+                    _vouEle.voucherPaymentMode = _voucherPaymentMode
+                    _vouEle.paymentReference = _paymentReference
                     saveVoucher.saveVoucherElements(_vouEle);
                     sevaProxy.printVoucherReceipt(_vouEle);
+                    console.log("before voucher receipt dialog close  == "+ _vouEle.receiptNumber);
+                    voucherReceiptDialogClosed();
+                    root.close();
                 }
             }
             Button{
@@ -116,6 +123,9 @@ Dialog {
     VouEle
     {
         id:_vouEle
+        Component.onDestruction : {
+            console.log("_vouEle destructed")
+        }
     }
 
     contentItem: VoucherReceiptDetails{id:_voucherReceiptDetails;Layout.fillWidth: true}

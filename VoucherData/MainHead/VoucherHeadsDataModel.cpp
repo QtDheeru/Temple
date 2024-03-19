@@ -31,21 +31,26 @@ QVariant VoucherHeadsDataModel::data(int row, int col, int role)
 
 void VoucherHeadsDataModel::init()
 {
-    qDebug()<<"init function caled";
+    qDebug() << "init function called";
     connect(DBInterface::init,&DBInterface::selectSignalFromDB,this,&VoucherHeadsDataModel::onSelectSignalFromDB,Qt::UniqueConnection);
     DBInterface::init->selectDataInMain();
 }
 
 void VoucherHeadsDataModel::callRowInDataModel(int row_number)
 {
-    qDebug()<<"rowNum in string="<<row_number;
-    int num=row_number;
-    QString mainSerial=m_voucherHeadList.at(num)->serialNo();
-    QString mainVouchId=m_voucherHeadList.at(num)->vouchId();
-    QString mainVouchName=m_voucherHeadList.at(num)->vCategory();
-    qDebug()<<"VoucherId = "<<mainVouchId;
-    qDebug()<<"serialId = "<<mainSerial;
-    qDebug()<<"Voucher name = "<<mainVouchName;
+    qDebug() << "rowNum in string = " << row_number;
+    int num = row_number;
+    if(m_voucherHeadList.empty()){
+        qWarning() << Q_FUNC_INFO << "Voucher head list is empty!!! "<< endl;
+        return;
+    }
+
+    QString mainSerial = m_voucherHeadList.at(num)->serialNo();
+    QString mainVouchId = m_voucherHeadList.at(num)->vouchId();
+    QString mainVouchName = m_voucherHeadList.at(num)->vCategory();
+    qDebug() << "VoucherId = " << mainVouchId;
+    qDebug() << "serialId = " << mainSerial;
+    qDebug() << "Voucher name = " << mainVouchName;
     emit vouchToTableModel(mainVouchId,mainSerial,mainVouchName);
 }
 

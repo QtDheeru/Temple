@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.15
 import QtQuick.Controls 2.15
 import "../components" as Utils
 import "../"
+
 Item {
     id : root
     anchors.fill: parent
@@ -61,7 +62,7 @@ Item {
                         text : "Start Seva Booking"
                         Layout.fillWidth: true
                         font.pixelSize: 20
-                        onClicked: startSevaBooking();
+                        onClicked: startSevaBooking()
                     }
                     Button {
                         text : "All Data"
@@ -73,19 +74,19 @@ Item {
                         text : "Add Devotee"
                         Layout.fillWidth: true
                         font.pixelSize: 20
-                        onClicked: addDevotee();
+                        onClicked: addDevotee()
                     }
                     Button {
                         text : "Update Devotee"
                         Layout.fillWidth: true
                         font.pixelSize: 20
-                        onClicked: areSureUpdate();
+                        onClicked: areSureUpdate()
                     }
                     Button {
                         text : "Delete Devotee"
                         Layout.fillWidth: true
                         font.pixelSize: 20
-                        onClicked: areSureDelete();
+                        onClicked: areSureDelete()
                     }
                     Button {
                         text : "Clear Data"
@@ -104,6 +105,20 @@ Item {
             return;
         }
         else{
+            console.log(" Mobile    =" + _devoteeView.mobileNo);
+            console.log(" Name      = " + _devoteeView.devoteeName);
+            console.log(" Nakshatra =" + _devoteeView.nakshatra)
+            console.log(" Gothra    =" + _devoteeView.gothra)
+            var devotee = {devoteeName : _devoteeView.devoteeName,
+                mobileNumber : _devoteeView.mobileNo,
+                gothra: _devoteeView.gothra,
+                nakshatra:_devoteeView.nakshatra};
+            if (!devoteeProxy.devoteeDataModel.addDevoteeJSObject(devotee)) {
+                console.log(" Error in Adding Devotee = " + devoteeProxy.devoteeDataModel.lastError());
+            }else{
+                console.log("Devotee Add Succesfull......")
+            }
+
             if(sevaProxy.getSevaTypeModel().getSevaTypeListSize() === 0)
             {
                 console.log("Clicked on Sevabooking sevaTypeModel = 0")
@@ -129,9 +144,9 @@ Item {
                 console.log(" if of <<< countIfSevaNamesPresentInSevaTypes++ " + countIfSevaNamesPresentInSevaTypes)
                 console.log("evening ---",_devoteeView.nakshatra)
                 console.log("_devoteeView.mobileNo---",_devoteeView.mobileNo)
-                var moblist = _devoteeView.mobileNo.split("_");
-                var mob = moblist[0];
-                loadSevabooking(_devoteeView.devoteeName,mob,_devoteeView.gothra,_devoteeView.nakshatra)
+//                var moblist = _devoteeView.mobileNo.split("_");
+//                var mob = moblist[0];
+                loadSevabooking(_devoteeView.devoteeName,_devoteeView.mobileNo,_devoteeView.gothra,_devoteeView.nakshatra)
             }
             else{
                 console.log("evening ---",_devoteeView.nakshatra)
@@ -145,6 +160,12 @@ Item {
         console.log(" Name      = " + _devoteeView.devoteeName);
         console.log(" Nakshatra =" + _devoteeView.nakshatra)
         console.log(" Gothra    =" + _devoteeView.gothra)
+        if(_devoteeView.mobileNo == "" || _devoteeView.devoteeName == ""){
+            _errorDialog.text2Display = "Devotee Name or Mobile number is empty";
+            _errorDialog.open();
+            return;
+        }
+
         var devotee = {devoteeName : _devoteeView.devoteeName,
             mobileNumber : _devoteeView.mobileNo,
             gothra: _devoteeView.gothra,
@@ -154,7 +175,7 @@ Item {
             _errorDialog.text2Display = devoteeProxy.devoteeDataModel.lastError();
             _errorDialog.open();
         } else {
-            console.log(" Dheerendra - Add Succesfull......")
+            console.log("Devotee Add Succesfull......")
             _errorDialog.context = 0;
             _errorDialog.text2Display = " Add successful";
             _errorDialog.visible = true;
@@ -220,22 +241,22 @@ Item {
     }
 
     function setDevoteeDetails(devotee){
-        _devoteeView.mobileNo  = devotee.mobileNumber;
-        _devoteeView.devoteeName = devotee.devoteeName;
+        _devoteeView.mobileNo  = devotee.mobileNumber
+        _devoteeView.devoteeName = devotee.devoteeName
         _devoteeView.setNakshatraCombo(devotee.nakshatra)
-        _devoteeView.setGothraCombo(devotee.gothra);
+        _devoteeView.setGothraCombo(devotee.gothra)
     }
 
     Connections{
         target: _devoteeListView
         function onDevoteeSelectionIndex(idx){
             console.log(" Devotee Selected ="+idx)
-            var index = devoteeProxy.devoteeSearchModel.getRowOfDataFromTableViewModel(idx);
-            var devotee = devoteeProxy.devoteeDataModel.getDevotee(index);
-            _devoteeView.setGothras(sevaProxy.getGothras());
-            _devoteeView.setNakshatras(sevaProxy.getNakshatras());
-            devotee.print();
-            setDevoteeDetails(devotee);
+            var index = devoteeProxy.devoteeSearchModel.getRowOfDataFromTableViewModel(idx)
+            var devotee = devoteeProxy.devoteeDataModel.getDevotee(index)
+            _devoteeView.setGothras(sevaProxy.getGothras())
+            _devoteeView.setNakshatras(sevaProxy.getNakshatras())
+            devotee.print()
+            setDevoteeDetails(devotee)
         }
     }
     Dialog {

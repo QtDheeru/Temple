@@ -29,9 +29,8 @@ Rectangle{
             width: parent.width/3.5
             color: "#72FFFF"
             ColumnLayout {
-                //        anchors.fill: parent
-                width: parent.width
                 id : _c1
+                width: parent.width
                 spacing: 5
                 anchors.margins: 5
                 MyDateEntry{
@@ -51,8 +50,8 @@ Rectangle{
                     _labelText:qsTr("Voucher Number")
                     _editable:false
                 }
-                MyRowEntry
-                {id:_name;
+                MyRowEntry{
+                    id:_name;
                     myHeight:subComponentHeight;
                     myWidth: parent.width/1.25
                     fontPixelSize: _r1.subComponentPixelSize
@@ -60,9 +59,7 @@ Rectangle{
                     focus: true
                     KeyNavigation.tab: _mobileNo
                 }
-
-                MyRowEntry
-                {
+                MyRowEntry{
                     id:_mobileNo;
                     myHeight:subComponentHeight;
                     myWidth: parent.width/1.25
@@ -71,9 +68,7 @@ Rectangle{
                     focus: true
                     KeyNavigation.tab: _voucherType
                 }
-
-                MyComboEntry
-                {
+                MyComboEntry{
                     id:_voucherType;
                     myHeight:_r1.subComponentHeight;
                     fontPixelSize: _r1.subComponentPixelSize
@@ -91,17 +86,11 @@ Rectangle{
                     onCurrentIndexChanged:
                     {
                         console.log("my current Index",currentIndex)
-
                         voucherProxy.voucherHeadsTableModel.rowClicked(currentIndex);
                         voucherProxy.listAppendProxy();
-
-                        // console.log("my current Index",currentIndex)
                     }
-
                     //                    _dataModel:["Financial","Groceries","Vegetables","Fruits and Flowers","Dairy Items","Computers & Digital","Misc","Others"]
-
                 }
-
                 Connections
                 {
                     target:voucherProxy
@@ -112,13 +101,9 @@ Rectangle{
                         console.log("voucher name="+a_vouch_name);
                         voucherProxy.send_Voucher(a_voucherId);
                         voucherProxy.clearProxy();
-
                         myitem.currentIndex = 0 ;
-
                     }
                 }
-
-
                 MyComboEntry
                 {
                     id:myitem
@@ -133,7 +118,6 @@ Rectangle{
                         console.log("Changedddddddddddddddd  ", currentIndex)
                     }
                 }
-
                 MyRowEntry{id:_note;
                     myHeight:subComponentHeight;
                     myWidth: parent.width/1.25
@@ -159,7 +143,6 @@ Rectangle{
                     isEditable: false
                     _dataModel:["Cash","Cheque","NEFT","UPI"]
                 }
-
                 MyRowEntry{id:_reference;
                     myHeight:subComponentHeight;
                     myWidth: parent.width/1.25
@@ -169,7 +152,6 @@ Rectangle{
                     KeyNavigation.tab: _voucherType
                     visible: false
                 }
-
                 Button{
                     id:_button
                     text: "Submit"
@@ -179,7 +161,7 @@ Rectangle{
                     Layout.preferredHeight: _r1.subComponentHeight;
                     Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
                     onClicked: {
-                        console.log("submit cutton clicked in voucher page")
+                        console.log("submit button clicked in voucher page")
                         console.log(_name._data.length)
                         console.log(_cost._data.length)
                         if((_name._data=="") || (_cost._data=="") ||(_mobileNo._data.length !=10) ||(_reference.visible==true && _reference._data=="") )
@@ -199,13 +181,13 @@ Rectangle{
                             _vouEle.voucherCost = _cost._data
                             _vouEle.voucherPaymentMode = _paymentMode._data
                             _vouEle.paymentReference = _reference._data
-                            //_voucherNo.clearData()
                             _name.clearData()
                             _mobileNo.clearData()
                             _note.clearData()
                             _cost.clearData()
                             _reference.clearData()
-                            saveVoucher.saveVoucherElements(_vouEle);
+                            myitem._enteredText = ""
+                            //saveVoucher.saveVoucherElements(_vouEle);
                             var li =  _vouEle.voucherDate.split("-");
                             var str = li[2]+"-"+li[1]+"-"+li[0];
                             _voucherReceiptDialog._vDate = str/*_vouEle.voucherDate*/
@@ -224,7 +206,6 @@ Rectangle{
                         }
                     }
                 }
-
                 Button{
                     id:_reportButton
                     text: "Report"
@@ -238,20 +219,14 @@ Rectangle{
                         console.log("Report button clicked in voucher page")
                     }
                 }
-
             }
         }
-        //        Image {
-        //            id: voucherImage
-        //            source: "qrc:/ui/assets/Images/voucher.jpg"
-        //        }
     }
 
     Loader{
         id:_load
-        //  focus: true
-
     }
+
     Connections{
         target: _load.item
         function onSendVoucherReportInput(obj)
@@ -273,7 +248,6 @@ Rectangle{
             _load.source = "voucherPage.qml"
         }
     }
-
     Connections{
         target:_voucherType
         function onItemChanged(j){
@@ -297,6 +271,17 @@ Rectangle{
                 _item._dataModel= ["Other Expenditure","Other small expenditure"]
         }
     }
+    Connections
+    {
+        target: _paymentMode
+        function onItemChanged(j){
+            if(j===0)
+
+                _reference.visible = false
+            else
+                _reference.visible=true
+        }
+    }
 
     DisplayDialog {
         id :_errorDialog
@@ -313,17 +298,7 @@ Rectangle{
         }
     }
 
-    Connections
-    {
-        target: _paymentMode
-        function onItemChanged(j){
-            if(j===0)
 
-                _reference.visible = false
-            else
-                _reference.visible=true
-        }
-    }
     Keys.onEscapePressed: {
         console.log("Esc pressed in voucher page")
         loadMenuPage()
@@ -332,7 +307,7 @@ Rectangle{
     VoucherReceiptDialog{
         id:_voucherReceiptDialog
         anchors.centerIn: parent
-        visible: true
+        visible: false
         // Keys.onEscapePressed: _voucherReceiptDialog.close()
         //                    onPaymentComplete: {
         //                        console.log("Seva is store now..")
@@ -347,31 +322,25 @@ Rectangle{
             resetBaseScreen()
         }
         onConfirmClicked: {
-            sevaProxy.printVoucherReceipt(_vouEle);
+            sevaProxy.printVoucherReceipt(_vouEle)
+            resetBaseScreen()
+            _voucherReceiptDialog.close()
         }
-
-        //onPrintClicked: {
-        ////sevaProxy.printReceipt();
-        //}
         onRejected: {
             resetBaseScreen()
         }
+        onVisibleChanged: {
+            if(_voucherReceiptDialog.visible == false)
+                resetBaseScreen();
+        }
+
     }
+
     function resetBaseScreen(){
+        console.log("resetBaseScreen")
         _r1.opacity = 1;
     }
-    Component.onCompleted: {
-        console.log("In Component.onCompleted: of ")
-        //forceActiveFocus();
-        if(pageNumber == 1){
-            loadConfirmationDailog(bookingElement)
-        }
-        else{
-            console.log("Inside Default")
-        }
-    }
     function loadConfirmationDailog(bookingElem){
-
         _voucherReceiptDialog._vDate = voucherProxy.getCurrentDate()/*_vouEle.voucherDate*/
         _voucherReceiptDialog._voucherNo = voucherProxy.getLastVoucherNumber()
         _voucherReceiptDialog._voucherName= bookingElem.person.devoteeName
@@ -394,8 +363,16 @@ Rectangle{
         saveVoucher.saveVoucherElements(_vouEle);
 
         _voucherReceiptDialog.open();
+    }
 
-
+    Component.onCompleted: {
+        console.log("In Component.onCompleted: of ")
+        if(pageNumber == 1){
+            loadConfirmationDailog(bookingElement)
+        }
+        else{
+            console.log("Inside Default")
+        }
     }
 }
 

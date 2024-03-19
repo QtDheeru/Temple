@@ -15,7 +15,6 @@ Rectangle{
     property var storeObject;
     property var ve
     property int  pageNumber: 1
-    signal sevaAllViewPageDestroyed();
     signal receiptCancel(var receiptNo, var amount)
     RowLayout{
         id:searchRow
@@ -88,7 +87,6 @@ Rectangle{
                         lv1.currentRow = styleData.row
                         lv1.selection.select(styleData.row)
 
-                        //                    color= styleData.selected ? "skyblue" : "white"
                         console.log("clicked cell in table view ",lv1.currentRow)
 
                         // convert mouse position from delegate to tableview coordinates
@@ -191,15 +189,10 @@ Rectangle{
                 height:40
                 color: styleData.selected ? "skyblue" : styleData.row%2 ? "light gray" : "white"
 
-                //styleData.row===selectedRow ? "yellow":
-                //color: styleData.row===selectedRow ? "yellow" : "white"
                 Text {
                     text: styleData.value
-                    // anchors.centerIn: parent
                     leftPadding: 1
                     font.pixelSize: 14
-                    // elide: Text.ElideRight
-                    //verticalAlignment: Text.AlignLeft
                     anchors.verticalCenter:  parent.verticalCenter
                     anchors.left: parent.left
                     anchors.leftMargin: 5
@@ -264,26 +257,16 @@ Rectangle{
                 id:_cancel
                 text: qsTr('Cancel')
                 onTriggered: {
-//                    _errorDialog.showmsg("Are you sure to cancel the reciept?",1)
-                    //getCancelReceiptDetails(ve)
                     storeObject = ve;
                     sevaProxy.sevaBookingTV.checkStatus(storeObject.sno);
-//                    loadCancelReceipt()
                 }
             }
-            MenuItem
-            {
-                id:_delete
-                text: qsTr('Delete')
-                onTriggered: {
-                    _errorDialog.showmsg("Are you sure to delete the data?",2)
-                }
-            }
-//            Component.onCompleted: {
-//                if(sevaProxy.sevaBookingTV.checkStatus(ve.sno)){
-//                    _cancel.visible = false
-//                }else{
-//                    _cancel.visible = true
+//            MenuItem
+//            {
+//                id:_delete
+//                text: qsTr('Delete')
+//                onTriggered: {
+//                    _errorDialog.showmsg("Are you sure to delete the data?",2)
 //                }
 //            }
         }
@@ -299,11 +282,11 @@ Rectangle{
             }
             onYesAction: {
                 if(page === 1){
-                    console.log("suman Cacel Confirmed---",ve.sno,page)
+                    console.log("Booked Seva cancel Confirmed---",ve.sno,page)
                     loadvoucher(ve,pageNumber)
                 }
                 else if(page === 2){
-                    console.log("suman delete Confirmed---",ve.sno)
+                    console.log("Booked Seva delete Confirmed---",ve.sno)
                     sevaProxy.deletedata(ve.sno)
                 }
             }
@@ -356,8 +339,9 @@ Rectangle{
             console.log("onSevaReceiptcancelClicked ")
             sevaProxy.setStatusToCancel(storeObject.sno)
             receiptCancel(storeObject.sno,totalCost)
-           // _errorDialog1.showError("Confirm to Cancel?",1)
-
+        }
+        onVisibleChanged: {
+            console.log("SevaCancelReceipt visiblity changed " + sevaCancelPopup.visible)
         }
     }
 
@@ -369,6 +353,7 @@ Rectangle{
         footerVisible:false
         function showError(message){
             console.log("inside show error2")
+            _errorDialog2.z = 5
             _errorDialog2.visible = true;
             _errorDialog2.text2Display = message
             _errorDialog2.open();
@@ -420,7 +405,6 @@ Rectangle{
             console.log("SevAllViewPage : onLoadCancelPage = " + storeObject.sno)
             sevaProxy.cancelReceipt(storeObject.sno);
             sevaCancelPopup.visible = true
-            //"SevaCancelReceipt.qml"
         }
         onNotAbleToCancel:{
             console.log("SevaAllViewPage : onNotAbleToCancel = " + storeObject.sno)
@@ -444,7 +428,6 @@ Rectangle{
         onTriggered: {
             _errorDialog2.close();
             console.log("timer is triggered #######")
-            //loader.setSource("VoucherPage.qml",{receiptNumber:storeObject.sno,pageNumber:1,totalCost:sevaProxy.mysevacancelmodel.totalAmount})
         }
     }
 
@@ -455,19 +438,16 @@ Rectangle{
 
     function resetBaseScreen()
     {
-       _allViewDataDialog.opacity = 1;
+        _allViewDataDialog.opacity = 1
     }
 
     Component.onCompleted: {
         console.log("SevaAllViewPage is created...")
-        //lv1.forceLayout()
     }
 
     Component.onDestruction: {
-        console.log("SevaAllViewPage is destroyed");
-        //sevaAllViewPageDestroyed();
-        sevaProxy.cleanBookingTableModel();
-//        lv1.forceLayout()
+        console.log("SevaAllViewPage is destroyed")
+        sevaProxy.cleanBookingTableModel()
     }
 
 }

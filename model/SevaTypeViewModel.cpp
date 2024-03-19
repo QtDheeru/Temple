@@ -8,7 +8,7 @@ SevaTypeViewModel::SevaTypeViewModel(QObject *parent)
 
 SevaTypeViewModel::~SevaTypeViewModel()
 {
-    qDebug() << Q_FUNC_INFO << " Object is getting destroyed..." << Qt::endl;
+    qDebug() << Q_FUNC_INFO << this->objectName() <<" Object is getting destroyed..." << Qt::endl;
 }
 
 //QVariant SevaTypeViewModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -32,19 +32,18 @@ int SevaTypeViewModel::rowCount(const QModelIndex &parent) const
 QVariant SevaTypeViewModel::data(const QModelIndex &index, int role) const
 {
     Q_UNUSED(role);
-    qDebug() << Q_FUNC_INFO << " Row =" << index.row() <<Qt::endl;
+    qDebug() << Q_FUNC_INFO << " Row =" << index.row()  << "role=" << role << Qt::endl;
     if (!index.isValid())
         return QVariant();
+    qDebug() << Q_FUNC_INFO << " index is  valid." << index << Qt::endl;
 
     SevaType *s = this->m_sevaTypes.at(index.row());
+    qDebug() << Q_FUNC_INFO << " seva id and seva namme= " << s->sevaTypeId() << s->sevaTypeName() << Qt::endl;
     switch(role){
     case 1 : return s->sevaTypeId();break;
     case 2 : return s->sevaTypeName();break;
     }
-
-    //return QVariant::fromValue(m_sevaTypes.at(index.row()));
     return QVariant();
-
 }
 
 bool SevaTypeViewModel::init()
@@ -65,7 +64,6 @@ bool SevaTypeViewModel::reflectToView(SevaType *sevatype)
     endInsertRows();
     qDebug() << Q_FUNC_INFO << " Number of Seva Types =" << m_sevaTypes.size() <<Qt::endl;
     return true;
-
 }
 
 const QList<SevaType *> &SevaTypeViewModel::sevaTypes() const

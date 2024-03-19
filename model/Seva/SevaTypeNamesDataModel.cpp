@@ -183,12 +183,14 @@ QString SevaTypeNamesDataModel::createNewSeva(SevaName *seva)
 
 SevaType* SevaTypeNamesDataModel::addSevaTypeDetail(int seva_id, QString seva_name, QString person_name)
 {
+    qDebug() << Q_FUNC_INFO << "seva id & seva name = " << seva_id << seva_name << Qt::endl;
     SevaType* sevatype = new SevaType;
+    QQmlEngine::setObjectOwnership(sevatype,QQmlEngine::CppOwnership);
+    sevatype->setObjectName("addSevaTypeDetail_SevaTypeNamesDataModel");
     sevatype->setSevaTypeId(seva_id);
     sevatype->setSevaTypeName(seva_name);
     m_sevaTypeDetails.insert(seva_id,sevatype);
     return sevatype;
-
 }
 
 QStringList SevaTypeNamesDataModel::getNakshatras()

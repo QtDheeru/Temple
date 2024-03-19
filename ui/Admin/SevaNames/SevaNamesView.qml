@@ -65,7 +65,7 @@ Rectangle
         highlightFollowsCurrentItem: true
         onCurrentIndexChanged:
         {
-            console.log("hello Current Index changed" + currentIndex)
+            console.log("Seva Names view current index changed" + currentIndex)
             sendSevaCurrentIndex(sevaTypeObject.sevaTypeId,currentIndex)
             //sendSevaCurrentIndex(currentIndex)
             //getSevaNameDetailsBySevaType(sevaTypeObject.sevaTypeId,currentIndex)

@@ -18,8 +18,6 @@ ApplicationWindow {
     color: "black"
     flags: Qt.WindowSystemMenuHint
     Component.onCompleted: {
-        //        console.log("=====" + confApp.appPath + "/" + confApp.welcomescreenImg );
-        //        console.log( confApp.welcomescreenImg);
         console.log("screen height= " + Screen.height)
         console.log("screen width= " + Screen.width)
         console.log("Screen MyStyles-screecnWidth size =" + styles.screenWidth)
@@ -40,7 +38,6 @@ ApplicationWindow {
             _errorDialog.visible = true;
             _errorDialog.text2Display = message
             _errorDialog.open();
-            //_errorDialog.visible = false;
         }
         onNoAction: {
             _errorDialog.close()
@@ -57,7 +54,7 @@ ApplicationWindow {
                 console.log("trustListModel.getTrustListSize()"+trustListModel.getTrustListSize())
                 loader.source= "MainTrust.qml"
             }
-            if(trustListModel.getTrustListSize()===1){
+            if(trustListModel.getTrustListSize() === 1){
                 console.log("in else--------------");
                 var trust= trustListModel.trustList[0];
                 var trustName = trust.trustName;
@@ -75,20 +72,15 @@ ApplicationWindow {
                 //  loader.source= "SevaBookingView.qml"
                 loader.source = "Login.qml"
             }
-            if(trustListModel.getTrustListSize()===0){
+            if(trustListModel.getTrustListSize() === 0){
                 console.log("trustListModel.getTrustList===0");
                 // loader.source= "MainTrust.qml"
                 errorOccur("Trust not present");
             }
-
-            //            function onLoadWelcome() {
-            //                console.log("Correct credentials")
-            //                loader.source = "WelcomeScreen.qml"
-            //            }
         }
         function onTimerTriggered() {
             console.log("Welcome screen TimeTriggered");
-            loader.source= "Login.qml"
+            loader.source = "Login.qml"
         }
         /*      function onLoadLogin(pagecount)
         {
@@ -100,7 +92,7 @@ ApplicationWindow {
             console.log("date clicked " +date )
             //            sevaDetailsonDateCount.onDateSelected(date)
             var b = sevaProxy.sevaReport.onDateSelected(date)
-            if(b===false)
+            if(b === false)
             {
                 errorOccur("date selected failed");
             }
@@ -181,10 +173,10 @@ ApplicationWindow {
             console.log("Wrong credentials")
         }
         function onLoginSuccess(pcount) {
-            console.log("Wrong credentials",pcount)
-            if(pcount===0){
+            console.log("Login Success",pcount)
+            if(pcount === 0){
                 loader.source = "MenuPage.qml"}
-            if(pcount===2){
+            if(pcount === 2){
                 console.log("Inside pcount 2")
                 loader.source = "SevaReportPage.qml"
             }
@@ -201,7 +193,7 @@ ApplicationWindow {
         function onSevabooking() {
             console.log("clicked on Sevabooking")
             //            loader.source= "SelectSevaTypeMenu.qml"
-            loader.source= "SevaBookingView.qml"
+            loader.source = "SevaBookingView.qml"
 
         }
         function onAccountDetails() {
@@ -215,7 +207,7 @@ ApplicationWindow {
         function onAdmin() {
             console.log("Clicked on Admin")
             loader.source = "";
-            loader.source= "qrc:/ui/Admin/AdminPage.qml"
+            loader.source = "qrc:/ui/Admin/AdminPage.qml"
             loader.item.width = _root.width
             loader.item.height = _root.height
         }
@@ -225,14 +217,8 @@ ApplicationWindow {
         }
         function onVoucher() {
             console.log("Clicked on Voucher")
-            loader.source = "voucherPage.qml"
+            loader.source = "VoucherPage.qml"
         }
-        //        function onLoadVoucherPage()
-        //        {
-        //            console.log("In onLoadVoucherPage")
-        //            loader.source = "voucherPage.qml"
-        //        }
-
         function onSendVoucherReportInput(obj)
         {
             console.log("signal emitted from voucher report page in main.qml")
@@ -287,7 +273,6 @@ ApplicationWindow {
             console.log("Clicked on Bank Registration")
             loader.source = ""
             loader.source = "qrc:/ui/BankRegistration/IntegrateFile.qml"
-//            myModel.initial();
         }
         function onLoadVoucherAdministration(){
             console.log("Clicked on Voucher Registration")
@@ -301,7 +286,7 @@ ApplicationWindow {
             //            progressBar.visible = true;
             //            progressBar.opacity = 0.1;
             var b = sevaProxy.showAllData();
-            if(b===false)
+            if(b === false)
             {
                 errorOccur("cannot fetch data")
             }
@@ -315,16 +300,14 @@ ApplicationWindow {
             loader.source = "qrc:/ui/Devotee/DevoteeSelectionPage.qml";
         }
         function onBackClicked(){
-            loader.source=""
+            loader.source = ""
             loader.source = "qrc:/ui/SevaAllViewPage.qml"
         }
-        function onSevaAllViewPageDestroyed(){
-            console.log("onSevaAllViewPageDestroyed")
-        }
-        function onReceiptCancel(receiptNo,amount)
-        {
+        function onReceiptCancel(receiptNo,amount){
             console.log("onReceiptCancel :: receipt No: " + receiptNo + ":: total cost: " + amount)
-            _ld.setSource("qrc:/ui/VoucherReceiptDialog.qml",{_receiptNumber:receiptNo,pageNumber:1,_voucherCost:amount})
+            var currentDate = new Date().toLocaleDateString(Qt.locale(),"dd-MM-yyyy")
+            _ld.z = 10
+            _ld.setSource("qrc:/ui/VoucherReceiptDialog.qml",{_receiptNumber:receiptNo,pageNumber:1,_voucherCost:amount,_vDate : currentDate})
         }
     }
     Loader{
@@ -332,6 +315,14 @@ ApplicationWindow {
         anchors.fill: parent
         z:10
         opacity: 0
+    }
+    Connections{
+        target: _ld.item
+        function onVoucherReceiptDialogClosed(){
+            console.log("onVoucherReceiptDialogClosed ")
+            _ld.z = 0
+            loader.item.forceActiveFocus();
+        }
     }
 
     Connections{

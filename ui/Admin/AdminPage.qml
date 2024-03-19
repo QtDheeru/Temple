@@ -64,12 +64,12 @@ Rectangle {
                 function sendcurrentSevaidx(indx){
                     sevaName.sindex = indx;
                 }
-//                onSendSevaCurrentIndex:{
-//                    console.log("onSendSevaCurrentIndex ")
-//                    sevaNameEntry.getSevaNameDetail(idx)
-//                }
                 onSendSevaCurrentIndex: {
                     console.log("onSendSevaCurrentIndex")
+                    if(index < 0){
+                        console.log("No seva names !!!")
+                        return;
+                    }
                     sevaNameEntry.getSevaNameDetailsBySevaType(sevaType,index)
                 }
             }
@@ -80,7 +80,7 @@ Rectangle {
                 Layout.fillHeight: true
                 Layout.minimumWidth: 100
                 Layout.preferredWidth: parent.width/6
-                visible: _actionSelector.sevaNameSelected               
+                visible: _actionSelector.sevaNameSelected
             }
         }
 

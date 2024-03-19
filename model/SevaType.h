@@ -12,6 +12,7 @@ class SevaType : public QObject
 
 public:
     explicit SevaType(QObject *parent = nullptr);
+    ~SevaType();
 
     QString sevaTypeName() const;
     void setSevaTypeName(const QString &sevaTypeName);

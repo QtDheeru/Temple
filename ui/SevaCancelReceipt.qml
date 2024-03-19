@@ -201,7 +201,6 @@ Item {
                             fontSize: 18
                             onMyClick:{
                                 console.log("SevaCancelReceipt :: Cancel clicked")
-                                //cancelClicked()
                                 _confirmationDialog.open();
 
                             }
@@ -212,7 +211,6 @@ Item {
                             myText: "Back"
                             fontSize: 18
                             onMyClick: {
-                                //backClicked()
                                 root.visible = false
                             }
                         }
@@ -225,20 +223,20 @@ Item {
     DisplayDialog {
         id :_confirmationDialog
         visible: false
+        text2Display: "Confirm cancelling the receipt."
         onYesAction: {
-            console.log("SevaCancelReceipt : yes Clicked")
+            console.log("SevaCancelReceipt : yes clicked")
             sevaReceiptcancelClicked(sevaProxy.mysevacancelmodel.totalAmount)
             sevaProxy.setStatusToCancel(sevaProxy.mysevacancelmodel.sevaReceiptNumber)
             _confirmationDialog.close()
+            root.visible = false
         }
         onNoAction: {
-            console.log("SevaCancelReceipt : No Clicked")
+            console.log("SevaCancelReceipt : No clicked")
             _confirmationDialog.close()
         }
     }
     Component.onCompleted: {
         console.log("SevaCancelReceipt is created");
-        //myTotalAmount = sevaProxy.mysevacancelmodel.getTotalAmount()
-        //console.log("myTotalAmount = " +  myTotalAmount);
     }
 }

@@ -145,6 +145,7 @@ bool DevoteeDataInterface::addDevotee(DevotePersnalDetails *devotee)
     personDbID++;
     devotee->setMobileNumber(mobileNumber);
     devotee->setPersonDbId(QString::number(personDbID));
+    qDebug() << Q_FUNC_INFO << " personDbID = " << personDbID << Qt::endl;
     return this->insertPersonDetails(devotee);
 }
 

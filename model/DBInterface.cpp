@@ -319,7 +319,7 @@ void DBInterface::selectDataInMain()
     QSqlQuery myquery;
     qDebug()<<"Select data called";
     myquery.prepare("Select * FROM VOUCHER_DATA");
-    bool val=myquery.exec();
+    bool val = myquery.exec();
     qDebug() << "The last error = "<<myquery.lastError();
     if(val){
         qDebug()<<"Select success";
@@ -493,7 +493,32 @@ void DBInterface::getChequeData()
             }
         }
     }
+}
 
+int DBInterface::getpersonID(QString devoteMobile,QString devoteeName)
+{
+    qDebug()<< Q_FUNC_INFO << "Devotee mobile no. " << devoteMobile << Qt::endl;
+    QSqlQuery qry;
+
+    QString stringQry = QString("SELECT * FROM persondetails");
+
+    qry.prepare(stringQry);
+    if(!qry.exec()){
+        qWarning() << Q_FUNC_INFO << "Error in persondetails query!!!" << qry.lastError().text() << Qt::endl;
+        return -1;
+    }
+    while (qry.next()){
+        QVariant mobileNumber = qry.value(5);
+        if(mobileNumber.toString().contains(devoteMobile)){
+            qDebug()<< Q_FUNC_INFO << "qry.value(5) mobile no. =" << qry.value(5) << Qt::endl;
+            if(qry.value(1).toString().contains(devoteeName)){
+                qDebug()<< Q_FUNC_INFO << " qry.value(0) Name of devotee  =" << qry.value(1) << " person ID" << qry.value(0).toInt() << Qt::endl;
+                return qry.value(0).toInt();
+            }
+        }
+    }
+    qWarning() << Q_FUNC_INFO << "Devotee is not present in persondetails !!!" << Qt::endl;
+    return -1;
 }
 
 void DBInterface::addMyDB(QString vid, QString sid, QString sname)
@@ -607,8 +632,8 @@ bool DBInterface::add_seva_type(QString seva_type, int seva_code,QString seva_ad
             this->setError("DataBase Msg: sevatype = " + seva_type + " Already exist");
             return false;
         }
-        if(snumber>sevaSerialNumber){
-            sevaSerialNumber=snumber;
+        if(snumber > sevaSerialNumber){
+            sevaSerialNumber = snumber;
         }
     }
     QSqlQuery Squery;
@@ -635,6 +660,7 @@ bool DBInterface::add_seva_type(QString seva_type, int seva_code,QString seva_ad
 
     return suc;
 }
+
 bool DBInterface::add_seva_type(SevaType *sevaType)
 {
     qDebug () << Q_FUNC_INFO << " Seva Type Requested to Add = " << sevaType->sevaTypeId() <<Qt::endl;
@@ -785,14 +811,18 @@ bool DBInterface::createSeva(SevaName* sevaName)
 {
     qDebug () << Q_FUNC_INFO << "Request add. Seva Name = " << sevaName->sevaName() << " sevaId= " << sevaName->sevaId() <<Qt::endl;
     QSqlQuery qry;
+
     qry.prepare("select * from sevaname where SNO=:sno");
     qry.bindValue(":sno",sevaName->sevaId());
-    qry.exec();
+    if(!qry.exec()){
+        qWarning() << Q_FUNC_INFO << "Seva Added " << qry.lastError().text() << Qt::endl;
+        return false;
+    }
     while(qry.next()){
         int snu = qry.value(0).toInt();
-        qDebug () << Q_FUNC_INFO << " Seva Name in DB =" << snu <<Qt::endl;
+        qDebug () << Q_FUNC_INFO << " Seva Name in DB =" << snu << Qt::endl;
         if (snu == sevaName->sevaId()){
-            qCritical()<<Q_FUNC_INFO<<"Seva with ID ="<< sevaName->sevaId() << endl;
+            qCritical() << Q_FUNC_INFO << "Seva with ID =" << sevaName->sevaId() << Qt::endl;
             emit dbError("Database Message: sevaID " + QString::number(sevaName->sevaId()) + "  already exist");
             this->setError("Database Message: sevaID = " + QString::number(sevaName->sevaId()) + " already exist");
             return false;
@@ -832,6 +862,7 @@ bool DBInterface::createSeva(SevaName* sevaName)
         sevaNames->setSevaCost(sevaName->sevaCost());
         sevaNames->setSevaStartDate(sevaName->sevaStartDate());
         sevaNames->print();
+        sevaNames->setObjectName("createSeva_DBInteerface");
         emit sendSevaName(sevaNames);
 
         return true;
@@ -1019,21 +1050,19 @@ bool DBInterface::insertSevaBooked(QString rcptNumI,QString devoteMobile, QStrin
     QSqlQuery qury;
 
     QString qr1 = QString("select * from sevaname where sevaname='%1'").arg(devoteSevaName);
-    //qury.prepare("select * from sevaname");
     qury.prepare(qr1);
     QString devoteSevaType;
     qury.exec();
-    int bookedsevaSerialNumber=0;
+    int bookedsevaSerialNumber = 0;
     while(qury.next()){
         RID=qury.value(0).toInt();
-        QString val1=qury.value(1).toString();
-        devoteSevaType=qury.value(2).toString();
-
+        QString val1 = qury.value(1).toString();
+        devoteSevaType = qury.value(2).toString();
     }
     qDebug() << Q_FUNC_INFO << " Name =" << devoteSevaName << " Query Size ="<<qury.size() << " Type=" << devoteSevaType <<  Qt::endl;
 
     // Check if devotee exist in DB.
-    int personId = insertPersonDetails(devoteMobile,devoteName,devoteNakshatra,devoteGotra,address);
+    int personId = getpersonID(devoteMobile,devoteName); //insertPersonDetails(devoteMobile,devoteName,devoteNakshatra,devoteGotra,address);
     QString Person_id = QString(personId);
 
     QDate sevaDate = QDate::fromString(devoteSevadate,"dd-MM-yyyy");
@@ -1092,9 +1121,6 @@ bool DBInterface::insertSevaBooked(QString rcptNumI,QString devoteMobile, QStrin
 void DBInterface::insertVoucherIssued(VoucherElement *ele)
 {
     QDate sevaDate = QDate::fromString(ele->voucherDate());
-
-    //    int smonth = sevaDate.month();
-    //    int syear = sevaDate.year();
     QList<QString> li = ele->voucherDate().split("-");
     int smonth = li.at(1).toInt();
     int syear =li.at(0).toInt();
@@ -1115,48 +1141,48 @@ void DBInterface::insertVoucherIssued(VoucherElement *ele)
     qry.bindValue(":dates", ele->voucherDate());
     //qry.bindValue(":dates", sevaDate);
     qry.bindValue(":voucher_type", ele->voucherType());
-    qry.bindValue(":reference_no",ele->PaymentReference());
+    qry.bindValue(":reference_no",ele->receiptNumber());
     qry.bindValue(":s_month",smonth);
     qry.bindValue(":s_year",syear);
     bool retVal = qry.exec();
     if (!retVal){
-        qDebug() << Q_FUNC_INFO << " Query Failed " << qry.lastError().text() <<Qt::endl;
+        qWarning() << Q_FUNC_INFO << " Query Failed " << qry.lastError().text() <<Qt::endl;
     }
     qDebug()<<Q_FUNC_INFO<<"  exiting...\n";
 }
 
 int DBInterface::insertPersonDetails(QString devoteMobile,QString devoteName,QString devoteNakshatra,QString devoteGotra,QString address)
 {
-    qDebug()<<Q_FUNC_INFO<<" entered\n";
+    qDebug() << Q_FUNC_INFO << " entered\n";
 
     bool found = false;
     int  personId = 0;
 
-    qDebug()<<Q_FUNC_INFO << " Name: "<<devoteName<<" Mobile: "<<devoteMobile <<"\n";
+    qDebug() << Q_FUNC_INFO << " Name: " << devoteName << " Mobile: " << devoteMobile << "\n";
 
     QSqlQuery qry;
 
     QString stringQry = QString("select * from persondetails where mobile=%1").arg(devoteMobile.trimmed());
     qry.prepare(stringQry);
     bool result = qry.exec();
-    qDebug() << Q_FUNC_INFO << " String to Query ="<<stringQry <<Qt::endl;
-    qDebug()<< Q_FUNC_INFO << " Query Result =" << result << " Size =" << qry.size() <<Qt::endl;
+    qDebug() << Q_FUNC_INFO << " String to Query ="<<stringQry << Qt::endl;
+    qDebug() << Q_FUNC_INFO << " Query Result =" << result << " Size =" << qry.size() << Qt::endl;
     if (!qry.next()){
         qry.clear();
-        qDebug() << Q_FUNC_INFO << " Devotee not in table. Insert" <<Qt::endl;
+        qDebug() << Q_FUNC_INFO << " Devotee not in table. Insert" << Qt::endl;
         QString lastRecord = "select * from persondetails";
         QSqlQuery qry1;
         qry1.prepare(lastRecord);
         qry1.exec();
-        qDebug() << Q_FUNC_INFO << " Query Size =" << qry1.size() <<Qt::endl;
+        qDebug() << Q_FUNC_INFO << " Query Size =" << qry1.size() << Qt::endl;
         while(qry1.next()){
             int pId = qry1.value(0).toInt();
-            if(pId>personId){
-                personId=pId;
+            if(pId > personId){
+                personId = pId;
             }
         }
         ++personId;
-        qDebug() << Q_FUNC_INFO << " Size =" << qry1.size() << " Person ID="<<personId << " Value ="<<qry1.value(0)<<Qt::endl;
+        qDebug() << Q_FUNC_INFO << " Size =" << qry1.size() << " Person ID="<< personId << " Value ="<<qry1.value(0)<<Qt::endl;
 
         QSqlQuery qry;
         qry.prepare("INSERT INTO persondetails(SNO,PERSONNAME,GOTHRA,NAKSHATRA,DATE,MOBILE,ADDRESS)"
@@ -1176,11 +1202,11 @@ int DBInterface::insertPersonDetails(QString devoteMobile,QString devoteName,QSt
         //        while(qry.next())
         //        {
         personId=qry.value(0).toInt();
-        QString mobileDB=qry.value(5).toString();
+        QString mobileDB =qry.value(5).toString();
         QString nameDB=qry.value(1).toString();
-        if(mobileDB==devoteMobile){
+        if(mobileDB == devoteMobile){
             found =true;
-            qDebug()<<"Mobile number  "<<devoteMobile<<" is found\n";
+            qDebug()<<"Mobile number  " << devoteMobile << " is found\n";
 
             if( nameDB !=devoteName){
                 qDebug()<<Q_FUNC_INFO<<" Devote names dont match\n";
@@ -1364,9 +1390,12 @@ void DBInterface::recvDeletedRecptNo(QString recptNo)
     str =("UPDATE sevabooking SET STATUS = '%1' WHERE RECPT_NUM = '%2' ;");
     str= str.arg(cmd).arg(recptNo);
     query.prepare(str);
-    bool b = query.exec();
+    if(!query.exec()){
+        qWarning() << Q_FUNC_INFO << "Update query for DB failed....!"<<query.lastError().text()<<Qt::endl;
+        return;
+    }
 
-    if(!(query.numRowsAffected()))
+    if((query.numRowsAffected()) == -1)
     {
         qWarning() << Q_FUNC_INFO << "Update too DB failed....!"<<query.lastError().text()<<Qt::endl;
         emit updateToDbFailed();
@@ -1471,8 +1500,8 @@ void DBInterface::closeSeva(int SevaId)
 
 
 
-//    str = ("SELECT SEVATYPE from Sevaname");
-//    query.prepare(str);
+    //    str = ("SELECT SEVATYPE from Sevaname");
+    //    query.prepare(str);
 
 }
 
@@ -2147,7 +2176,7 @@ bool DBInterface::saveData(QObject *obj)
     // to Test --------
     QList<SevaName*> sevas = sevaData->sevabookinglist();
     Q_ASSERT(sevaData != nullptr);
-    for(int i=0;i<sevas.size();i++){
+    for(int i = 0;i < sevas.size();i++){
         SevaName *seva = sevas.at(i);
         qDebug() << Q_FUNC_INFO <<  "Add ############ ="<< seva->additionalCost() << Qt::endl;
         b =   this->insertSevaBooked(rcptNo,rec->mobilenumber(),rec->devoteeName(),
@@ -2854,10 +2883,10 @@ void DBInterface::booking_report_dataRange_function(QString SEVA,int TYPE,QStrin
             }
         }
 
-        prasada =prasada*quantity;
+        prasada = prasada * quantity;
         yy_date=QDate::fromString(query_other1.value(3).toString(),"yyyy-MM-dd");//cost
         qDebug()<<"DD-MM-YYYY is "<<yy_date<<Qt::endl;
-        sevadate = yy_date.toString("dd-MM-yyyy") ;
+        sevadate = yy_date.toString("dd-MM-yyyy");
         list_sevadate.append(sevadate);
         elm->setNote(query_other1.value(5).toString());//total
         list_note.append(note);
@@ -3583,7 +3612,6 @@ void DBInterface::old_password(QString l_userfirstname, QString l_userlastname)
 
 void DBInterface::add_new_signin_details(QString fname, QString lname, QString username, QString password,int rolenum,QString date)
 {
-
     QSqlQuery query_s_no;
     QMessageBox msgbox;
     QString status;
@@ -3600,8 +3628,7 @@ void DBInterface::add_new_signin_details(QString fname, QString lname, QString u
     while(qry.next())
     {
         QString val1=qry.value(3).toString();
-        qDebug()<<"The val1 is= "<<val1<<Qt::endl;
-        //        qDebug()<<Q_FUNC_INFO<<val2<<Qt::endl;
+        qDebug()<< Q_FUNC_INFO << "The val1 is= "<<val1<<Qt::endl;
 
         qDebug()<<Q_FUNC_INFO<< fname<<lname<<username<<  password<<rolenum<< date<<"%%%%%%%%%%%%"<<val1<<Qt::endl;
 
@@ -3610,10 +3637,6 @@ void DBInterface::add_new_signin_details(QString fname, QString lname, QString u
             qDebug()<<"User exist"<<Qt::endl;
             found =true;
             status = username + ": " + "Alraedy Exist";
-            //            msgbox.setText(tr("User ALLREADY EXIST"));
-            //            msgbox.exec();
-            //                    return;
-            //            break;
         }
     }
     if(found==false)
@@ -3849,28 +3872,29 @@ QString DBInterface::NumberToWord(const unsigned int number)
 
 bool DBInterface::checkCredentials(QString userID, QString pass)
 {
-    qDebug()<<Q_FUNC_INFO<<Qt::endl;
+    qDebug() << Q_FUNC_INFO << userID << pass << Qt::endl;
     QSqlQuery query_s_no;
     query_s_no.prepare("select SNO,FIRSTNAME,LASTNAME,USERNAME,PASSWORD,ROLENUMBER,DATE from signindetails");
-    query_s_no.exec();
-    //    qDebug() << Q_FUNC_INFO << "Size of query == " << query_s_no.size()<<Qt::endl;
+    if(!query_s_no.exec()){
+        qWarning()<<"Error in signin db query "<< query_s_no.lastError().text() <<Qt::endl;
+        return false;
+    }
     while(query_s_no.next())
     {
-        qDebug()<<"The while id and password "<< userID << userID<<Qt::endl;
-        QString first_name= query_s_no.value(1).toString();
-        QString last_name=query_s_no.value(2).toString();
-        QString user_name=query_s_no.value(3).toString();
-        QString pass_word=query_s_no.value(4).toString();
-        int rolenumber= query_s_no.value(5).toString().toInt();
-        qDebug() << Q_FUNC_INFO << "suman db id and password ==  " << user_name << pass_word;
-        if(userID==user_name && pass == pass_word){
+        qDebug() << Q_FUNC_INFO << "The while id =" << userID << " password =" << pass << Qt::endl;
+        QString first_name = query_s_no.value(1).toString();
+        QString last_name = query_s_no.value(2).toString();
+        QString user_name = query_s_no.value(3).toString();
+        QString pass_word = query_s_no.value(4).toString();
+        int rolenumber = query_s_no.value(5).toString().toInt();
+        qDebug() << Q_FUNC_INFO << " db id = " << user_name << " password = " << pass_word;
+        if(userID == user_name && pass == pass_word){
             emit success();
-            qDebug()<<"The role number is"<<rolenumber<<Qt::endl;
+            qDebug() << "The role number is " << rolenumber << Qt::endl;
             emit sendRolenumber(rolenumber,first_name +" "+ last_name);
             return true;
         }
     }
-    qDebug() << Q_FUNC_INFO << userID << pass << Qt::endl;
 
     emit wrongCred();
     return false;
@@ -4032,8 +4056,6 @@ void DBInterface::qrySevabookingByDateRange(QString startDate, QString endDate)
     }
 }
 
-
-
 bool DBInterface::querySevaType()
 {
     QSqlQuery query_other;
@@ -4048,6 +4070,7 @@ bool DBInterface::querySevaType()
         //          if (sevaCode > 2000) continue;
         qDebug() << Q_FUNC_INFO << "Inside while --- after if------ querying seva type " << Qt::endl;
         SevaType *sevaTypeObject = new SevaType;
+        sevaTypeObject->setObjectName("sevaTypeJsonProcessor");
         sevaTypeObject->setSevaTypeId(sevaCode);
         sevaTypeObject->setSevaTypeName(sevaTypeName);
         emit sendSevaType(sevaTypeObject);
@@ -4065,7 +4088,7 @@ bool DBInterface::querySevaNames()
     while(qry.next()){
         int sevaId = qry.value(0).toInt();
         QString Sevastatus = qry.value(7).toString();
-        if(Sevastatus == status){
+        if(Sevastatus == status || Sevastatus == NULL ){
             SevaName *sevaNames = new SevaName;
             sevaNames->setSevaId(sevaId);
             sevaNames->setNumber(qry.value(0).toInt());
@@ -4073,6 +4096,7 @@ bool DBInterface::querySevaNames()
             sevaNames->setSevaType(qry.value(2).toInt());
             sevaNames->setSevaCost(qry.value(3).toInt());
             sevaNames->setSevaStartDate(qry.value(4).toString());
+            sevaNames->setObjectName("querysevaname_DBInterface");
             emit sendSevaName(sevaNames);
         }
         else{
@@ -4112,7 +4136,7 @@ void DBInterface::readSevaTypesFromJson()
 QStringList DBInterface::qryNakshatras()
 {
     QStringList nakshatras;
-    nakshatras<<"" << "Ashwini" << "Bharani" << "Krittika" << "Rohini"
+    nakshatras << "" << "Ashwini" << "Bharani" << "Krittika" << "Rohini"
                << "Mrigashira" << "Ardra" << "Punarvasu" << "Pushya"
                << "Ashlesha" << "Magha" << "Purvaphalguni"<<"Uttaraphalguni"
                << "Hasta" << "Chitra" << "Swati"<<"Vishakha"<<"Anuradha"
@@ -4134,7 +4158,7 @@ QStringList DBInterface::qryGothras()
         QString Gotra=qury.value(2).toString();
         if (Gotra.compare("-") == 0 || Gotra.compare("--") == 0) continue;
         bool alreadyExist = list_gotra.contains(Gotra);
-        if( alreadyExist==true){
+        if( alreadyExist == true){
             continue;
         }else {
             list_gotra.append(Gotra);

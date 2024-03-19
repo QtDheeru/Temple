@@ -16,7 +16,7 @@ Rectangle {
     property alias _data :_tInput.currentText
     property alias _enteredText : _tInput.editText
     property alias currentIndex :_tInput.currentIndex
-    property alias   isEditable : _tInput.editable
+    property alias isEditable : _tInput.editable
     signal indexChanged(var i)
     signal monthChanged(var mon)
     signal yearChanged(var yr)
@@ -58,11 +58,6 @@ Rectangle {
             Layout.alignment:  Qt.AlignVCenter
             Layout.rightMargin: 10
             font.pixelSize: _root.comboBoxFontSize
-            //            indicator: Image {
-            //                id: indi
-            //                scale : 0.5
-            //                source: "qrc:/ui/assets/Images/up-and-down-arrows.png"
-            //            }
             onActivated:{
                 console.log(" Activated Index ="+index)
                 console.log("Selected Text ="+_tInput.textAt(index))
@@ -89,7 +84,7 @@ Rectangle {
         }
     }
     function findTextInComboBox(combotext){
-        console.log(" FInding the tetxt ="+combotext)
+        console.log(" FInding the tetxt =" + combotext + " ::index :" + _tInput.find(combotext))
         return _tInput.find(combotext);
     }
 }

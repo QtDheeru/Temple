@@ -99,6 +99,10 @@ Rectangle{
                 anchors.verticalCenter: parent.verticalCenter
                 onClicked: {
                     console.log("user Addclicked")
+                    if(_name._data == "" || userid._data == "" || _password._data == ""){
+                        _errorDialog.showMsg("Please fill all the fields.")
+                        return;
+                    }
                     sevaProxy.userManagement.addUser(_name._data,_lastname._data,userid._data,_password._data,myrole._data,"")
                 }
             }

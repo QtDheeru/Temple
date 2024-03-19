@@ -5,6 +5,11 @@ SevaType::SevaType(QObject *parent) : QObject(parent)
 
 }
 
+SevaType::~SevaType()
+{
+    qDebug() << Q_FUNC_INFO << this->objectName()<< " Seva Type is destroyed" << Qt::endl;
+}
+
 QString SevaType::sevaTypeName() const
 {
     return m_sevaTypeName;

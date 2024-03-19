@@ -56,6 +56,7 @@ void SevaTypeJsonProcessor::readSevaTypeFromJsonFormate()
                         qDebug()<<Q_FUNC_INFO<<"not a valid Seva Code"<<Qt::endl;
                     }
                     SevaType* st = new SevaType;
+                    st->setObjectName("sevaTypeJsonProcessor_read");
                     QJsonObject obj=jsonObject.value(s).toObject();
                     QList<QString> strList = obj.keys();
                     for(QString s1 : strList)
@@ -185,6 +186,7 @@ void SevaTypeJsonProcessor::readSevasFromJsonFormate()
                         qDebug()<<Q_FUNC_INFO<<"not a valid Seva Id for key"<<Qt::endl;
                     }
                     SevaName* sn = new SevaName;
+                    sn->setObjectName("sevaTypeJsonProcessor");
                     QJsonObject obj=jsonObject.value(s).toObject();
                     QList<QString> strList = obj.keys();
                     for(QString s1 : strList)

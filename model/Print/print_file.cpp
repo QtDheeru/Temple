@@ -42,24 +42,29 @@ void print_file::PrinterPreview()
 
 int print_file::printing_file(QList<Print_Detail *> *pd)
 {
-    qDebug()<<Q_FUNC_INFO << Qt::endl;
+    qDebug() << Q_FUNC_INFO << Qt::endl;
     this->prin2PixMap(pd);
     QPrinter printer;
-    qDebug()<<Q_FUNC_INFO << " Start the printing ="<<pd->size() << Qt::endl;
+    qDebug() << Q_FUNC_INFO << " Start the printing =" << pd->size() << Qt::endl;
     printer.setOrientation(QPrinter::Portrait);
     QPainter painter;
 
     QPrintDialog *dlg = new QPrintDialog(&printer);
-    dlg->exec();
-    QRectF f(150,0,500,550);
-    QRectF e(0,0,500,550);
-    if (!painter.begin(&printer)){
-        qWarning("failed to open file, is it writable?");
-        return 10;
+    if(dlg->exec() != QDialog::Accepted){
+        qDebug() << Q_FUNC_INFO << " dlg->exec() != QDialog::Accepted" << Qt::endl;
+        return 1;
+    }else{
+        qDebug() << Q_FUNC_INFO << " dlg->exec() == QDialog::Accepted" << Qt::endl;
+        QRectF f(150,0,500,550);
+        QRectF e(0,0,500,550);
+        if (!painter.begin(&printer)){
+            qWarning("failed to open file, is it writable?");
+            return 10;
+        }
+        painter.setPen(Qt::black);
+        painter.drawPixmap(f,m_map,e);
+        return 1;
     }
-    painter.setPen(Qt::black);
-    painter.drawPixmap(f,m_map,e);
-    return 1;
 }
 
 int print_file::printing_file(Print_VoucherDetail *pvd)
@@ -72,20 +77,24 @@ int print_file::printing_file(Print_VoucherDetail *pvd)
     QPainter painter;
 
     QPrintDialog *dlg = new QPrintDialog(&printer);
-    dlg->exec();
-    QRectF f(150,0,500,550);
-    QRectF e(0,0,500,550);
-    if (!painter.begin(&printer)){
-        qDebug()<<Q_FUNC_INFO <<"In side if"<< Qt::endl;
-        qWarning("failed to open file, is it writable?");
-        return 10;
+    if(dlg->exec() != QDialog::Accepted){
+        qDebug() << Q_FUNC_INFO << " dlg->exec() != QDialog::Accepted" << Qt::endl;
+        return 1;
+    }else{
+        qDebug() << Q_FUNC_INFO << " dlg->exec() == QDialog::Accepted" << Qt::endl;
+        QRectF f(150,0,500,550);
+        QRectF e(0,0,500,550);
+        if (!painter.begin(&printer)){
+            qDebug()<<Q_FUNC_INFO <<"In side if"<< Qt::endl;
+            qWarning("failed to open file, is it writable?");
+            return 10;
+        }
+        qDebug()<<Q_FUNC_INFO <<"In ////////// 1"<<  Qt::endl;
+        painter.setPen(Qt::black);
+        painter.drawPixmap(f,m_map,e);
+        qDebug()<<Q_FUNC_INFO <<"In 2*******"<<  Qt::endl;
+        return 1;
     }
-    qDebug()<<Q_FUNC_INFO <<"In ////////// 1"<<  Qt::endl;
-    painter.setPen(Qt::black);
-    painter.drawPixmap(f,m_map,e);
-    qDebug()<<Q_FUNC_INFO <<"In 2*******"<<  Qt::endl;
-
-    return 1;
 }
 
 int print_file::printing_file(Print_BookingDetail *pbd)
@@ -98,20 +107,25 @@ int print_file::printing_file(Print_BookingDetail *pbd)
     QPainter painter;
 
     QPrintDialog *dlg = new QPrintDialog(&printer);
-    dlg->exec();
-    QRectF f(150,0,500,550);
-    QRectF e(0,0,500,550);
-    if (!painter.begin(&printer)){
-        qDebug()<<Q_FUNC_INFO <<"In side if"<< Qt::endl;
-        qWarning("failed to open file, is it writable?");
-        return 10;
-    }
-    qDebug()<<Q_FUNC_INFO <<"In ////////// 1"<<  Qt::endl;
-    painter.setPen(Qt::black);
-    painter.drawPixmap(f,m_map,e);
-    qDebug()<<Q_FUNC_INFO <<"In 2*******"<<  Qt::endl;
+    if(dlg->exec() != QDialog::Accepted){
+        qDebug() << Q_FUNC_INFO << " dlg->exec() != QDialog::Accepted" << Qt::endl;
+        return 1;
+    }else{
+        qDebug() << Q_FUNC_INFO << " dlg->exec() == QDialog::Accepted" << Qt::endl;
+        QRectF f(150,0,500,550);
+        QRectF e(0,0,500,550);
+        if (!painter.begin(&printer)){
+            qDebug()<<Q_FUNC_INFO <<"In side if"<< Qt::endl;
+            qWarning("failed to open file, is it writable?");
+            return 10;
+        }
+        qDebug()<<Q_FUNC_INFO <<"In ////////// 1"<<  Qt::endl;
+        painter.setPen(Qt::black);
+        painter.drawPixmap(f,m_map,e);
+        qDebug()<<Q_FUNC_INFO <<"In 2*******"<<  Qt::endl;
 
-    return 1;
+        return 1;
+    }
 }
 
 int print_file::printing_file_1(QList<Print_Detail *> *pd)
@@ -738,6 +752,7 @@ int print_file::prin2PixMap(Print_BookingDetail *pbd)
             listOfSevaName.append(sn);
             listOfTotal.append(QString::number(sTotAmt));
             totalAmount += sTotAmt;
+            sn->setObjectName("printfile");
         }
         int next_slot_y = top_margin+215, next_slot_x = margin+5;
 

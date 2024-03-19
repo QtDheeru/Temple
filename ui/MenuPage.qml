@@ -49,8 +49,8 @@ Rectangle {
             color: "aqua"
             buttonText: "ACCOUNT DETAILS"
             border.width: _menupage.width/300
-            enabled: sevaProxy.userManagement.rolenum===1
-            opacity: sevaProxy.userManagement.rolenum===1 ? 1 :0.4
+            enabled: sevaProxy.userManagement.rolenum === 1
+            opacity: sevaProxy.userManagement.rolenum === 1 ? 1 :0.4
             onButtonClikcked: {
                 console.log("account details button clicked");
                 accountDetails();
@@ -62,8 +62,6 @@ Rectangle {
                 else{
                     console.log("this is admin")
                 }
-
-                //_errorDialog.open()
             }
         }
         TempleButton{
@@ -76,24 +74,21 @@ Rectangle {
             onButtonClikcked: {
                 console.log("booking report button clicked");
                 bookingreport();
-                _errorDialog.open()
+                _errorPopup.open()
             }
         }
         TempleButton{
             id:button4
-            width:_menupage.width/4
+            width: _menupage.width/4
             height: _menupage.height/5
             color: "aqua"
             buttonText: "ADMIN"
-            enabled: sevaProxy.userManagement.rolenum===1
-            opacity: sevaProxy.userManagement.rolenum===1 ? 1 :0.4
+            enabled: sevaProxy.userManagement.rolenum === 1
+            opacity: sevaProxy.userManagement.rolenum === 1 ? 1 : 0.4
             border.width: _menupage.width/300
             onButtonClikcked: {
                 loadAdminrights()
-                //                admin();
                 console.log("admin button clicked")
-                // _loginloader.active= true
-                // loadLogin(4)
                 if(sevaProxy.userManagement.rolenum !== 1){
                     _adminmsg.showMsg("Admin Access Only!")
                 }
@@ -121,17 +116,17 @@ Rectangle {
             buttonText: "VOUCHER"
             border.width: _menupage.width/300
             onButtonClikcked: {
-                console.log("voucher button clicked");
+                console.log("Voucher button clicked");
                 voucher();
-                _errorDialog.open()
+                _errorPopup.open()
             }
         }
         DisplayDialog{
-            id:_errorDialog
+            id:_errorPopup
             visible: false
             text2Display :"Not Implemented"
             onNoAction: {
-                _errorDialog.close()
+                _errorPopup.close()
             }
         }
     }

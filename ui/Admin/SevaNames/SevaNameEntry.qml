@@ -16,7 +16,7 @@ Item {
     }
     function getSevaNameDetail(idx){
         index=idx
-        console.log("inside suman getSevaNameDetail ",idx)
+        console.log("SevaNameEntry :: getSevaNameDetail ",idx)
         if(idx < 0)
             return;
         sevaNameObject = sevaProxy.getSevaByIndex(idx)
@@ -199,10 +199,10 @@ Item {
             }
             onYesAction: {
                 if(buttonNum == 1){
-                    sevaProxy.modifySeva(parseInt(sevaId._data),sevaName._data,sevaCost._data,getCurrentDate())
+                    sevaProxy.modifySeva(parseInt(sevaId._data)-1,sevaName._data,sevaCost._data,getCurrentDate())
                 }
                 else if(buttonNum == 2){
-                    sevaProxy.closeSeva(parseInt(sevaId._data))
+                    sevaProxy.closeSeva(parseInt(sevaId._data)-1)
                     console.log("Seva Close confirmed ")
                     //getSevaNameDetail(index)
                 }
