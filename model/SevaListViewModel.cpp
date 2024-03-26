@@ -67,6 +67,10 @@ int SevaListViewModel::getSevaListViewSize()
 SevaName *SevaListViewModel::getSevaNameByIndex(int sevaType, int index)
 {
     qDebug() << Q_FUNC_INFO << "SevaType:" << sevaType << " :: index:" << index << Qt::endl;
+    QList<SevaName *> sevaNameList = m_sevaTypeNameModel->getSevaList(sevaType);
+    if(sevaNameList.isEmpty()){
+        return nullptr;
+    }
     return m_sevaTypeNameModel->getSevaList(sevaType).at(index);
 }
 

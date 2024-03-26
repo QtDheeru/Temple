@@ -36,9 +36,10 @@ Rectangle
         _root.sevaTypeSelected(sevaTypeObject);
     }
     onSindexChanged: {
-        console.log("hello world.....",sindex);
+        console.log("onSindexChanged :: sindex = ",sindex);
         _root.getSevaTypeDetails(sindex);
-        _listView.model= sevaProxy.getSevaModel(sevaTypeObject.sevaTypeId)
+        _listView.model = sevaProxy.getSevaModel(sevaTypeObject.sevaTypeId)
+        sendSevaCurrentIndex(sevaTypeObject.sevaTypeId,currentIndex)
     }
 
     ListView
@@ -63,6 +64,7 @@ Rectangle
         header :_headerComp
         headerPositioning: ListView.OverlayHeader
         highlightFollowsCurrentItem: true
+
         onCurrentIndexChanged:
         {
             console.log("Seva Names view current index changed" + currentIndex)
@@ -70,6 +72,11 @@ Rectangle
             //sendSevaCurrentIndex(currentIndex)
             //getSevaNameDetailsBySevaType(sevaTypeObject.sevaTypeId,currentIndex)
         }
+        onModelChanged: {
+            console.log("Seva Name view model is changed")
+            _listView.currentIndex = 0
+        }
+
         Component.onCompleted:
         {
             _root.getSevaTypeDetails(0);
@@ -84,14 +91,6 @@ Rectangle
             height: 25
             z: 2
             color: "#00A2ED"
-            //                    Text {
-            //                        text :qsTr("Seva Name")
-            //                        font.bold : true
-            //                        font.italic: true
-            //                        font.pixelSize: 20
-            //                        anchors.centerIn: parent
-            //                    }
-
             RowLayout
             {
                 anchors.fill: parent
@@ -112,7 +111,6 @@ Rectangle
                     font.pixelSize: 17
                     font.bold: true
                 }
-
                 Text
                 {
                     Layout.alignment: Qt.AlignRight

@@ -30,6 +30,16 @@ Item {
         console.log("getSevaNameDetailsBySevaType")
 
         sevaNameObject = sevaProxy.getSevaByIndex(sevaType,idx)
+        if(!sevaNameObject)
+        {
+            console.log("getSevaNameDetailsBySevaType :: no sevas for sevatype = " + sevaType )
+            sevaName._data = ""
+            sevaId._data = ""
+            sevaCost._data = ""
+            sevaDateStart._data = ""
+            return;
+        }
+
         sevaName._data = sevaNameObject.sevaName
         sevaId._data = sevaNameObject.sevaId
         sevaCost._data = sevaNameObject.sevaCost
@@ -199,17 +209,18 @@ Item {
             }
             onYesAction: {
                 if(buttonNum == 1){
-                    sevaProxy.modifySeva(parseInt(sevaId._data)-1,sevaName._data,sevaCost._data,getCurrentDate())
+                    console.log("seva Name ID = " + sevaId._data)
+                    sevaProxy.modifySeva(parseInt(sevaId._data),sevaName._data,sevaCost._data,getCurrentDate())
                 }
                 else if(buttonNum == 2){
-                    sevaProxy.closeSeva(parseInt(sevaId._data)-1)
+                    console.log("seva Name ID = " + sevaId._data)
+                    sevaProxy.closeSeva(parseInt(sevaId._data))
                     console.log("Seva Close confirmed ")
                     //getSevaNameDetail(index)
                 }
                 else{
                     console.log("Something wrong in Data Entry!!!")
                 }
-
             }
         }
         Component

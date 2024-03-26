@@ -50,7 +50,7 @@ QList<SevaName *> SevaTypeNamesDataModel::getSevaList(int sevaType)
     qDebug() << Q_FUNC_INFO << " Is empty = " << m_sevaNameDetails.empty() << Qt::endl;
 
     if(m_sevaNameDetails.empty()){
-        qCritical() << Q_FUNC_INFO << "SevaNameDetails is empty !!!" << Qt::endl;
+        qWarning() << Q_FUNC_INFO << "SevaNameDetails is empty !!!" << Qt::endl;
         exit(0);
     }
     qDebug() << Q_FUNC_INFO << "  m_sevaNameDetaiils is not empty." << sevaType << Qt::endl;
@@ -63,6 +63,7 @@ QList<SevaName *> SevaTypeNamesDataModel::getSevaList(int sevaType)
         qCritical() << Q_FUNC_INFO << " save name details  map is empty!!!" << Qt::endl;
         m_sevaNameDetails.remove(sevaType);
         m_sevaTypeDetails.remove(sevaType);
+        return map.values();
     }
     qDebug() << "Map values=" << map.values() << Qt::endl;
     return map.values();
