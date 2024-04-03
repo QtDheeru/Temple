@@ -239,6 +239,17 @@ void SevaBookingElement::setReceiptNum(const QString &newReceiptNum)
     m_receiptNum = newReceiptNum;
 }
 
+QString SevaBookingElement::note() const
+{
+    return m_note;
+}
+
+void SevaBookingElement::setNote(const QString &newNote)
+{
+    m_note = newNote;
+    noteChanged();
+}
+
 
 
 

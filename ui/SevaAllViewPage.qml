@@ -140,6 +140,7 @@ Rectangle{
                             _sevaBookingElement.totalCost= ve.totalCost
                             _sevaBookingElement.cash= ve.cash
                             _sevaBookingElement.bank= ve.bank
+                            _sevaBookingElement.note = ve.note
                         }
                         else if (mouse.button == Qt.RightButton)
                         {

@@ -16,7 +16,7 @@ ApplicationWindow {
     property var storeObject
     title: constant.addressText1
     color: "black"
-    flags: Qt.WindowSystemMenuHint
+//    flags: Qt.WindowSystemMenuHint
     Component.onCompleted: {
         console.log("screen height= " + Screen.height)
         console.log("screen width= " + Screen.width)

@@ -21,7 +21,9 @@ class SevaBookingElement : public QObject
     Q_PROPERTY(QString bank READ bank WRITE setBank CONSTANT)
     Q_PROPERTY(QString status READ status WRITE setStatus NOTIFY statusChanged)
     Q_PROPERTY(QString bankName READ bankName WRITE setBankName NOTIFY bankNameChanged)
+    Q_PROPERTY(QString note READ note WRITE setNote NOTIFY noteChanged)
     Q_PROPERTY(bool sevaChecked READ sevaChecked WRITE setSevaChecked NOTIFY sevaCheckedChanged FINAL)
+
 
 public:
     explicit SevaBookingElement(QObject *parent = nullptr);
@@ -92,12 +94,16 @@ public:
     QString receiptNum() const;
     void setReceiptNum(const QString &newReceiptNum);
 
+    QString note() const;
+    void setNote(const QString &newNote);
+
 signals:
     void sevatimeChanged();
     void statusChanged();
     void bankNameChanged();
 
     void sevaCheckedChanged();
+    void noteChanged();
 
 private :
     QString m_sno;
@@ -121,6 +127,7 @@ private :
     QString m_bookedBy;
     bool m_sevaChecked;
     QString m_receiptNum;
+    QString m_note;
 
 };
 
