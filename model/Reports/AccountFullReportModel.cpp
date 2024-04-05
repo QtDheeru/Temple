@@ -20,7 +20,16 @@ void AccountFullReportModel::insertrows(AccountFullreportElement * elememt)
     this->m_accountFullreportElementList.append(elememt);
     endInsertRows();
     m_iGrandTotal += elememt->total();
+    qDebug() << Q_FUNC_INFO << "mode = " << elememt->paymentmode() << Qt::endl;
+    if(elememt->paymentmode() == "Cash" || elememt->paymentmode() == "0"){
+        qDebug() << Q_FUNC_INFO << "cash" << Qt::endl;
+        m_cashTotal += elememt->total();
+    }else{
+        m_neftTotal += elememt->total();
+    }
     this->setIGrandTotal(m_iGrandTotal);
+    this->setCashTotal(m_cashTotal);
+    this->setNeftTotal(m_neftTotal);
 }
 
 void AccountFullReportModel::generateAccountReport(ReportFilterElements * filterelement)
@@ -31,13 +40,15 @@ void AccountFullReportModel::generateAccountReport(ReportFilterElements * filter
 void AccountFullReportModel::generateFullAccountReportEachdate(ReportFilterElements * filterelement)
 {
     m_iGrandTotal = 0;
+    m_neftTotal = 0;
+    m_cashTotal = 0;
     qDebug()<<Q_FUNC_INFO<<Qt::endl;
     beginResetModel();
     m_accountFullreportElementList.clear();
     endResetModel();
     qDebug()<<Q_FUNC_INFO<<m_accountFullreportElementList.size()<<Qt::endl;
     qDebug()<<Q_FUNC_INFO<<"elm date"<<filterelement->sSingleDate()<<Qt::endl;
-    qDebug()<<Q_FUNC_INFO<<"elm ddetails"<<filterelement->sSevaName()<<filterelement->iSevaType()<<Qt::endl;
+    qDebug()<<Q_FUNC_INFO<<"elm details"<<filterelement->sSevaName()<<filterelement->iSevaType()<<Qt::endl;
 
     if(filterelement->iSelectedType()==0)
     {
@@ -61,6 +72,8 @@ void AccountFullReportModel::generateFullAccountReportEachdate(ReportFilterEleme
 void AccountFullReportModel::generateFullAccountReportForDateRange(ReportFilterElements * filterelement)
 {
     m_iGrandTotal = 0;
+    m_neftTotal = 0;
+    m_cashTotal = 0;
     qDebug()<<Q_FUNC_INFO<<Qt::endl;
     beginResetModel();
     m_accountFullreportElementList.clear();
@@ -91,6 +104,8 @@ void AccountFullReportModel::generateFullAccountReportForDateRange(ReportFilterE
 void AccountFullReportModel::generateFullAccountReportForMonth(ReportFilterElements * filterelement)
 {
     m_iGrandTotal = 0;
+    m_neftTotal = 0;
+    m_cashTotal = 0;
     qDebug()<<Q_FUNC_INFO<<Qt::endl;
     beginResetModel();
     m_accountFullreportElementList.clear();
@@ -138,6 +153,26 @@ void AccountFullReportModel::setGrandTotalToZero()
 {
     qDebug()<<Q_FUNC_INFO<<Qt::endl;
     this->setIGrandTotal(0);
+}
+
+int AccountFullReportModel::cashTotal() const
+{
+    return m_cashTotal;
+}
+
+void AccountFullReportModel::setCashTotal(int newCashTotal)
+{
+    m_cashTotal = newCashTotal;
+}
+
+int AccountFullReportModel::neftTotal() const
+{
+    return m_neftTotal;
+}
+
+void AccountFullReportModel::setNeftTotal(int newNeftTotal)
+{
+    m_neftTotal = newNeftTotal;
 }
 
 AccountReportCSVProcessor *AccountFullReportModel::getAccountCSVProcessor() const

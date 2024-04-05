@@ -78,6 +78,7 @@ Rectangle{
             width: _rr1.width/12
             movable: false
             resizable: false
+            horizontalAlignment : Text.AlignRight
         }
         TableViewColumn {
             id:_UPI;title: "DevoteeName"; role: "devoteeName";
@@ -102,12 +103,14 @@ Rectangle{
             width: _rr1.width/12
             movable: false
             resizable: false
+            horizontalAlignment : Text.AlignRight
         }
         TableViewColumn {
             id: _totalAmount;title: "Total"; role: "total";
             width: _rr1.width/12
             movable: false
             resizable: false
+            horizontalAlignment : Text.AlignRight
         }
         TableViewColumn {
             id:_status;title: "Status"; role: "status";
@@ -121,13 +124,14 @@ Rectangle{
         width: _rr1.width
         height:  styles.screenHeight/15
         anchors.bottom: _rr1.bottom
+
         Rectangle{
-            id:_grandTotalText
-            width: parent.width/2
-            height: parent.height
+            id:_cashTotalText
+            width: parent.width/3
+            height: parent.height/2
             color: "#72FFFF"
             Text {
-                text:"Grand Total :" //+ sevaProxy.sevaReport.accReportModel.grandTotal
+                text:"Cash Total : " + sevaProxy.sevaReport.accountFullReportModel.cashTotal + ".00 ₹"
                 anchors.centerIn: parent
                 font.pixelSize: styles.headerTextFont1
                 font.italic: true
@@ -135,46 +139,74 @@ Rectangle{
             }
         }
         Rectangle{
-            width: parent.width/2
-            height: parent.height
-            anchors.left: _grandTotalText.right
+            id:_neftTotalText
+            width: parent.width/3
+            height: parent.height/2
             color: "#72FFFF"
-            //  color: "Black"
+            anchors.top: _cashTotalText.bottom
             Text {
-                id:total
-                text:sevaProxy.sevaReport.accountFullReportModel.iGrandTotal + ".00 ₹"
+                text:"Neft Total : " + sevaProxy.sevaReport.accountFullReportModel.neftTotal + ".00 ₹"
                 anchors.centerIn: parent
-                font.pixelSize: 30
+                font.pixelSize: styles.headerTextFont1
                 font.italic: true
                 font.bold : true
-                Component.onCompleted: {
-                    console.log("In Component.onCompleted: of seva report page single date total text "+total.text)
-                }
             }
         }
-    }
-    Button{
-        id:_exportCsv
-        height:60
-        width: 200
-        anchors.top: lv1.bottom
-        anchors.horizontalCenter: lv1.horizontalCenter
-        style: ButtonStyle{
-            background: Rectangle{
-                id: bg
-                border.width: 1
-                radius: 3
-                color: "cornflowerblue"
-                Label{
-                    text: "Export Data"
-                    anchors.centerIn: parent
+        Button{
+            id:_exportCsv
+            height:60
+            width: parent.width/3
+            anchors.top: lv1.bottom
+            anchors.left: _cashTotalText.right
+            style: ButtonStyle{
+                background: Rectangle{
+                    id: bg
+                    border.width: 1
+                    radius: 3
+                    color: "cornflowerblue"
+                    Label{
+                        text: "Export Data"
+                        anchors.centerIn: parent
+                    }
                 }
             }
+            onClicked: {
+                sevaProxy.sevaReport.accountFullReportModel.generateFullAccountDataCSV()
+            }
         }
-        onClicked: {
-            sevaProxy.sevaReport.accountFullReportModel.generateFullAccountDataCSV()
+        Rectangle{
+            id:_grandTotalText
+            width: parent.width/3
+            height: parent.height
+            color: "#72FFFF"
+            anchors.left: _exportCsv.right
+            Text {
+                text:"Grand Total : " + sevaProxy.sevaReport.accountFullReportModel.iGrandTotal + ".00 ₹"
+                anchors.centerIn: parent
+                font.pixelSize: styles.headerTextFont1
+                font.italic: true
+                font.bold : true
+            }
         }
+//        Rectangle{
+//            width: parent.width/4
+//            height: parent.height
+//            anchors.left: _grandTotalText.right
+//            color: "#72FFFF"
+//            Text {
+//                id:total
+//                text:sevaProxy.sevaReport.accountFullReportModel.iGrandTotal + ".00 ₹"
+//                anchors.centerIn: parent
+//                font.pixelSize: 30
+//                font.italic: true
+//                font.bold : true
+//                Component.onCompleted: {
+//                    console.log("In Component.onCompleted: of seva report page single date total text "+total.text)
+//                }
+//            }
+//        }
     }
+
     Connections{
         id:connection
         target: sevaProxy.sevaReport.accountFullReportModel.accountCSVProcessor
@@ -208,7 +240,6 @@ Rectangle{
     }
 
     Component.onCompleted:  {
-
         console.log("Component.completed: AllAccountDetails ")
         _rr1.focus = true
     }

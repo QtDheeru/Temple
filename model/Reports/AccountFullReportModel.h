@@ -13,6 +13,8 @@ class AccountFullReportModel : public QAbstractTableModel
 {
     Q_OBJECT
     Q_PROPERTY(int iGrandTotal READ iGrandTotal WRITE setIGrandTotal NOTIFY iGrandTotalChanged)
+    Q_PROPERTY(int neftTotal READ neftTotal WRITE setNeftTotal NOTIFY neftTotalChanged)
+    Q_PROPERTY(int cashTotal READ cashTotal WRITE setCashTotal NOTIFY cashTotalChanged)
     Q_PROPERTY(AccountReportCSVProcessor *accountCSVProcessor READ getAccountCSVProcessor WRITE setAccountCSVProcessor NOTIFY accountCSVProcessorChanged)
 
 public:
@@ -46,9 +48,17 @@ public:
     AccountReportCSVProcessor *getAccountCSVProcessor() const;
     void setAccountCSVProcessor(AccountReportCSVProcessor *newAccountCSVProcessor);
 
+    int neftTotal() const;
+    void setNeftTotal(int newNeftTotal);
+
+    int cashTotal() const;
+    void setCashTotal(int newCashTotal);
+
 signals:
 
     void iGrandTotalChanged();
+    void cashTotalChanged();
+    void neftTotalChanged();
     void sendAccountFullreportElementList(QList<AccountFullreportElement*>);
     void accountCSVProcessorChanged();
     void successMessage(QString exportmsg);
@@ -66,6 +76,8 @@ public slots:
 private:
     QList<AccountFullreportElement*> m_accountFullreportElementList;
     int m_iGrandTotal;
+    int m_neftTotal;
+    int  m_cashTotal;
     AccountReportCSVProcessor *accountCSVProcessor = nullptr;
     // QAbstractItemModel interface
 };

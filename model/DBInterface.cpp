@@ -1529,6 +1529,7 @@ void DBInterface::fullAccounDetailsDateWise(QString SEVA,int TYPE,QString format
     }else{
         qWarning() << "test not executed";
     }
+    int cashTotal = 0, neftTotal = 0;
     while(query_other1.next()){
         qDebug()<<"test inside date while"<<Qt::endl;
         AccountFullreportElement* felement= new AccountFullreportElement;

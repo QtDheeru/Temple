@@ -332,7 +332,7 @@ int print_file::prin2PixMap(QList<Print_Detail *> *pd)
         painter.setFont(QFont("Times New Roman",QFont::Bold));
         QLineF line1(margin,top_margin + 90,printW + 40,100);
         painter.drawLine(line1);
-        painter.setFont(QFont("Arial",9));
+        painter.setFont(QFont("Arial",8));
         painter.drawText(margin + 10,top_margin + 105,"Name:");
         painter.drawText(margin + 60,top_margin + 105,pd->front()->NAME);
         QLineF line10(margin,top_margin + 115,printW + 40,top_margin + 115);
@@ -369,14 +369,14 @@ int print_file::prin2PixMap(QList<Print_Detail *> *pd)
 
         QLineF line2(margin,top_margin+190,printW+40,200);//horizontal
         painter.drawLine(line2);
-        painter.drawText(margin+3,top_margin+205,"Sl.no");
+        painter.drawText(margin+3,top_margin+205,"Sl");
         QLineF lineslno(margin+30,top_margin+190,margin+30,410);//vertical
         painter.drawLine(lineslno);
-        painter.drawText(margin+40,top_margin+205,"Seva Name");
-        painter.drawText(margin+280,top_margin+205,"Cost");
+        painter.drawText(margin+35,top_margin+205,"Seva Name");
+        painter.drawText(margin+260,top_margin+205,"Cost");
 
-        painter.drawText(margin+325,top_margin+205,"Count");
-        painter.drawText(margin+365,top_margin+205,"Amount");
+        painter.drawText(margin+314,top_margin+205,"Count");
+        painter.drawText(margin+355,top_margin+205,"Amount");
         QLineF line9(margin,top_margin+215,printW+40,225);//horizontal
         painter.drawLine(line9);
 
@@ -387,34 +387,34 @@ int print_file::prin2PixMap(QList<Print_Detail *> *pd)
             painter.drawText(next_slot_x,next_slot_y+15, QString::number(i+1));
             painter.setFont(QFont("Arial",8));
             painter.drawText(next_slot_x+35,next_slot_y+5,260,320,Qt::AlignLeft|Qt::AlignTop|Qt::TextWordWrap,pd->at(i)->SEVA_DESCR);
-            painter.drawText(next_slot_x+267,next_slot_y+15,pd->at(i)->RATE+".00");
+            painter.drawText(next_slot_x+255,next_slot_y+15,pd->at(i)->RATE+".00");
             qDebug() << Q_FUNC_INFO << " **** rate =" << pd->at(i)->RATE << Qt::endl;
-            painter.drawText(next_slot_x+330,next_slot_y+15,pd->at(i)->QTY);
-            painter.drawText(next_slot_x+310+45,next_slot_y+15,pd->at(i)->AMT+".00");
+            painter.drawText(next_slot_x+320,next_slot_y+15,pd->at(i)->QTY);
+            painter.drawText(next_slot_x+300+45,next_slot_y+15,pd->at(i)->AMT+".00");
             if(pd->at(i)->ADDITIONAL.toInt() > 0){
                 painter.drawText(next_slot_x+40,next_slot_y+30,"Additional cost :");
-                painter.drawText(next_slot_x+267,next_slot_y+30,pd->at(i)->ADDITIONAL + ".00");
-                painter.drawText(next_slot_x+310+45,next_slot_y+30,pd->at(i)->ADDITIONAL + ".00");
+                painter.drawText(next_slot_x+257,next_slot_y+30,pd->at(i)->ADDITIONAL + ".00");
+                painter.drawText(next_slot_x+300+45,next_slot_y+30,pd->at(i)->ADDITIONAL + ".00");
             }
             next_slot_y = next_slot_y + 40;
             qDebug() << Q_FUNC_INFO << " **** Amount =" << pd->at(i)->AMT <<Qt::endl;
         }
-        QLineF line6(margin+270,top_margin+190,margin+270,410);// the cost verticle line
+        QLineF line6(margin+255,top_margin+190,margin+255,410);// the cost verticle line
         painter.drawLine(line6);
 
-        QLineF line3(margin+322,top_margin+190,margin+322,410);
+        QLineF line3(margin+312,top_margin+190,margin+312,410);
         painter.drawLine(line3);
 
-        QLineF line5(margin+358,top_margin+190,margin+358,410);
+        QLineF line5(margin+348,top_margin+190,margin+348,410);
         painter.drawLine(line5);
 
-        painter.setFont(QFont("Arial",8));
+        painter.setFont(QFont("Arial",7));
         painter.drawText(margin+310,top_margin+415," Total: ₹ ");
         painter.drawText(margin+360,top_margin+415,pd->back()->TOTAL_AMT+".00");
-        painter.drawText(margin,top_margin+417,"Total in words:₹");
-        painter.drawText(margin+85,top_margin+416,pd->back()->TOTAL_IN_WORDS+" only");
-        painter.drawText(margin+2,top_margin+435,"Note:");
-        painter.drawText(margin+37,top_margin+435,pd->back()->NOTE);
+        painter.drawText(margin,top_margin+425,"Total in words:₹");
+        painter.drawText(margin+85,top_margin+425,pd->back()->TOTAL_IN_WORDS+" only");
+        painter.drawText(margin+2,top_margin+440,"Note:");
+        painter.drawText(margin+37,top_margin+440,pd->back()->NOTE);
 
         QPixmap mypix(":/Images/Rules.png");
         painter.drawPixmap(margin,top_margin+442,370,120,mypix);
