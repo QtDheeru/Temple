@@ -75,7 +75,7 @@ void AccountReportCSVProcessor::recieveAccountFullreportElementList(QList<Accoun
             {
                 qDebug()<<"Inside if"<<Qt::endl;
                 QString header;
-                header =  QString("Rcpt_No") + "," + "Recpt_date" + "," + "Seva_date" + "," + "Seva_name"+ "," +"Seva_count" + "," + "Seva_cost"+ "," + "Devotee_name" + "," + "Mobile"+ "," + "Payment_mode" + "," +"Total_amnt" + "," + "Booking_status" +'\n';
+                header =  QString("Rcpt_No") + "," + "Recpt_date" + "," + "Seva_date" + "," + "Seva_name"+ "," +"Seva_count" + "," + "Seva_cost"+ "," + "Devotee_name" + "," + "Mobile"+ "," + "Payment_mode" + "," + "Additional_cost" + "," +"Total_amnt" + "," + "Booking_status" +'\n';
                 out<<header.toUpper();
             }
             for(auto it =accntfulList.begin(); it != accntfulList.end(); it++){
@@ -88,6 +88,7 @@ void AccountReportCSVProcessor::recieveAccountFullreportElementList(QList<Accoun
                         (*it)->devoteeName() +","+
                         (*it)->mobile() +","+
                         (*it)->paymentmode()+ ","+
+                        (*it)->additionalCost() + "," +
                         QString::number((*it)->total())+ ","+
                         (*it)->bookingStatus()+ '\n';
                 out<<storeData;

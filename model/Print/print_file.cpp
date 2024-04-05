@@ -100,6 +100,18 @@ int print_file::printing_file(Print_VoucherDetail *pvd)
 int print_file::printing_file(Print_BookingDetail *pbd)
 {
     qDebug()<<Q_FUNC_INFO << Qt::endl;
+
+
+    QList<Print_Detail*> printList;
+
+
+
+
+
+
+
+
+
     this->prin2PixMap(pbd);
     QPrinter printer;
     qDebug()<<Q_FUNC_INFO << " Start the printing ="<< Qt::endl;
@@ -130,7 +142,6 @@ int print_file::printing_file(Print_BookingDetail *pbd)
 
 int print_file::printing_file_1(QList<Print_Detail *> *pd)
 {
-    //    this->prin2PixMap(pd);
     QPrinter printer;
     qDebug() << Q_FUNC_INFO << " Start the printing =" << pd->size() << Qt::endl;
     printer.setOrientation(QPrinter::Portrait);
@@ -283,7 +294,7 @@ int print_file::prin2PixMap(QList<Print_Detail *> *pd)
     //QImage map(wid,ht,QImage::Format_RGB555);
     m_map.fill(Qt::white);
     QPrinter printer;
-    qDebug()<<Q_FUNC_INFO << " Start the printing ="<<pd->size() << Qt::endl;
+    qDebug() << Q_FUNC_INFO << " Start the printing =" << pd->size() << Qt::endl;
     printer.setOrientation(QPrinter::Portrait);
     QPainter painter;
     {
@@ -376,20 +387,16 @@ int print_file::prin2PixMap(QList<Print_Detail *> *pd)
             painter.drawText(next_slot_x,next_slot_y+15, QString::number(i+1));
             painter.setFont(QFont("Arial",8));
             painter.drawText(next_slot_x+35,next_slot_y+5,260,320,Qt::AlignLeft|Qt::AlignTop|Qt::TextWordWrap,pd->at(i)->SEVA_DESCR);
-            //            QRectF amt_rect(next_slot_x+275,next_slot_y-13,rect_width-left_margin+309,20);
-            //            QRectF boundingRect(amt_rect);
-            //            painter.drawText(amt_rect,Qt::AlignLeft|Qt::AlignTop|Qt::TextWordWrap,pd->at(i)->SEVA_DESCR , &boundingRect);
-            //            painter.setFont(QFont("Arial",9));
-            painter.drawText(next_slot_x+265,next_slot_y+15,pd->at(i)->RATE+".00");
+            painter.drawText(next_slot_x+267,next_slot_y+15,pd->at(i)->RATE+".00");
             qDebug() << Q_FUNC_INFO << " **** rate =" << pd->at(i)->RATE << Qt::endl;
             painter.drawText(next_slot_x+330,next_slot_y+15,pd->at(i)->QTY);
-
-            //QRectF amt_rect(next_slot_x+275,next_slot_y-13,rect_width-margin+309,20);
-            //painter.drawText(amt_rect, Qt::AlignRight, pd->at(i)->AMT+".00");
-            //painter.drawText(amt_rect, Qt::AlignRight, pd->at(i)->AMT+".00");
             painter.drawText(next_slot_x+310+45,next_slot_y+15,pd->at(i)->AMT+".00");
+            if(pd->at(i)->ADDITIONAL.toInt() > 0){
+                painter.drawText(next_slot_x+40,next_slot_y+30,"Additional cost :");
+                painter.drawText(next_slot_x+267,next_slot_y+30,pd->at(i)->ADDITIONAL + ".00");
+                painter.drawText(next_slot_x+310+45,next_slot_y+30,pd->at(i)->ADDITIONAL + ".00");
+            }
             next_slot_y = next_slot_y + 40;
-
             qDebug() << Q_FUNC_INFO << " **** Amount =" << pd->at(i)->AMT <<Qt::endl;
         }
         QLineF line6(margin+270,top_margin+190,margin+270,410);// the cost verticle line
@@ -402,23 +409,18 @@ int print_file::prin2PixMap(QList<Print_Detail *> *pd)
         painter.drawLine(line5);
 
         painter.setFont(QFont("Arial",8));
-
         painter.drawText(margin+310,top_margin+415," Total: ₹ ");
         painter.drawText(margin+360,top_margin+415,pd->back()->TOTAL_AMT+".00");
-
-        //painter.setFont(QFont("Arial",10));
-
         painter.drawText(margin,top_margin+417,"Total in words:₹");
         painter.drawText(margin+85,top_margin+416,pd->back()->TOTAL_IN_WORDS+" only");
-
         painter.drawText(margin+2,top_margin+435,"Note:");
         painter.drawText(margin+37,top_margin+435,pd->back()->NOTE);
+
         QPixmap mypix(":/Images/Rules.png");
         painter.drawPixmap(margin,top_margin+442,370,120,mypix);
         painter.setFont(QFont("Arial",12));
         painter.setFont(QFont("Arial",PRINT_HEADER::FOOTER_4_FONT));
         painter.drawText(margin+330,top_margin+446,PRINT_HEADER::TRUST_SEAL);
-
         painter.save();
         QPen pen;
         pen.setWidthF(0.5);
@@ -745,14 +747,12 @@ int print_file::prin2PixMap(Print_BookingDetail *pbd)
             QString  sName= query_other1.value(3).toString().trimmed();
             QString  sQty= query_other1.value(4).toString().trimmed();
             QString  sCost= query_other1.value(14).toString().trimmed();
-            QString sAddCost = query_other1.value(15).toString().trimmed();
             double  sTotAmt= query_other1.value(16).toDouble();
 
             SevaName* sn = new SevaName;
             sn->setSevaName(sName);
             sn->setSevaCost(sCost.toDouble());
             sn->setCount(sQty.toInt());
-            sn->setAdditionalCost(sAddCost.toInt());
             listOfSevaName.append(sn);
             listOfTotal.append(QString::number(sTotAmt));
             totalAmount += sTotAmt;

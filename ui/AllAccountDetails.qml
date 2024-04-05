@@ -5,6 +5,7 @@ import QtQuick.Controls.Styles 1.4
 import QtQuick.Controls 1.4
 import "./components"
 import ReportElements 1.0
+
 Rectangle{
     id:_rr1
     signal loadDateWisePage();
@@ -12,8 +13,8 @@ Rectangle{
     property var styles : MyStyles{}
     TableView{
         id: lv1
-        model:sevaProxy.sevaReport.accountFullReportModel
-        width:parent.width
+        model: sevaProxy.sevaReport.accountFullReportModel
+        width: parent.width
         height: parent.height - styles.screenHeight/15
         style: TableViewStyle {
             headerDelegate: Rectangle {
@@ -21,17 +22,14 @@ Rectangle{
                 color: "#72FFFF"
                 Text {
                     id: headerItem
-                    //anchors.centerIn: parent
                     text: styleData.value
                     font.bold: true
                     font.pixelSize: 15
                     font.family: "Helvetica"
                 }
-
             }
             rowDelegate: Rectangle {
                 height:20
-                // color: styleData.selected ? "skyblue" : "white"
             }
             itemDelegate:Rectangle{
                 id:_itmdel
@@ -39,7 +37,6 @@ Rectangle{
                 color: styleData.selected ? "skyblue" : styleData.row%2 ? "light gray" : "white"
                 Text {
                     anchors.fill: parent
-                    //   anchors.centerIn: parent
                     text: styleData.value
                     font.pixelSize: 14
                 }
@@ -48,17 +45,14 @@ Rectangle{
         TableViewColumn {
             id:_slNo;title: "Recpt No"; role: "recieptnumber";
             width: _rr1.width/15
-
             movable: false
             resizable: false
         }
         TableViewColumn {
             id:_sevaName;title: "ReceiptDate"; role: "recptDate";
             width: _rr1.width/12
-
             movable: false
             resizable: false
-
         }
         TableViewColumn {
             id:_cost;title: "SevaDate"; role: "sevadate";
@@ -78,7 +72,6 @@ Rectangle{
             width: _rr1.width/15
             movable: false
             resizable: false
-
         }
         TableViewColumn {
             id:_cheque;title: "SevaCost"; role: "sevacost";
@@ -105,7 +98,13 @@ Rectangle{
             resizable: false
         }
         TableViewColumn {
-            id:_totalAmount;title: "Total"; role: "total";
+            id:_additionalCost;title: "AdditionalCost"; role: "additionalCost";
+            width: _rr1.width/12
+            movable: false
+            resizable: false
+        }
+        TableViewColumn {
+            id: _totalAmount;title: "Total"; role: "total";
             width: _rr1.width/12
             movable: false
             resizable: false
@@ -117,8 +116,6 @@ Rectangle{
             resizable: false
         }
     }
-
-
     Rectangle{
         id:_footer
         width: _rr1.width
@@ -212,11 +209,11 @@ Rectangle{
 
     Component.onCompleted:  {
 
-        console.log("Component.completed: of AllAccount data")
+        console.log("Component.completed: AllAccountDetails ")
         _rr1.focus = true
     }
     Component.onDestruction: {
-        console.log(" Component.onDestruction of AllAccountData")
+        console.log(" Component.onDestruction of AllAccountDetails ")
         sevaProxy.sevaReport.accountFullReportModel.resetAccModel();
     }
 }

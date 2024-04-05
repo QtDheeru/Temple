@@ -214,9 +214,7 @@ Rectangle{
             }
         }
         TableViewColumn {title: "Serial No"; role: "serialNo"; width: parent.width/12}
-
         TableViewColumn {title: "Rcpt No"; role: "RecieptNumber"; width: parent.width/12}
-
         //TableViewColumn {title: "Person ID"; role: "PersonID"; width: parent.width/12}
         TableViewColumn {title: "Devotee Name"; role: "DevoteeName"; width: parent.width/12}
         TableViewColumn {title: "Mobile Number"; role: "MobileNumber"; width: parent.width/12}
@@ -236,7 +234,6 @@ Rectangle{
         //TableViewColumn {title: "Address"; role: "Address"; width: parent.width/9}
         //TableViewColumn {title: "Momento"; role: "Momento"; width: parent.width/12}
         //TableViewColumn {title: "BookedBy"; role: "BookedBy"; width: parent.width/12}
-
 
         Menu{
             id: contextMenu
@@ -262,14 +259,6 @@ Rectangle{
                     sevaProxy.sevaBookingTV.checkStatus(storeObject.sno);
                 }
             }
-//            MenuItem
-//            {
-//                id:_delete
-//                text: qsTr('Delete')
-//                onTriggered: {
-//                    _errorDialog.showmsg("Are you sure to delete the data?",2)
-//                }
-//            }
         }
         DisplayDialog {
             id :_errorDialog

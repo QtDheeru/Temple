@@ -1511,23 +1511,23 @@ void DBInterface::fullAccounDetailsDateWise(QString SEVA,int TYPE,QString format
     QSqlQuery query_other1;
     QString que1;
     if(TYPE == 0){
-        que1 = ("select sevabooking.SNO,sevabooking.RECEIPT_DATE,sevabooking.SEVA_DATE,sevabooking.SEVANAME,sevabooking.SEVACOST,sevabooking.QUANTITY,persondetails.PERSONNAME,persondetails.MOBILE,sevabooking.BANK,sevabooking.CASH, sevabooking.STATUS from sevabooking  INNER JOIN persondetails ON sevabooking.PERSONID=persondetails.SNO where sevabooking.RECEIPT_DATE='%1';");
+        que1 = ("select sevabooking.SNO,sevabooking.RECEIPT_DATE,sevabooking.SEVA_DATE,sevabooking.SEVANAME,sevabooking.SEVACOST,sevabooking.QUANTITY,persondetails.PERSONNAME,persondetails.MOBILE,sevabooking.BANK,sevabooking.SEVATOTALPRICE,sevabooking.ADDITIONALCOST,sevabooking.STATUS from sevabooking INNER JOIN persondetails ON sevabooking.PERSONID=persondetails.SNO where sevabooking.RECEIPT_DATE='%1';");
         que1 = que1.arg(formatchangedcalendar_str);
     }
     else if(SEVA == ALLSEVANAME){
-        que1 = ("select sevabooking.SNO,sevabooking.RECEIPT_DATE,sevabooking.SEVA_DATE,sevabooking.SEVANAME,sevabooking.SEVACOST,sevabooking.QUANTITY,persondetails.PERSONNAME,persondetails.MOBILE,sevabooking.BANK,sevabooking.CASH,sevabooking.STATUS from sevabooking INNER JOIN persondetails ON sevabooking.PERSONID=persondetails.SNO  sevabooking where sevabooking.RECEIPT_DATE='%1' and sevabooking.SEVATYPE='%2';");
+        que1 = ("select sevabooking.SNO,sevabooking.RECEIPT_DATE,sevabooking.SEVA_DATE,sevabooking.SEVANAME,sevabooking.SEVACOST,sevabooking.QUANTITY,persondetails.PERSONNAME,persondetails.MOBILE,sevabooking.BANK,sevabooking.SEVATOTALPRICE,sevabooking.ADDITIONALCOST,sevabooking.STATUS from sevabooking INNER JOIN persondetails ON sevabooking.PERSONID=persondetails.SNO sevabooking where sevabooking.RECEIPT_DATE='%1' and sevabooking.SEVATYPE='%2';");
         que1 = que1.arg(formatchangedcalendar_str).arg(TYPE);
     }
     else{
-        que1 = ("select sevabooking.SNO,sevabooking.RECEIPT_DATE,sevabooking.SEVA_DATE,sevabooking.SEVANAME,sevabooking.SEVACOST,sevabooking.QUANTITY,persondetails.PERSONNAME,persondetails.MOBILE,sevabooking.BANK,sevabooking.CASH,sevabooking.STATUS from sevabooking  INNER JOIN persondetails ON sevabooking.PERSONID=persondetails.SNO where sevabooking.RECEIPT_DATE='%1' and sevabooking.SEVATYPE='%2 and sevabooking.SEVANAME = '%3';");
+        que1 = ("select sevabooking.SNO,sevabooking.RECEIPT_DATE,sevabooking.SEVA_DATE,sevabooking.SEVANAME,sevabooking.SEVACOST,sevabooking.QUANTITY,persondetails.PERSONNAME,persondetails.MOBILE,sevabooking.BANK,sevabooking.SEVATOTALPRICE,sevabooking.ADDITIONALCOST,sevabooking.STATUS from sevabooking INNER JOIN persondetails ON sevabooking.PERSONID=persondetails.SNO where sevabooking.RECEIPT_DATE='%1' and sevabooking.SEVATYPE='%2 and sevabooking.SEVANAME = '%3';");
         que1 = que1.arg(formatchangedcalendar_str).arg(TYPE).arg(SEVA);
     }
     query_other1.prepare(que1);
     bool test = query_other1.exec();
-    if(test==true){
-        qDebug()<<"test executed";
+    if(test == true){
+        qDebug() << "test executed";
     }else{
-        qWarning()<<"test not executed";
+        qWarning() << "test not executed";
     }
     while(query_other1.next()){
         qDebug()<<"test inside date while"<<Qt::endl;
@@ -1542,7 +1542,8 @@ void DBInterface::fullAccounDetailsDateWise(QString SEVA,int TYPE,QString format
         felement->setMobile(query_other1.value(7).toString());
         felement->setPaymentmode(query_other1.value(8).toString());
         felement->setTotal(query_other1.value(9).toInt());
-        felement->setBookingStatus(query_other1.value(10).toString());
+        felement->setAdditionalCost(query_other1.value(10).toString());
+        felement->setBookingStatus(query_other1.value(11).toString());
         qDebug()<<query_other1.value(0).toString()<<Qt::endl;
         qDebug()<<query_other1.value(1).toString()<<Qt::endl;
         qDebug()<<query_other1.value(2).toString()<<Qt::endl;
@@ -1564,15 +1565,15 @@ void DBInterface::fullAccounDetailsDateRangeWise(QString SEVA,int TYPE ,QString 
     QSqlQuery query_other1;
     QString que1;
     if(TYPE == 0){
-        que1 = ("select sevabooking.SNO,sevabooking.RECEIPT_DATE,sevabooking.SEVA_DATE,sevabooking.SEVANAME,sevabooking.SEVACOST,sevabooking.QUANTITY,persondetails.PERSONNAME,persondetails.MOBILE,sevabooking.BANK,sevabooking.CASH,sevabooking.STATUS from sevabooking  INNER JOIN persondetails ON sevabooking.PERSONID=persondetails.SNO where sevabooking.RECEIPT_DATE between '%1' and '%2';");
+        que1 = ("select sevabooking.SNO,sevabooking.RECEIPT_DATE,sevabooking.SEVA_DATE,sevabooking.SEVANAME,sevabooking.SEVACOST,sevabooking.QUANTITY,persondetails.PERSONNAME,persondetails.MOBILE,sevabooking.BANK,sevabooking.SEVATOTALPRICE,sevabooking.ADDITIONALCOST,sevabooking.STATUS from sevabooking  INNER JOIN persondetails ON sevabooking.PERSONID=persondetails.SNO where sevabooking.RECEIPT_DATE between '%1' and '%2';");
         que1 = que1.arg(seva_Startdate).arg(seva_Enddate);
     }
     else if(SEVA == ALLSEVANAME){
-        que1 = ("select sevabooking.SNO,sevabooking.RECEIPT_DATE,sevabooking.SEVA_DATE,sevabooking.SEVANAME,sevabooking.SEVACOST,sevabooking.QUANTITY,persondetails.PERSONNAME,persondetails.MOBILE,sevabooking.BANK,sevabooking.CASH,sevabooking.STATUS from sevabooking  INNER JOIN persondetails ON sevabooking.PERSONID=persondetails.SNO where sevabooking.RECEIPT_DATE between '%1' and '%2' and sevabooking.SEVATYPE = '%3';");
+        que1 = ("select sevabooking.SNO,sevabooking.RECEIPT_DATE,sevabooking.SEVA_DATE,sevabooking.SEVANAME,sevabooking.SEVACOST,sevabooking.QUANTITY,persondetails.PERSONNAME,persondetails.MOBILE,sevabooking.BANK,sevabooking.SEVATOTALPRICE,sevabooking.ADDITIONALCOST,sevabooking.STATUS from sevabooking  INNER JOIN persondetails ON sevabooking.PERSONID=persondetails.SNO where sevabooking.RECEIPT_DATE between '%1' and '%2' and sevabooking.SEVATYPE = '%3';");
         que1 = que1.arg(seva_Startdate).arg(seva_Enddate).arg(TYPE);
     }
     else{
-        que1 = ("select sevabooking.SNO,sevabooking.RECEIPT_DATE,sevabooking.SEVA_DATE,sevabooking.SEVANAME,sevabooking.SEVACOST,sevabooking.QUANTITY,persondetails.PERSONNAME,persondetails.MOBILE,sevabooking.BANK,sevabooking.CASH,sevabooking.STATUS from sevabooking  INNER JOIN persondetails ON sevabooking.PERSONID=persondetails.SNO where sevabooking.RECEIPT_DATE between '%1' and '%2' and sevabooking.SEVATYPE = '%3' and sevabooking.SEVANAME = '%4';");
+        que1 = ("select sevabooking.SNO,sevabooking.RECEIPT_DATE,sevabooking.SEVA_DATE,sevabooking.SEVANAME,sevabooking.SEVACOST,sevabooking.QUANTITY,persondetails.PERSONNAME,persondetails.MOBILE,sevabooking.BANK,sevabooking.SEVATOTALPRICE,sevabooking.ADDITIONALCOST,sevabooking.STATUS from sevabooking  INNER JOIN persondetails ON sevabooking.PERSONID=persondetails.SNO where sevabooking.RECEIPT_DATE between '%1' and '%2' and sevabooking.SEVATYPE = '%3' and sevabooking.SEVANAME = '%4';");
         que1 = que1.arg(seva_Startdate).arg(seva_Enddate).arg(TYPE).arg(SEVA);
     }
     query_other1.prepare(que1);
@@ -1595,7 +1596,8 @@ void DBInterface::fullAccounDetailsDateRangeWise(QString SEVA,int TYPE ,QString 
         felement->setMobile(query_other1.value(7).toString());
         felement->setPaymentmode(query_other1.value(8).toString());
         felement->setTotal(query_other1.value(9).toInt());
-        felement->setBookingStatus(query_other1.value(10).toString());
+        felement->setAdditionalCost(query_other1.value(10).toString());
+        felement->setBookingStatus(query_other1.value(11).toString());
         qDebug()<<query_other1.value(0).toString()<<Qt::endl;
         qDebug()<<query_other1.value(1).toString()<<Qt::endl;
         qDebug()<<query_other1.value(2).toString()<<Qt::endl;
@@ -1618,17 +1620,17 @@ void DBInterface::fullAccounDetailsMonthwise(QString SEVA,int TYPE,int month,int
     QString que1;
     if(TYPE == 0){
         qDebug() << "temple First" << Qt::endl;
-        que1 = ("select sevabooking.SNO,sevabooking.RECEIPT_DATE,sevabooking.SEVA_DATE,sevabooking.SEVANAME,sevabooking.SEVACOST,sevabooking.QUANTITY,persondetails.PERSONNAME,persondetails.MOBILE,sevabooking.BANK,sevabooking.CASH,sevabooking.STATUS from sevabooking  INNER JOIN persondetails ON sevabooking.PERSONID=persondetails.SNO where sevabooking.R_MONTH='%1' and sevabooking.R_YEAR='%2';");
+        que1 = ("select sevabooking.SNO,sevabooking.RECEIPT_DATE,sevabooking.SEVA_DATE,sevabooking.SEVANAME,sevabooking.SEVACOST,sevabooking.QUANTITY,persondetails.PERSONNAME,persondetails.MOBILE,sevabooking.BANK,sevabooking.SEVATOTALPRICE,sevabooking.ADDITIONALCOST,sevabooking.STATUS from sevabooking  INNER JOIN persondetails ON sevabooking.PERSONID=persondetails.SNO where sevabooking.R_MONTH='%1' and sevabooking.R_YEAR='%2';");
         que1 = que1.arg(month).arg(year);
     }
     else if(SEVA == ALLSEVANAME){
         qDebug()<<"temple second"<<Qt::endl;
-        que1 = ("select sevabooking.SNO,sevabooking.RECEIPT_DATE,sevabooking.SEVA_DATE,sevabooking.SEVANAME,sevabooking.SEVACOST,sevabooking.QUANTITY,persondetails.PERSONNAME,persondetails.MOBILE,sevabooking.BANK,sevabooking.CASH,sevabooking.STATUS from sevabooking  INNER JOIN persondetails ON sevabooking.PERSONID=persondetails.SNO where sevabooking.R_MONTH='%1' and sevabooking.R_YEAR ='%2' and sevabooking.SEVATYPE = '%3';");
+        que1 = ("select sevabooking.SNO,sevabooking.RECEIPT_DATE,sevabooking.SEVA_DATE,sevabooking.SEVANAME,sevabooking.SEVACOST,sevabooking.QUANTITY,persondetails.PERSONNAME,persondetails.MOBILE,sevabooking.BANK,sevabooking.SEVATOTALPRICE,sevabooking.ADDITIONALCOST,sevabooking.STATUS from sevabooking  INNER JOIN persondetails ON sevabooking.PERSONID=persondetails.SNO where sevabooking.R_MONTH='%1' and sevabooking.R_YEAR ='%2' and sevabooking.SEVATYPE = '%3';");
         que1 = que1.arg(month).arg(year).arg(TYPE);
     }
     else{
         qDebug()<<"temple 3rd"<<Qt::endl;
-        que1 = ("select sevabooking.SNO,sevabooking.RECEIPT_DATE,sevabooking.SEVA_DATE,sevabooking.SEVANAME,sevabooking.SEVACOST,sevabooking.QUANTITY,persondetails.PERSONNAME,persondetails.MOBILE,sevabooking.BANK,sevabooking.CASH,sevabooking.STATUS from sevabooking  INNER JOIN persondetails ON sevabooking.PERSONID=persondetails.SNO where sevabooking.R_MONTH='%1' and sevabooking.R_YEAR='%2' and sevabooking.SEVATYPE = '%3' and sevabooking.SEVANAME = '%4';");
+        que1 = ("select sevabooking.SNO,sevabooking.RECEIPT_DATE,sevabooking.SEVA_DATE,sevabooking.SEVANAME,sevabooking.SEVACOST,sevabooking.QUANTITY,persondetails.PERSONNAME,persondetails.MOBILE,sevabooking.BANK,sevabooking.SEVATOTALPRICE,sevabooking.ADDITIONALCOST,sevabooking.STATUS from sevabooking  INNER JOIN persondetails ON sevabooking.PERSONID=persondetails.SNO where sevabooking.R_MONTH='%1' and sevabooking.R_YEAR='%2' and sevabooking.SEVATYPE = '%3' and sevabooking.SEVANAME = '%4';");
         que1 = que1.arg(month).arg(year).arg(TYPE).arg(SEVA);
     }
     query_other1.prepare(que1);
@@ -1650,8 +1652,9 @@ void DBInterface::fullAccounDetailsMonthwise(QString SEVA,int TYPE,int month,int
         felement->setDevoteeName(query_other1.value(6).toString());
         felement->setMobile(query_other1.value(7).toString());
         felement->setPaymentmode(query_other1.value(8).toString());
-        felement->setTotal(query_other1.value(9).toInt());
-        felement->setBookingStatus(query_other1.value(10).toString());
+        felement->setTotal(query_other1.value(9).toInt());        
+        felement->setAdditionalCost(query_other1.value(10).toString());
+        felement->setBookingStatus(query_other1.value(11).toString());
         qDebug() << query_other1.value(0).toString()<<Qt::endl;
         qDebug() << query_other1.value(1).toString()<<Qt::endl;
         qDebug() << query_other1.value(2).toString()<<Qt::endl;
@@ -1666,7 +1669,6 @@ void DBInterface::fullAccounDetailsMonthwise(QString SEVA,int TYPE,int month,int
     }
     qDebug()<<"Hello world!"<<Qt::endl;
 }
-
 
 void DBInterface::to_persondetails_db(QString devoteMobile,QString devoteName,QString devoteNakshatra,QString devoteGotra,QString devoteSevacharge,QString devoteAdditionalcharges,QString devoteCount,QString devotereceiptdate,QString devoteSevadate,QString devoteNote)
 {
@@ -1815,7 +1817,6 @@ void DBInterface::seva_modification_testing(int sno, int new_sevarow, QString ne
 
 void DBInterface::combobox_sevatype()
 {
-
     QList<QString> list_sevatype;
 
     list_sevatype.clear();

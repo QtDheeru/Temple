@@ -130,3 +130,13 @@ void AccountFullreportElement::setBookingStatus(const QString &newBookingStatus)
 {
     m_bookingStatus = newBookingStatus;
 }
+
+QString AccountFullreportElement::additionalCost() const
+{
+    return m_additionalCost;
+}
+
+void AccountFullreportElement::setAdditionalCost(const QString &newAdditionalCost)
+{
+    m_additionalCost = newAdditionalCost;
+}

@@ -222,6 +222,8 @@ QVariant AccountFullReportModel::data(const QModelIndex &index, int role) const
         return _da->mobile();break;}
     case paymentmode:{
         return _da->paymentmode();break;}
+    case additionalCost:{
+        return _da->additionalCost()+ ".00 ";break;}
     case total:{
         return c.setNum(_da->total())+ ".00 ";break;}
     case status:{
@@ -244,6 +246,7 @@ QHash<int, QByteArray> AccountFullReportModel::roleNames() const
     roles[mobile] = "mobile";
     roles[paymentmode] = "paymentmode";
     roles[total] = "total";
+    roles[additionalCost] = "additionalCost";
     roles[status]= "status";
     return roles;
 }

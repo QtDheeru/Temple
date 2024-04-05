@@ -4,6 +4,7 @@
 #include <QSortFilterProxyModel>
 #include <QObject>
 #include "DevoteeDetailsTableModel.h"
+#include <QMap>
 
 class DevoteeDetailsSearchModel : public QSortFilterProxyModel
 {
@@ -18,6 +19,8 @@ public:
 private:
     QString m_txtTyped;
     QString m_comboBoxText;
+
+    QMap<QString, DevoteeDetailsTableModel::DEVOTEE_ENUMS> m_search2EnumMap;
 
 protected:
     bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override;
