@@ -15,9 +15,6 @@ print_file::print_file(QWidget *parent) : QWidget(parent)
     voc_purpose = new QList<QString>;
     voc_cat = new QList<QString>;
     voc_pri = new QList<float>;
-    newfile = QString("/home/avinash/TEMPLE.txt");
-    file.setFileName(newfile);
-    svg_file = QString("/home/avinash/fawnright.svg");
 }
 
 int print_file::write2file(QString seva_S,QString name_S,QString gothram_S,QString nakshatram_S,float cost_S,QString date_S)
@@ -100,18 +97,7 @@ int print_file::printing_file(Print_VoucherDetail *pvd)
 int print_file::printing_file(Print_BookingDetail *pbd)
 {
     qDebug()<<Q_FUNC_INFO << Qt::endl;
-
-
     QList<Print_Detail*> printList;
-
-
-
-
-
-
-
-
-
     this->prin2PixMap(pbd);
     QPrinter printer;
     qDebug()<<Q_FUNC_INFO << " Start the printing ="<< Qt::endl;
@@ -286,6 +272,7 @@ int print_file::printing_file_1(QList<Print_Detail *> *pd)
     return 0;
 }
 
+// This method is used for printing the receipt.
 int print_file::prin2PixMap(QList<Print_Detail *> *pd)
 {
     int wid = 470;
@@ -305,143 +292,304 @@ int print_file::prin2PixMap(QList<Print_Detail *> *pd)
         painter.setPen(QColor(255,0,0));
         painter.setRenderHint(QPainter::SmoothPixmapTransform);
 
-        unsigned short margin = 40, top_margin = 10;
-        int printW = wid - margin * 1.5;
-        int printHt = 400;
+        unsigned short leftSideMargin = 40, top_margin = 10;
+        int printW = wid - leftSideMargin * 1.5;
+        int printHt = 350;
         int verticalSpacing = 0;
 
+        int yFromTop = top_margin;
+        int xFromLeft = leftSideMargin;
+
+        painter.save();
         QPen pen1;
-        pen1.setWidthF(1.2);
+        pen1.setWidthF(0.5);
+        pen1.setColor(Qt::gray);
+        painter.setPen(pen1);
+
+        QRect boundingRect(xFromLeft, yFromTop, printW,printHt);
+        painter.drawRect(boundingRect);
+
+        painter.restore();
         pen1.setColor(Qt::black);
         painter.setPen(pen1);
-        painter.drawRect(margin, top_margin, printW,printHt);
+
         painter.setFont(QFont("Times New Roman", PRINT_HEADER::HEADER_1_FONT,QFont::Bold));
-        painter.drawText(QRectF(margin,top_margin + verticalSpacing,printW,20),Qt::AlignCenter,PRINT_HEADER::HEADER_1);
-        painter.setFont(QFont("Times New Roman",PRINT_HEADER::HEADER_3_FONT));
-        verticalSpacing += 10;
-        painter.drawText(QRectF(margin,top_margin + verticalSpacing,printW,50),Qt::AlignCenter,PRINT_HEADER::HEADER_2);
+        painter.drawText(QRectF(xFromLeft,yFromTop,printW,20),Qt::AlignCenter,PRINT_HEADER::HEADER_1);
         painter.setFont(QFont("Times New Roman",PRINT_HEADER::HEADER_2_FONT));
-        verticalSpacing += 20;
-        painter.drawText(QRectF(margin,top_margin + verticalSpacing,printW,50),Qt::AlignCenter,PRINT_HEADER::HEADER_3);
+        painter.drawText(QRectF(xFromLeft,yFromTop,printW,50),Qt::AlignCenter,PRINT_HEADER::HEADER_2);
+        painter.setFont(QFont("Times New Roman",PRINT_HEADER::HEADER_3_FONT));
+        yFromTop += 10;
+        painter.drawText(QRectF(xFromLeft,yFromTop,printW,50),Qt::AlignCenter,PRINT_HEADER::HEADER_3);
         painter.setFont(QFont("Times New Roman", PRINT_HEADER::HEADER_4_FONT));
-        verticalSpacing += 20;
-        painter.drawText(QRectF(margin,top_margin + verticalSpacing,printW,50),Qt::AlignCenter,PRINT_HEADER::HEADER_4);
-        verticalSpacing += 20;
-        painter.drawText(QRectF(margin,top_margin + verticalSpacing,printW,50),Qt::AlignLeft,PRINT_HEADER::HEADER_LEFT);
+        yFromTop += 10;
+        painter.drawText(QRectF(xFromLeft,yFromTop,printW,50),Qt::AlignCenter,PRINT_HEADER::HEADER_4);
+        yFromTop += 10;
+        painter.drawText(QRectF(xFromLeft,yFromTop,printW,50),Qt::AlignLeft,PRINT_HEADER::HEADER_LEFT);
+        yFromTop += 25;
 
-        painter.setFont(QFont("Times New Roman",QFont::Bold));
-        QLineF line1(margin,top_margin + 90,printW + 40,100);
-        painter.drawLine(line1);
-        painter.setFont(QFont("Arial",8));
-        painter.drawText(margin + 10,top_margin + 105,"Name:");
-        painter.drawText(margin + 60,top_margin + 105,pd->front()->NAME);
-        QLineF line10(margin,top_margin + 115,printW + 40,top_margin + 115);
-        painter.drawLine(line10);
-
-        painter.drawText(margin + 10,top_margin + 130,"Mob. No:");
-        painter.drawText(margin + 75,140,pd->front()->MOB_NO);
-        QLineF line11(margin,top_margin + 140,printW + 40,150);
-        painter.drawLine(line11);
-
-        qDebug()<<Q_FUNC_INFO << " Start the printing-6"<<Qt::endl;
-        painter.drawText(margin + 10,top_margin + 155,"Gothra:");
-        painter.drawText(margin + 70,top_margin + 155,pd->front()->GOTHRA);
-        QLineF line12(margin,top_margin + 165,printW + 40,175);
-        painter.drawLine(line12);
-
-        painter.drawText(margin+10,top_margin+180,"Nakshatra:");
-        painter.drawText(margin+86,top_margin+180,pd->front()->NAKSHATRA);
-
-        QLineF line4(margin+210,top_margin+90,margin+210,200);
-        painter.drawLine(line4);
-
-        painter.drawText(margin+230,top_margin+105,"Recpt.No:");
-        painter.drawText(margin+310,top_margin+105,pd->front()->RECPT_NO);
-
-        painter.drawText(margin+230,top_margin+130,"Date:");
-        painter.drawText(margin+295,top_margin+130,pd->back()->DATE);
-
-        painter.drawText(margin+230,top_margin+155,"Seva Date:");
-        painter.drawText(margin+308,top_margin+155,pd->back()->SEVA_DATE);
-
-        painter.drawText(margin+230,top_margin+180,"Seva Time:");
-        painter.drawText(margin+310,top_margin+180,pd->back()->SEVA_TIME);
-
-        QLineF line2(margin,top_margin+190,printW+40,200);//horizontal
-        painter.drawLine(line2);
-        painter.drawText(margin+3,top_margin+205,"Sl");
-        QLineF lineslno(margin+30,top_margin+190,margin+30,410);//vertical
-        painter.drawLine(lineslno);
-        painter.drawText(margin+35,top_margin+205,"Seva Name");
-        painter.drawText(margin+260,top_margin+205,"Cost");
-
-        painter.drawText(margin+314,top_margin+205,"Count");
-        painter.drawText(margin+355,top_margin+205,"Amount");
-        QLineF line9(margin,top_margin+215,printW+40,225);//horizontal
-        painter.drawLine(line9);
-
-        int next_slot_y = top_margin+215, next_slot_x = margin+5;
-
-        for(int i = 0; i < pd->size();i++)
-        {
-            painter.drawText(next_slot_x,next_slot_y+15, QString::number(i+1));
-            painter.setFont(QFont("Arial",8));
-            painter.drawText(next_slot_x+35,next_slot_y+5,260,320,Qt::AlignLeft|Qt::AlignTop|Qt::TextWordWrap,pd->at(i)->SEVA_DESCR);
-            painter.drawText(next_slot_x+255,next_slot_y+15,pd->at(i)->RATE+".00");
-            qDebug() << Q_FUNC_INFO << " **** rate =" << pd->at(i)->RATE << Qt::endl;
-            painter.drawText(next_slot_x+320,next_slot_y+15,pd->at(i)->QTY);
-            painter.drawText(next_slot_x+300+45,next_slot_y+15,pd->at(i)->AMT+".00");
-            if(pd->at(i)->ADDITIONAL.toInt() > 0){
-                painter.drawText(next_slot_x+40,next_slot_y+30,"Additional cost :");
-                painter.drawText(next_slot_x+257,next_slot_y+30,pd->at(i)->ADDITIONAL + ".00");
-                painter.drawText(next_slot_x+300+45,next_slot_y+30,pd->at(i)->ADDITIONAL + ".00");
-            }
-            next_slot_y = next_slot_y + 40;
-            qDebug() << Q_FUNC_INFO << " **** Amount =" << pd->at(i)->AMT <<Qt::endl;
-        }
-        QLineF line6(margin+255,top_margin+190,margin+255,410);// the cost verticle line
-        painter.drawLine(line6);
-
-        QLineF line3(margin+312,top_margin+190,margin+312,410);
-        painter.drawLine(line3);
-
-        QLineF line5(margin+348,top_margin+190,margin+348,410);
-        painter.drawLine(line5);
-
-        painter.setFont(QFont("Arial",7));
-        painter.drawText(margin+310,top_margin+415," Total: ₹ ");
-        painter.drawText(margin+360,top_margin+415,pd->back()->TOTAL_AMT+".00");
-        painter.drawText(margin,top_margin+425,"Total in words:₹");
-        painter.drawText(margin+85,top_margin+425,pd->back()->TOTAL_IN_WORDS+" only");
-        painter.drawText(margin+2,top_margin+440,"Note:");
-        painter.drawText(margin+37,top_margin+440,pd->back()->NOTE);
-
-        QPixmap mypix(":/Images/Rules.png");
-        painter.drawPixmap(margin,top_margin+442,370,120,mypix);
-        painter.setFont(QFont("Arial",12));
-        painter.setFont(QFont("Arial",PRINT_HEADER::FOOTER_4_FONT));
-        painter.drawText(margin+330,top_margin+446,PRINT_HEADER::TRUST_SEAL);
         painter.save();
-        QPen pen;
-        pen.setWidthF(0.5);
-        painter.setPen(pen);
-        QRectF footerRect(margin,top_margin+450,printW,94);
-        painter.drawRect(footerRect);
+        pen1.setWidthF(0.5);
+        pen1.setColor(Qt::gray);
+        painter.setPen(pen1);
+        QLineF line1(xFromLeft,yFromTop,printW + 40,yFromTop);
+        painter.drawLine(line1);
+        painter.restore();
+        painter.setFont(QFont("Arial",8));
+        yFromTop += 12;
+        painter.drawText(xFromLeft + 10,yFromTop,"Name");
+        painter.drawText(xFromLeft + 60,yFromTop,pd->front()->NAME);
+
+        painter.drawText(xFromLeft+230,yFromTop,"Recpt.No");
+        painter.drawText(xFromLeft+295,yFromTop,pd->front()->RECPT_NO);
+
+        painter.save();
+        pen1.setWidthF(0.5);
+        pen1.setColor(Qt::gray);
+        painter.setPen(pen1);
+        yFromTop += 8;
+        QLineF line2(xFromLeft,yFromTop,printW + 40,yFromTop);
+        painter.drawLine(line2);
         painter.restore();
 
-        painter.setFont(QFont("Arial",PRINT_HEADER::FOOTER_4_FONT));
-        painter.drawText(QRectF(margin,top_margin+450,printW,20),Qt::AlignLeft,PRINT_HEADER::FOOTER_1);
-        painter.drawText(QRectF(margin,top_margin+465,printW,20),Qt::AlignLeft,PRINT_HEADER::FOOTER_2);
-        painter.drawText(QRectF(margin,top_margin+480,printW,20),Qt::AlignLeft,PRINT_HEADER::FOOTER_3);
-        painter.drawText(QRectF(margin,top_margin+495,printW,20),Qt::AlignLeft,PRINT_HEADER::FOOTER_4);
-        painter.drawText(QRectF(margin,top_margin+510,printW,20),Qt::AlignLeft,PRINT_HEADER::FOOTER_5);
-        painter.drawText(QRectF(margin,top_margin+525,printW,20),Qt::AlignLeft,PRINT_HEADER::FOOTER_6);
 
-        painter.drawText(QRectF(margin,top_margin+528,printW,50),Qt::AlignCenter,PRINT_HEADER::FOOTER_7);
-        pen.setWidthF(0.7);
-        painter.setFont(QFont("Times New Roman",PRINT_HEADER::FOOTER_7_FONT,QFont::Bold));
-        painter.drawText(QRectF(margin,top_margin+540,printW,50),Qt::AlignCenter,PRINT_HEADER::FOOTER_8);
-        painter.setFont(QFont("Times New Roman",PRINT_HEADER::FOOTER_8_FONT,QFont::Bold));
+        yFromTop += 12;
+        painter.drawText(xFromLeft + 10,yFromTop,"Mobile");
+        painter.drawText(xFromLeft + 60,yFromTop,pd->front()->MOB_NO);
+
+        painter.drawText(xFromLeft+230,yFromTop,"Date");
+        painter.drawText(xFromLeft+295,yFromTop,pd->back()->DATE);
+
+        yFromTop += 12;
+        painter.save();
+        pen1.setWidthF(0.5);
+        pen1.setColor(Qt::gray);
+        painter.setPen(pen1);
+        QLineF line3(xFromLeft,yFromTop,printW + 40,yFromTop);
+        painter.drawLine(line3);
+        painter.restore();
+
+        yFromTop += 10;
+        painter.drawText(xFromLeft + 10,yFromTop,"Gothra");
+        painter.drawText(xFromLeft + 60,yFromTop,pd->front()->GOTHRA);
+
+        painter.drawText(xFromLeft+230,yFromTop,"Seva Date");
+        painter.drawText(xFromLeft+295,yFromTop,pd->back()->SEVA_DATE);
+
+        painter.save();
+        pen1.setWidthF(0.5);
+        pen1.setColor(Qt::gray);
+        painter.setPen(pen1);
+        yFromTop += 12;
+        QLineF line4(xFromLeft,yFromTop,printW + 40,yFromTop);
+        painter.drawLine(line4);
+        painter.restore();
+
+        yFromTop += 10;
+        painter.drawText(xFromLeft+10,yFromTop,"Nakshatra");
+        painter.drawText(xFromLeft+60,yFromTop,pd->front()->NAKSHATRA);
+
+        painter.drawText(xFromLeft+230,yFromTop,"Seva Time");
+        painter.drawText(xFromLeft+310,yFromTop,pd->back()->SEVA_TIME);
+
+        painter.save();
+        pen1.setWidthF(0.5);
+        pen1.setColor(Qt::gray);
+        painter.setPen(pen1);
+        yFromTop += 10;
+        QLineF line5(xFromLeft,yFromTop,printW+40,yFromTop);//horizontal
+        painter.drawLine(line5);
+        painter.restore();
+
+        painter.save();
+        pen1.setWidthF(0.5);
+        pen1.setColor(Qt::gray);
+        painter.setPen(pen1);
+        QLineF verticalline4(xFromLeft+210,line1.y1(),xFromLeft+210,line5.y1());
+        painter.drawLine(verticalline4);
+        painter.restore();
+
+        yFromTop += 10;
+        painter.drawText(xFromLeft+3,yFromTop,"Sl");
+        painter.drawText(xFromLeft+35,yFromTop,"Seva Name");
+        painter.drawText(xFromLeft+260,yFromTop,"Cost");
+
+        painter.drawText(xFromLeft+310,yFromTop,"Qty");
+        painter.drawText(xFromLeft+350,yFromTop,"Amount");
+
+        painter.save();
+        pen1.setWidthF(0.5);
+        pen1.setColor(Qt::gray);
+        painter.setPen(pen1);
+        yFromTop += 10;
+        QLineF line6(xFromLeft,yFromTop,printW+40,yFromTop);//horizontal
+        painter.drawLine(line6);
+        painter.restore();
+
+        yFromTop += 8;
+        int sevaXPos = xFromLeft+5;
+
+        int sevaYPos = yFromTop+5;
+        int addCostYPos = 10;
+
+        QStringList amtList;
+        QStringList addOnList;
+
+        QStringList rateList;
+        QStringList addOnRateList;
+        int max = 0,max1=0;
+        for(int i = 0; i < pd->size();i++){
+            QString total = pd->at(i)->AMT+".00";
+            QString addOn = pd->at(i)->ADDITIONAL + ".00";
+            QString rate = pd->at(i)->RATE + ".00";
+            int s1 = total.length();
+            int s2 = addOn.length();
+            int s3 = rate.length();
+            amtList.append( total );
+            addOnList.append( addOn );
+
+            rateList.append(rate);
+            addOnRateList.append(addOn);
+            if (s1 > max) max = s1;
+            if (s2 > max ) max = s2;
+
+            if (s3 > max1) max1 = s3;
+            if (s2 > max1 ) max1 = s2;
+        }
+        for(int i=0;i<amtList.size();i++){
+            QString one = amtList.at(i);
+            if (max > one.length()){
+                int diff = max - one.length();
+                while(diff != 0){
+                    one.prepend("  ");
+                    diff--;
+                }
+            }
+            amtList.replace(i,one);
+            QString two = addOnList.at(i);
+            if (max > two.length()){
+                int diff = max - two.length();
+                while(diff != 0){
+                    two.prepend("  ");
+                    diff--;
+                }
+            }
+            addOnList.replace(i,two);
+        }
+
+        for(int i=0;i<rateList.size();i++){
+            QString one = rateList.at(i);
+            if (max1 > one.length()){
+                int diff = max1 - one.length();
+                while(diff != 0){
+                    one.prepend("  ");
+                    diff--;
+                }
+            }
+            rateList.replace(i,one);
+            QString two = addOnRateList.at(i);
+            if (max1 > two.length()){
+                int diff = max1 - two.length();
+                while(diff != 0){
+                    two.prepend("  ");
+                    diff--;
+                }
+            }
+            addOnRateList.replace(i,two);
+        }
+
+
+        for(int i = 0; i < pd->size();i++){
+            painter.drawText(sevaXPos, sevaYPos, QString::number(i+1));
+            painter.setFont(QFont("Arial",8));
+            //painter.drawText(next_slot_x+35,sevaYPos,260,5,Qt::AlignLeft|Qt::AlignTop|Qt::TextWordWrap,pd->at(i)->SEVA_DESCR);
+            painter.drawText(sevaXPos+35,sevaYPos,pd->at(i)->SEVA_DESCR);
+            painter.drawText(sevaXPos+245,sevaYPos,rateList.at(i));
+            painter.drawText(sevaXPos+310,sevaYPos,pd->at(i)->QTY);
+            painter.drawText(sevaXPos+300+35,sevaYPos,amtList.at(i));
+            if(pd->at(i)->ADDITIONAL.toInt() > 0){
+                sevaYPos +=addCostYPos;
+                painter.drawText(sevaXPos+40,sevaYPos,"Additional cost ");
+                painter.drawText(sevaXPos+245,sevaYPos,addOnRateList.at(i));
+                painter.drawText(sevaXPos+300+35,sevaYPos,addOnList.at(i));
+            }
+            sevaYPos += 15;
+            qDebug() << Q_FUNC_INFO << " **** Amount =" << pd->at(i)->AMT <<Qt::endl;
+        }
+        int yLinePos = line5.y1();
+
+        painter.save();
+        pen1.setWidthF(0.5);
+        pen1.setColor(Qt::gray);
+        painter.setPen(pen1);
+
+        QLineF lineslno(xFromLeft+30,yLinePos,xFromLeft+30,boundingRect.bottomRight().y());//vertical
+        painter.drawLine(lineslno);
+
+        QLineF verticalLine7(xFromLeft+240,yLinePos,xFromLeft+240,boundingRect.bottomRight().y());// the cost verticle line
+        painter.drawLine(verticalLine7);
+
+        QLineF verticalLine8(xFromLeft+305,yLinePos,xFromLeft+305,boundingRect.bottomRight().y());
+        painter.drawLine(verticalLine8);
+
+        QLineF verticalLine9(xFromLeft+330,yLinePos,xFromLeft+330,boundingRect.bottomRight().y());
+        painter.drawLine(verticalLine9);
+
+        painter.restore();
+
+        yLinePos = boundingRect.bottomRight().y() + 15;
+        painter.setFont(QFont("Arial",8));
+        QString words = "Total in words:₹  - ";
+        words.append(pd->back()->TOTAL_IN_WORDS);
+        words.append("  only");
+
+        int wordsBoxHeight = 30;
+        int wordsBoxWidth = 250;
+        painter.drawText(xFromLeft,yLinePos-5,wordsBoxWidth,wordsBoxHeight,Qt::AlignLeft|Qt::AlignTop|Qt::TextWordWrap,words);
+        painter.drawText(xFromLeft+280,yLinePos," Total: ₹ ");
+        QString value = QString(pd->back()->TOTAL_AMT);
+        QString toDisplay = QString::number(value.toDouble(), 'f', 2);
+        painter.drawText(xFromLeft+330,yLinePos,pd->back()->TOTAL_AMT);
+        qDebug() << " Exponential Value =" << toDisplay << Qt::endl;
+
+        yLinePos += 20;
+
+        QString note = "Note - ";
+        note.append(pd->back()->NOTE);
+        painter.drawText(xFromLeft,yLinePos,wordsBoxWidth,wordsBoxHeight,Qt::AlignLeft|Qt::AlignTop|Qt::TextWordWrap,note);
+
+
+        yLinePos += 10;
+        painter.setFont(QFont("Arial",PRINT_HEADER::FOOTER_10_FONT));
+        painter.drawText(xFromLeft+300,yLinePos,PRINT_HEADER::TRUST_SEAL);
+
+        painter.save();
+
+        yLinePos += 15;
+        painter.setFont(QFont("Arial",PRINT_HEADER::FOOTER_10_FONT));
+        painter.drawText(QRectF(xFromLeft,yLinePos,printW,20),Qt::AlignLeft,PRINT_HEADER::FOOTER_1);
+        yLinePos += 15;
+        painter.drawText(QRectF(xFromLeft,yLinePos,printW,20),Qt::AlignLeft,PRINT_HEADER::FOOTER_2);
+        yLinePos += 15;
+        painter.drawText(QRectF(xFromLeft,yLinePos,printW,20),Qt::AlignLeft,PRINT_HEADER::FOOTER_3);
+        yLinePos += 15;
+        painter.drawText(QRectF(xFromLeft,yLinePos,printW,20),Qt::AlignLeft,PRINT_HEADER::FOOTER_4);
+        yLinePos += 15;
+        painter.drawText(QRectF(xFromLeft,yLinePos,printW,20),Qt::AlignLeft,PRINT_HEADER::FOOTER_5);
+
+        painter.save();
+        pen1.setWidthF(0.5);
+        pen1.setColor(Qt::gray);
+        painter.setPen(pen1);
+        yLinePos += 15;
+        QRectF rectF(xFromLeft,yLinePos,printW,45);
+        painter.drawRect(rectF);
+        painter.restore();
+
+        painter.drawText(QRectF(xFromLeft,yLinePos,printW,20),Qt::AlignCenter,PRINT_HEADER::FOOTER_6);
+        painter.drawText(QRectF(xFromLeft,yLinePos,printW,50),Qt::AlignCenter,PRINT_HEADER::FOOTER_7);
+        yLinePos += 15;
+        painter.setFont(QFont("Times New Roman",PRINT_HEADER::FOOTER_10_FONT));
+        painter.drawText(QRectF(xFromLeft,yLinePos,printW,50),Qt::AlignCenter,PRINT_HEADER::FOOTER_8);
 
         printer.setPrintRange(QPrinter::CurrentPage);
         painter.end();
@@ -650,7 +798,7 @@ int print_file::prin2PixMap(Print_BookingDetail *pbd)
     //QImage map(wid,ht,QImage::Format_RGB555);
     m_map.fill(Qt::white);
     QPrinter printer;
-    qDebug() << Q_FUNC_INFO << " Start the printing =" << Qt::endl;
+    qDebug() << Q_FUNC_INFO << " Start Printing the receipt = " << pbd->serial_No << Qt::endl;
     printer.setOrientation(QPrinter::Portrait);
     QPainter painter;
     {
@@ -666,10 +814,12 @@ int print_file::prin2PixMap(Print_BookingDetail *pbd)
         int printHt = 360;
         int verticalSpacing = 0;
 
+        qreal penWidth = 1;
         QPen pen1;
-        pen1.setWidthF(1.5);
-        pen1.setColor(Qt::black);
+        pen1.setWidthF(penWidth);
+        pen1.setColor(Qt::gray);
         painter.setPen(pen1);
+        painter.save();
         painter.drawRect(margin, top_margin, printW,printHt);
         painter.setFont(QFont("Times New Roman", PRINT_HEADER::HEADER_1_FONT, QFont::Bold));
         painter.drawText(QRectF(margin,top_margin+verticalSpacing,printW,20),Qt::AlignCenter,PRINT_HEADER::HEADER_1);
@@ -848,8 +998,9 @@ void print_file::singleentry(QString devoteSevaName,QString devoteCount,int seva
     single_sevadate = priviusformatdatesevadate;
 }
 
-QString print_file::NumberToWord(const unsigned int number)
+QString print_file::NumberToWord(const unsigned long number)
 {
+    qDebug() << Q_FUNC_INFO << " Number to Converstion =" << number << Qt::endl;
     const std::vector<QString> first14=
     {"Zero", "One","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten","Eleven",
      "Twelve", "Thirteen", "Fourteen" };
@@ -886,7 +1037,13 @@ QString print_file::NumberToWord(const unsigned int number)
         unsigned int remainder = number - (millions*100000);
         return NumberToWord(millions) + (0 != remainder ? " Lakhs " + NumberToWord(remainder) : " Lakhs");
     }
-    throw std::out_of_range("NumberToWord() value too large");
+    if( number < 1000000000 )
+    {
+        unsigned int millions = static_cast<int>(number/10000000);
+        unsigned int remainder = number - (millions*10000000);
+        return NumberToWord(millions) + (0 != remainder ? " Crores " + NumberToWord(remainder) : " Crores");
+    }
+    return "Number is too large";
 }
 
 

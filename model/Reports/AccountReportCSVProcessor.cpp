@@ -35,14 +35,14 @@ void AccountReportCSVProcessor::recieveAccountReportList(QList<AccountReportElem
             }
             for(auto it =accountReportList.begin(); it != accountReportList.end(); it++){
                 storeData =QString::number((*it)->slNo()) +","+
-                        (*it)->getSeva_name()+","+
-                        QString::number((*it)->getSeva_cost())+","+
-                        QString::number((*it)->getSeva_ticket())+","+
-                        QString::number((*it)->getCash())+","+
-                        QString::number((*it)->getCheque()) +","+
-                        QString::number((*it)->getNeft()) +","+
-                        QString::number((*it)->getUpi()) +","+
-                        QString::number((*it)->getSeva_total())+'\n';
+                            (*it)->getSeva_name()+","+
+                            QString::number((*it)->getSeva_cost())+","+
+                            QString::number((*it)->getSeva_ticket())+","+
+                            QString::number((*it)->getCash())+","+
+                            QString::number((*it)->getCheque()) +","+
+                            QString::number((*it)->getNeft()) +","+
+                            QString::number((*it)->getUpi()) +","+
+                            QString::number((*it)->getSeva_total())+'\n';
                 out<<storeData;
             }
             file.close();
@@ -80,21 +80,40 @@ void AccountReportCSVProcessor::recieveAccountFullreportElementList(QList<Accoun
             }
             for(auto it =accntfulList.begin(); it != accntfulList.end(); it++){
                 storeData =(*it)->recieptnumber() +","+
-                        (*it)->recptDate()+","+
-                        (*it)->sevadate()+","+
-                        (*it)->sevaname()+","+
-                        QString::number((*it)->sevaCount())+","+
-                        QString::number((*it)->sevacost()) +","+
-                        (*it)->devoteeName() +","+
-                        (*it)->mobile() +","+
-                        (*it)->paymentmode()+ ","+
-                        (*it)->additionalCost() + "," +
-                        QString::number((*it)->total())+ ","+
-                        (*it)->bookingStatus()+ '\n';
+                            (*it)->recptDate()+","+
+                            (*it)->sevadate()+","+
+                            (*it)->sevaname()+","+
+                            QString::number((*it)->sevaCount())+","+
+                            QString::number((*it)->sevacost()) +","+
+                            (*it)->devoteeName() +","+
+                            (*it)->mobile() +","+
+                            (*it)->paymentmode()+ ","+
+                            (*it)->additionalCost() + "," +
+                            QString::number((*it)->total())+ ","+
+                            (*it)->bookingStatus()+ '\n';
                 out<<storeData;
             }
+            storeData.clear();
+            storeData.append("Cash: ");
+            storeData.append(QString::number(m_summary->cashTotal));
+            storeData.append(",");
+            storeData.append("NEFT: ");
+            storeData.append(QString::number(m_summary->neftTotal));
+            storeData.append(",");
+            storeData.append("Cheque: ");
+            storeData.append(QString::number(m_summary->chequeTotal));
+            storeData.append(",");
+            storeData.append("UPI: ");
+            storeData.append(QString::number(m_summary->upiTotal));
+            storeData.append(",");
+            storeData.append("Unknown: ");
+            storeData.append(QString::number(m_summary->unknownTypeTotal));
+            storeData.append(",");
+            storeData.append("Total: ");
+            storeData.append(QString::number(m_summary->total));
+            out<<storeData;
             file.close();
-            qDebug() << "File saved: " << fileName;
+            qDebug() << Q_FUNC_INFO << " Account data File saved: " << fileName;
             emit successMessage(msg);
         }
         else
@@ -103,4 +122,15 @@ void AccountReportCSVProcessor::recieveAccountFullreportElementList(QList<Accoun
         }
     }
     m_addHeader =0;
+}
+
+Account_Summary *AccountReportCSVProcessor::summary() const
+{
+    return m_summary;
+}
+
+bool AccountReportCSVProcessor::addSummary(Account_Summary *newSummary)
+{
+    m_summary = newSummary;
+    return true;
 }

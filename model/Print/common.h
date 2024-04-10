@@ -96,7 +96,14 @@ struct SevaNameDetails{
     QString sevaDate;
 };
 
-
+struct Account_Summary{
+    double cashTotal;
+    double neftTotal;
+    double upiTotal;
+    double chequeTotal;
+    double total;
+    double unknownTypeTotal;
+};
 
 enum Error{
     CANNOTPRINT = 10

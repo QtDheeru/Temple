@@ -112,10 +112,12 @@ void SevaBookingConformationDataModel::print()
         p->SEVA_DATE.append(seva->sevaStartDate());
         totalAmount += totalSevaCost;
         totalAmount += seva->additionalCost();
-        p->TOTAL_AMT.append(QString::number(totalAmount));
-        p->TOTAL_IN_WORDS.append(print_file::NumberToWord(p->TOTAL_AMT.toUInt()));
+        p->TOTAL_AMT.append(QString::number(totalAmount,'f',2));
+        p->TOTAL_IN_WORDS.append(print_file::NumberToWord(totalAmount));
         p->NOTE.append(m_sevaReceipt->note());
         printList.append(p);
+        qDebug() << Q_FUNC_INFO << " Total Seva Cost =" << p->TOTAL_AMT << Qt::endl;
+        qDebug() << Q_FUNC_INFO << " Total Seva Cost =" << print_file::NumberToWord(totalAmount) << Qt::endl;
     }
     print_file file;
     file.printing_file(&printList);

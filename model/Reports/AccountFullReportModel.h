@@ -8,6 +8,7 @@
 #include "ReportFilterElements.h"
 #include <QAbstractTableModel>
 #include "./model/DBInterface.h"
+#include "common.h"
 
 class AccountFullReportModel : public QAbstractTableModel
 {
@@ -15,6 +16,11 @@ class AccountFullReportModel : public QAbstractTableModel
     Q_PROPERTY(int iGrandTotal READ iGrandTotal WRITE setIGrandTotal NOTIFY iGrandTotalChanged)
     Q_PROPERTY(int neftTotal READ neftTotal WRITE setNeftTotal NOTIFY neftTotalChanged)
     Q_PROPERTY(int cashTotal READ cashTotal WRITE setCashTotal NOTIFY cashTotalChanged)
+    Q_PROPERTY(int chequeTotal READ chequeTotal WRITE setChequeTotal NOTIFY chequeTotalChanged)
+    Q_PROPERTY(int upiTotal READ upiTotal WRITE setUpiTotal NOTIFY upiTotalChanged)
+    // QAbstractItemModel interface
+    Q_PROPERTY(double unknownTypeTotal READ unknownTypeTotal WRITE setUnknownTypeTotal NOTIFY unknownTypeTotalChanged FINAL)
+
     Q_PROPERTY(AccountReportCSVProcessor *accountCSVProcessor READ getAccountCSVProcessor WRITE setAccountCSVProcessor NOTIFY accountCSVProcessorChanged)
 
 public:
@@ -54,14 +60,28 @@ public:
     int cashTotal() const;
     void setCashTotal(int newCashTotal);
 
+    double chequeTotal() const;
+    void setChequeTotal(double newChequeTotal);
+
+    double upiTotal() const;
+    void setUpiTotal(double newUpiTotal);
+
+    double unknownTypeTotal() const;
+    void setUnknownTypeTotal(double newUnknownTypeTotal);
+
 signals:
 
     void iGrandTotalChanged();
     void cashTotalChanged();
     void neftTotalChanged();
+    void chequeTotalChanged();
+    void upiTotalChanged();
+
     void sendAccountFullreportElementList(QList<AccountFullreportElement*>);
     void accountCSVProcessorChanged();
     void successMessage(QString exportmsg);
+
+    void unknownTypeTotalChanged();
 
 public slots:
     void insertrows(AccountFullreportElement*);
@@ -78,8 +98,12 @@ private:
     int m_iGrandTotal;
     int m_neftTotal;
     int  m_cashTotal;
+    double m_chequeTotal;
+    double m_upiTotal;
+    double m_unknownTypeTotal;
+
+    Account_Summary *m_accountSummary;
     AccountReportCSVProcessor *accountCSVProcessor = nullptr;
-    // QAbstractItemModel interface
-};
+ };
 
 #endif // ACCOUNTFULLREPORTMODEL_H

@@ -6,6 +6,14 @@ AccountFullReportModel::AccountFullReportModel(QObject *parent)
     qDebug()<<Q_FUNC_INFO<<Qt::endl;
     m_iGrandTotal = 0;
     accountCSVProcessor  = new AccountReportCSVProcessor;
+    m_accountSummary = new Account_Summary;
+    this->accountCSVProcessor->addSummary(m_accountSummary);
+    m_accountSummary->cashTotal = 0;
+    m_accountSummary->neftTotal = 0;
+    m_accountSummary->chequeTotal = 0;
+    m_accountSummary->upiTotal = 0;
+    m_accountSummary->unknownTypeTotal = 0;
+    m_accountSummary->total = 0;
 }
 
 AccountFullReportModel::~AccountFullReportModel()
@@ -20,16 +28,33 @@ void AccountFullReportModel::insertrows(AccountFullreportElement * elememt)
     this->m_accountFullreportElementList.append(elememt);
     endInsertRows();
     m_iGrandTotal += elememt->total();
-    qDebug() << Q_FUNC_INFO << "mode = " << elememt->paymentmode() << Qt::endl;
-    if(elememt->paymentmode() == "Cash" || elememt->paymentmode() == "0"){
-        qDebug() << Q_FUNC_INFO << "cash" << Qt::endl;
-        m_cashTotal += elememt->total();
-    }else{
-        m_neftTotal += elememt->total();
-    }
     this->setIGrandTotal(m_iGrandTotal);
-    this->setCashTotal(m_cashTotal);
-    this->setNeftTotal(m_neftTotal);
+    qDebug() << Q_FUNC_INFO << "mode = " << elememt->paymentmode() << Qt::endl;
+    if((elememt->paymentmode().compare("Cash",Qt::CaseInsensitive)==0) || elememt->paymentmode() == "0"){
+        qDebug() << Q_FUNC_INFO << "cash" << Qt::endl;
+        this->setCashTotal(m_accountSummary->cashTotal + elememt->total());
+        return;
+    }
+    if(elememt->paymentmode().compare("UPI",Qt::CaseInsensitive)==0){
+        qDebug() << Q_FUNC_INFO << "UPI " << Qt::endl;
+        this->setUpiTotal(m_accountSummary->upiTotal + elememt->total());
+        return;
+    }
+
+    if(elememt->paymentmode().compare("Cheque",Qt::CaseInsensitive)==0){
+        qDebug() << Q_FUNC_INFO << "Cheque " << Qt::endl;
+        this->setChequeTotal(m_accountSummary->chequeTotal + elememt->total());
+        return;
+    }
+
+    if(elememt->paymentmode().compare("NEFT",Qt::CaseInsensitive)==0){
+        qDebug() << Q_FUNC_INFO << "NEFT " << Qt::endl;
+        this->setNeftTotal(m_accountSummary->neftTotal + elememt->total());
+        return;
+    }
+    // This should be always zero. Code should never reach here.
+    this->setUnknownTypeTotal(m_accountSummary->unknownTypeTotal + elememt->total());
+    return;
 }
 
 void AccountFullReportModel::generateAccountReport(ReportFilterElements * filterelement)
@@ -155,24 +180,57 @@ void AccountFullReportModel::setGrandTotalToZero()
     this->setIGrandTotal(0);
 }
 
+double AccountFullReportModel::unknownTypeTotal() const
+{
+    return this->m_accountSummary->unknownTypeTotal;
+}
+
+void AccountFullReportModel::setUnknownTypeTotal(double newUnknownTypeTotal)
+{
+    if (qFuzzyCompare(m_unknownTypeTotal, newUnknownTypeTotal))
+        return;
+    this->m_accountSummary->unknownTypeTotal = newUnknownTypeTotal;
+    emit unknownTypeTotalChanged();
+}
+
+double AccountFullReportModel::upiTotal() const
+{
+    return this->m_accountSummary->upiTotal;
+}
+
+void AccountFullReportModel::setUpiTotal(double newUpiTotal)
+{
+    this->m_accountSummary->upiTotal = newUpiTotal;
+}
+
+double AccountFullReportModel::chequeTotal() const
+{
+    return m_accountSummary->chequeTotal;
+}
+
+void AccountFullReportModel::setChequeTotal(double newChequeTotal)
+{
+    m_accountSummary->chequeTotal = newChequeTotal;
+}
+
 int AccountFullReportModel::cashTotal() const
 {
-    return m_cashTotal;
+    return m_accountSummary->cashTotal;
 }
 
 void AccountFullReportModel::setCashTotal(int newCashTotal)
 {
-    m_cashTotal = newCashTotal;
+    m_accountSummary->cashTotal = newCashTotal;
 }
 
 int AccountFullReportModel::neftTotal() const
 {
-    return m_neftTotal;
+    return m_accountSummary->neftTotal;
 }
 
 void AccountFullReportModel::setNeftTotal(int newNeftTotal)
 {
-    m_neftTotal = newNeftTotal;
+    m_accountSummary->neftTotal = newNeftTotal;
 }
 
 AccountReportCSVProcessor *AccountFullReportModel::getAccountCSVProcessor() const
@@ -190,14 +248,12 @@ void AccountFullReportModel::setAccountCSVProcessor(AccountReportCSVProcessor *n
 
 int AccountFullReportModel::iGrandTotal() const
 {
-    return m_iGrandTotal;
+    return m_accountSummary->total;
 }
 
 void AccountFullReportModel::setIGrandTotal(int newIGrandTotal)
 {
-    if (m_iGrandTotal == newIGrandTotal)
-        return;
-    m_iGrandTotal = newIGrandTotal;
+    m_accountSummary->total = newIGrandTotal;
     emit iGrandTotalChanged();
 }
 
@@ -206,6 +262,12 @@ void AccountFullReportModel::resetAccModel()
     qDebug()<<Q_FUNC_INFO<<Qt::endl;
     beginResetModel();
     m_accountFullreportElementList.clear();
+    m_accountSummary->cashTotal = 0;
+    m_accountSummary->neftTotal = 0;
+    m_accountSummary->chequeTotal = 0;
+    m_accountSummary->upiTotal = 0;
+    m_accountSummary->unknownTypeTotal = 0;
+    m_accountSummary->total = 0;
     endResetModel();
 }
 
