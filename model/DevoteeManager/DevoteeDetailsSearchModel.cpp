@@ -4,14 +4,25 @@ DevoteeDetailsSearchModel::DevoteeDetailsSearchModel(QObject *parent)
     : QSortFilterProxyModel{parent}
 {
     qDebug()<<Q_FUNC_INFO<<Qt::endl;
+    m_search2EnumMap["Mobile Number"] = DevoteeDetailsTableModel::MOBILE_NUMBER_ROLE;
+    m_search2EnumMap["Serial No"]     = DevoteeDetailsTableModel::SNO_ROLE;
+    m_search2EnumMap["Person ID"]     = DevoteeDetailsTableModel::PERSON_ID_ROLE;
+    m_search2EnumMap["Person DbID"]   = DevoteeDetailsTableModel::PERSON_DBID_ROLE;
+    m_search2EnumMap["Devotee Name"]  = DevoteeDetailsTableModel::DEVOTEE_NAME_ROLE;
+    m_search2EnumMap["Gothra"]        = DevoteeDetailsTableModel::GOTHRA_ROLE;
+    m_search2EnumMap["Nakshatra"]     = DevoteeDetailsTableModel::NAKSHATRA_ROLE ;
 }
 
 void DevoteeDetailsSearchModel::updateTableModel(QString txtTyped, QString comboBoxText)
 {
     qDebug()<<Q_FUNC_INFO<<">>>>>>>>>>>>>>>"<< " Search Text " << txtTyped << " ComboBox =" << comboBoxText << Qt::endl;
+    if(txtTyped == ""){
+        return;
+    }
     m_txtTyped = txtTyped;
     m_comboBoxText = comboBoxText;
     invalidateFilter();
+    //invalidateRowsFilter();
 }
 
 int DevoteeDetailsSearchModel::getRowOfDataFromTableViewModel(int source_row)
@@ -25,49 +36,10 @@ int DevoteeDetailsSearchModel::getRowOfDataFromTableViewModel(int source_row)
 bool DevoteeDetailsSearchModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
 {
     const QModelIndex sourceIndex = sourceModel()->index(source_row, 0, source_parent);
-    int i = sourceIndex.row();
-    qDebug()<<Q_FUNC_INFO<<">>>>>>sourceIndex.row()>>>>>>>>> "<<i<<Qt::endl;
-    if(m_txtTyped == ""){
-        return true;
-    }
-    if(m_comboBoxText == "Serial No"){
-        qDebug()<<Q_FUNC_INFO<<"hereee"<<Qt::endl;
-        const QString filterElement = sourceIndex.data(DevoteeDetailsTableModel::SNO_ROLE).toString();
-        return(filterElement.toLower().startsWith(m_txtTyped.toLower()));
-    }
-    else if(m_comboBoxText == "Person ID"){
-        const QString filterElement = sourceIndex.data(DevoteeDetailsTableModel::PERSON_ID_ROLE).toString();
-        return(filterElement.toLower().startsWith(m_txtTyped.toLower()));
-    }
-    else if(m_comboBoxText == "Person DbID"){
-        const QString filterElement = sourceIndex.data(DevoteeDetailsTableModel::PERSON_DBID_ROLE).toString();
-        return(filterElement.toLower().startsWith(m_txtTyped.toLower()));
-    }
-    else if(m_comboBoxText == "Devotee Name"){
-        qDebug()<<Q_FUNC_INFO<<"hereee Devotee Name"<<Qt::endl;
-        const QString filterElement = sourceIndex.data(DevoteeDetailsTableModel::DEVOTEE_NAME_ROLE).toString();
-        if(filterElement.toLower().startsWith(m_txtTyped.toLower()))
-        {
-            QModelIndex proxyIndex  =  mapFromSource(sourceIndex);
-            int proxyRow = proxyIndex.row();
-            qDebug()<<Q_FUNC_INFO<<"hereee Devotee Name inside if"<<proxyRow<<Qt::endl;
-            return(filterElement.toLower().startsWith(m_txtTyped.toLower()));
-        } else {
-            return(filterElement.toLower().startsWith(m_txtTyped.toLower()));
-        }
-    }
-    else if(m_comboBoxText == "Mobile Number"){
-        qDebug()<<Q_FUNC_INFO<<"hereee"<<Qt::endl;
-        const QString filterElement = sourceIndex.data(DevoteeDetailsTableModel::MOBILE_NUMBER_ROLE).toString();
-        return(filterElement.toLower().startsWith(m_txtTyped.toLower()));
-    }
-    else if(m_comboBoxText == "Gothra"){
-        const QString filterElement = sourceIndex.data(DevoteeDetailsTableModel::GOTHRA_ROLE).toString();
-        return(filterElement.toLower().startsWith(m_txtTyped.toLower()));
-    }
-    else if(m_comboBoxText == "Nakshatra"){
-        const QString filterElement = sourceIndex.data(DevoteeDetailsTableModel::NAKSHATRA_ROLE).toString();
-        return(filterElement.toLower().startsWith(m_txtTyped.toLower()));
-    }
+
+    DevoteeDetailsTableModel::DEVOTEE_ENUMS role = m_search2EnumMap.value(m_comboBoxText);
+    const QString filterElement = sourceIndex.data(role).toString();
+    return(filterElement.toLower().startsWith(m_txtTyped.toLower()));
+
     return true;
 }

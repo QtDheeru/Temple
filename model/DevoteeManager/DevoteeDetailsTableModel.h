@@ -17,7 +17,7 @@ class DevoteeDetailsTableModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:
-    enum{
+    enum DEVOTEE_ENUMS{
         SNO_ROLE = Qt::UserRole+1,
         PERSON_ID_ROLE,
         PERSON_DBID_ROLE,

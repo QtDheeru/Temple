@@ -6,7 +6,7 @@ Button {
     signal sevaSelected(int index, int sevaType, int sevaId)
     signal sevaSelectedFromView(int index, int sevaType, int sevaId)
     implicitWidth: parent.width;
-    implicitHeight: _t1.contentHeight+10;
+    implicitHeight: _t1.contentHeight + 10;
     anchors.margins: 10
     background: Rectangle{color : "skyblue"}
     height:_t1.contentHeight+10
@@ -21,7 +21,7 @@ Button {
     }
     onClicked: {
         // sevaType,sevaId - These are coming as roles from model
-        console.log(" Index ="+index + " SevaType ="+SevaType + " SevaID="+SevaId)
+        console.log(" Index =" + index + " SevaType =" + SevaType + " SevaID=" + SevaId)
         sevaSelected(index,SevaType,SevaId)
         sevaProxy.print(SevaType,SevaId);
     }

@@ -101,18 +101,23 @@ void SevaBookingConformationDataModel::print()
         p->SEVA_TIME.append(m_sevaReceipt->sevatime());
         SevaName* seva = m_sevabookinglist.at(i);
 
-        double totalSevaCost = (seva->sevaCost()*seva->count()) + seva->additionalCost();
+        double totalSevaCost = (seva->sevaCost()*seva->count());
         p->SEVA_DESCR.append(seva->sevaName());
         p->QTY.append(QString::number(seva->count()));
         p->AMT.append(QString::number(totalSevaCost));
         p->CASH.append(QString::number(seva->sevaCost()));
         p->RATE.append(QString::number(seva->sevaCost()));
+        p->ADDITIONAL.append(QString::number(seva->additionalCost()));
 
         p->SEVA_DATE.append(seva->sevaStartDate());
         totalAmount += totalSevaCost;
-        p->TOTAL_AMT.append(QString::number(totalAmount));
-        p->TOTAL_IN_WORDS.append(print_file::NumberToWord(p->TOTAL_AMT.toUInt()));
+        totalAmount += seva->additionalCost();
+        p->TOTAL_AMT.append(QString::number(totalAmount,'f',2));
+        p->TOTAL_IN_WORDS.append(print_file::NumberToWord(totalAmount));
+        p->NOTE.append(m_sevaReceipt->note());
         printList.append(p);
+        qDebug() << Q_FUNC_INFO << " Total Seva Cost =" << p->TOTAL_AMT << Qt::endl;
+        qDebug() << Q_FUNC_INFO << " Total Seva Cost =" << print_file::NumberToWord(totalAmount) << Qt::endl;
     }
     print_file file;
     file.printing_file(&printList);

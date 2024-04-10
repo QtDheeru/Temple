@@ -34,10 +34,9 @@ QString saveVoucher::FormatDate(QString unformat)
 
 void saveVoucher::saveVoucherElements(VoucherElement *ele)
 {
-    qDebug() << Q_FUNC_INFO <<  " :: Mobile No : " << ele->mobileNo() << Qt::endl;
+    qDebug() << Q_FUNC_INFO <<  "saveVoucherElements :: Mobile No : " << ele->mobileNo()  << " receipt num : " << ele->receiptNumber() << Qt::endl;
     qDebug() << Q_FUNC_INFO << " Payment ref: " << ele->PaymentReference() << Qt::endl;
     DBInterface::getInstance()->insertVoucherIssued(ele);
-     // qDebug()<<"save voucher insert"<<b<<Qt::endl;
     setNextVoucherNumber(m_voucherNumber->getNextVoucherNumber());
 
 }

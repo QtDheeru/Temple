@@ -47,7 +47,8 @@ Rectangle{
                 onAccepted: _search.clicked()
                 Keys.onDeletePressed: _clear.clicked()
                 placeholderText: "Enter "+_combo.currentText + " for Search"
-                onTextChanged: devoteeProxy.devoteeSearchModel.updateTableModel(txt, _combo.currentText);
+                onEditingFinished: devoteeProxy.devoteeSearchModel.updateTableModel(txt, _combo.currentText);
+                //onTextChanged: devoteeProxy.devoteeSearchModel.updateTableModel(txt, _combo.currentText);
             }
         }
         Rectangle{

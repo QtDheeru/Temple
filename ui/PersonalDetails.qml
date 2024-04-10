@@ -31,7 +31,7 @@ Rectangle {
 
     function setGothras(gothraList){
         console.log("********* In setGothras function  *********** = 0")
-        if(gothraList.length===0)
+        if(gothraList.length === 0)
         {
             console.log("********* In if of setGothras function  *********** = 0")
             errorOccur("gothras not found");
@@ -42,7 +42,7 @@ Rectangle {
     }
     function setNakshatras(nakshatraList){
         console.log("********* In set nakshatra function  *********** = 0")
-        if(nakshatraList.length===0)
+        if(nakshatraList.length === 0)
         {
             console.log("********* In if of set nakshatra function  *********** = 0")
             errorOccur("Nakshtras not found");
@@ -52,6 +52,7 @@ Rectangle {
         }
     }
     function setNakshatraCombo(nakshatra){
+
         _nakshatra.currentIndex = _nakshatra.findTextInComboBox(nakshatra);
     }
     function setGothraCombo(gothra){
@@ -61,7 +62,6 @@ Rectangle {
         Layout.leftMargin: 10
         width: parent.width
         Layout.fillWidth: true
-        //height: parent.height
         Rectangle{
             id : _header
             height: _root.height/20
@@ -150,11 +150,9 @@ Rectangle {
     function clearData(){
         _name.clearData();
         _mobile.clearData()
-        //_receipt.clearData();
     }
     Component.onCompleted: {
         console.log(" Name Status ="+_name.isDataExist)
         console.log(" Mobile Status ="+_mobile.isDataExist)
     }
 }
-//}

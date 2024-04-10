@@ -61,6 +61,7 @@ public:
     QList<SevaBookingElement*> getSewaBookingEntryForReceipt(QString);//added Now
 
     void getChequeData();
+    int getpersonID(QString devoteMobile,QString devoteeName);
 
 signals:
     void send_seva_details(QString,int);

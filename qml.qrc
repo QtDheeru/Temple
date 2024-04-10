@@ -44,7 +44,7 @@
         <file>ui/MainTrust.qml</file>
         <file>ui/WelcomeToAppScreen.qml</file>
         <file>ui/BookingReportPage.qml</file>
-        <file>ui/voucherPage.qml</file>
+        <file>ui/VoucherPage.qml</file>
         <file>ui/assets/Images/voucher.jpg</file>
         <file>ui/components/MyVoucherFilter.qml</file>
         <file>ui/VoucherReportPage.qml</file>

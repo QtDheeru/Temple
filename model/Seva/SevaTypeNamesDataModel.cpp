@@ -50,19 +50,18 @@ QList<SevaName *> SevaTypeNamesDataModel::getSevaList(int sevaType)
     qDebug() << Q_FUNC_INFO << " Is empty = " << m_sevaNameDetails.empty() << Qt::endl;
 
     if(m_sevaNameDetails.empty()){
-        qCritical() << Q_FUNC_INFO << "SevaNameDetails is empty !!!" << Qt::endl;
+        qWarning() << Q_FUNC_INFO << "SevaNameDetails is empty !!!" << Qt::endl;
         exit(0);
     }
-    qDebug() << Q_FUNC_INFO << "  m_sevaNameDetaiils is not empty." << sevaType << Qt::endl;
+    qDebug() << Q_FUNC_INFO << "  m_sevaNameDetails is not empty." << sevaType << Qt::endl;
     QMap<int, SevaName*> map = this->m_sevaNameDetails.value(sevaType);
     qDebug() << Q_FUNC_INFO << "  Took values of sevanames " << sevaType  << ":: Seva Name detail size : " << m_sevaNameDetails.size()<< Qt::endl;
-    qDebug() << Q_FUNC_INFO << " Sevas===== > " << this->m_sevaNameDetails << Qt::endl;
-    qDebug() << Q_FUNC_INFO << " Sevas===== > " << m_sevaNameDetails[0] << Qt::endl;
     if(map.empty())
     {
         qCritical() << Q_FUNC_INFO << " save name details  map is empty!!!" << Qt::endl;
         m_sevaNameDetails.remove(sevaType);
         m_sevaTypeDetails.remove(sevaType);
+        return map.values();
     }
     qDebug() << "Map values=" << map.values() << Qt::endl;
     return map.values();
@@ -183,12 +182,14 @@ QString SevaTypeNamesDataModel::createNewSeva(SevaName *seva)
 
 SevaType* SevaTypeNamesDataModel::addSevaTypeDetail(int seva_id, QString seva_name, QString person_name)
 {
+    qDebug() << Q_FUNC_INFO << "seva id & seva name = " << seva_id << seva_name << Qt::endl;
     SevaType* sevatype = new SevaType;
+    QQmlEngine::setObjectOwnership(sevatype,QQmlEngine::CppOwnership);
+    sevatype->setObjectName("addSevaTypeDetail_SevaTypeNamesDataModel");
     sevatype->setSevaTypeId(seva_id);
     sevatype->setSevaTypeName(seva_name);
     m_sevaTypeDetails.insert(seva_id,sevatype);
     return sevatype;
-
 }
 
 QStringList SevaTypeNamesDataModel::getNakshatras()

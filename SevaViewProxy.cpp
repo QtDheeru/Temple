@@ -91,7 +91,6 @@ QAbstractItemModel *SevaViewProxy::getSevaModel(int sevaType)
 
 QAbstractItemModel *SevaViewProxy::getSevaTypeModel()
 {
-    qDebug() << Q_FUNC_INFO << " ###############"  << Qt::endl;
     if (m_sevaTypeModel == nullptr) {
         m_sevaTypeModel  = new SevaTypeViewModel;
         QQmlEngine::setObjectOwnership(m_sevaTypeModel,QQmlEngine::CppOwnership);
@@ -113,15 +112,16 @@ bool SevaViewProxy::resetBookView()
 
 SevaName* SevaViewProxy::getSeva(int sevaType, int sevaId)
 {
+    qDebug() << Q_FUNC_INFO << "sevaType = " << sevaType << " sevaId = " << sevaId << Qt::endl;
     return SevaTypeNamesDataModel::self()->getSevaDetails(sevaType,sevaId);
 }
 
 SevaName *SevaViewProxy::getSevaByIndex(int sevaType,int index)
 {
-    qDebug() << Q_FUNC_INFO<<index << Qt::endl;
-    qDebug()<<"current.... seva model"<<Qt::endl;
+    qDebug() << Q_FUNC_INFO << index << Qt::endl;
+    qDebug() << "current.... seva model" << Qt::endl;
     Q_ASSERT(m_currentSevaModel != nullptr);
-    qDebug()<<"current seva model"<<m_currentSevaModel<<Qt::endl;
+    qDebug() << "current seva model" << m_currentSevaModel << Qt::endl;
     return this->m_currentSevaModel->getSevaNameByIndex(sevaType,index);
 }
 
@@ -179,8 +179,6 @@ bool SevaViewProxy::saveReceipt(MySevaReceipt *receipt)
 {
     qDebug() << Q_FUNC_INFO <<  Qt::endl;
     return m_sevaBookingModelData->saveReceipt(receipt);
-    //receipt->print();
-    //  return true;
 }
 
 void SevaViewProxy::cancelReceipt(QString a_recptno)
@@ -215,7 +213,6 @@ void SevaViewProxy::cleanBookingTableModel()
                      m_sevaBookingTV,&SevaBookingTableModel::reset);
     QObject::connect(DBInterface::getInstance(),&DBInterface::refreshModel,
                      m_sevaBookingTV,&SevaBookingTableModel::referseshTheModel);
-
 }
 
 void SevaViewProxy::deleteRecipt(QString rcptNo)
@@ -258,7 +255,7 @@ void SevaViewProxy::checkIfStatusAlreadyCanceled(QString a_recptNo)
     qDebug() << "Number of objects in list " << m_recpt_details.size();
     for(SevaBookingElement *ele : m_recpt_details)
     {
-        qDebug() << "Seva checked Status in statusCheck" << ele->status();
+        qDebug() << "Seva checked Status in statusCheck " << ele->status();
         if(ele->status() == l_checkStatus){
             l_count++;
         }
@@ -329,9 +326,8 @@ bool SevaViewProxy::printReceipt()
 bool SevaViewProxy::printVoucherReceipt(VoucherElement *voucherElement)
 {
     qDebug() << Q_FUNC_INFO << Qt::endl;
-    //print_details* p = new Print_Detail;
     print_voucherDetails* p = new Print_VoucherDetail;
-    int voucherNumber= voucherElement->voucherNo();
+    int voucherNumber = voucherElement->voucherNo();
     qDebug() << Q_FUNC_INFO << " Voucher~~~~ " << voucherNumber << Qt::endl;
     p->VOUCHER_NO = QString::number(voucherNumber);
     p->VOUCHER_COST = voucherElement->voucherCost();
@@ -370,7 +366,7 @@ bool SevaViewProxy::printBookingReceipt(SevaBookingElement *sevaBookingElement)
     p->total_Cost = sevaBookingElement->cash();
     p->cash = sevaBookingElement->cash();
     p->bank = sevaBookingElement->bank();
-    print_file *file=new print_file;
+    print_file *file = new print_file;
     file->printing_file(p);
     return true ;
 }
@@ -448,14 +444,8 @@ QString SevaViewProxy::addNewSevaType(QString sevaTypeName,int sevaTypeId ,QStri
     qDebug() << Q_FUNC_INFO << Qt::endl;
     if(DBInterface::getInstance()->add_seva_type(sevaTypeName,sevaTypeId,personName))
     {
-        qDebug()<<"after DBInterface "<<Qt::endl;
         sevatype = SevaTypeNamesDataModel::self()->addSevaTypeDetail(sevaTypeId,sevaTypeName,personName);
-
-
         m_sevaTypeModel->reflectToView(sevatype);
-
-
-
     }
     return DBInterface::getInstance()->getError();
 }
@@ -557,7 +547,6 @@ void SevaViewProxy::addNewSigninDetails(QString name, QString lastname, QString 
     qDebug()<<Q_FUNC_INFO<<name<<lastname<<userid<<password<<rolenumber<<date<<Qt::endl;
     DBInterface::getInstance()->add_new_signin_details(name,lastname,userid,password,rolenumber,"");
 }
-
 
 SevaReport *SevaViewProxy::reportOnDateModel() const
 {

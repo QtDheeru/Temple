@@ -17,7 +17,7 @@ class VoucherElement : public QObject
     Q_PROPERTY(QString voucherCost READ voucherCost WRITE setVoucherCost NOTIFY voucherCostChanged)
     Q_PROPERTY(QString voucherPaymentMode READ voucherPaymentMode WRITE setVoucherPaymentMode NOTIFY voucherPaymentModeChanged)
     Q_PROPERTY(QString paymentReference READ PaymentReference WRITE setPaymentReference NOTIFY PaymentReferenceChanged)
-    Q_PROPERTY(QString receiptNumber READ voucherCost WRITE setVoucherCost NOTIFY voucherCostChanged)
+    Q_PROPERTY(QString receiptNumber READ receiptNumber WRITE setReceiptNumber NOTIFY receiptNumberChanged)
 public:
     explicit VoucherElement(QObject *parent = nullptr);
 
@@ -75,6 +75,7 @@ signals:
     void voucherCostChanged();
     void voucherPaymentModeChanged();
     void PaymentReferenceChanged();
+    void receiptNumberChanged();
 
 private:
     QString m_voucherDate;

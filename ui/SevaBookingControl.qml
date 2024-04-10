@@ -87,7 +87,7 @@ Rectangle {
             Layout.fillWidth: true;text : "Last Transaction"
             Layout.maximumHeight: 40
             font.pixelSize: fontSize
-            enabled: false              //Not implemented
+            enabled: true              //Not implemented
             onClicked: {
                 showLast10Transaction()
             }

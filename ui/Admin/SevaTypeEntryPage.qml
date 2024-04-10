@@ -70,7 +70,7 @@ Rectangle{
                             }
                             var message = sevaProxy.addNewSevaType(sevatypeName._data,sevaCode._data,userName._data)
                             sevaCode._data = sevaProxy.getNextSevaTypeID()
-                            sevaProxy.sevaBookingModelData.querySevaType();
+                            sevaProxy.sevaBookingModelData.querySevaTypes();
                             _errorDialog.showError(message)
                         }
                     }

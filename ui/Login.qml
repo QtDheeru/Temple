@@ -98,8 +98,6 @@ Item {
                     horizontalAlignment: TextInput.AlignHCenter
                     verticalAlignment: TextInput.AlignVCenter
                     font.pixelSize: fpixelsize
-                    //                    width: mainRectangle.width/3
-                    //                    height: mainRectangle.height/13
                     anchors.fill: parent
                     property string placeholderText: "Enter your Login ID"
                     clip: true
@@ -190,7 +188,7 @@ Item {
         {
             console.log("Credentials are correct")
             loginSuccess(pageNumber)
-            callLoad();
+            //callLoad();
         }
         function onWrongCredentials()
         {

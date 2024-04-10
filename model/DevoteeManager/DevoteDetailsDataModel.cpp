@@ -39,25 +39,21 @@ bool DevoteDetailsDataModel::addDevoteeJSObject(QVariantMap map)
     qDebug() << Q_FUNC_INFO << " Devotee Name =" << map["devoteeName"];
     QString mobile = map["mobileNumber"].toString();
     QString devoteeName = map["devoteeName"].toString();
-    int idx = mobile.indexOf("_");
-    if (idx > 0){
-        mobile = mobile.mid(0,idx);
-        qDebug() << Q_FUNC_INFO << " Mobile Adjusted =" << mobile;
-    }
-    if (searchDevoteeByName(mobile.trimmed(),devoteeName.trimmed())) {
+
+    if (searchDevoteeByName(mobile.trimmed(),devoteeName.trimmed()))
         return false;
-    }
-    DevotePersnalDetails *devotee  = new DevotePersnalDetails;
+
+    DevotePersnalDetails *devotee = new DevotePersnalDetails;
     devotee->setDevoteeName(map["devoteeName"].toString());
     devotee->setMobileNumber(mobile);
     devotee->setNakshatra(map["nakshatra"].toString());
     devotee->setGothra(map["gothra"].toString());
     QQmlEngine::setObjectOwnership(devotee,QQmlEngine::CppOwnership);
     if(DevoteeDataInterface::getInstance()->addDevotee(devotee)){
-        qDebug()<<"inside if the devotee add function"<<Qt::endl;
+        qDebug() << "inside if the devotee add function" << Qt::endl;
         this->m_devoteeList.append(devotee);
         emit devoteeAdded();
-        qDebug()<<"After emit if the devotee add function"<<Qt::endl;
+        qDebug() << "After emit if the devotee add function" << Qt::endl;
         return true;
     } else {
         return false;
@@ -160,18 +156,21 @@ DevoteDetailsDataModel *DevoteDetailsDataModel::getInstance()
     return m_self;
 }
 
-bool DevoteDetailsDataModel::searchDevoteeByName(QString mobileNo, QString name)
+bool DevoteDetailsDataModel::searchDevoteeByName(QString mobile, QString name)
 {
+    int idx = mobile.indexOf("_");
     bool found = false;
-    DevotePersnalDetails *devoteeFound = nullptr;
+    if (idx > 0){
+        mobile = mobile.mid(0,idx);
+        qDebug() << Q_FUNC_INFO << " Mobile Adjusted =" << mobile;
+    }
     foreach(auto devote, this->m_devoteeList){
-        if(devote->mobileNumber().startsWith(mobileNo)) {
+        if(devote->mobileNumber().startsWith(mobile)) {
             qDebug() << Q_FUNC_INFO << " Mobile Number found. Check Name =" << devote->devoteeName() << " Name =" << name <<Qt::endl;
             if (devote->devoteeName().compare(name)==0){
                 found = true;
-                QString error = QString(" Name %1 with Mobile =%2 already exist").arg(name).arg(mobileNo);
+                QString error = QString(" Name %1 with Mobile =%2 already exist").arg(name).arg(mobile);
                 this->setError(error);
-                devoteeFound = devote;
                 break;
             }
         }

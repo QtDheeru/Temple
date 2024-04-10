@@ -54,7 +54,7 @@ public:
     QList<QString> *voc_cat;
     QList<float> *voc_pri;
     void singleentry(QString, QString, int, QString);
-    static QString NumberToWord(const unsigned int number);
+    static QString NumberToWord(const unsigned long number);
     int printing_file_1(QList<Print_Detail *> *pd);
 
     QPixmap m_map;

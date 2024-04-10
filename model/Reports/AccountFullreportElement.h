@@ -45,6 +45,9 @@ public:
     const QString &bookingStatus() const;
     void setBookingStatus(const QString &newBookingStatus);
 
+    QString additionalCost() const;
+    void setAdditionalCost(const QString &newAdditionalCost);
+
 signals:
 
 private:
@@ -60,6 +63,7 @@ private:
     QString m_paymentmode;
     int m_total;
     QString m_bookingStatus;
+    QString m_additionalCost;
 };
 
 #endif // ACCOUNTFULLREPORTELEMENT_H
