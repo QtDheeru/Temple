@@ -12,6 +12,7 @@ Item {
     property int fontPixelSize : 20
     property  bool showPopup : true
     property int myheight:20
+    property alias calendarEnabled: button.enabled
     signal dateChanged(var date)
     TextField {
         id: textDate
@@ -35,6 +36,7 @@ Item {
         anchors.left: textDate.right
         anchors.leftMargin: -(textDate.height)
         anchors.top: parent.top
+        enabled: true
         Image {
             id: img
             anchors.fill: parent

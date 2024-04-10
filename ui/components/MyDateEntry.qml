@@ -12,6 +12,7 @@ Rectangle {
     property int fontPixelSize : 20
     property alias _labelText : _label.text
     property alias selecteddate:_tInput.dateSelected
+    property alias calendarEnabled:_tInput.calendarEnabled
     signal dateChanged(var date)
     //border.color: "yellow";border.width: 1
     color: "transparent"
@@ -39,7 +40,7 @@ Rectangle {
         MyDatePicker{
             id :_tInput
             Layout.fillHeight: true
-        showPopup: _rootDateEntry.showPopup
+            showPopup: _rootDateEntry.showPopup
             Layout.fillWidth: true
             Layout.preferredWidth: _rootDateEntry.myWidth - _label.width
             Layout.preferredHeight: _rootDateEntry.myHeight
@@ -56,7 +57,7 @@ Rectangle {
     Connections{
         target: _tInput
         function onDateChanged(date) {
-            console.log("onDateChanged"+date)
+            console.log("Rajjjjjjjjjjjjj"+date)
             dateChanged(date);
         }
     }

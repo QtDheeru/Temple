@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Window 2.15
 import QtQuick.Layouts 1.15
 import QtQuick.Controls 2.15
+import QtQuick.Controls.Styles 1.4
 import "../components" as Utils
 import "../"
 
@@ -52,18 +53,29 @@ Item {
                     Layout.margins: 10
                     isRcptvisible:false
                 }
+
+                Button {
+                    text : "Start Seva Booking"
+                    Layout.fillWidth: true
+                    Layout.margins: 10
+                    font.pixelSize: 20
+                    implicitHeight: parent.height/12
+                    background: Rectangle {
+                        implicitWidth: 100
+                        implicitHeight: 25
+                        border.width: control.activeFocus ? 2 : 1
+                        border.color: "red"
+                        radius: 4
+                    }
+                    onClicked: startSevaBooking()
+                }
+
                 ColumnLayout{
                     width : parent.width
                     anchors.horizontalCenter: parent.horizontalCenter
                     Layout.margins: 10
                     Layout.alignment: Qt.AlignTop
 
-                    Button {
-                        text : "Start Seva Booking"
-                        Layout.fillWidth: true
-                        font.pixelSize: 20
-                        onClicked: startSevaBooking()
-                    }
                     Button {
                         text : "All Data"
                         Layout.fillWidth: true
@@ -144,8 +156,8 @@ Item {
                 console.log(" if of <<< countIfSevaNamesPresentInSevaTypes++ " + countIfSevaNamesPresentInSevaTypes)
                 console.log("evening ---",_devoteeView.nakshatra)
                 console.log("_devoteeView.mobileNo---",_devoteeView.mobileNo)
-//                var moblist = _devoteeView.mobileNo.split("_");
-//                var mob = moblist[0];
+                //                var moblist = _devoteeView.mobileNo.split("_");
+                //                var mob = moblist[0];
                 loadSevabooking(_devoteeView.devoteeName,_devoteeView.mobileNo,_devoteeView.gothra,_devoteeView.nakshatra)
             }
             else{
@@ -184,6 +196,11 @@ Item {
     }
 
     function areSureUpdate(){
+        if(_devoteeView.mobileNo === '' || _devoteeView.devoteeName === ''){
+            dialog.title = "Please select the Devote to update";
+            dialog.open();
+            return;
+        }
         _errorDialog.text2Display = " Are you sure you would like to Update ?\n\n Name ="+_devoteeView.devoteeName + "\n\n Mobile ="+_devoteeView.mobileNo;
         _errorDialog.context = 1;
         _errorDialog.open();
@@ -195,24 +212,33 @@ Item {
     }
 
     function updateDevotee(){
-        _errorDialog.visible = false;
         console.log(" Mobile    ="+_devoteeView.mobileNo);
         console.log(" Name      = "+_devoteeView.devoteeName);
         console.log(" Nakshatra ="+_devoteeView.nakshatra)
         console.log(" Gothra    ="+_devoteeView.gothra)
-        var devotee = {devoteeName : _devoteeView.devoteeName,
+        var devotee = {
+            devoteeName : _devoteeView.devoteeName,
             mobileNumber : _devoteeView.mobileNo,
             gothra: _devoteeView.gothra,
-            nakshatra:_devoteeView.nakshatra};
+            nakshatra:_devoteeView.nakshatra
+        };
         if (!devoteeProxy.devoteeDataModel.updateDevoteeJSObject(devotee)) {
             console.log(" Error Update Devotee ="+peopleDataModel.lastError());
-            _errorDialog.context = 0;
-            _errorDialog.text2Display = peopleDataModel.lastError();
+            root.showTempDialog(peopleDataModel.lastError());
         } else {
-            _errorDialog.context = 0;
-            _errorDialog.text2Display = " Update successful";
+            console.log(" Devotee update successfull ")
+            var msg = " Update successful \n\n Name = "+_devoteeView.devoteeName + "\n\n Mobile = "+_devoteeView.mobileNo;
+            root.showTempDialog(msg);
         }
-        _errorDialog.open();
+    }
+
+    function showTempDialog(message) {
+        var _eDialog = _errorComp.createObject(root);
+        _eDialog.closed.connect(_eDialog.destroy);
+        _eDialog.context = 0;
+        _eDialog.text2Display = message;
+        _eDialog.visible = true;
+        _eDialog.open();
     }
 
     function deleteDevotee() {
@@ -224,16 +250,14 @@ Item {
             mobileNumber : _devoteeView.mobileNo,
             gothra: _devoteeView.gothra,
             nakshatra:_devoteeView.nakshatra};
-        if (!!devoteeProxy.devoteeDataModel.deleteDevoteeJSObject(devotee)) {
+        if (!devoteeProxy.devoteeDataModel.deleteDevoteeJSObject(devotee)) {
             console.log(" Error Delete Devotee ="+peopleDataModel.lastError());
-            _errorDialog.text2Display = peopleDataModel.lastError();
-            _errorDialog.context = 0;
-
-        }else {
-            _errorDialog.context = 0;
-            _errorDialog.text2Display = " Delete successful";
+            var msg = " Delete Error= "+ peopleDataModel.lastError() + "  \n\n Name = "+_devoteeView.devoteeName + "\n\n Mobile = "+_devoteeView.mobileNo ;
+            root.showTempDialog(msg);
+        } else {
+            msg = " Delete successful \n\n Name = "+_devoteeView.devoteeName + "\n\n Mobile = "+_devoteeView.mobileNo;
+            root.showTempDialog(msg);
         }
-        _errorDialog.open();
     }
 
     function clearData(){
@@ -259,11 +283,20 @@ Item {
             setDevoteeDetails(devotee)
         }
     }
+
     Dialog {
         id: dialog
         title: "Title"
         standardButtons: Dialog.Ok
+        anchors.centerIn: parent
         visible: false
+    }
+
+    Component{
+        id : _errorComp
+        Utils.DisplayDialog{
+            id : _eDialog
+        }
     }
 
     Utils.DisplayDialog{
@@ -274,6 +307,8 @@ Item {
         onYesAction:{
             console.log( "Yes clicked. Context ="+context)
             root.onYesAction(context)
+            _errorDialog.accept();
+            _errorDialog.close();
             console.log( "Yes clicked. Finished.. ="+context)
         }
         onOpened: {
@@ -281,11 +316,14 @@ Item {
         }
         onClosed: {
             console.log(" It is onClosed now..")
+            _errorDialog.accept();
+            _errorDialog.close();
         }
     }
 
     function onYesAction(context) {
         console.log( "Yes clicked. Context ="+ context)
+
         switch (context){
         case 1 :updateDevotee(); break;
         case 2 :deleteDevotee(); break;

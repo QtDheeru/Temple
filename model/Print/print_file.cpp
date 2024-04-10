@@ -15,6 +15,9 @@ print_file::print_file(QWidget *parent) : QWidget(parent)
     voc_purpose = new QList<QString>;
     voc_cat = new QList<QString>;
     voc_pri = new QList<float>;
+    m_rec_width = 500;
+    m_rec_height = 600;
+
 }
 
 int print_file::write2file(QString seva_S,QString name_S,QString gothram_S,QString nakshatram_S,float cost_S,QString date_S)
@@ -52,8 +55,8 @@ int print_file::printing_file(QList<Print_Detail *> *pd)
         return 1;
     }else{
         qDebug() << Q_FUNC_INFO << " dlg->exec() == QDialog::Accepted" << Qt::endl;
-        QRectF f(150,0,500,550);
-        QRectF e(0,0,500,550);
+        QRectF f(150,0,m_rec_width,m_rec_height);
+        QRectF e(0,0,m_rec_width,m_rec_height);
         if (!painter.begin(&printer)){
             qWarning("failed to open file, is it writable?");
             return 10;
@@ -110,8 +113,8 @@ int print_file::printing_file(Print_BookingDetail *pbd)
         return 1;
     }else{
         qDebug() << Q_FUNC_INFO << " dlg->exec() == QDialog::Accepted" << Qt::endl;
-        QRectF f(150,0,500,550);
-        QRectF e(0,0,500,550);
+        QRectF f(150,0,m_rec_width,m_rec_height);
+        QRectF e(0,0,m_rec_width,m_rec_height);
         if (!painter.begin(&printer)){
             qDebug()<<Q_FUNC_INFO <<"In side if"<< Qt::endl;
             qWarning("failed to open file, is it writable?");
@@ -126,6 +129,7 @@ int print_file::printing_file(Print_BookingDetail *pbd)
     }
 }
 
+// Not used
 int print_file::printing_file_1(QList<Print_Detail *> *pd)
 {
     QPrinter printer;
@@ -275,9 +279,7 @@ int print_file::printing_file_1(QList<Print_Detail *> *pd)
 // This method is used for printing the receipt.
 int print_file::prin2PixMap(QList<Print_Detail *> *pd)
 {
-    int wid = 470;
-    int ht = 800;
-    m_map = QPixmap(wid,ht);
+    m_map = QPixmap(m_rec_width,m_rec_height);
     //QImage map(wid,ht,QImage::Format_RGB555);
     m_map.fill(Qt::white);
     QPrinter printer;
@@ -292,10 +294,9 @@ int print_file::prin2PixMap(QList<Print_Detail *> *pd)
         painter.setPen(QColor(255,0,0));
         painter.setRenderHint(QPainter::SmoothPixmapTransform);
 
-        unsigned short leftSideMargin = 40, top_margin = 10;
-        int printW = wid - leftSideMargin * 1.5;
+        unsigned short leftSideMargin = 40, top_margin = 20;
+        int printW = m_rec_width - leftSideMargin * 1.5;
         int printHt = 350;
-        int verticalSpacing = 0;
 
         int yFromTop = top_margin;
         int xFromLeft = leftSideMargin;
@@ -313,19 +314,19 @@ int print_file::prin2PixMap(QList<Print_Detail *> *pd)
         pen1.setColor(Qt::black);
         painter.setPen(pen1);
 
-        painter.setFont(QFont("Times New Roman", PRINT_HEADER::HEADER_1_FONT,QFont::Bold));
+        painter.setFont(QFont("Times New Roman", PRINT_HEADER::HEADER_Title_Font,QFont::Bold));
         painter.drawText(QRectF(xFromLeft,yFromTop,printW,20),Qt::AlignCenter,PRINT_HEADER::HEADER_1);
-        painter.setFont(QFont("Times New Roman",PRINT_HEADER::HEADER_2_FONT));
+        painter.setFont(QFont("Times New Roman",PRINT_HEADER::HEADER_1_FONT));
         painter.drawText(QRectF(xFromLeft,yFromTop,printW,50),Qt::AlignCenter,PRINT_HEADER::HEADER_2);
-        painter.setFont(QFont("Times New Roman",PRINT_HEADER::HEADER_3_FONT));
-        yFromTop += 10;
+        painter.setFont(QFont("Times New Roman",PRINT_HEADER::HEADER_1_FONT));
+        yFromTop += 12;
         painter.drawText(QRectF(xFromLeft,yFromTop,printW,50),Qt::AlignCenter,PRINT_HEADER::HEADER_3);
-        painter.setFont(QFont("Times New Roman", PRINT_HEADER::HEADER_4_FONT));
-        yFromTop += 10;
+        painter.setFont(QFont("Times New Roman", PRINT_HEADER::HEADER_1_FONT));
+        yFromTop += 12;
         painter.drawText(QRectF(xFromLeft,yFromTop,printW,50),Qt::AlignCenter,PRINT_HEADER::HEADER_4);
-        yFromTop += 10;
+        yFromTop += 12;
         painter.drawText(QRectF(xFromLeft,yFromTop,printW,50),Qt::AlignLeft,PRINT_HEADER::HEADER_LEFT);
-        yFromTop += 25;
+        yFromTop += 30;
 
         painter.save();
         pen1.setWidthF(0.5);
@@ -335,7 +336,7 @@ int print_file::prin2PixMap(QList<Print_Detail *> *pd)
         painter.drawLine(line1);
         painter.restore();
         painter.setFont(QFont("Arial",8));
-        yFromTop += 12;
+        yFromTop += 15;
         painter.drawText(xFromLeft + 10,yFromTop,"Name");
         painter.drawText(xFromLeft + 60,yFromTop,pd->front()->NAME);
 
@@ -346,13 +347,13 @@ int print_file::prin2PixMap(QList<Print_Detail *> *pd)
         pen1.setWidthF(0.5);
         pen1.setColor(Qt::gray);
         painter.setPen(pen1);
-        yFromTop += 8;
+        yFromTop += 10;
         QLineF line2(xFromLeft,yFromTop,printW + 40,yFromTop);
         painter.drawLine(line2);
         painter.restore();
 
 
-        yFromTop += 12;
+        yFromTop += 15;
         painter.drawText(xFromLeft + 10,yFromTop,"Mobile");
         painter.drawText(xFromLeft + 60,yFromTop,pd->front()->MOB_NO);
 
@@ -368,7 +369,7 @@ int print_file::prin2PixMap(QList<Print_Detail *> *pd)
         painter.drawLine(line3);
         painter.restore();
 
-        yFromTop += 10;
+        yFromTop += 13;
         painter.drawText(xFromLeft + 10,yFromTop,"Gothra");
         painter.drawText(xFromLeft + 60,yFromTop,pd->front()->GOTHRA);
 
@@ -379,12 +380,12 @@ int print_file::prin2PixMap(QList<Print_Detail *> *pd)
         pen1.setWidthF(0.5);
         pen1.setColor(Qt::gray);
         painter.setPen(pen1);
-        yFromTop += 12;
+        yFromTop += 13;
         QLineF line4(xFromLeft,yFromTop,printW + 40,yFromTop);
         painter.drawLine(line4);
         painter.restore();
 
-        yFromTop += 10;
+        yFromTop += 13;
         painter.drawText(xFromLeft+10,yFromTop,"Nakshatra");
         painter.drawText(xFromLeft+60,yFromTop,pd->front()->NAKSHATRA);
 
@@ -395,7 +396,7 @@ int print_file::prin2PixMap(QList<Print_Detail *> *pd)
         pen1.setWidthF(0.5);
         pen1.setColor(Qt::gray);
         painter.setPen(pen1);
-        yFromTop += 10;
+        yFromTop += 12;
         QLineF line5(xFromLeft,yFromTop,printW+40,yFromTop);//horizontal
         painter.drawLine(line5);
         painter.restore();
@@ -408,7 +409,7 @@ int print_file::prin2PixMap(QList<Print_Detail *> *pd)
         painter.drawLine(verticalline4);
         painter.restore();
 
-        yFromTop += 10;
+        yFromTop += 12;
         painter.drawText(xFromLeft+3,yFromTop,"Sl");
         painter.drawText(xFromLeft+35,yFromTop,"Seva Name");
         painter.drawText(xFromLeft+260,yFromTop,"Cost");
@@ -429,7 +430,7 @@ int print_file::prin2PixMap(QList<Print_Detail *> *pd)
         int sevaXPos = xFromLeft+5;
 
         int sevaYPos = yFromTop+5;
-        int addCostYPos = 10;
+        int addCostYPos = 12;
 
         QStringList amtList;
         QStringList addOnList;
@@ -565,7 +566,7 @@ int print_file::prin2PixMap(QList<Print_Detail *> *pd)
         painter.save();
 
         yLinePos += 15;
-        painter.setFont(QFont("Arial",PRINT_HEADER::FOOTER_10_FONT));
+        painter.setFont(QFont("Arial",PRINT_HEADER::FOOTER_10_FONT,QFont::Normal));
         painter.drawText(QRectF(xFromLeft,yLinePos,printW,20),Qt::AlignLeft,PRINT_HEADER::FOOTER_1);
         yLinePos += 15;
         painter.drawText(QRectF(xFromLeft,yLinePos,printW,20),Qt::AlignLeft,PRINT_HEADER::FOOTER_2);
@@ -580,17 +581,21 @@ int print_file::prin2PixMap(QList<Print_Detail *> *pd)
         pen1.setWidthF(0.5);
         pen1.setColor(Qt::gray);
         painter.setPen(pen1);
-        yLinePos += 15;
-        QRectF rectF(xFromLeft,yLinePos,printW,45);
+        yLinePos += 25;
+        QRectF rectF(xFromLeft,yLinePos,printW,60);
         painter.drawRect(rectF);
         painter.restore();
 
         painter.drawText(QRectF(xFromLeft,yLinePos,printW,20),Qt::AlignCenter,PRINT_HEADER::FOOTER_6);
-        painter.drawText(QRectF(xFromLeft,yLinePos,printW,50),Qt::AlignCenter,PRINT_HEADER::FOOTER_7);
-        yLinePos += 15;
+        yLinePos +=15;
         painter.setFont(QFont("Times New Roman",PRINT_HEADER::FOOTER_10_FONT));
-        painter.drawText(QRectF(xFromLeft,yLinePos,printW,50),Qt::AlignCenter,PRINT_HEADER::FOOTER_8);
+        painter.drawText(QRectF(xFromLeft,yLinePos,printW,20),Qt::AlignCenter,PRINT_HEADER::FOOTER_7);
+        yLinePos += 15;
+        painter.drawText(QRectF(xFromLeft,yLinePos,printW,20),Qt::AlignCenter,PRINT_HEADER::FOOTER_8);
 
+        if (yLinePos > m_rec_height){
+            qWarning() << Q_FUNC_INFO << " Receipt may be cut at the end. Height less than draw area" << Qt::endl;
+        }
         printer.setPrintRange(QPrinter::CurrentPage);
         painter.end();
     }

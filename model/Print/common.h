@@ -154,7 +154,7 @@ namespace PRINT_HEADER {
 
 //#ifdef RAMMANDIR
 const QString HEADER_1="SRIMAN MADHVA SANGHA RELIGIOUS AND CHARITABLE TRUST";
-constexpr int HEADER_1_FONT=7;
+constexpr int HEADER_1_FONT=8;
 const QString HEADER_2="Survey No.8, Sri Raghavendraswamy Matha Road, 9th Main, 3rd Stage BEML Layout";
 constexpr int HEADER_2_FONT=6;
 const QString HEADER_3="RR Nagar,  Bengaluru-560098";
@@ -178,12 +178,12 @@ const QString FOOTER_5= "4.  ಚಟಕ/ಸಂಕಲ್ಪ- ಇಬ್ಬರಿಗ
 constexpr int FOOTER_5_FONT=5;
 const QString FOOTER_6=  "ಮಧ್ವ ಮತದ ಸಿದ್ಧಾಂತದ ಪದ್ಧತಿ ಬಿಡಬ್ಯಾಡಿ, ಬಿಟ್ಟು ಕೆಡಬ್ಯಾಡಿ - ಶ್ರೀ ಪುರಂದರದಾಸರು.";
 constexpr int FOOTER_6_FONT=5;
-const QString FOOTER_7="Account No: 7720000100023495 PUNJAB NATIONAL BANK RR Nagar Branch";
+const QString FOOTER_7="Acc - 7720000100023495 PUNJAB NATIONAL BANK RR Nagara";
 constexpr int FOOTER_7_FONT=6;
-const QString FOOTER_8="IFSC CODE- PUNB0772000 ";
+const QString FOOTER_8="IFSC  - PUNB0772000 ";
 constexpr int FOOTER_8_FONT=6;
 const QString FOOTER_9=  " ";
-constexpr int FOOTER_9_FONT=8;
+constexpr int FOOTER_9_FONT=10;
 const QString FOOTER_10=  " ";
 constexpr int FOOTER_10_FONT=8;
 

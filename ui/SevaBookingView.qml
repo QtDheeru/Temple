@@ -58,6 +58,7 @@ Rectangle{
                 height: parent.height
                 Layout.alignment: Qt.AlignTop
                 RowLayout{
+                    //Layout.fillHeight: true
                     spacing: root.height/200
                     Layout.topMargin: root.height/100
                     Layout.rightMargin: root.height/100
@@ -116,12 +117,14 @@ Rectangle{
         function onSevaSelected(idx, sevaType, sevaId){
             console.log(" SBV - Index =" + idx + " SevaType =" + sevaType + " SevaID=" + sevaId)
             sevaObject = sevaProxy.getSeva(sevaType,sevaId);
-            console.log(" Seva Object = " + sevaObject)
+            console.log(" Seva Object = "+sevaObject)
             if(sevaObject === null)
             {
                 console.log("Inside if of seva object")
             }
             _sevaD.setSevaDetails(sevaObject)
+            _personal.setGothras(sevaProxy.getGothras());
+            _personal.setNakshatras(sevaProxy.getNakshatras());
         }
         function onSevaSelectedByIndex(idx){
             console.log(" Seva Selected ="+idx)
@@ -133,6 +136,8 @@ Rectangle{
             }
             _sevaD.setSevaDetails(sevaObject)
             console.log("seva name  = " + sevaObject.sevaName + " Seva cost = " + sevaObject.sevaCost)
+            _personal.setGothras(sevaProxy.getGothras());
+            _personal.setNakshatras(sevaProxy.getNakshatras());
         }
     }
 
@@ -298,9 +303,9 @@ Rectangle{
         console.log(" Gotra ="+_personal.gotra)
         buildSevaReceipt();
         var b = sevaProxy.saveReceipt(_sevaReceipt);
-        if(b === false)
+        if(b===false)
         {
-            errorOccur("Cannot store seva receipt details into db");
+            errorOccur("cannot store seva receipt details into db");
         }
     }
 
@@ -326,6 +331,9 @@ Rectangle{
     }
     function clearData(){
         console.log(" Data is getting cleared")
+//        _personal.clearData()
+        //        _personal.devoteeNameEditable = true //ch
+        //        _personal.mobileNoEditable = true  //ch
         _sevaD.clearData();
         _sevaD.isCountEditable =  true;
         _sevaD.isAddressEditable = true;
@@ -380,7 +388,6 @@ Rectangle{
 
     Keys.onEscapePressed: {
         console.log("Esc pressed in select seva type view")
-        _sevaP.clearData();
         loadMenuPage()
     }
     SevaReceipt{
@@ -457,8 +464,6 @@ Rectangle{
 
     Component.onCompleted: {
         console.log("Component.onCompleted: of seva booking view",dgothra,d_Nakshtra)
-        _personal.setGothras(sevaProxy.getGothras());
-        _personal.setNakshatras(sevaProxy.getNakshatras());
         _personal.setNakshatraCombo(d_Nakshtra)
         _personal.setGothraCombo(dgothra)
         forceActiveFocus()
