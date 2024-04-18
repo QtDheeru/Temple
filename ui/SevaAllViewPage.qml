@@ -125,7 +125,6 @@ Rectangle{
                             _allViewDataDialog._cash= ve.cash
                             _allViewDataDialog._bank= ve.bank
 
-
                             _sevaBookingElement.sno = ve.sno
                             _sevaBookingElement.person_id = ve.person_id
                             _sevaBookingElement.person.devoteeName = ve.person.devoteeName
@@ -145,8 +144,7 @@ Rectangle{
                         else if (mouse.button == Qt.RightButton)
                         {
                             console.log("Right")
-                            contextMenu.popup()
-                            // var ve = sevaProxy.sevaBookingTV.getRowOfData(lv1.currentRow);
+
                             var v = sevaProxy.sevaBSearchModel.getRowOfDataFromTableViewModel(lv1.currentRow);
                             console.log("///////////////////"+v)
                             ve = sevaProxy.sevaBookingTV.getRowOfData(v);
@@ -181,6 +179,8 @@ Rectangle{
                             _sevaBookingElement.totalCost= ve.totalCost
                             _sevaBookingElement.cash= ve.cash
                             _sevaBookingElement.bank= ve.bank
+                            contextMenu.popup()
+                            console.log("/////////////////// right click")
                         }
                     }
                 }
@@ -238,21 +238,20 @@ Rectangle{
         Menu{
             id: contextMenu
             MenuItem {
-                id:_modify
+                id: _modify
                 text: qsTr('Modify')
-                onTriggered:
-                {
+                onTriggered: {
                     sevaProxy.sevaBookingTV
                     _allViewDataDialog.open()
                 }
             }
             MenuItem {
-                id:_print
+                id: _print
                 text: qsTr('Print')
-                onTriggered:_allViewDataDialog.open()
+                onTriggered: _allViewDataDialog.open()
             }
             MenuItem{
-                id:_cancel
+                id: _cancel
                 text: qsTr('Cancel')
                 onTriggered: {
                     storeObject = ve;
@@ -261,7 +260,7 @@ Rectangle{
             }
         }
         DisplayDialog {
-            id :_errorDialog
+            id : _errorDialog
             visible: false
             property var page
             function showmsg(exportmsg,pageno){

@@ -1430,7 +1430,7 @@ QList<SevaBookingElement *> DBInterface::getSewaBookingEntryForReceipt(QString r
     {
         qDebug() << Q_FUNC_INFO <<"Inside getSewaBookingEntryForReceipt of DBInterface";
         SevaBookingElement *seva_ele = new SevaBookingElement;
-        QString s_no=query.value(0).toString();
+        QString s_no = query.value(0).toString();
         QString person_id = query.value(1).toString();
         QString seva_type = query.value(2).toString();
         QString seva_name = query.value(3).toString();

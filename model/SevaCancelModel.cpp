@@ -6,16 +6,6 @@ SevaCancelModel::SevaCancelModel(QObject *parent)
     qDebug()<<"Inside SevaCancelModel Class"<<Qt::endl;
 }
 
-//bool SevaCancelModel::sevaChecked() const
-//{
-//    return m_sevaChecked;
-//}
-
-//void SevaCancelModel::setSevaChecked(bool newSevaChecked)
-//{
-//    m_sevaChecked = newSevaChecked;
-//}
-
 int SevaCancelModel::rowCount(const QModelIndex &parent) const
 {
     m_recptList.count();
@@ -55,15 +45,15 @@ QHash<int, QByteArray> SevaCancelModel::roleNames() const
 
     qDebug()<<Q_FUNC_INFO<<" 2 " <<roles;
     return roles;
-
 }
 
 int SevaCancelModel::setData(QList<SevaBookingElement*> l_recptList)
 {
+    qDebug()<<Q_FUNC_INFO << Qt::endl;
     this->beginResetModel();
     m_recptList = l_recptList;
     SevaBookingElement *ele = l_recptList.at(0);
-    getTotalAmount();
+    this->getTotalAmount();
     this->setSevaReceiptNumber(ele->receiptNum());
     this->endResetModel();
     return 0;

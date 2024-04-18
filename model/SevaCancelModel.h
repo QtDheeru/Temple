@@ -23,9 +23,6 @@ public:
     QHash<int, QByteArray> roleNames() const override;
     int setData(QList<SevaBookingElement *>);
 
-//    bool sevaChecked() const;
-//    void setSevaChecked(bool newSevaChecked);
-
     QList<SevaBookingElement *> recptList() const;
     void setRecptList(const QList<SevaBookingElement *> &newRecptList);
 

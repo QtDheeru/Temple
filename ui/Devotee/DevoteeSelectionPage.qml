@@ -53,7 +53,6 @@ Item {
                     Layout.margins: 10
                     isRcptvisible:false
                 }
-
                 Button {
                     text : "Start Seva Booking"
                     Layout.fillWidth: true
@@ -206,6 +205,11 @@ Item {
         _errorDialog.open();
     }
     function areSureDelete(){
+        if(_devoteeView.mobileNo === '' || _devoteeView.devoteeName === ''){
+            dialog.title = "Please select the Devote to delete";
+            dialog.open();
+            return;
+        }
         _errorDialog.context = 2;
         _errorDialog.text2Display= " Are you sure you would like to Delete ?\n\n Name ="+_devoteeView.devoteeName + "\n\n Mobile ="+_devoteeView.mobileNo;
         _errorDialog.open();
