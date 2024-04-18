@@ -32,16 +32,7 @@ Rectangle {
             font.pixelSize: fontSize
             onClicked: {
                 console.log(" Adding Seva")//SevaBookingControl.qml
-                var s1 = selectedReceiptDate.split("-")
-                var s2 = selectedSevaDate.split("-");
-                if((s1[0]>s2[0])||(s1[1]>s2[1])||(s1[2]>s2[2]))
-                {
-                    errorOccur("select proper seva date");
-                }
-                else
-                {
-                    addMoreSeva()
-                }
+                addMoreSeva()
             }
         }
         Button {
@@ -72,22 +63,22 @@ Rectangle {
                 clearReceipt();
             }
         }
-//        Button {
-//            id : _showData
-//            Layout.fillWidth: true;text : "All Data"
-//            Layout.maximumHeight: 40
-//            font.pixelSize: fontSize
-//            onClicked: {
-//                console.log("show all button clicked")
-//                showAllData();
-//            }
-//        }
+        //        Button {
+        //            id : _showData
+        //            Layout.fillWidth: true;text : "All Data"
+        //            Layout.maximumHeight: 40
+        //            font.pixelSize: fontSize
+        //            onClicked: {
+        //                console.log("show all button clicked")
+        //                showAllData();
+        //            }
+        //        }
         Button {
             id : _last10Trans
             Layout.fillWidth: true;text : "Last Transaction"
             Layout.maximumHeight: 40
             font.pixelSize: fontSize
-            enabled: true              //Not implemented
+            enabled: false              //Not implemented
             onClicked: {
                 showLast10Transaction()
             }
@@ -141,7 +132,7 @@ Rectangle {
         },
         State{
             name:"next";
-          /*  PropertyChanges{target: _addMoreSevabutton;enabled : true} revert if nece*/
+            /*  PropertyChanges{target: _addMoreSevabutton;enabled : true} revert if nece*/
             PropertyChanges{target: _addMoreSevabutton;enabled : false}
             PropertyChanges{target: _payButton;enabled : true}
             PropertyChanges{target: _next;enabled : false}

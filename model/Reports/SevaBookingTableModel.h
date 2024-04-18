@@ -74,7 +74,7 @@ private:
     static int x;
     static int y;
     static int z;
-    const QString status="canceled";
+    const QString m_status="canceled";
     bool found;
 
 };

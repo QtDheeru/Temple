@@ -215,13 +215,6 @@ void SevaViewProxy::cleanBookingTableModel()
                      m_sevaBookingTV,&SevaBookingTableModel::referseshTheModel);
 }
 
-void SevaViewProxy::deleteRecipt(QString rcptNo)
-{
-    qDebug() << Q_FUNC_INFO << "rcptNo" << rcptNo << Qt::endl;
-    emit sendDeletedRecptNo(rcptNo);
-    this->m_sevaBookingTV->reset(rcptNo);
-}
-
 void SevaViewProxy::setStatusToCancel(QString rcptNo){
     qDebug() << Q_FUNC_INFO << "rcptNo" << rcptNo << Qt::endl;
     //    this->checkIfStatusAlreadyCanceled(rcptNo);

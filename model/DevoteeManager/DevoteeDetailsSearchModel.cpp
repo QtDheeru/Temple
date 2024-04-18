@@ -16,13 +16,9 @@ DevoteeDetailsSearchModel::DevoteeDetailsSearchModel(QObject *parent)
 void DevoteeDetailsSearchModel::updateTableModel(QString txtTyped, QString comboBoxText)
 {
     qDebug()<<Q_FUNC_INFO<<">>>>>>>>>>>>>>>"<< " Search Text " << txtTyped << " ComboBox =" << comboBoxText << Qt::endl;
-    if(txtTyped == ""){
-        return;
-    }
     m_txtTyped = txtTyped;
     m_comboBoxText = comboBoxText;
     invalidateFilter();
-    //invalidateRowsFilter();
 }
 
 int DevoteeDetailsSearchModel::getRowOfDataFromTableViewModel(int source_row)
@@ -35,6 +31,9 @@ int DevoteeDetailsSearchModel::getRowOfDataFromTableViewModel(int source_row)
 
 bool DevoteeDetailsSearchModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
 {
+    if(m_txtTyped == ""){
+       return true;
+    }
     const QModelIndex sourceIndex = sourceModel()->index(source_row, 0, source_parent);
 
     DevoteeDetailsTableModel::DEVOTEE_ENUMS role = m_search2EnumMap.value(m_comboBoxText);

@@ -157,13 +157,16 @@ void SevaBookingTableModel::reset(QString receiptNo)
         if (receiptNo.contains(m_bookedSeva[i]->sno())){
             row = i;
             sevaReceipt = m_bookedSeva[i];
-            sevaReceipt->setStatus(status);
+            sevaReceipt->setStatus(m_status);
         }
     }
+    qDebug()<<Q_FUNC_INFO<<Qt::endl;
     QModelIndex topLeft = createIndex(row,0);
     QModelIndex topRight = createIndex(row,20);
+    qDebug()<<Q_FUNC_INFO<<Qt::endl;
     emit dataChanged(topLeft, topRight);
     emit statusCancelledSuccess();
+    qDebug()<<Q_FUNC_INFO<<Qt::endl;
 }
 
 void SevaBookingTableModel::checkStatus(QString receiptNo){
@@ -174,7 +177,12 @@ void SevaBookingTableModel::checkStatus(QString receiptNo){
     }
     for(int var = 0;var < m_bookedSeva.size();var++) {
         if(m_bookedSeva[var]->sno() == receiptNo){
-            if(m_bookedSeva[var]->status() == status){
+            if((m_bookedSeva[var]->status() == "")){
+                emit notAbleToCancel();
+                return;
+            }
+            qDebug() << Q_FUNC_INFO << "booked seva status =" << m_bookedSeva[var]->status() << Qt::endl;
+            if(m_bookedSeva[var]->status() == m_status){
                 check= true;
                 emit alreadyCancelled();
             }
@@ -187,7 +195,7 @@ void SevaBookingTableModel::checkStatus(QString receiptNo){
 
 void SevaBookingTableModel::referseshTheModel(QString rownum)
 {
-    qDebug()<<Q_FUNC_INFO<<Qt::endl;
+    qDebug() << Q_FUNC_INFO << Qt::endl;
     int count=0;
     for(int var=0;var<m_bookedSeva.size();var++) {
         if(m_bookedSeva[var]->sno()== rownum){

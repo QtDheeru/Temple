@@ -45,7 +45,8 @@ Rectangle {
             fontPixelSize: _rootSevaDateTime.subComponentPixelSize
             myWidth: parent.width/1.25
             _labelText:qsTr("Reciept Date")
-            showPopup: sevaProxy.userManagement.rolenum===1
+            calendarEnabled:false
+            showPopup: sevaProxy.userManagement.rolenum === 1
         }
         MyDateEntry{
             id:r2;
@@ -55,7 +56,7 @@ Rectangle {
             _labelText:qsTr("Seva Date")
         }
         MyComboEntry{id:_momento;
-            myHeight:_rootSevaDateTime.subComponentHeight-10;
+            myHeight:_rootSevaDateTime.subComponentHeight - 10;
             fontPixelSize: _rootSevaDateTime.subComponentPixelSize
             myWidth: parent.width/1.25
             Layout.topMargin: 8;

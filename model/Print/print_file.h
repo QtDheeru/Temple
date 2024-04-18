@@ -57,6 +57,8 @@ public:
     static QString NumberToWord(const unsigned long number);
     int printing_file_1(QList<Print_Detail *> *pd);
 
+    int m_rec_width, m_rec_height;
+
     QPixmap m_map;
 };
 

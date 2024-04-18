@@ -59,7 +59,6 @@ public:
                                         QString gothra);
     Q_INVOKABLE bool saveReceipt(MySevaReceipt *receipt);
 
-    Q_INVOKABLE void deleteRecipt(QString rcptNo);
     Q_INVOKABLE void setStatusToCancel(QString rcptNo);
     void checkIfStatusAlreadyCanceled(QString);
 
