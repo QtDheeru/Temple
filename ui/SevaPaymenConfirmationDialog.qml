@@ -51,6 +51,7 @@ Dialog {
             spacing: 5
             Layout.margins: 5
             Button{
+                id : _paymentConfirmButton
                 Layout.topMargin: 5;Layout.bottomMargin: 5;
                 Layout.fillWidth: true;text :"Payment Confirm"
                 Layout.maximumHeight: parent.height-15
@@ -60,6 +61,8 @@ Dialog {
                     console.log("In confirm  clicked")
                     if (checkAmoutPaid()) {
                         console.log("In if confirm  clicked")
+                        _sevaPayment.cashPaid = "";
+                        //_paymentConfirmButton.enabled = false;
                         closeButton.enabled = false;
                         paymentComplete();
                         //_sevaPayment.clearData();

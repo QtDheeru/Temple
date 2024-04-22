@@ -144,7 +144,8 @@ Rectangle{
                         else if (mouse.button == Qt.RightButton)
                         {
                             console.log("Right")
-
+                            contextMenu.popup()
+                            // var ve = sevaProxy.sevaBookingTV.getRowOfData(lv1.currentRow);
                             var v = sevaProxy.sevaBSearchModel.getRowOfDataFromTableViewModel(lv1.currentRow);
                             console.log("///////////////////"+v)
                             ve = sevaProxy.sevaBookingTV.getRowOfData(v);
@@ -179,8 +180,6 @@ Rectangle{
                             _sevaBookingElement.totalCost= ve.totalCost
                             _sevaBookingElement.cash= ve.cash
                             _sevaBookingElement.bank= ve.bank
-                            contextMenu.popup()
-                            console.log("/////////////////// right click")
                         }
                     }
                 }
@@ -238,7 +237,7 @@ Rectangle{
         Menu{
             id: contextMenu
             MenuItem {
-                id: _modify
+                id:_modify
                 text: qsTr('Modify')
                 onTriggered: {
                     sevaProxy.sevaBookingTV

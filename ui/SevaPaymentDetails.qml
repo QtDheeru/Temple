@@ -120,7 +120,8 @@ Rectangle {
             myHeight:10
             _labelFontSize:25
         }
-        MyRowEntry {id:_note;_labelText :qsTr("Note");
+        MyRowEntry {
+            id:_note;_labelText :qsTr("Note");
             myWidth: parent.width/1.4
         }
     }

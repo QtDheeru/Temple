@@ -13,11 +13,11 @@
 class AccountFullReportModel : public QAbstractTableModel
 {
     Q_OBJECT
-    Q_PROPERTY(int iGrandTotal READ iGrandTotal WRITE setIGrandTotal NOTIFY iGrandTotalChanged)
-    Q_PROPERTY(int neftTotal READ neftTotal WRITE setNeftTotal NOTIFY neftTotalChanged)
-    Q_PROPERTY(int cashTotal READ cashTotal WRITE setCashTotal NOTIFY cashTotalChanged)
-    Q_PROPERTY(int chequeTotal READ chequeTotal WRITE setChequeTotal NOTIFY chequeTotalChanged)
-    Q_PROPERTY(int upiTotal READ upiTotal WRITE setUpiTotal NOTIFY upiTotalChanged)
+    Q_PROPERTY(double iGrandTotal READ iGrandTotal WRITE setIGrandTotal NOTIFY iGrandTotalChanged)
+    Q_PROPERTY(double neftTotal READ neftTotal WRITE setNeftTotal NOTIFY neftTotalChanged)
+    Q_PROPERTY(double cashTotal READ cashTotal WRITE setCashTotal NOTIFY cashTotalChanged)
+    Q_PROPERTY(double chequeTotal READ chequeTotal WRITE setChequeTotal NOTIFY chequeTotalChanged)
+    Q_PROPERTY(double upiTotal READ upiTotal WRITE setUpiTotal NOTIFY upiTotalChanged)
     // QAbstractItemModel interface
     Q_PROPERTY(double unknownTypeTotal READ unknownTypeTotal WRITE setUnknownTypeTotal NOTIFY unknownTypeTotalChanged FINAL)
 
@@ -49,16 +49,16 @@ public:
     Q_INVOKABLE void resetAccModel();
     Q_INVOKABLE void generateFullAccountDataCSV();
 
-    int iGrandTotal() const;
-    void setIGrandTotal(int newIGrandTotal);
+    double iGrandTotal() const;
+    void setIGrandTotal(double newIGrandTotal);
     AccountReportCSVProcessor *getAccountCSVProcessor() const;
     void setAccountCSVProcessor(AccountReportCSVProcessor *newAccountCSVProcessor);
 
-    int neftTotal() const;
-    void setNeftTotal(int newNeftTotal);
+    double neftTotal() const;
+    void setNeftTotal(double newNeftTotal);
 
-    int cashTotal() const;
-    void setCashTotal(int newCashTotal);
+    double cashTotal() const;
+    void setCashTotal(double newCashTotal);
 
     double chequeTotal() const;
     void setChequeTotal(double newChequeTotal);
@@ -95,9 +95,9 @@ public slots:
 
 private:
     QList<AccountFullreportElement*> m_accountFullreportElementList;
-    int m_iGrandTotal;
-    int m_neftTotal;
-    int  m_cashTotal;
+    double m_iGrandTotal;
+    double m_neftTotal;
+    double m_cashTotal;
     double m_chequeTotal;
     double m_upiTotal;
     double m_unknownTypeTotal;

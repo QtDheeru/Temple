@@ -54,12 +54,9 @@ Rectangle {
             onButtonClikcked: {
                 console.log("account details button clicked");
                 accountDetails();
-                //                _loginloader.active= true
-                //                loadLogin(2)
                 if(sevaProxy.userManagement.rolenum !== 1){
                     _adminmsg.showMsg("Admin Access Only!")
-                }
-                else{
+                } else {
                     console.log("this is admin")
                 }
             }
@@ -162,7 +159,7 @@ Rectangle {
             if(pcount===2){
                 _loginloader.anchors.fill = parent
                 console.log("Inside pcount 2")
-                loader.source = "SevaReportPage.qml"
+                loader.source = "qrc:/ui/Reports/Account/SevaReportPage.qml"
             }
             if (pcount === 4){
                 _loginloader.anchors.fill = parent

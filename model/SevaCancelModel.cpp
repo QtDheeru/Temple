@@ -13,7 +13,8 @@ int SevaCancelModel::rowCount(const QModelIndex &parent) const
 
 QVariant SevaCancelModel::data(const QModelIndex &index, int role) const
 {
-    qDebug()<<Q_FUNC_INFO<<" indexValInTBM "<<index.row()<<role;
+    qDebug()<<Q_FUNC_INFO<< " indexValInTBM "<<index.row()<<role;
+    if (m_recptList.size() == 0  ) return "";
 
     if(role == 0 )
     {
@@ -49,8 +50,8 @@ QHash<int, QByteArray> SevaCancelModel::roleNames() const
 
 int SevaCancelModel::setData(QList<SevaBookingElement*> l_recptList)
 {
-    qDebug()<<Q_FUNC_INFO << Qt::endl;
     this->beginResetModel();
+    m_recptList.clear();
     m_recptList = l_recptList;
     SevaBookingElement *ele = l_recptList.at(0);
     this->getTotalAmount();

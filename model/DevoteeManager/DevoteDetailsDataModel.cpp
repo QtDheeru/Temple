@@ -65,6 +65,8 @@ bool DevoteDetailsDataModel::updateDevoteeJSObject(QVariantMap map)
     qDebug() << Q_FUNC_INFO << " Devotee Name =" << map["devoteeName"];
     QString mobile = map["mobileNumber"].toString();
     QString devoteeName = map["devoteeName"].toString();
+
+    m_devoteeFoundIndex = -1;
     DevotePersnalDetails *devotee = searchDevoteeByMobile(mobile.trimmed());
     if (devotee != nullptr) {
         QScopedPointer<DevotePersnalDetails> devotee2Update(new DevotePersnalDetails);

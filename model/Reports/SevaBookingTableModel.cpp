@@ -160,13 +160,10 @@ void SevaBookingTableModel::reset(QString receiptNo)
             sevaReceipt->setStatus(m_status);
         }
     }
-    qDebug()<<Q_FUNC_INFO<<Qt::endl;
     QModelIndex topLeft = createIndex(row,0);
     QModelIndex topRight = createIndex(row,20);
-    qDebug()<<Q_FUNC_INFO<<Qt::endl;
     emit dataChanged(topLeft, topRight);
     emit statusCancelledSuccess();
-    qDebug()<<Q_FUNC_INFO<<Qt::endl;
 }
 
 void SevaBookingTableModel::checkStatus(QString receiptNo){

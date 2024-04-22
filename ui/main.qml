@@ -2,6 +2,8 @@ import QtQuick 2.12
 import QtQuick.Controls 2.5
 import QtQuick.Window 2.12
 import "./components"
+import "Reports/Account"
+import "Reports/Booking"
 
 ApplicationWindow {
     id :_root
@@ -46,7 +48,7 @@ ApplicationWindow {
 
     Connections{
         target: loader.item
-        ignoreUnknownSignals: true
+        //ignoreUnknownSignals: true
 
         function onWelcomeToAppTimeTriggered(){
             if(trustListModel.getTrustListSize()>1)
@@ -82,11 +84,7 @@ ApplicationWindow {
             console.log("Welcome screen TimeTriggered");
             loader.source = "Login.qml"
         }
-        /*      function onLoadLogin(pagecount)
-        {
-            console.log("Login Page loaded");
-            loader.setSource("Login.qml",{pageNumber:pagecount,loginPageImage:"",height:300,width:300})
-        }*/
+
         function onDateClicked(date)
         {
             console.log("date clicked " +date )
@@ -100,9 +98,15 @@ ApplicationWindow {
                 loader.source = "SevaReportOnDateView.qml"
             }
         }
+
+        function onStartReportGeneration(date1){
+            console.log("Send Report Generation request to Backend")
+            //sevaProxy.sevaReport.generateAccReport(obj)
+        }
+
         function onSendReportImput(obj)
         {
-            console.log("In main")
+            console.log("Send Report Generation request to Backend")
             sevaProxy.sevaReport.generateAccReport(obj)
         }
         function onSendBookReportImput(obj)
@@ -110,11 +114,7 @@ ApplicationWindow {
             console.log("In main")
             sevaProxy.sevaReport.generateBookReport(obj)
         }
-        function onSendReportDateRangeImput(obj)
-        {
-            console.log("In main")
-            sevaProxy.sevaReport.generateAccReportForEachDate(obj)
-        }
+
         function onSendBookingReportDateRangeImput(obj)
         {
             console.log("In main")
@@ -122,6 +122,7 @@ ApplicationWindow {
         }
         function onSendReportDateRangeImputForWholeMonth(obj)
         {
+            // Every month report
             console.log("In main")
             sevaProxy.sevaReport.generateAccReportForEachDateForWholeMonth(obj)
         }
@@ -159,10 +160,6 @@ ApplicationWindow {
             console.log("reset Model")
             sevaProxy.sevaReport.resetAccModel()
         }
-        //        function onResetAccDateRangeModel(){
-        //            console.log("reset Model")
-        //            sevaProxy.sevaReport.resetAccDateRangeModel()
-        //        }
         function onResetBookingModel(){
             console.log("reset DateRangeModel")
             sevaProxy.sevaReport.resetBookingModel()
@@ -178,7 +175,7 @@ ApplicationWindow {
                 loader.source = "MenuPage.qml"}
             if(pcount === 2){
                 console.log("Inside pcount 2")
-                loader.source = "SevaReportPage.qml"
+                loader.source = "qrc:/ui/Reports/Account/SevaReportPage.qml"
             }
             if (pcount === 4){
                 console.log("Inside pcount 4")
@@ -198,7 +195,7 @@ ApplicationWindow {
         }
         function onAccountDetails() {
             console.log("Clicked on AccountDetails")
-            loader.source = "SevaReportPage.qml"
+            loader.source = "qrc:/ui/Reports/Account/SevaReportPage.qml"
         }
         function onBookingreport() {
             console.log("Clicked on Bookingreport")

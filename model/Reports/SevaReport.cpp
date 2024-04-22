@@ -124,15 +124,12 @@ void SevaReport::generateAccReport(ReportFilterElements* ele)
 {
     qDebug()<<Q_FUNC_INFO<<Qt::endl;
     m_accountreportModel->generateAccReport(ele);
-    qDebug()<<ele->bDatewise()<<Qt::endl;
-    qDebug()<<ele->sSingleDate()<<Qt::endl;
 }
 
 void SevaReport::generateAccReportForEachDate(ReportFilterElements *ele)
 {
     qDebug()<<Q_FUNC_INFO<<Qt::endl;
     m_accountReportDateRangeModel->generateAccDateRangeReport(ele);
-
 }
 
 void SevaReport::generateAccReportForEachDateForWholeMonth(ReportFilterElements *ele)

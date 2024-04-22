@@ -67,30 +67,31 @@ void AccountFullReportModel::generateFullAccountReportEachdate(ReportFilterEleme
     m_iGrandTotal = 0;
     m_neftTotal = 0;
     m_cashTotal = 0;
-    qDebug()<<Q_FUNC_INFO<<Qt::endl;
     beginResetModel();
     m_accountFullreportElementList.clear();
     endResetModel();
-    qDebug()<<Q_FUNC_INFO<<m_accountFullreportElementList.size()<<Qt::endl;
-    qDebug()<<Q_FUNC_INFO<<"elm date"<<filterelement->sSingleDate()<<Qt::endl;
-    qDebug()<<Q_FUNC_INFO<<"elm details"<<filterelement->sSevaName()<<filterelement->iSevaType()<<Qt::endl;
+    filterelement->print();
+    qDebug()<<Q_FUNC_INFO<<" Report Date"<<filterelement->sSingleDate() << " SevaName ="<<filterelement->sSevaName()<<" SevaType =" << filterelement->iSevaType()<<Qt::endl;
 
-    if(filterelement->iSelectedType()==0)
-    {
-        qDebug()<<Q_FUNC_INFO<<"Inside c date acc rep"<<Qt::endl;
-        filterelement->setSSingleDate(FormatDate(filterelement->sSingleDate()));
-        qDebug()<<Q_FUNC_INFO<<"elm->setSSingleDate(FormatDate(elm->sSingleDate()))"<<filterelement->sSingleDate()<<Qt::endl;
-        DBInterface::getInstance()->fullAccounDetailsDateWise(filterelement->sSevaName(),filterelement->iSevaType(),(filterelement->sSingleDate()));
+    switch(filterelement->iSelectedType()) {
+    case  ReportFilterElements::REPORT_DATE_SELECTION_TYPE::SINGLE_DATE_REPORT:{
+          qDebug() << Q_FUNC_INFO << " Generate the Single Date Full Report " << Qt::endl;
+          filterelement->setSSingleDate(FormatDate(filterelement->sSingleDate()));
+          DBInterface::getInstance()->fullAccounDetailsDateWise(filterelement->sSevaName(),filterelement->iSevaType(),(filterelement->sSingleDate()));
+          break;
     }
-    else if(filterelement->iSelectedType()==1)
-    {
-        filterelement->setSStartDate(FormatDate(filterelement->sStartDate()));
-        filterelement->setSEndDate(FormatDate(filterelement->sEndDate()));
-        DBInterface::getInstance()->fullAccounDetailsDateRangeWise(filterelement->sSevaName(),filterelement->iSevaType(),filterelement->sStartDate(),filterelement->sEndDate());
+    case  ReportFilterElements::REPORT_DATE_SELECTION_TYPE::DATE_RANGE_REPORT : {
+          filterelement->setSStartDate(FormatDate(filterelement->sStartDate()));
+          filterelement->setSEndDate(FormatDate(filterelement->sEndDate()));
+          DBInterface::getInstance()->fullAccounDetailsDateRangeWise(filterelement->sSevaName(),filterelement->iSevaType(),filterelement->sStartDate(),filterelement->sEndDate());
+          break;
     }
-    else
-    {
-        DBInterface::getInstance()->fullAccounDetailsMonthwise(filterelement->sSevaName(),filterelement->iSevaType(),filterelement->sMonth().toInt(),filterelement->sYear().toInt());
+    case  ReportFilterElements::REPORT_DATE_SELECTION_TYPE::MONTH_REPORT : {
+          DBInterface::getInstance()->fullAccounDetailsMonthwise(filterelement->sSevaName(),filterelement->iSevaType(),filterelement->sMonth().toInt(),filterelement->sYear().toInt());
+          break;
+    }
+    default : {qDebug() << Q_FUNC_INFO << " Wrong selection type. No full reports" << Qt::endl; break;}
+
     }
 }
 
@@ -166,6 +167,8 @@ int AccountFullReportModel::getaccountFullreportElementListSize()
 QString AccountFullReportModel::FormatDate(QString unformat)
 {
     qDebug()<<Q_FUNC_INFO<<unformat<<Qt::endl;
+    QDate date1 = QDate::fromString(unformat,"yyyy-MM-dd");
+    if (date1.isValid()) return unformat;
     QString format;
     QDate Date = QDate::fromString(unformat,"dd-MM-yyyy");
     qDebug()<<Q_FUNC_INFO<<Date<<Qt::endl;
@@ -213,22 +216,22 @@ void AccountFullReportModel::setChequeTotal(double newChequeTotal)
     m_accountSummary->chequeTotal = newChequeTotal;
 }
 
-int AccountFullReportModel::cashTotal() const
+double AccountFullReportModel::cashTotal() const
 {
     return m_accountSummary->cashTotal;
 }
 
-void AccountFullReportModel::setCashTotal(int newCashTotal)
+void AccountFullReportModel::setCashTotal(double newCashTotal)
 {
     m_accountSummary->cashTotal = newCashTotal;
 }
 
-int AccountFullReportModel::neftTotal() const
+double AccountFullReportModel::neftTotal() const
 {
     return m_accountSummary->neftTotal;
 }
 
-void AccountFullReportModel::setNeftTotal(int newNeftTotal)
+void AccountFullReportModel::setNeftTotal(double newNeftTotal)
 {
     m_accountSummary->neftTotal = newNeftTotal;
 }
@@ -246,12 +249,12 @@ void AccountFullReportModel::setAccountCSVProcessor(AccountReportCSVProcessor *n
     emit accountCSVProcessorChanged();
 }
 
-int AccountFullReportModel::iGrandTotal() const
+double AccountFullReportModel::iGrandTotal() const
 {
     return m_accountSummary->total;
 }
 
-void AccountFullReportModel::setIGrandTotal(int newIGrandTotal)
+void AccountFullReportModel::setIGrandTotal(double newIGrandTotal)
 {
     m_accountSummary->total = newIGrandTotal;
     emit iGrandTotalChanged();
