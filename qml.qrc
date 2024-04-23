@@ -37,7 +37,6 @@
         <file>ui/AddSevas.qml</file>
         <file>ui/assets/Images/TempleInviteSnap.jpeg</file>
         <file>ui/assets/Images/TempleInviteSnap1.PNG</file>
-        <file>ui/SevaReportPage.qml</file>
         <file>ui/SevaReportOnDateView.qml</file>
         <file>ui/components/MyReportFilter.qml</file>
         <file>ui/TrustDelegate.qml</file>
@@ -55,12 +54,6 @@
         <file>ui/AllDataView.qml</file>
         <file>ui/VoucherReceiptDialog.qml</file>
         <file>ui/VoucherReceiptDetails.qml</file>
-        <file>ui/SevaAccountReportOnDateRange.qml</file>
-        <file>ui/SevaAccountReportForSingleDate.qml</file>
-        <file>ui/SevaAccountReportMonthWise.qml</file>
-        <file>ui/SevaBookingReportForSingleDate.qml</file>
-        <file>ui/SevaBookingReportOnDateRange.qml</file>
-        <file>ui/SevaBookingReportMonthWise.qml</file>
         <file>ui/components/MyBookingFilter.qml</file>
         <file>ui/AllViewDataDialog.qml</file>
         <file>ui/AllViewDataDetails.qml</file>
@@ -76,7 +69,6 @@
         <file>ui/assets/Images/remove.png</file>
         <file>ui/Admin/AdminRights.qml</file>
         <file>ui/Admin/UserManagement.qml</file>
-        <file>ui/AllAccountDetails.qml</file>
         <file>ui/assets/Images/cancel.png</file>
         <file>ui/Devotee/DevoteeDetailsPage.qml</file>
         <file>ui/Devotee/DevoteeSelectionPage.qml</file>
@@ -112,5 +104,14 @@
         <file>Images/check-mark.png</file>
         <file>ui/components/MyCheckBox.qml</file>
         <file>ui/components/MyButton.qml</file>
+        <file>ui/Reports/Account/ReportFooter.qml</file>
+        <file>ui/Reports/Account/SevaAccountReportForSingleDate.qml</file>
+        <file>ui/Reports/Account/SevaAccountReportMonthWise.qml</file>
+        <file>ui/Reports/Account/SevaAccountReportOnDateRange.qml</file>
+        <file>ui/Reports/Booking/SevaBookingReportForSingleDate.qml</file>
+        <file>ui/Reports/Booking/SevaBookingReportMonthWise.qml</file>
+        <file>ui/Reports/Booking/SevaBookingReportOnDateRange.qml</file>
+        <file>ui/Reports/Account/AllAccountDetails.qml</file>
+        <file>ui/Reports/Account/SevaReportPage.qml</file>
     </qresource>
 </RCC>

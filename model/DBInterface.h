@@ -262,6 +262,7 @@ private:
     QList<SevaBookingElement*> m_sevabooking;
 
     QString m_error;
+    QList<QString> m_pay_mode={"cash","Cheque","NEFT","UPI"};
 
 };
 

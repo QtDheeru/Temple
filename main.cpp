@@ -19,6 +19,7 @@
 #include "model/voucher/VoucherFilterElements.h"
 #include "model/voucher/VoucherReportModel.h"
 #include "AccountReportMonthRangeElement.h"
+#include "AccountReportElement.h"
 #include "BookingReportDateRangeElement.h"
 #include "SevaTypeNamesDataModel.h"
 #include "SevaBookingConformationDataModel.h"
@@ -67,9 +68,14 @@ int main(int argc, char *argv[])
 
     qmlRegisterUncreatableType<QAbstractItemModel>("Utils",1,0,"Abc","DontCreate");
     qmlRegisterType<ReportFilterElements>("ReportElements",1,0,"ReportFilterItems");
+    qmlRegisterUncreatableType<ReportFilterElements>("ReportElements",1,0,"ReportFilterEnum","Enum is not a data type");
+
+
     qmlRegisterType<VoucherElement>("VoucherElement",1,0,"VouEle");
     qmlRegisterType<SevaBookingElement>("SevaBookingElement",1,0,"SevaBookingEle");
     qmlRegisterType<VoucherFilterElements>("VoucherFilterElement",1,0,"VouFilElem");
+
+    qmlRegisterType<AccountReportElement>("AccountReportElement",1,0,"AccountReportElement");
     qmlRegisterType<AccountReportDateRangeElement>(" AccountReportDateRangeElement",1,0," AccReportDateRangeElement");
     qmlRegisterType<AccountReportMonthRangeElement>(" AccountReportMonthRangeElement",1,0," AccReportMonthRangeElement");
     qmlRegisterType<BookingReportDateRangeElement>("BookingReportDateRangeElement",1,0," BookingReportDateRangeElement");

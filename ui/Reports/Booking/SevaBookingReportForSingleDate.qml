@@ -7,13 +7,11 @@ import "./components"
 //import ReportElements 1.0
 Rectangle{
     id:_rr1
-    //    property alias thisHeight :_rr1.height
-    //    property alias thisWidth : _rr1.width
-    // color: "yellow"
-    //signal sendReportDateRangeImputAgain();
+    anchors.fill: parent
     signal loadMenuPage();
     signal loadDateWiseBookingPage();
     property var styles : MyStyles{}
+    property alias model : lv1.model
     TableView{
         id: lv1
         model: sevaProxy.sevaReport.bookReportModel
@@ -31,13 +29,6 @@ Rectangle{
                     font.pixelSize: 15
                     font.family: "Helvetica"
                 }
-                //                        Rectangle {
-                //                            anchors.right: parent.right
-                //                            anchors.top: parent.top
-                //                            anchors.bottom: parent.bottom
-                //                            width: 1
-                //                            color: "black"
-                //                        }
             }
             rowDelegate: Rectangle {
                 height:20
@@ -56,39 +47,8 @@ Rectangle{
 
                     font.pixelSize: 14
                 }
-
-                //                Rectangle{
-                //                    anchors.right: parent.right
-                //                    width:1
-                //                    color:"black"
-                //                    height:parent.height
-                //                }
             }
         }
-        //        TableViewColumn {
-        //            id:_slNo;title: "Sl No"; role: "SlNo";
-        //            width: _rr1.width/8.1
-
-        //            movable: false
-        //            resizable: false
-        //            //            delegate: Rectangle{
-        //            //                id:_slNodel
-        //            //                height:20
-        //            //                color: styleData.row%2 ? "light gray":"white"
-        //            //                Text {
-        //            //                  //  anchors.fill: parent
-        //            //                      anchors.centerIn: parent
-        //            //                    text: styleData.value
-        //            //                    horizontalAlignment:Text.AlignLeft
-        //            //                    padding: 5
-        //            //                    verticalAlignment: Qt.AlignVCenter
-
-        //            //                    font.pixelSize: 14
-        //            //                }
-        //            //            }
-        //        }
-
-
 
         TableViewColumn {
             id:_name;title: "Name"; role: "name";
