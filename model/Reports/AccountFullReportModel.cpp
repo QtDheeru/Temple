@@ -71,26 +71,29 @@ void AccountFullReportModel::generateFullAccountReportEachdate(ReportFilterEleme
     m_accountFullreportElementList.clear();
     endResetModel();
     filterelement->print();
-    qDebug()<<Q_FUNC_INFO<<" Report Date"<<filterelement->sSingleDate() << " SevaName ="<<filterelement->sSevaName()<<" SevaType =" << filterelement->iSevaType()<<Qt::endl;
+    qDebug() << Q_FUNC_INFO << " Report Date" << filterelement->sSingleDate() << " SevaName =" << filterelement->sSevaName() << " SevaType =" << filterelement->iSevaType() << Qt::endl;
 
     switch(filterelement->iSelectedType()) {
-    case  ReportFilterElements::REPORT_DATE_SELECTION_TYPE::SINGLE_DATE_REPORT:{
-          qDebug() << Q_FUNC_INFO << " Generate the Single Date Full Report " << Qt::endl;
-          filterelement->setSSingleDate(FormatDate(filterelement->sSingleDate()));
-          DBInterface::getInstance()->fullAccounDetailsDateWise(filterelement->sSevaName(),filterelement->iSevaType(),(filterelement->sSingleDate()));
-          break;
+    case ReportFilterElements::REPORT_DATE_SELECTION_TYPE::SINGLE_DATE_REPORT:{
+        qDebug() << Q_FUNC_INFO << " Generate the Single Date Full Report " << Qt::endl;
+        filterelement->setSSingleDate(FormatDate(filterelement->sSingleDate()));
+        DBInterface::getInstance()->fullAccounDetailsDateWise(filterelement->sSevaName(),filterelement->iSevaType(),(filterelement->sSingleDate()));
+        break;
     }
-    case  ReportFilterElements::REPORT_DATE_SELECTION_TYPE::DATE_RANGE_REPORT : {
-          filterelement->setSStartDate(FormatDate(filterelement->sStartDate()));
-          filterelement->setSEndDate(FormatDate(filterelement->sEndDate()));
-          DBInterface::getInstance()->fullAccounDetailsDateRangeWise(filterelement->sSevaName(),filterelement->iSevaType(),filterelement->sStartDate(),filterelement->sEndDate());
-          break;
+    case ReportFilterElements::REPORT_DATE_SELECTION_TYPE::DATE_RANGE_REPORT : {
+        filterelement->setSStartDate(FormatDate(filterelement->sStartDate()));
+        filterelement->setSEndDate(FormatDate(filterelement->sEndDate()));
+        DBInterface::getInstance()->fullAccounDetailsDateRangeWise(filterelement->sSevaName(),filterelement->iSevaType(),filterelement->sStartDate(),filterelement->sEndDate());
+        break;
     }
-    case  ReportFilterElements::REPORT_DATE_SELECTION_TYPE::MONTH_REPORT : {
-          DBInterface::getInstance()->fullAccounDetailsMonthwise(filterelement->sSevaName(),filterelement->iSevaType(),filterelement->sMonth().toInt(),filterelement->sYear().toInt());
-          break;
+    case ReportFilterElements::REPORT_DATE_SELECTION_TYPE::MONTH_REPORT : {
+        DBInterface::getInstance()->fullAccounDetailsMonthwise(filterelement->sSevaName(),filterelement->iSevaType(),filterelement->sMonth().toInt(),filterelement->sYear().toInt());
+        break;
     }
-    default : {qDebug() << Q_FUNC_INFO << " Wrong selection type. No full reports" << Qt::endl; break;}
+    default : {
+        qDebug() << Q_FUNC_INFO << " Wrong selection type. No full reports" << Qt::endl;
+        break;
+    }
 
     }
 }

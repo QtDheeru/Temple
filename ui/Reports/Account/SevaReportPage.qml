@@ -108,8 +108,18 @@ Rectangle{
              item.back.connect(root.adjustStackView);
              break;
         }
-        case ReportFilterEnum.DATE_RANGE_REPORT: break;
-        case ReportFilterEnum.MONTH_REPORT: break;
+        case ReportFilterEnum.DATE_RANGE_REPORT:
+            sevaProxy.sevaReport.accountFullReportModel.generateFullAccountReportEachdate(filterObject)
+            root.checkForNoRecords();
+            var item = _reportStackView.push("qrc:/ui/Reports/Account/AllAccountDetails.qml");
+            item.back.connect(root.adjustStackView);
+            break;
+        case ReportFilterEnum.MONTH_REPORT:
+            sevaProxy.sevaReport.accountFullReportModel.generateFullAccountReportEachdate(filterObject)
+            root.checkForNoRecords();
+            var item = _reportStackView.push("qrc:/ui/Reports/Account/AllAccountDetails.qml");
+            item.back.connect(root.adjustStackView);
+            break;
         }
 
         sevaProxy.sevaReport.accountFullReportModel.generateFullAccountReportEachdate(filterObject)

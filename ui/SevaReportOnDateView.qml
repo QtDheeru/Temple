@@ -19,7 +19,6 @@ Rectangle{
                 Layout.preferredWidth: 20
                 Layout.maximumWidth: 20
                 font.bold : true
-
             }
             Text {
                 text:"Name"
@@ -99,25 +98,23 @@ Rectangle{
                 Layout.maximumWidth: 100
                 font.bold : true
             }
-
         }
     }
     ListView{
         width:parent.width
         height: parent.height - _header.height
-         anchors.top: _header.bottom
+        anchors.top: _header.bottom
         id:dateCountList
         //model: sevaDateCount
         model: sevaProxy.sevaReport.reportOnDateModel
         spacing: 2
         delegate:_comp2
-Component.onCompleted: {
-    if(sevaProxy.sevaReport.reportOnDateModel===null)
-    {
-        errorOccur("seva details on date model not found");
-    }
-}
-
+        Component.onCompleted: {
+            if(sevaProxy.sevaReport.reportOnDateModel===null)
+            {
+                errorOccur("seva details on date model not found");
+            }
+        }
     }
 
     Component{
@@ -128,90 +125,95 @@ Component.onCompleted: {
             height: 30
             color: (index%2 ==0)?"gray":"lightgray"
 
-
             RowLayout{
                 anchors.fill: parent
-                Text{
+                Text {
                     Layout.alignment: Qt.AlignLeft
                     //Layout.leftMargin: 10
                     Layout.preferredWidth: 20
                     Layout.maximumWidth: 20
-                    text:Sno   }
-                Text{
+                    text:Sno
+                }
+                Text {
                     Layout.alignment: Qt.AlignLeft
                     //Layout.leftMargin: 20
                     Layout.preferredWidth: 150
                     Layout.maximumWidth: 150
                     elide: Text.ElideRight
-                    text:name   }
-                Text{
+                    text:name
+                }
+                Text {
                     Layout.alignment: Qt.AlignLeft
                     //Layout.leftMargin: 60
                     Layout.preferredWidth: 100
                     Layout.maximumWidth: 100
                     text:mobile
                 }
-                Text{
+                Text {
                     Layout.alignment: Qt.AlignLeft
                     //Layout.leftMargin: 60
                     Layout.preferredWidth: 150
                     Layout.maximumWidth: 150
                     elide: Text.ElideRight
-                    text:sevaName   }
-                Text{
+                    text:sevaName
+                }
+                Text {
                     Layout.alignment: Qt.AlignLeft
                     //Layout.leftMargin: 60
                     Layout.preferredWidth: 100
                     Layout.maximumWidth: 100
-                    text:sevaDate   }
-                Text{
+                    text:sevaDate
+                }
+                Text {
                     Layout.alignment: Qt.AlignLeft
                     //Layout.leftMargin: 60
                     Layout.preferredWidth: 100
                     Layout.maximumWidth: 100
-                    text:receiptDate   }
-                Text{
+                    text:receiptDate
+                }
+                Text {
                     Layout.alignment: Qt.AlignLeft
                     //Layout.leftMargin: 60
                     Layout.preferredWidth: 100
                     Layout.maximumWidth: 100
-                    text:total   }
-                Text{
+                    text:total
+                }
+                Text {
                     Layout.alignment: Qt.AlignLeft
                     //Layout.leftMargin: 60
                     Layout.preferredWidth: 100
                     Layout.maximumWidth: 100
-                    text:cash   }
-                Text{
+                    text:cash
+                }
+                Text {
                     Layout.alignment: Qt.AlignLeft
                     //Layout.leftMargin: 60
                     Layout.preferredWidth: 100
                     Layout.maximumWidth: 100
-                    text:bank   }
-                Text{
+                    text:bank
+                }
+                Text {
                     Layout.alignment: Qt.AlignLeft
                     //Layout.leftMargin: 60
                     Layout.preferredWidth: 100
                     Layout.maximumWidth: 100
-                    text:refernce   }
-                Text{
+                    text:refernce
+                }
+                Text {
                     Layout.alignment: Qt.AlignLeft
                     //Layout.leftMargin: 60
                     Layout.preferredWidth: 100
                     Layout.maximumWidth: 100
-                    text:momento   }
-                Text{
+                    text:momento
+                }
+                Text {
                     Layout.alignment: Qt.AlignLeft
                     //Layout.leftMargin: 60
                     Layout.preferredWidth: 100
                     Layout.maximumWidth: 100
-                    text:address   }
-
-
-
-
+                    text:address
+                }
             }
-
         }
     }
 }
