@@ -161,7 +161,6 @@ bool SevaBookingConformationDataModel::saveReceipt(MySevaReceipt *rec)
     this->m_sevaReceipt->setReceiptNo(rec->receiptNo());
     this->m_sevaReceipt->setDevoteeName(rec->devoteeName());
     this->m_sevaReceipt->setGothra(rec->gothra());
-    qDebug() << Q_FUNC_INFO << "gotra ==== > " << rec->gothra() << Qt::endl;
     this->m_sevaReceipt->setNakshtra(rec->nakshtra());
     this->m_sevaReceipt->setMobilenumber(rec->mobilenumber());
 

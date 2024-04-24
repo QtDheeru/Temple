@@ -2,7 +2,7 @@
 #define ACCOUNTREPORTDATERANGEELEMENT_H
 
 #include <QObject>
-#include<QDebug>
+#include <QDebug>
 class AccountReportDateRangeElement : public QObject
 {
     Q_OBJECT

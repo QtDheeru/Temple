@@ -1,5 +1,6 @@
 #include "ReportFilterElements.h"
 #include <QDebug>
+#include <QMetaEnum>
 ReportFilterElements::ReportFilterElements(QObject *parent)
     : QObject{parent}
 {
@@ -8,13 +9,11 @@ ReportFilterElements::ReportFilterElements(QObject *parent)
 
 bool ReportFilterElements::bSevawise() const
 {
-    qDebug()<<Q_FUNC_INFO<<Qt::endl;;
     return m_bSevawise;
 }
 
 void ReportFilterElements::setBSevawise(bool newBSevawise)
 {
-    qDebug()<<Q_FUNC_INFO<<Qt::endl;;
     if(m_bSevawise == newBSevawise)
         return;
     m_bSevawise = newBSevawise;
@@ -23,13 +22,11 @@ void ReportFilterElements::setBSevawise(bool newBSevawise)
 
 bool ReportFilterElements::bDatewise() const
 {
-    qDebug()<<Q_FUNC_INFO<<Qt::endl;;
     return m_bDatewise;
 }
 
 void ReportFilterElements::setBDatewise(bool newBDatewise)
 {
-    qDebug()<<Q_FUNC_INFO<<Qt::endl;;
     if(m_bDatewise == newBDatewise)
         return;
     m_bDatewise = newBDatewise;
@@ -37,13 +34,11 @@ void ReportFilterElements::setBDatewise(bool newBDatewise)
 
 int ReportFilterElements::iSevaType() const
 {
-    qDebug()<<Q_FUNC_INFO<<Qt::endl;;
     return m_iSevaType;
 }
 
 void ReportFilterElements::setISevaType(int newISevaType)
 {
-    qDebug()<<Q_FUNC_INFO<<Qt::endl;;
     if(m_iSevaType == newISevaType)
         return;
     m_iSevaType = newISevaType;
@@ -51,13 +46,11 @@ void ReportFilterElements::setISevaType(int newISevaType)
 
 const QString &ReportFilterElements::sSevaName() const
 {
-    qDebug()<<Q_FUNC_INFO<<Qt::endl;;
     return m_sSevaName;
 }
 
 void ReportFilterElements::setSSevaName(const QString &newSSevaName)
 {
-    qDebug()<<Q_FUNC_INFO<<Qt::endl;;
     if(m_sSevaName == newSSevaName)
         return;
     m_sSevaName = newSSevaName;
@@ -65,13 +58,11 @@ void ReportFilterElements::setSSevaName(const QString &newSSevaName)
 
 const QString &ReportFilterElements::sSingleDate() const
 {
-    qDebug()<<Q_FUNC_INFO<<Qt::endl;;
     return m_sSingleDate;
 }
 
 void ReportFilterElements::setSSingleDate(const QString &newSSingleDate)
 {
-    qDebug()<<Q_FUNC_INFO<<Qt::endl;;
     if(m_sSingleDate == newSSingleDate)
         return;
     m_sSingleDate = newSSingleDate;
@@ -79,13 +70,11 @@ void ReportFilterElements::setSSingleDate(const QString &newSSingleDate)
 
 const QString &ReportFilterElements::sStartDate() const
 {
-    qDebug()<<Q_FUNC_INFO<<Qt::endl;;
     return m_sStartDate;
 }
 
 void ReportFilterElements::setSStartDate(const QString &newSStartDate)
 {
-    qDebug()<<Q_FUNC_INFO<<Qt::endl;;
     if(  m_sStartDate == newSStartDate)
         return;
     m_sStartDate = newSStartDate;
@@ -93,13 +82,11 @@ void ReportFilterElements::setSStartDate(const QString &newSStartDate)
 
 const QString &ReportFilterElements::sEndDate() const
 {
-    qDebug()<<Q_FUNC_INFO<<Qt::endl;;
     return m_sEndDate;
 }
 
 void ReportFilterElements::setSEndDate(const QString &newSEndDate)
 {
-    qDebug()<<Q_FUNC_INFO<<Qt::endl;;
     if( m_sEndDate == newSEndDate)
         return;
     m_sEndDate = newSEndDate;
@@ -107,30 +94,22 @@ void ReportFilterElements::setSEndDate(const QString &newSEndDate)
 
 const QString &ReportFilterElements::sMonth() const
 {
-    qDebug()<<Q_FUNC_INFO<<Qt::endl;;
     return m_sMonth;
 }
 
 void ReportFilterElements::setSMonth(const QString &newSMonth)
 {
-    qDebug()<<Q_FUNC_INFO<<Qt::endl;
-//    if(  m_sMonth == newSMonth)
-//        return;
     m_sMonth = newSMonth;
     emit sMonthChanged();
 }
 
 const QString &ReportFilterElements::sYear() const
 {
-    qDebug()<<Q_FUNC_INFO<<Qt::endl;;
     return m_sYear;
 }
 
 void ReportFilterElements::setSYear(const QString &newSYear)
 {
-    qDebug()<<Q_FUNC_INFO<<Qt::endl;;
-//    if(  m_sYear == newSYear)
-//        return;
     m_sYear = newSYear;
     emit sYearChanged();
 }
@@ -143,4 +122,70 @@ int ReportFilterElements::iSelectedType() const
 void ReportFilterElements::setISelectedType(int newISelectedType)
 {
     m_iSelectedType = newISelectedType;
+}
+
+int ReportFilterElements::reportType() const
+{
+    return m_reportType;
+}
+
+void ReportFilterElements::setReportType(int newReportType)
+{
+    if (m_reportType == newReportType)
+        return;
+    m_reportType = newReportType;
+    emit reportTypeChanged();
+}
+
+void ReportFilterElements::print()
+{
+    qDebug() << Q_FUNC_INFO << " **** Pritning the Filter Selection ******* "  << Qt::endl;
+    if (bSevawise()){
+        qDebug() << " Seva Wise Report = " << bSevawise();
+    }
+    if (bDatewise()){
+        qDebug() << " Date Wise Report = " << bDatewise();
+    }
+    qDebug() << " SevaType Index =" << this->iSevaType() << " Name="<<this->sevaType();
+    qDebug() << " SevaName Index =" << this->sevaNameIndex() << " Name  =" << this->sSevaName();
+    QMetaEnum metaEnum = QMetaEnum::fromType<ReportFilterElements::REPORT_DATE_SELECTION_TYPE>();
+    qDebug() << " Which Date Report = ?" << metaEnum.valueToKey(ReportFilterElements::REPORT_DATE_SELECTION_TYPE(this->iSelectedType()));
+
+    QMetaEnum metaEnum1 = QMetaEnum::fromType<ReportFilterElements::REPORT_TYPE>();
+    qDebug() << " TypeOfReport = " << metaEnum1.valueToKey(ReportFilterElements::REPORT_TYPE(this->reportType()));
+    if (this->iSelectedType() == REPORT_DATE_SELECTION_TYPE::SINGLE_DATE_REPORT){
+        qDebug() << " Date Report. Date =" << this->sSingleDate();
+    }
+    if (this->iSelectedType() == REPORT_DATE_SELECTION_TYPE::DATE_RANGE_REPORT){
+        qDebug() << " Date Range Report. Start Date =" << this->sStartDate() << " EndDate="<<this->sEndDate();
+    }
+    if (this->iSelectedType() == REPORT_DATE_SELECTION_TYPE::MONTH_REPORT){
+        qDebug() << " Month Report. Year =" << this->sYear() << " Month =" << this->sMonth();
+    }
+}
+
+QString ReportFilterElements::sevaType() const
+{
+    return m_sevaType;
+}
+
+void ReportFilterElements::setSevaType(const QString &newSevaType)
+{
+    if (m_sevaType == newSevaType)
+        return;
+    m_sevaType = newSevaType;
+    emit sevaTypeChanged();
+}
+
+int ReportFilterElements::sevaNameIndex() const
+{
+    return m_sevaNameIndex;
+}
+
+void ReportFilterElements::setSevaNameIndex(int newSevaNameIndex)
+{
+    if (m_sevaNameIndex == newSevaNameIndex)
+        return;
+    m_sevaNameIndex = newSevaNameIndex;
+    emit sevaNameIndexChanged();
 }

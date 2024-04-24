@@ -8,6 +8,7 @@ AccountReportElement::AccountReportElement(QObject *parent)
     neft =0;
     cheque = 0;
     upi = 0;
+    this->reportGenerationSource = 0;
 }
 
 const QString &AccountReportElement::getSeva_name() const
@@ -40,12 +41,12 @@ void AccountReportElement::setSeva_cost(float newSeva_cost)
     seva_cost = newSeva_cost;
 }
 
-float AccountReportElement::getSeva_total() const
+double AccountReportElement::getSeva_total() const
 {
     return seva_total;
 }
 
-void AccountReportElement::setSeva_total(float newSeva_total)
+void AccountReportElement::setSeva_total(double newSeva_total)
 {
     seva_total = newSeva_total;
 }
@@ -60,12 +61,12 @@ void AccountReportElement::setSlNo(int newSlNo)
     m_slNo = newSlNo;
 }
 
-float AccountReportElement::getCash() const
+double AccountReportElement::getCash() const
 {
     return cash;
 }
 
-void AccountReportElement::setCash(float newCash)
+void AccountReportElement::setCash(double newCash)
 {
     cash = newCash;
 }
@@ -108,5 +109,73 @@ QString AccountReportElement::getTransaction_mode() const
 void AccountReportElement::setTransaction_mode(const QString &newTransaction_mode)
 {
     transaction_mode = newTransaction_mode;
+}
+
+void AccountReportElement::print()
+{
+    qDebug() << " Date =" << this->date() << " SevaType=" << this->sevaType() << " SevaName =" << this->seva_name << " Count=" << this->seva_ticket << " " << this->seva_cost << " " << this->seva_total << Qt::endl;
+    qDebug() << " Cash =" << this->cash << " Chq=" << this->cheque << " UPI="<<this->upi << " NEFT"<<this->neft << " Total " << seva_total << Qt::endl;
+}
+
+int AccountReportElement::getReportGenerationSource() const
+{
+    return reportGenerationSource;
+}
+
+void AccountReportElement::setReportGenerationSource(int newReportGenerationSource)
+{
+    if (reportGenerationSource == newReportGenerationSource)
+        return;
+    reportGenerationSource = newReportGenerationSource;
+    emit reportGenerationSourceChanged();
+}
+
+QString AccountReportElement::month() const
+{
+    return m_month;
+}
+
+void AccountReportElement::setMonth(const QString &newMonth)
+{
+    if (m_month == newMonth)
+        return;
+    m_month = newMonth;
+    emit monthChanged();
+}
+
+QString AccountReportElement::year() const
+{
+    return m_year;
+}
+
+void AccountReportElement::setYear(const QString &newYear)
+{
+    if (m_year == newYear)
+        return;
+    m_year = newYear;
+    emit yearChanged();
+}
+
+QString AccountReportElement::date() const
+{
+    return m_date;
+}
+
+void AccountReportElement::setDate(const QString &newDate)
+{
+    m_date = newDate;
+}
+
+int AccountReportElement::sevaType() const
+{
+    return m_sevaType;
+}
+
+void AccountReportElement::setSevaType(int newSevaType)
+{
+    if (m_sevaType == newSevaType)
+        return;
+    m_sevaType = newSevaType;
+    emit sevaTypeChanged();
 }
 

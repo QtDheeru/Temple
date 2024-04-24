@@ -91,9 +91,10 @@ signals:
     void booking_report(BookingReportElement*);
     //void account_report(QList<QString>,QList<int>,QList<float>,QList<float>,QString);
     void account_report(AccountReportElement*);
-    void account_report_Date_Range(AccountReportDateRangeElement*);
+    void account_report_Date_Range(AccountReportElement*);
+    //void account_report_Date_Range(AccountReportDateRangeElement*);
     void booking_report_Date_Range(BookingReportDateRangeElement*);
-    void account_report_Month_Range(AccountReportMonthRangeElement*);
+    void account_report_Month_Range(AccountReportElement*);
     void booking_report_Month_Range(BookingReportMonthRangeElement*);
     void voucher_report(VoucherElement*);
 
@@ -203,7 +204,6 @@ public slots:
     bool qrySevabookingBySevaDate(QString);
     void qrySevabookingByDateRange(QString,QString);
 
-
     // Dheerendra added
     bool querySevaType();
     bool querySevaNames();
@@ -262,6 +262,7 @@ private:
     QList<SevaBookingElement*> m_sevabooking;
 
     QString m_error;
+    QList<QString> m_pay_mode={"cash","Cheque","NEFT","UPI"};
 
 };
 

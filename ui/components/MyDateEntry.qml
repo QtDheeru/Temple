@@ -57,7 +57,7 @@ Rectangle {
     Connections{
         target: _tInput
         function onDateChanged(date) {
-            console.log("Rajjjjjjjjjjjjj"+date)
+            console.log("onDateChanged"+date)
             dateChanged(date);
         }
     }
