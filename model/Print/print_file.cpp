@@ -387,7 +387,7 @@ int print_file::prin2PixMap(QList<Print_Detail *> *pd)
 
         yFromTop += 13;
         painter.drawText(xFromLeft+10,yFromTop,"Nakshatra");
-        painter.drawText(xFromLeft+60,yFromTop,pd->front()->NAKSHATRA);
+        painter.drawText(xFromLeft+65,yFromTop,pd->front()->NAKSHATRA);
 
         painter.drawText(xFromLeft+230,yFromTop,"Seva Time");
         painter.drawText(xFromLeft+310,yFromTop,pd->back()->SEVA_TIME);

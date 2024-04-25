@@ -29,7 +29,7 @@ Rectangle{
     property string sevatype
     property string sevaid
     property var sevaObject
-    property string d_Nakshtra: _personal.nakshatra
+    property alias d_Nakshtra: _personal.nakshatra
     property alias dname: _personal.devoteeName
     property alias dmobile: _personal.mobileNo
     property alias dgothra: _personal.gothra
@@ -111,7 +111,7 @@ Rectangle{
             }
         }
     }
-    //    }
+
     Connections{
         target: _sevaListView
         function onSevaSelected(idx, sevaType, sevaId){
@@ -138,6 +138,11 @@ Rectangle{
             console.log("seva name  = " + sevaObject.sevaName + " Seva cost = " + sevaObject.sevaCost)
             _personal.setGothras(sevaProxy.getGothras());
             _personal.setNakshatras(sevaProxy.getNakshatras());
+        }
+        function onErrorOccur(errorMsg)
+        {
+            console.log("In connections of on error occur of seva booking view")
+            _errorDialog.showError(errorMsg);
         }
     }
 
@@ -213,7 +218,6 @@ Rectangle{
 
     Connections{
         target: _sevaContoller
-        //    target: _ld.item
         function onStartPayment(){
             console.log(" Payment started ")
             if (_sevaP.sevaCount==0){
@@ -221,12 +225,10 @@ Rectangle{
                 _errorDialog.showError("Sevas Not added. Please Add Seva");
                 return;
             }
-
             //saveOnlySeva();// Don't add seva to list as it is not confirmed
             _paymentDialog.amount2Pay = _sevaPriceSummary.amout2Pay
             r1.opacity = 0.3;
             _paymentDialog.open();
-            // _paymentDialog.b = true;
         }
         function onAddMoreSeva(){
             console.log(" Add more seva")
@@ -241,31 +243,18 @@ Rectangle{
 
         function onShowAllDataFromSevBControl(){
             console.log("SevaControll : Show all Data")
-            //            progressBar.visible = true;
-            //            progressBar.opacity = 0.1;
             var b = sevaProxy.showAllData();
             if(b===false)
             {
                 errorOccur("cannot fetch data")
             }
-
-            //_ld.source = "SevaBookedDetailView.qml";
             _ld.source = "SevaAllViewPage.qml"
-            //            while(_ld.status===Loader.Loading)
-            //            {
-            //                console.log("Show all Data  while(_ld.status===Loader.Loading)")
-            //                progressBar.visible = true;
-            //                progressBar.opacity = 0.1;
-            //                pb.value = _ld.progress*10
-            //                console.log(pb.value);
-            //            }
         }
 
 
         function onNextReceipt() {
             console.log("In onNextReceipt of sbv")
             root.clearData();
-            //root.resetNextControls(false);
             _sevaContoller.startNextBooking();
             _sevaListView.selectFirstSeva();
         }
@@ -275,17 +264,8 @@ Rectangle{
             if(_sevaContoller.state === "paymentComplete")
             {
                 _personal.enabled = false
-                //                _sevaContoller.nextButtonFocus = true
-                //                root.focus = true
                 r1.forceActiveFocus();
-                //nextReceipt();
-                //               _sevaD.isCountEditable =  false;
-                //                _sevaD.isAddressEditable = false;
-                //                _sevaD.isAdditionalCostEditable = false;
-                //                _personal.devoteeNameEditable = true //ch
-                //        _personal.mobileNoEditable = true  //ch
                 root.clearData();
-                //root.resetNextControls(false);
                 _sevaContoller.startNextBooking();
                 _sevaListView.selectFirstSeva();
 
@@ -331,9 +311,6 @@ Rectangle{
     }
     function clearData(){
         console.log(" Data is getting cleared")
-//        _personal.clearData()
-        //        _personal.devoteeNameEditable = true //ch
-        //        _personal.mobileNoEditable = true  //ch
         _sevaD.clearData();
         _sevaD.isCountEditable =  true;
         _sevaD.isAddressEditable = true;
@@ -429,14 +406,6 @@ Rectangle{
         console.log(" Seva bookedby ="+_sevaDate.bookedby)
     }
 
-    Connections{
-        target:_sevaListView
-        function onErrorOccur(errorMsg)
-        {
-            console.log("In connections of on error occur of seva booking view")
-            _errorDialog.showError(errorMsg);
-        }
-    }
     Connections{
         target:_personal
         function onErrorOccur(errorMsg)

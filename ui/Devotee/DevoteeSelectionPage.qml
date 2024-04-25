@@ -93,16 +93,17 @@ Item {
                         font.pixelSize: 20
                         onClicked: areSureUpdate()
                     }
-                    Button {
-                        text : "Delete Devotee"
-                        Layout.fillWidth: true
-                        font.pixelSize: 20
-                        onClicked: areSureDelete()
-                    }
+                    // Button {
+                    //     text : "Delete Devotee"
+                    //     Layout.fillWidth: true
+                    //     font.pixelSize: 20
+                    //     onClicked: areSureDelete()
+                    // }
                     Button {
                         text : "Clear Data"
                         Layout.fillWidth: true
                         font.pixelSize: 20
+                        onClicked: clearData()
                     }
                 }
             }
@@ -227,13 +228,14 @@ Item {
             nakshatra:_devoteeView.nakshatra
         };
         if (!devoteeProxy.devoteeDataModel.updateDevoteeJSObject(devotee)) {
-            console.log(" Error Update Devotee ="+peopleDataModel.lastError());
+            console.log(" Error Update Devotee =" + peopleDataModel.lastError());
             root.showTempDialog(peopleDataModel.lastError());
         } else {
             console.log(" Devotee update successfull ")
-            var msg = " Update successful \n\n Name = "+_devoteeView.devoteeName + "\n\n Mobile = "+_devoteeView.mobileNo;
+            var msg = " Update successful \n\n Name = " + _devoteeView.devoteeName + "\n\n Mobile = "+_devoteeView.mobileNo;
             root.showTempDialog(msg);
         }
+        _errorDialog.context = 0
     }
 
     function showTempDialog(message) {
@@ -262,6 +264,7 @@ Item {
             msg = " Delete successful \n\n Name = "+_devoteeView.devoteeName + "\n\n Mobile = "+_devoteeView.mobileNo;
             root.showTempDialog(msg);
         }
+        _errorDialog.context = 0
     }
 
     function clearData(){
@@ -278,7 +281,7 @@ Item {
     Connections{
         target: _devoteeListView
         function onDevoteeSelectionIndex(idx){
-            console.log(" Devotee Selected ="+idx)
+            console.log(" Devotee Selected =" + idx)
             var index = devoteeProxy.devoteeSearchModel.getRowOfDataFromTableViewModel(idx)
             var devotee = devoteeProxy.devoteeDataModel.getDevotee(index)
             _devoteeView.setGothras(sevaProxy.getGothras())
@@ -313,14 +316,12 @@ Item {
             root.onYesAction(context)
             _errorDialog.accept();
             _errorDialog.close();
-            console.log( "Yes clicked. Finished.. ="+context)
         }
         onOpened: {
             console.log(" It is opened now..")
         }
         onClosed: {
             console.log(" It is onClosed now..")
-            _errorDialog.accept();
             _errorDialog.close();
         }
     }
