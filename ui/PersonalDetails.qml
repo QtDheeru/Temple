@@ -52,7 +52,7 @@ Rectangle {
         }
     }
     function setNakshatraCombo(nakshatra){
-
+        console.log(" In set nakshatra function = "+ nakshatra)
         _nakshatra.currentIndex = _nakshatra.findTextInComboBox(nakshatra);
     }
     function setGothraCombo(gothra){

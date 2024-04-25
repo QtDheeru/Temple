@@ -29,7 +29,7 @@ Rectangle{
     property string sevatype
     property string sevaid
     property var sevaObject
-    property string d_Nakshtra: _personal.nakshatra
+    property alias d_Nakshtra: _personal.nakshatra
     property alias dname: _personal.devoteeName
     property alias dmobile: _personal.mobileNo
     property alias dgothra: _personal.gothra
@@ -110,7 +110,7 @@ Rectangle{
             }
         }
     }
-    //    }
+
     Connections{
         target: _sevaListView
         function onSevaSelected(idx, sevaType, sevaId){
@@ -133,6 +133,11 @@ Rectangle{
             }
             _sevaD.setSevaDetails(sevaObject)
             console.log("seva name  = " + sevaObject.sevaName + " Seva cost = " + sevaObject.sevaCost)
+        }
+        function onErrorOccur(errorMsg)
+        {
+            console.log("In connections of on error occur of seva booking view")
+            _errorDialog.showError(errorMsg);
         }
     }
 
@@ -208,7 +213,6 @@ Rectangle{
 
     Connections{
         target: _sevaContoller
-        //    target: _ld.item
         function onStartPayment(){
             console.log(" Payment started ")
             if (_sevaP.sevaCount==0){
@@ -216,12 +220,10 @@ Rectangle{
                 _errorDialog.showError("Sevas Not added. Please Add Seva");
                 return;
             }
-
             //saveOnlySeva();// Don't add seva to list as it is not confirmed
             _paymentDialog.amount2Pay = _sevaPriceSummary.amout2Pay
             r1.opacity = 0.3;
             _paymentDialog.open();
-            // _paymentDialog.b = true;
         }
         function onAddMoreSeva(){
             console.log(" Add more seva")
@@ -248,7 +250,6 @@ Rectangle{
         function onNextReceipt() {
             console.log("In onNextReceipt of sbv")
             root.clearData();
-            //root.resetNextControls(false);
             _sevaContoller.startNextBooking();
             _sevaListView.selectFirstSeva();
         }
@@ -400,14 +401,6 @@ Rectangle{
         console.log(" Seva bookedby ="+_sevaDate.bookedby)
     }
 
-    Connections{
-        target:_sevaListView
-        function onErrorOccur(errorMsg)
-        {
-            console.log("In connections of on error occur of seva booking view")
-            _errorDialog.showError(errorMsg);
-        }
-    }
     Connections{
         target:_personal
         function onErrorOccur(errorMsg)

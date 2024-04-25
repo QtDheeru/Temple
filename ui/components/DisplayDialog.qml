@@ -4,21 +4,24 @@ import QtQuick.Controls 2.5
 Dialog {
     visible: true
     title: "Information.."
+    width: 400;height: 250
+    standardButtons: setButtons?Dialog.Ok :Dialog.Ok | Dialog.Close
+    closePolicy: Popup.NoAutoClose
+    x: (parent.width - width) / 2
+    y: (parent.height - height) / 2
+    modal: true
+
     property var page
     property alias text2Display : _t1.text
-    width: 400;height: 250
     property string rectColor:"lightblue"
     property string contentColor:"lightblue"
     property bool footerVisible:true
     property bool setButtons:false
-
-    standardButtons: setButtons?Dialog.Ok :Dialog.Ok | Dialog.Close
     property int context : 0
-    closePolicy: Popup.NoAutoClose
+
     signal yesAction();
     signal noAction();
 
-    modal: true
     background: Rectangle{
         anchors.fill: parent
         color:rectColor
@@ -70,7 +73,4 @@ Dialog {
             yesAction();
         }
     }
-
-    x: (parent.width - width) / 2
-    y: (parent.height - height) / 2
 }
