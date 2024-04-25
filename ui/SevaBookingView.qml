@@ -11,30 +11,29 @@ import SevaBookingConformationDataModel 1.0
 
 Rectangle{
     id : root
-    property var styles : MyStyles{}
     width: styles.screenWidth
     height: styles.screenHeight
+    property var styles : MyStyles{}
     property int sevaType :-1
     property int myHeight : 30
     property int fontPixelSize : 20
     property alias selectedReceiptDate: _sevaDate.receiptdate
     property alias selectedSevaDate: _sevaDate.sevadate
-
-    signal loadMenuPage()
-    signal loadDevoteeSelection()
-
     property var storeObject
-
     property string sevaname
     property string sevatype
     property string sevaid
     property var sevaObject
-    property alias d_Nakshtra: _personal.nakshatra
     property alias dname: _personal.devoteeName
     property alias dmobile: _personal.mobileNo
     property alias dgothra: _personal.gothra
+    property alias dNakshtra: _personal.nakshatra
+
+    signal loadMenuPage()
+    signal loadDevoteeSelection()
+
     onSevaTypeChanged: {
-        console.log(" Popup - Seva Type ="+sevaType)
+        console.log(" Popup - Seva Type =" + sevaType)
         _sevaListView.sevaType = sevaType;
     }
     Rectangle {
@@ -72,7 +71,7 @@ Rectangle{
                         devoteeNameEditable: false
                         mobileNoEditable: false
                     }
-                    SevaDateTime{id:_sevaDate;Layout.fillWidth: true
+                    SevaDateTime{id: _sevaDate;Layout.fillWidth: true
                         KeyNavigation.tab: _sevaD}
                 }
                 RowLayout{
@@ -80,7 +79,7 @@ Rectangle{
                     Layout.fillWidth: true
                     Layout.topMargin: root.height/100
                     Layout.rightMargin: root.height/100
-                    SevaDetails{id:_sevaD;Layout.fillWidth: true;referenceVisbility :false}
+                    SevaDetails{id:_sevaD;Layout.fillWidth: true;referenceVisbility : false}
                     SevaBookingProgressView{id:_sevaP;Layout.fillWidth: true}
                 }
                 RowLayout{
@@ -109,6 +108,188 @@ Rectangle{
                 }
             }
         }
+    }
+
+    Timer{
+        id: _timer
+        running: false
+        interval: 1500
+        onTriggered: {
+            _errorDialog2.close();
+            _ld.setSource("voucherPage.qml",{bookingElement:storeObject,pageNumber:1})
+        }
+    }
+    SevaPaymenConfirmationDialog{
+        id : _paymentDialog
+        onPaymentComplete: {
+            console.log("Payment is completed. Store the Seva details in Data Store..")
+            _sevaContoller.bookingComplete();
+            saveFullReceipt();
+            sevaProxy.printReceipt();
+            resetBaseScreen();
+            paymentOver();
+            _sevaP.clearData();
+            loadDevoteeSelection();
+        }
+        onCloseClicked: {
+            console.log("SevaPaymenConfirmationDialog :: on close clicked ")
+            resetBaseScreen()
+        }
+        onRejected: {
+            resetBaseScreen()
+        }
+    }
+    DisplayDialog {
+        id : _errorDialog
+        visible: false
+        function showError(message){
+            console.log("inside show error")
+            _errorDialog.visible = true;
+            _errorDialog.text2Display = message
+            _errorDialog.open();
+        }
+        onYesAction: {
+            _errorDialog.close()
+        }
+        onNoAction: {
+            _errorDialog.close()
+        }
+    }
+    DisplayDialog {
+        id : _errorDialog2
+        visible: false
+        rectColor: "lightgreen"
+        contentColor: "lightgreen"
+        footerVisible:false
+        function showError(message){
+            console.log("inside show error2")
+            _errorDialog2.visible = true;
+            _errorDialog2.text2Display = message
+            _errorDialog2.open();
+            _timer.start();
+        }
+    }
+    SevaReceipt{
+        id : _sevaReceipt
+    }
+    Loader{
+        id : _ld
+        anchors.fill: parent
+        Connections{
+            target: _ld.item
+            function onLoadSevaBookingView()
+            {
+                console.log(" In onLoadSevaBookingView")
+                _ld.source = "SevaBookingView.qml"
+            }
+            function onLoadMenuPage()
+            {
+                console.log(" In onLoadMenuPage")
+                loadMenuPage();
+            }
+            function onLoadvoucher(ve,pageNo){
+                console.log("onLoadvoucher :: ve : ",ve," :: pageNo : ",pageNo)
+                sevaProxy.cancelReceipt(ve.sno);
+                _ld.setSource("voucherPage.qml",{bookingElement:ve,pageNumber:pageNo})
+            }
+        }
+    }
+
+    function saveFullReceipt(){
+        console.log(" Save all the recept data")
+        console.log(" ReceiptNo ="+_personal.receiptNumber)
+        console.log(" Name ="+_personal.devoteeName)
+        console.log(" Mobile ="+_personal.mobileNo)
+        console.log(" Nakshatra ="+_personal.nakshatra)
+        console.log(" Gotra ="+_personal.gotra)
+        buildSevaReceipt();
+        var b = sevaProxy.saveReceipt(_sevaReceipt);
+        if(b === false)
+        {
+            errorOccur("Cannot store seva receipt details into db");
+        }
+    }
+    function saveOnlySeva() {
+        printSevaObject();
+        var retVal = sevaProxy.addSevaOnly(sevaObject.sevaType,
+                                           sevaObject.sevaId,
+                                           sevaObject.sevaName,
+                                           _sevaD.sevaCost,
+                                           _sevaDate.sevadate,
+                                           _sevaDate.sevatime,
+                                           _sevaD.addcost,
+                                           _sevaD.count);
+        if (retVal === false ){
+            console.log ("Seva already exist. Add another")
+            _errorDialog.showError("Seva Already added. Add another")
+            return;
+        }
+        _sevaPriceSummary.addTotal(_sevaD.sevaCost,_sevaD.count)
+        _sevaPriceSummary.addTotal(_sevaD.addcost)
+        sevaObject = null;
+    }
+    function clearData(){
+        console.log(" Data is getting cleared")
+        _sevaD.clearData();
+        _sevaD.isCountEditable =  true;
+        _sevaD.isAddressEditable = true;
+        _sevaD.isAdditionalCostEditable = true;
+
+        _sevaDate.clearData();
+        // Following call will initiate the next receipt generation
+        _sevaP.clearData();
+        _sevaPriceSummary.clearData();
+        _paymentDialog.clearData();
+    }
+    function resetPartial(){
+        _sevaD.resetPartial();
+    }
+    function buildSevaReceipt() {
+        _sevaReceipt.receiptNo = _personal.receiptNumber.trim();
+        _sevaReceipt.devoteeName = _personal.devoteeName.trim();
+        _sevaReceipt.mobileNo = _personal.mobileNo.trim();
+        _sevaReceipt.gothra = _personal.gothra.trim();
+        _sevaReceipt.nakshtra = _personal.nakshatra.trim()
+        _sevaReceipt.reference = _sevaD.reference.trim();
+        _sevaReceipt.address = _sevaD.address.trim();
+
+        _sevaReceipt.receiptDate = _sevaDate.receiptdate.trim();
+        _sevaReceipt.momento = _sevaDate.momento.trim()
+        _sevaReceipt.sevatime = _sevaDate.sevatime.trim();
+        _sevaReceipt.bookedBy = _sevaDate.bookedby.trim()
+        _sevaReceipt.cash =  _paymentDialog.paymentObject.cashPaid.trim()
+        _sevaReceipt.bank =  _paymentDialog.paymentObject.bankSelected.trim()
+        _sevaReceipt.paymentMode = _paymentDialog.paymentObject.paymentMode.trim()
+        _sevaReceipt.bookingStatus =_paymentDialog.status
+        _sevaReceipt.onlineRef =  _paymentDialog.paymentObject.checkOrTransactionId.trim()
+        _sevaReceipt.note = _paymentDialog.paymentObject.note
+    }
+    function disableControls(){
+        _sevaContoller.setButtons(false);
+    }
+    function resetNextControls(value){
+        _sevaContoller.nextReceipt();
+    }
+    function paymentOver(){
+        _sevaContoller.paymentComplete()
+    }
+    function enableControls(){
+        _sevaContoller.setButtons(true);
+    }
+    function resetBaseScreen(){
+        r1.opacity = 1;
+    }
+    function printSevaObject(){
+        console.log(" Seva Id    ="+sevaObject.sevaId)
+        console.log(" Seva Type  ="+sevaObject.sevaType)
+        console.log(" Seva Name  ="+sevaObject.sevaName)
+        console.log(" Seva Cost  ="+sevaObject.sevaCost)
+        console.log(" Seva addition cost ="+_sevaD.addcost)
+        console.log(" Seva count ="+_sevaD.count)
+        console.log(" Receipt Date ="+_sevaDate.receiptdate)
+        console.log(" Seva    Date ="+_sevaDate.sevadate)
+        console.log(" Seva sevatime ="+_sevaDate.sevatime)
+        console.log(" Seva bookedby ="+_sevaDate.bookedby)
     }
 
     Connections{
@@ -140,77 +321,6 @@ Rectangle{
             _errorDialog.showError(errorMsg);
         }
     }
-
-    Timer{
-        id:_timer
-        running: false
-        interval: 1500
-        onTriggered: {
-            _errorDialog2.close();
-            _ld.setSource("voucherPage.qml",{bookingElement:storeObject,pageNumber:1})
-        }
-    }
-
-    SevaPaymenConfirmationDialog{
-        id : _paymentDialog
-        onPaymentComplete: {
-            console.log("Payment is completed. Store the Seva details in Data Store..")
-            _sevaContoller.bookingComplete();
-            saveFullReceipt();
-            sevaProxy.printReceipt();
-            resetBaseScreen();
-            paymentOver();
-        }
-        onCloseClicked: {
-            resetBaseScreen()
-        }
-        onPrintClicked: {
-            sevaProxy.printReceipt();
-        }
-        onRejected: {
-            resetBaseScreen()
-        }
-    }
-
-    function resetBaseScreen(){
-        r1.opacity = 1;
-    }
-
-    DisplayDialog {
-        id :_errorDialog
-        visible: false
-
-        function showError(message){
-            console.log("inside show error")
-            _errorDialog.visible = true;
-            _errorDialog.text2Display = message
-            _errorDialog.open();
-        }
-        onYesAction: {
-            _errorDialog.close()
-        }
-
-        onNoAction: {
-            _errorDialog.close()
-        }
-    }
-
-    DisplayDialog {
-        id :_errorDialog2
-        visible: false
-        rectColor: "lightgreen"
-        contentColor: "lightgreen"
-        footerVisible:false
-        function showError(message){
-            console.log("inside show error2")
-            _errorDialog2.visible = true;
-            _errorDialog2.text2Display = message
-            _errorDialog2.open();
-            _timer.start();
-        }
-    }
-
-
     Connections{
         target: _sevaContoller
         function onStartPayment(){
@@ -235,18 +345,15 @@ Rectangle{
             console.log(" Clear Receipt Data")
             clearData();
         }
-
         function onShowAllDataFromSevBControl(){
             console.log("SevaControll : Show all Data")
             var b = sevaProxy.showAllData();
-            if(b===false)
+            if(b === false)
             {
                 errorOccur("cannot fetch data")
             }
             _ld.source = "SevaAllViewPage.qml"
         }
-
-
         function onNextReceipt() {
             console.log("In onNextReceipt of sbv")
             root.clearData();
@@ -267,94 +374,29 @@ Rectangle{
                 _personal.enabled = true
         }
     }
-
-    function saveFullReceipt(){
-        console.log(" Save all the recept data")
-        console.log(" ReceiptNo ="+_personal.receiptNumber)
-        console.log(" Name ="+_personal.devoteeName)
-        console.log(" Mobile ="+_personal.mobileNo)
-        console.log(" Nakshatra ="+_personal.nakshatra)
-        console.log(" Gotra ="+_personal.gotra)
-        buildSevaReceipt();
-        var b = sevaProxy.saveReceipt(_sevaReceipt);
-        if(b === false)
+    Connections{
+        target: _personal
+        function onErrorOccur(errorMsg)
         {
-            errorOccur("Cannot store seva receipt details into db");
+            console.log("In connections of on error occur of seva booking view")
+            _errorDialog.showError(errorMsg);
         }
     }
-
-    function saveOnlySeva() {
-        printSevaObject();
-        var retVal = sevaProxy.addSevaOnly(sevaObject.sevaType,
-                                           sevaObject.sevaId,
-                                           sevaObject.sevaName,
-                                           _sevaD.sevaCost,
-                                           _sevaDate.sevadate,
-                                           _sevaDate.sevatime,
-                                           _sevaD.addcost,
-                                           _sevaD.count);
-        if (retVal === false ){
-            console.log ("Seva already exist. Add another")
-            _errorDialog.showError("Seva Already added. Add another")
-            return;
+    Connections{
+        target: _sevaDate
+        function onErrorOccur(errorMsg)
+        {
+            console.log("In connections of on error occur of seva booking view")
+            _errorDialog.showError(errorMsg);
         }
-
-        _sevaPriceSummary.addTotal(_sevaD.sevaCost,_sevaD.count)
-        _sevaPriceSummary.addTotal(_sevaD.addcost)
-        sevaObject = null;
     }
-    function clearData(){
-        console.log(" Data is getting cleared")
-        _sevaD.clearData();
-        _sevaD.isCountEditable =  true;
-        _sevaD.isAddressEditable = true;
-        _sevaD.isAdditionalCostEditable = true;
-
-        _sevaDate.clearData();
-        // Following call will initiate the next receipt generation
-        _sevaP.clearData();
-        _sevaPriceSummary.clearData();
-        _paymentDialog.clearData();
-    }
-
-    function resetPartial(){
-        _sevaD.resetPartial();
-    }
-
-    function buildSevaReceipt() {
-        _sevaReceipt.receiptNo = _personal.receiptNumber.trim();
-        _sevaReceipt.devoteeName = _personal.devoteeName.trim();
-        _sevaReceipt.mobileNo = _personal.mobileNo.trim();
-        _sevaReceipt.gothra = _personal.gothra.trim();
-        _sevaReceipt.nakshtra = _personal.nakshatra.trim()
-        _sevaReceipt.reference = _sevaD.reference.trim();
-        _sevaReceipt.address = _sevaD.address.trim();
-
-        _sevaReceipt.receiptDate = _sevaDate.receiptdate.trim();
-        _sevaReceipt.momento = _sevaDate.momento.trim()
-        _sevaReceipt.sevatime = _sevaDate.sevatime.trim();
-        _sevaReceipt.bookedBy = _sevaDate.bookedby.trim()
-        _sevaReceipt.cash =  _paymentDialog.paymentObject.cashPaid.trim()
-        _sevaReceipt.bank =  _paymentDialog.paymentObject.bankSelected.trim()
-        _sevaReceipt.paymentMode = _paymentDialog.paymentObject.paymentMode.trim()
-        _sevaReceipt.bookingStatus =_paymentDialog.status
-        _sevaReceipt.onlineRef =  _paymentDialog.paymentObject.checkOrTransactionId.trim()
-        _sevaReceipt.note = _paymentDialog.paymentObject.note
-    }
-
-    function disableControls(){
-        _sevaContoller.setButtons(false);
-    }
-    function resetNextControls(value){
-        _sevaContoller.nextReceipt();
-    }
-
-    function paymentOver(){
-        _sevaContoller.paymentComplete()
-    }
-
-    function enableControls(){
-        _sevaContoller.setButtons(true);
+    Connections{
+        target: _sevaContoller
+        function onErrorOccur(errorMsg)
+        {
+            console.log("In connections of on error occur of seva booking view")
+            _errorDialog.showError(errorMsg);
+        }
     }
 
     Keys.onEscapePressed: {
@@ -362,75 +404,11 @@ Rectangle{
         _sevaP.clearData();
         loadMenuPage()
     }
-    SevaReceipt{
-        id : _sevaReceipt
-    }
-    Loader{
-        id : _ld
-        anchors.fill: parent
-        Connections{
-            target: _ld.item
-            function onLoadSevaBookingView()
-            {
-                console.log(" In onLoadSevaBookingView")
-                _ld.source = "SevaBookingView.qml"
-            }
-            function onLoadMenuPage()
-            {
-                console.log(" In onLoadMenuPage")
-                loadMenuPage();
-            }
-            function onLoadvoucher(ve,pageNo){
-                console.log("hellooooooon suman",ve," ",pageNo)
-                sevaProxy.cancelReceipt(ve.sno);
-                _ld.setSource("voucherPage.qml",{bookingElement:ve,pageNumber:pageNo})
-            }
-        }
-    }
-
-    function printSevaObject(){
-        console.log(" Seva Id    ="+sevaObject.sevaId)
-        console.log(" Seva Type  ="+sevaObject.sevaType)
-        console.log(" Seva Name  ="+sevaObject.sevaName)
-        console.log(" Seva Cost  ="+sevaObject.sevaCost)
-        console.log(" Seva addition cost ="+_sevaD.addcost)
-        console.log(" Seva count ="+_sevaD.count)
-        console.log(" Receipt Date ="+_sevaDate.receiptdate)
-        console.log(" Seva    Date ="+_sevaDate.sevadate)
-        console.log(" Seva sevatime ="+_sevaDate.sevatime)
-        console.log(" Seva bookedby ="+_sevaDate.bookedby)
-    }
-
-    Connections{
-        target:_personal
-        function onErrorOccur(errorMsg)
-        {
-            console.log("In connections of on error occur of seva booking view")
-            _errorDialog.showError(errorMsg);
-        }
-    }
-    Connections{
-        target:_sevaDate
-        function onErrorOccur(errorMsg)
-        {
-            console.log("In connections of on error occur of seva booking view")
-            _errorDialog.showError(errorMsg);
-        }
-    }
-    Connections{
-        target:_sevaContoller
-        function onErrorOccur(errorMsg)
-        {
-            console.log("In connections of on error occur of seva booking view")
-            _errorDialog.showError(errorMsg);
-        }
-    }
-
     Component.onCompleted: {
-        console.log("Component.onCompleted: of seva booking view",dgothra,d_Nakshtra)
+        console.log("Component.onCompleted: of seva booking view",dgothra,dNakshtra)
         _personal.setGothras(sevaProxy.getGothras());
         _personal.setNakshatras(sevaProxy.getNakshatras());
-        _personal.setNakshatraCombo(d_Nakshtra)
+        _personal.setNakshatraCombo(dNakshtra)
         _personal.setGothraCombo(dgothra)
         forceActiveFocus()
         _sevaDate.bookedby = sevaProxy.userManagement.signIn_Name

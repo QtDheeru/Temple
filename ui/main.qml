@@ -70,8 +70,6 @@ ApplicationWindow {
                 var str2 =trustListModel.getDataLocation();
                 console.log("str1 = --" + str1);
                 console.log("str2 = --" + str2);
-                //   loader.source = "WelcomeScreen.qml"
-                //  loader.source= "SevaBookingView.qml"
                 loader.source = "Login.qml"
             }
             if(trustListModel.getTrustListSize() === 0){
@@ -84,11 +82,9 @@ ApplicationWindow {
             console.log("Welcome screen TimeTriggered");
             loader.source = "Login.qml"
         }
-
         function onDateClicked(date)
         {
             console.log("date clicked " +date )
-            //            sevaDetailsonDateCount.onDateSelected(date)
             var b = sevaProxy.sevaReport.onDateSelected(date)
             if(b === false)
             {
@@ -98,12 +94,10 @@ ApplicationWindow {
                 loader.source = "SevaReportOnDateView.qml"
             }
         }
-
         function onStartReportGeneration(date1){
             console.log("Send Report Generation request to Backend")
             //sevaProxy.sevaReport.generateAccReport(obj)
         }
-
         function onSendReportImput(obj)
         {
             console.log("Send Report Generation request to Backend")
@@ -189,7 +183,6 @@ ApplicationWindow {
         //Menu Page handlers
         function onSevabooking() {
             console.log("clicked on Sevabooking")
-            //            loader.source= "SelectSevaTypeMenu.qml"
             loader.source = "SevaBookingView.qml"
 
         }
@@ -243,7 +236,6 @@ ApplicationWindow {
         {
             console.log("In onErrorOccured of main")
             _errorDialog.showError(errorMsg);
-            console.log("In onErrorOccured of main2222")
         }
         function onLoadUserManagement(){
             console.log("User Management loading")
@@ -264,7 +256,7 @@ ApplicationWindow {
         function onLoadSevabooking( d_name,d_mobile,d_gothra,d_nakshatra){
             console.log("main loadSevabooking-----",d_nakshatra)
             loader.source = "";
-            loader.setSource("SevaBookingView.qml",{dname:d_name,dmobile:d_mobile,dgothra:d_gothra,d_Nakshtra:d_nakshatra})
+            loader.setSource("SevaBookingView.qml",{dname:d_name,dmobile:d_mobile,dgothra:d_gothra,dNakshtra:d_nakshatra})
         }
         function onLoadBankRegistration(){
             console.log("Clicked on Bank Registration")
@@ -278,19 +270,13 @@ ApplicationWindow {
         }
         function onShowAllDataView(){
             console.log("Clicked on show all data")
-
-            console.log("Show all Data")
-            //            progressBar.visible = true;
-            //            progressBar.opacity = 0.1;
             var b = sevaProxy.showAllData();
             if(b === false)
             {
                 errorOccur("cannot fetch data")
             }
-
             loader.source = ""
             loader.source = "qrc:/ui/SevaAllViewPage.qml"
-
         }
         function onLoadSevaBookingView(){
             loader.source = ""

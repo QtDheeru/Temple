@@ -9,23 +9,21 @@ Dialog {
     width: 680;
     height: 520;
     closePolicy: Popup.NoAutoClose
-    // property bool b : closeButton.enabled
     modal: true
+    title: "InitiatePayment"
+    x: (parent.width - width) / 2
+    y: (parent.height - height) / 2
+
     property alias amount2Pay : _sevaPayment.amount2Pay
     property string errorMessage: "Amount To Pay does not \n\n Match with Cash Paid"
     property alias paymentObject : _sevaPayment
     property string status: "booked"
+
     signal paymentComplete();
     signal closeClicked();
-    signal printClicked();
     signal errorOccur(string errorMsg);
-    // signal nextReceip();
-    function clearData() {
-        console.log(" ")
-        _sevaPayment.clearData()
-    }
 
-    title: "InitiatePayment"
+    contentItem: SevaPaymentDetails{id:_sevaPayment;Layout.fillWidth: true}
     background: Rectangle{
         anchors.fill: parent
         color:"lightblue"
@@ -62,11 +60,8 @@ Dialog {
                     if (checkAmoutPaid()) {
                         console.log("In if confirm  clicked")
                         _sevaPayment.cashPaid = "";
-                        //_paymentConfirmButton.enabled = false;
                         closeButton.enabled = false;
                         paymentComplete();
-                        //_sevaPayment.clearData();
-                        // nextReceip();
                         closeButton.enabled = true;
                         _paymentDialog.close()
                     } else {
@@ -75,18 +70,6 @@ Dialog {
                     }
                 }
             }
-            //            Button{
-            //                Layout.topMargin: 5;Layout.bottomMargin: 5;
-            //                Layout.fillWidth: true;text :"Print"
-            //                Layout.maximumHeight: parent.height-15
-            //                font.pixelSize: 20
-            //                enabled: _sevaPayment.isDataExist
-            //                visible: false
-            //                onClicked: {
-            //                    console.log("In print-------- clicked")
-            //                    printClicked();
-            //                }
-            //            }
             Button{
                 id:closeButton
                 Layout.topMargin: 5;Layout.bottomMargin: 5;
@@ -98,21 +81,6 @@ Dialog {
                     _paymentDialog.close()
                 }
             }
-        }
-    }
-
-    x: (parent.width - width) / 2
-    y: (parent.height - height) / 2
-    contentItem: SevaPaymentDetails{id:_sevaPayment;Layout.fillWidth: true}
-
-    function checkAmoutPaid(){
-        var tempAmount2Pay = _sevaPayment.amount2Pay.trim().substring(4).trim()
-        if (tempAmount2Pay === _sevaPayment.cashPaid.trim()){
-            console.log("Amount Paid does match. Contine further ="+tempAmount2Pay + " 2BePaid ="+_sevaPayment.cashPaid.trim())
-            return true;
-        }else {
-            console.log("Amount Paid does match. Contine further ="+tempAmount2Pay + " 2BePaid ="+_sevaPayment.cashPaid.trim())
-            return false;
         }
     }
 
@@ -147,6 +115,22 @@ Dialog {
             _errorDialog.showError(errorMsg);
         }
     }
+
+    function checkAmoutPaid(){
+        var tempAmount2Pay = _sevaPayment.amount2Pay.trim().substring(4).trim()
+        if (tempAmount2Pay === _sevaPayment.cashPaid.trim()){
+            console.log("Amount Paid does match. Contine further ="+tempAmount2Pay + " 2BePaid ="+_sevaPayment.cashPaid.trim())
+            return true;
+        }else {
+            console.log("Amount Paid does match. Contine further ="+tempAmount2Pay + " 2BePaid ="+_sevaPayment.cashPaid.trim())
+            return false;
+        }
+    }
+    function clearData() {
+        console.log(" ")
+        _sevaPayment.clearData()
+    }
+
     onOpened: {
         console.log("********* In onOpened: of spcd  *********** ")
         var bankList =  sevaProxy.getBankList();
