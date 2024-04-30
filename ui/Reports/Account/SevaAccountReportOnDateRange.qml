@@ -74,7 +74,7 @@ Rectangle{
                         {
                             console.log(" Generate the report for a Day at Row ="+lv1.currentRow)
                             var accountElement = sevaProxy.sevaReport.accountReportDateRangeModel.getAccountReportDateRangeElementAt(lv1.currentRow);
-                            accountElement.reportGenerationSource = 2;
+                            accountElement.reportGenerationSource = ReportEnums.CLICK_ON_REPORT;
                             generateReportForDate(accountElement);
                         }
                     }

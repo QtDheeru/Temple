@@ -8,7 +8,7 @@ SevaCancelModel::SevaCancelModel(QObject *parent)
 
 int SevaCancelModel::rowCount(const QModelIndex &parent) const
 {
-    m_recptList.count();
+    return m_recptList.count();
 }
 
 QVariant SevaCancelModel::data(const QModelIndex &index, int role) const

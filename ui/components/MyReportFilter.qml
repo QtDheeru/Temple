@@ -24,8 +24,8 @@ Rectangle {
     property int defaultSevaType : 0
     property string fileName : "MyReportFilter.qml"
 
-    property int dETAIL_REPORT  : ReportFilterEnum.DETAIL_REPORT
-    property int sUMMARY_REPORT : ReportFilterEnum.SUMMARY_REPORT
+    property int dETAIL_REPORT  : ReportEnums.DETAIL_REPORT
+    property int sUMMARY_REPORT : ReportEnums.SUMMARY_REPORT
 
     property alias isAllselected:_month._data
     property var currentMonth;
@@ -514,6 +514,7 @@ Rectangle {
 
     function collectCurrentFilterOptions(typeOfReport) {
         _rip.reportType = typeOfReport;
+        _rip.reportGenerationSource = ReportEnums.CLICK_ON_LEFT_SELECTION;
         if (_sevatypeCheck.checked == true){
             // Report for all seva types & all seva names.
             _rip.iSevaType = root.defaultSevaType
@@ -534,7 +535,7 @@ Rectangle {
         _rip.bDatewise = _datewise.checked
         if (_selectDateRadio.checked){
             console.log(" Single Date Selection ")
-            _rip.iSelectedType = ReportFilterEnum.SINGLE_DATE_REPORT;
+            _rip.iSelectedType = ReportEnums.SINGLE_DATE_REPORT;
             _rip.sSingleDate = r1.selecteddate
             _rip.sStartDate = "null"
             _rip.sEndDate = "null"
@@ -544,7 +545,7 @@ Rectangle {
 
         if (_rangeSelectedRadio.checked){
             console.log(" Date Range Selection ")
-            _rip.iSelectedType = ReportFilterEnum.DATE_RANGE_REPORT;
+            _rip.iSelectedType = ReportEnums.DATE_RANGE_REPORT;
             _rip.sSingleDate = "null"
             _rip.sStartDate = r2.selecteddate
             _rip.sEndDate = r3.selecteddate
@@ -554,7 +555,7 @@ Rectangle {
 
         if (_monthYearRadio.checked){
             console.log(" Month Selection ")
-            _rip.iSelectedType = ReportFilterEnum.MONTH_REPORT;
+            _rip.iSelectedType = ReportEnums.MONTH_REPORT;
             _rip.sSingleDate = "null";
             _rip.sStartDate = "null"
             _rip.sEndDate = "null"
@@ -587,7 +588,7 @@ Rectangle {
 
             _sevaName._dataModel = sevaProxy.getSevaModel(0);
             _sevaName._dataModelRole = "SevaName"
-            collectCurrentFilterOptions(ReportFilterEnum.SUMMARY_REPORT);
+            collectCurrentFilterOptions(ReportEnums.SUMMARY_REPORT);
         }
     }
 }

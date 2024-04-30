@@ -2,17 +2,12 @@
 #define REPORTFILTERELEMENTS_H
 
 #include <QObject>
+#include "ReportEnums.h"
 
 class ReportFilterElements : public QObject
 {
     Q_OBJECT
 public:
-
-    enum REPORT_TYPE{DETAIL_REPORT=1,SUMMARY_REPORT=2};
-    enum REPORT_DATE_SELECTION_TYPE{SINGLE_DATE_REPORT=0,DATE_RANGE_REPORT=1,MONTH_REPORT=2};
-
-    Q_ENUM(REPORT_TYPE)
-    Q_ENUM(REPORT_DATE_SELECTION_TYPE)
 
     explicit ReportFilterElements(QObject *parent = nullptr);
 
@@ -30,6 +25,7 @@ public:
     Q_PROPERTY(QString sYear READ sYear WRITE setSYear NOTIFY sYearChanged)
     Q_PROPERTY(int iSelectedType READ iSelectedType WRITE setISelectedType NOTIFY iSelectedTypeChanged)
     Q_PROPERTY(int reportType READ reportType WRITE setReportType NOTIFY reportTypeChanged FINAL)
+    Q_PROPERTY(ReportEnums::REPORT_GENERATION_SOURCE reportGenerationSource READ reportGenerationSource WRITE setReportGenerationSource NOTIFY reportGenerationSourceChanged FINAL)
 
     bool bSevawise() const;
     void setBSevawise(bool newBSevawise);
@@ -72,6 +68,9 @@ public:
     int sevaNameIndex() const;
     void setSevaNameIndex(int newSevaNameIndex);
 
+    ReportEnums::REPORT_GENERATION_SOURCE reportGenerationSource() const;
+    void setReportGenerationSource(const ReportEnums::REPORT_GENERATION_SOURCE &newReportGenerationSource);
+
 signals:
     void bSevawiseChanged();
     void bDatewiseChanged();
@@ -87,6 +86,8 @@ signals:
     void reportTypeChanged();
     void sevaTypeChanged();
     void sevaNameIndexChanged();
+
+    void reportGenerationSourceChanged();
 
 private:
     bool m_bSevawise;
@@ -105,6 +106,7 @@ private:
     int m_iSelectedType;
     // Report is details or Summary
     int m_reportType;
+    ReportEnums::REPORT_GENERATION_SOURCE m_reportGenerationSource;
 };
 
 #endif // REPORTFILTERELEMENTS_H

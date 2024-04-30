@@ -216,13 +216,6 @@ Rectangle{
     Keys.onEscapePressed: {
         console.log("Esc pressed in AllAccountDetails.qml ")
         back();
-        // if(isSingleDateSelected)
-        // {
-        //     loadMenuPage();
-        // }
-        // else{
-        //     loadDateWisePage();
-        // }
     }
 
     Component.onCompleted:  {

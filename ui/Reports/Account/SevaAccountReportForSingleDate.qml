@@ -64,7 +64,7 @@ Rectangle{
                         mouse.accepted = true
                         if (mouse.button === Qt.LeftButton){
                             var accountElement = sevaProxy.sevaReport.accReportModel.getAccountReportElement(clickIndex);
-                            accountElement.reportGenerationSource = 2;
+                            accountElement.reportGenerationSource = ReportEnums.CLICK_ON_REPORT;
                             loadSevaDetails(accountElement);
                         }
                     }
@@ -259,13 +259,6 @@ Rectangle{
     Keys.onEscapePressed: {
         console.log("Esc pressed in SevaAccountReportForSingleDate ")
         back();
-        // if(isSingleDateSelected)
-        // {
-        //     loadMenuPage();
-        // }
-        // else{
-        //     loadDateWisePage();
-        // }
     }
 
     Component.onCompleted:  {

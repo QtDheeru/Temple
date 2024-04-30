@@ -33,8 +33,8 @@ Rectangle{
         var filterObj = reportFilterComp.createObject();
         filterObj.bSevawise = _reportitems.seWise
         filterObj.bDatewise = _reportitems.dtWise
-        filterObj.iSelectedType = ReportFilterEnum.SINGLE_DATE_REPORT;
-        filterObj.reportType = ReportFilterEnum.DETAIL_REPORT
+        filterObj.iSelectedType = ReportEnums.SINGLE_DATE_REPORT;
+        filterObj.reportType = ReportEnums.DETAIL_REPORT
         filterObj.iSevaType = accountElement.sevaType;
         filterObj.sSevaName = accountElement.sevaName;
         filterObj.sSingleDate = accountElement.date
@@ -42,6 +42,7 @@ Rectangle{
         filterObj.sEndDate = "null"
         filterObj.sMonth = "null"
         filterObj.sYear  = "null"
+        filterObj.reportGenerationSource = accountElement.reportGenerationSource
         generateReport(filterObj);
     }
 
@@ -51,8 +52,8 @@ Rectangle{
         var filterObj = reportFilterComp.createObject();
         filterObj.bSevawise = _reportitems.seWise
         filterObj.bDatewise = _reportitems.dtWise
-        filterObj.iSelectedType = ReportFilterEnum.SINGLE_DATE_REPORT;
-        filterObj.reportType = ReportFilterEnum.SUMMARY_REPORT
+        filterObj.iSelectedType = ReportEnums.SINGLE_DATE_REPORT;
+        filterObj.reportType = ReportEnums.SUMMARY_REPORT
         filterObj.iSevaType = accountElement.sevaType;
         filterObj.sSevaName = accountElement.sevaName;
         filterObj.sSingleDate = accountElement.date
@@ -60,6 +61,7 @@ Rectangle{
         filterObj.sEndDate = "null"
         filterObj.sMonth = "null"
         filterObj.sYear  = "null"
+        filterObj.reportGenerationSource = accountElement.reportGenerationSource
         generateReport(filterObj);
     }
     function loadDaySummaryForMonth(accountElement){
@@ -68,8 +70,8 @@ Rectangle{
         var filterObj = reportFilterComp.createObject();
         filterObj.bSevawise = _reportitems.seWise
         filterObj.bDatewise = _reportitems.dtWise
-        filterObj.iSelectedType = ReportFilterEnum.MONTH_REPORT;
-        filterObj.reportType = ReportFilterEnum.SUMMARY_REPORT
+        filterObj.iSelectedType = ReportEnums.MONTH_REPORT;
+        filterObj.reportType = ReportEnums.SUMMARY_REPORT
         filterObj.iSevaType = accountElement.sevaType;
         filterObj.sSevaName = accountElement.sevaName;
         filterObj.sSingleDate = accountElement.date
@@ -77,21 +79,22 @@ Rectangle{
         filterObj.sEndDate = "null"
         filterObj.sMonth = accountElement.month
         filterObj.sYear  = accountElement.year
+        filterObj.reportGenerationSource = accountElement.reportGenerationSource
         generateReport(filterObj);
     }
 
     function generateReport(filterObject){
         console.log(" Start Generating the report ")
         filterObject.print();
-        if (filterObject.reportGenerationSource === 0){
+        if (filterObject.reportGenerationSource === ReportEnums.CLICK_ON_LEFT_SELECTION){
             _reportStackView.clear();
         }
         switch(filterObject.reportType)
         {
-        case ReportFilterEnum.DETAIL_REPORT :
+        case ReportEnums.DETAIL_REPORT :
             root.generateDetailsReport(filterObject)
             break;
-        case ReportFilterEnum.SUMMARY_REPORT:
+        case ReportEnums.SUMMARY_REPORT:
             root.generateSummaryReport(filterObject);
             break;
         }
@@ -101,20 +104,20 @@ Rectangle{
         var selectionType = filterObject.iSelectedType;
         console.log(" Start Generating the Details report ="+selectionType)
         switch(selectionType){
-        case ReportFilterEnum.SINGLE_DATE_REPORT: {
+        case ReportEnums.SINGLE_DATE_REPORT: {
              sevaProxy.sevaReport.accountFullReportModel.generateFullAccountReportEachdate(filterObject)
              root.checkForNoRecords();
              var item = _reportStackView.push("qrc:/ui/Reports/Account/AllAccountDetails.qml");
              item.back.connect(root.adjustStackView);
              break;
         }
-        case ReportFilterEnum.DATE_RANGE_REPORT:
+        case ReportEnums.DATE_RANGE_REPORT:
             sevaProxy.sevaReport.accountFullReportModel.generateFullAccountReportEachdate(filterObject)
             root.checkForNoRecords();
             var item = _reportStackView.push("qrc:/ui/Reports/Account/AllAccountDetails.qml");
             item.back.connect(root.adjustStackView);
             break;
-        case ReportFilterEnum.MONTH_REPORT:
+        case ReportEnums.MONTH_REPORT:
             sevaProxy.sevaReport.accountFullReportModel.generateFullAccountReportEachdate(filterObject)
             root.checkForNoRecords();
             var item = _reportStackView.push("qrc:/ui/Reports/Account/AllAccountDetails.qml");
@@ -130,7 +133,7 @@ Rectangle{
         var selectionType = filterObject.iSelectedType;
         console.log(" Start Generating the Summary report ="+selectionType)
         switch(selectionType){
-        case ReportFilterEnum.SINGLE_DATE_REPORT: {
+        case ReportEnums.SINGLE_DATE_REPORT: {
              sevaProxy.sevaReport.generateAccReport(filterObject);
              root.checkForNoRecords();
              var item = _reportStackView.push("qrc:/ui/Reports/Account/SevaAccountReportForSingleDate.qml");
@@ -138,7 +141,7 @@ Rectangle{
              item.back.connect(root.adjustStackView);
              break;
         }
-        case ReportFilterEnum.DATE_RANGE_REPORT: {
+        case ReportEnums.DATE_RANGE_REPORT: {
             sevaProxy.sevaReport.generateAccReportForEachDate(filterObject);
             //root.checkForNoRecords();
             var item1 = _reportStackView.push("qrc:/ui/Reports/Account/SevaAccountReportOnDateRange.qml");
@@ -146,7 +149,7 @@ Rectangle{
             item1.back.connect(root.adjustStackView);
             break;
         }
-        case ReportFilterEnum.MONTH_REPORT:{
+        case ReportEnums.MONTH_REPORT:{
             // Report for all the months. month=All is 13 Selection all in ComboBox
             if (filterObject.sMonth === "13"){
                 sevaProxy.sevaReport.generateAccReportForEachMonth(filterObject)
@@ -175,88 +178,9 @@ Rectangle{
 
     Connections{
         target: _reportitems
-
         function onReportFilterChanged(filterObject){
             root.generateReport(filterObject);
         }
-
-        // function onSendReportInput(obj){
-        //     _load.source = "";
-        //     console.log(" Start Generating the report "+obj.sSingleDate)
-        //     // Following will send signal to backend to generate the report
-        //     sevaProxy.sevaReport.generateAccReport(obj)
-        //     console.log(" Report Generation Initiated .."+obj.sSingleDate)
-        //     if(sevaProxy.sevaReport.accReportModel.getAccountReportQryListSize()===0){
-        //         total.text = sevaProxy.sevaReport.accReportModel.grandTotal + ".00 ₹"
-        //         sendError("No Reports for this Date");
-        //     } else {
-        //         total.text = sevaProxy.sevaReport.accReportModel.grandTotal + ".00 ₹"
-        //     }
-        //     //_load.source = "SevaAccountReportForSingleDate.qml"
-        //     var item = _reportStackView.push("qrc:/ui/SevaAccountReportForSingleDate.qml");
-        //     item.loadSevaDetails.connect(root.loadAllSevaDetailsOnADay)
-        // }
-
-        // function onDateRangeSelected(){
-        //     console.log("In onDateRangeSelected")
-        //     _load.source = "SevaAccountReportOnDateRange.qml"
-        // }
-
-        // function onMonthWiseSelected(){
-        //     console.log("In onDateRangeSelected")
-        //     _load.source = "SevaAccountReportMonthWise.qml"
-
-        // }
-        // function onLoadDateWisePage()
-        // {
-        //     console.log("In onLoadDateWisePage")
-        //     _load.source = "SevaAccountReportOnDateRange.qml"
-        // }
-
-        // function onSendReportDateRangeInput(obj){
-        //     console.log("In onSendReportDateRangeInput")
-        //     //sevaProxy.sevaReport.generateAccReportForEachDate(obj)
-        // }
-        // function onSendReportMonthRangeInput(obj)
-        // {
-        //     console.log("In onSendReportMonthRangeInput")
-        //     sendReportMonthRangeImput(obj);
-        //     //  isAllselected = true;
-        // }
-        // function onSendReportDateRangeInputForWholeMonth(obj)
-        // {
-        //     console.log("In onSendReportDateRangeInputForWholeMonth")
-        //     sendReportDateRangeImputForWholeMonth(obj);
-        //     //isAllselected = false;
-        // }
-        // function   onSendError(err){
-        //     console.log("In onSendError")
-        //     _errorDialog.showError(err);
-        // }
-        // function onSendAllDetailsReportDateRangeInput(obj){
-        //     console.log("Suman onSendAllDetailsReportDateRangeInput")
-        //     _load.source = ""
-        //     sevaProxy.sevaReport.accountFullReportModel.generateFullAccountReportForDateRange(obj)
-        //     _load.source = "AllAccountDetails.qml";
-        // }
-        // function onSendAllDetailsReportMonthRangeInput(obj){
-        //     console.log("Suman onSendAllDetailsReportMonthRangeInput")
-        //     _load.source = ""
-        //     sevaProxy.sevaReport.accountFullReportModel.generateFullAccountReportForMonth(obj)
-        //     _load.source = "AllAccountDetails.qml";
-        // }
-        // function onSendAlldetailsReportDateRangeInputForWholeMonth(obj){
-        //     console.log("Suman onSendAlldetailsReportDateRangeInputForWholeMonth")
-        //     _load.source = ""
-        //     sevaProxy.sevaReport.accountFullReportModel.generateFullAccountReportForMonth(obj)
-        //     _load.source = "AllAccountDetails.qml";
-        // }
-        // function onSendAllReportInputEachDate(obj){
-        //     console.log("Suman onSendAllReportInputEachDate")
-        //     _load.source = ""
-        //     sevaProxy.sevaReport.accountFullReportModel.generateFullAccountReportEachdate(obj)
-        //     _load.source = "AllAccountDetails.qml";
-        // }
     }
     ReportFilterItems{
         id:_rip
@@ -404,13 +328,25 @@ Rectangle{
     }
 
     function adjustStackView(){
+        console.log(fileName + " StackView Depth ="+_reportStackView.depth)
         if (_reportStackView.depth <= 1){
+            console.log(fileName + " Clearing StackView. Current Depth ="+_reportStackView.depth)
             _reportStackView.clear();
             loadMenuPage()
             return;
         }
         if (_reportStackView.depth > 1){
+            console.log(fileName + " Removing topItem. Current StackView Depth ="+_reportStackView.depth)
             _reportStackView.pop()
+        }
+    }
+
+    Timer{
+        repeat: true
+        interval: 5000
+        running: true
+        onTriggered: {
+           console.log(fileName + " - Current StackView Depth ="+_reportStackView.depth)
         }
     }
 

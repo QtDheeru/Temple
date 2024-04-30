@@ -8,7 +8,7 @@ AccountReportElement::AccountReportElement(QObject *parent)
     neft =0;
     cheque = 0;
     upi = 0;
-    this->reportGenerationSource = 0;
+    this->m_reportGenerationSource = ReportEnums::CLICK_ON_LEFT_SELECTION;
 }
 
 const QString &AccountReportElement::getSeva_name() const
@@ -117,18 +117,6 @@ void AccountReportElement::print()
     qDebug() << " Cash =" << this->cash << " Chq=" << this->cheque << " UPI="<<this->upi << " NEFT"<<this->neft << " Total " << seva_total << Qt::endl;
 }
 
-int AccountReportElement::getReportGenerationSource() const
-{
-    return reportGenerationSource;
-}
-
-void AccountReportElement::setReportGenerationSource(int newReportGenerationSource)
-{
-    if (reportGenerationSource == newReportGenerationSource)
-        return;
-    reportGenerationSource = newReportGenerationSource;
-    emit reportGenerationSourceChanged();
-}
 
 QString AccountReportElement::month() const
 {
@@ -154,6 +142,19 @@ void AccountReportElement::setYear(const QString &newYear)
         return;
     m_year = newYear;
     emit yearChanged();
+}
+
+ReportEnums::REPORT_GENERATION_SOURCE AccountReportElement::reportGenerationSource() const
+{
+    return m_reportGenerationSource;
+}
+
+void AccountReportElement::setReportGenerationSource(const ReportEnums::REPORT_GENERATION_SOURCE &newReportGenerationSource)
+{
+    if (m_reportGenerationSource == newReportGenerationSource)
+        return;
+    m_reportGenerationSource = newReportGenerationSource;
+    emit reportGenerationSourceChanged();
 }
 
 QString AccountReportElement::date() const

@@ -7,6 +7,7 @@
 #include "AccountReportElement.h"
 #include "ReportFilterElements.h"
 #include "AccountReportCSVProcessor.h"
+#include "ReportEnums.h"
 class AccountReportModel : public QAbstractTableModel
 {
     Q_OBJECT

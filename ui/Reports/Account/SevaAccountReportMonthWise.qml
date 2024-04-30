@@ -52,6 +52,7 @@ Rectangle{
                             console.log(fileName + " Row Clicked = "+lv1.currentRow)
                             var obj = sevaProxy.sevaReport.accountReportMonthRangeModel.getAccountReportMonthRangeElementAt(lv1.currentRow);
                             console.log(fileName +  " Generate Report for Month="+obj.month)
+                            accountElement.reportGenerationSource = ReportEnums.CLICK_ON_REPORT;
                             generateReportForOneMonth(obj);
                         }
                     }
