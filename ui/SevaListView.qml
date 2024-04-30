@@ -4,43 +4,21 @@ import "./components"
 import QtQuick.Layouts 1.3
 
 Rectangle {
-    id:_root
+    id: _root
     width: 200;
-    height:parent.height
+    height: parent.height
     color: "transparent"
     anchors.margins: 20
     border.width: 0.5;border.color: "#00A2ED"
 
-    property int sevaType :-1
+    property int sevaType : -1
     property alias currentIndex: _listView.currentIndex
-
     property int myHeight : 30
     property int fontPixelSize : 20
 
     signal errorOccur(string errorMsg);
     signal sevaSelected(int index, int sevaType, int sevaId)
-    signal sevaSelectedByIndex(int index)
-
-    onSevaTypeChanged: {
-        console.log(" Seva Type Changed: " +sevaType)
-        _listView.model = sevaProxy.getSevaModel(sevaType);
-    }
-
-    function selectFirstSeva()
-    {
-        _listView.currentIndex = -1;
-        _listView.currentIndex = 0;
-    }
-
-    function recvSevaSelected(idx,sevaType, sevaId) {
-        console.log(" VIEW - Index =" + idx + " SevaType =" + sevaType + " SevaID=" + sevaId)
-        sevaSelected(idx,sevaType,sevaId)
-        _listView.currentIndex = idx
-    }
-    function recvSevaSelected_1(idx) {
-        console.log(" VIEW-1 - Index =" + idx )
-        sevaSelectedByIndex(idx)
-    }
+    signal sevaSelectedByIndex(int sevaType, int index)
 
     Rectangle{
         id : _sevaTypeSelection
@@ -92,6 +70,7 @@ Rectangle {
                     console.log("Model SevaType--------: "+currentItem);
                     console.log("Model SevaType: " + currentItem.model.sevaTypeName);
                     console.log("Model SevaType: " + currentItem.model.sevaTypeId);
+                    _listView.currentIndex = 0;
                 }
                 Component.onCompleted: {
                     var currentItem = delegateModel.items.get(currentIndex)
@@ -108,14 +87,13 @@ Rectangle {
         anchors.top: _sevaTypeSelection.bottom
         width: parent.width-5
         height: parent.height - _sevaTypeSelection.height * 1.5
-        highlight :highlightBar
+        highlight : highlightBar
         spacing: 2
         clip: true
         focus: true
         currentIndex: 0
         snapMode: ListView.SnapToItem
-        //model : sevaProxy.getSevaModel(sevaType)
-        delegate: MySevaDelegate{
+        delegate: MySevaDelegate {
             Component.onCompleted: {
                 sevaSelected.connect(recvSevaSelected);
             }
@@ -124,8 +102,7 @@ Rectangle {
         headerPositioning: ListView.OverlayHeader
         highlightFollowsCurrentItem: true
         onCurrentIndexChanged: {
-            console.log(" Current Index changed" + currentIndex)
-            //recvSevaSelected(currentIndex,_sevaTypes)
+            recvSevaSelected_1((_sevaTypes.delegateModel.items.get( _sevaTypes.currentIndex)).model.sevaTypeId,currentIndex)
         }
     }
     Component{
@@ -151,12 +128,31 @@ Rectangle {
             border.color: "green"
             border.width: 1;
             color: Qt.rgba(0,0.0,1,0.5)
-            z:5
+            z: 5
         }
     }
+
+    onSevaTypeChanged: {
+        console.log(" Seva Type Changed: " +sevaType)
+        _listView.model = sevaProxy.getSevaModel(sevaType);
+    }
+
+    function selectFirstSeva() {
+        _listView.currentIndex = -1;
+        _listView.currentIndex = 0;
+    }
+    function recvSevaSelected(idx,sevaType, sevaId) {
+        console.log(" VIEW - Index =" + idx + " SevaType =" + sevaType + " SevaID=" + sevaId)
+        sevaSelected(idx,sevaType,sevaId)
+        _listView.currentIndex = idx
+    }
+    function recvSevaSelected_1(sevaType,idx) {
+        console.log(" VIEW-1 - Index =" + idx )
+        sevaSelectedByIndex(sevaType,idx)
+    }
+
     Component.onCompleted: {
         console.log("Component.onCompleted: of seva list view")
-
     }
 }
 

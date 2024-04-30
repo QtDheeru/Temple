@@ -15,7 +15,7 @@ Rectangle {
     property alias receiptdate : r1.selecteddate
     property alias sevadate : r2.selecteddate
     property alias momento : _momento._data
-    property alias bookedby : r4._data
+    property alias bookedby : _bookedBy._data
     property string sevatime : _time._data
     ColumnLayout {
         id : _c1
@@ -69,7 +69,7 @@ Rectangle {
             fontPixelSize: _rootSevaDateTime.subComponentPixelSize
         }
         MyRowEntry {
-            id:r4;_labelText :qsTr("Booked By")
+            id:_bookedBy;_labelText :qsTr("Booked By")
             myWidth: parent.width/1.25
             myHeight:_rootSevaDateTime.subComponentHeight-10;
             fontPixelSize: _rootSevaDateTime.subComponentPixelSize

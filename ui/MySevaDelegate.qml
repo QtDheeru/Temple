@@ -3,13 +3,13 @@ import QtQuick.Controls 2.14
 
 Button {
     id : b1
-    signal sevaSelected(int index, int sevaType, int sevaId)
-    signal sevaSelectedFromView(int index, int sevaType, int sevaId)
     implicitWidth: parent.width;
     implicitHeight: _t1.contentHeight + 10;
     anchors.margins: 10
     background: Rectangle{color : "skyblue"}
     height:_t1.contentHeight+10
+    signal sevaSelected(int index, int sevaType, int sevaId)
+    signal sevaSelectedFromView(int index, int sevaType, int sevaId)
 
     contentItem: Text {
         id : _t1
