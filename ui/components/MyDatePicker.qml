@@ -49,11 +49,13 @@ Item {
     }
     Popup{
         id: calPopup
-        width: _rootDataPicker.width-_rootDataPicker.width/2.8
-        height: 360
+        width: _rootDataPicker.width * 1.5
+        height: _rootDataPicker.height * 8
         visible: false
+        y: -calPopup.height/3.5
         Cal.Calendar{
             id: cal
+            anchors.fill: parent
             style: CalStyle.CalendarStyle {
                 gridVisible: true
 //                dayDelegate: Rectangle
@@ -109,8 +111,8 @@ Item {
             }
 
 
-            width: _rootDataPicker.width-_rootDataPicker.width/4
-            height: calPopup.height
+            // width: _rootDataPicker.width-_rootDataPicker.width/4
+            // height: calPopup.height
             visible: false
             selectedDate: new Date()
 
