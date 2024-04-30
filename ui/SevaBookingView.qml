@@ -46,7 +46,7 @@ Rectangle{
             anchors.fill: parent
             spacing: root.height/100
             SevaListView{
-                id :_sevaListView
+                id : _sevaListView
                 Layout.topMargin: root.height/100
                 Layout.fillHeight: parent.height
                 focus: false
@@ -62,7 +62,7 @@ Rectangle{
                     Layout.rightMargin: root.height/100
                     Layout.fillWidth: true
                     PersonalDetails{
-                        id:_personal;Layout.fillWidth: true
+                        id: _personal;Layout.fillWidth: true
                         receiptNumber: sevaProxy.receiptNumber
                         KeyNavigation.tab: _sevaDate
                         Layout.alignment: Qt.AlignTop
@@ -79,8 +79,8 @@ Rectangle{
                     Layout.fillWidth: true
                     Layout.topMargin: root.height/100
                     Layout.rightMargin: root.height/100
-                    SevaDetails{id:_sevaD;Layout.fillWidth: true;referenceVisbility : false}
-                    SevaBookingProgressView{id:_sevaP;Layout.fillWidth: true}
+                    SevaDetails{id: _sevaD; Layout.fillWidth: true; referenceVisbility : false}
+                    SevaBookingProgressView{id: _sevaP;Layout.fillWidth: true}
                 }
                 RowLayout{
                     Layout.fillWidth: true
@@ -93,11 +93,11 @@ Rectangle{
                         Layout.alignment: Qt.AlignTop
                         Layout.rightMargin: 1
                         enablePaymentButton: _personal.isDataExist &&
-                                             _sevaD.isDataExist && (_personal.mobileNo.length==10)
+                                             _sevaD.isDataExist && (_personal.mobileNo.length == 10)
 
                         onEnablePaymentButtonChanged: {
                             enableControls(true)
-                            console.log(" ******* Enabled Button changed......."+enablePaymentButton)
+                            console.log(" ******* Enabled Button changed......." + enablePaymentButton)
                         }
                     }
                     SevaPriceSummary{
@@ -304,10 +304,10 @@ Rectangle{
             }
             _sevaD.setSevaDetails(sevaObject)
         }
-        function onSevaSelectedByIndex(idx){
-            console.log(" Seva Selected ="+idx)
+        function onSevaSelectedByIndex(sevaType,idx){
+            console.log(" Seva Selected =" + idx)
             if (idx < 0 ) idx = 0;
-            sevaObject = sevaProxy.getSevaByIndex(idx);
+            sevaObject = sevaProxy.getSevaByIndex(sevaType,idx);
             if(sevaObject === null)
             {
                 console.log("Inside if of seva object")
