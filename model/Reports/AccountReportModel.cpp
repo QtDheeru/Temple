@@ -159,21 +159,21 @@ void AccountReportModel::generateAccReport(ReportFilterElements *elm)
     this->resetAccModel();
 
     switch(elm->iSelectedType()){
-    case  ReportFilterElements::REPORT_DATE_SELECTION_TYPE::SINGLE_DATE_REPORT:{
+    case  ReportEnums::SINGLE_DATE_REPORT:{
         qDebug() << Q_FUNC_INFO << " Generate the Single Date Report " << Qt::endl;
         // convert the date from dd-mm-yyyy format to yyyy-mm-dd. DB expects this.
         elm->setSSingleDate(FormatDate(elm->sSingleDate()));
         DBInterface::getInstance()->account_report_cdate_function(elm->sSevaName(),elm->iSevaType(),(elm->sSingleDate()));
         break;
     }
-    case  ReportFilterElements::REPORT_DATE_SELECTION_TYPE::DATE_RANGE_REPORT : {
+    case  ReportEnums::DATE_RANGE_REPORT : {
         qDebug() << Q_FUNC_INFO << " Generate the Date Ranged Report " << Qt::endl;
         elm->setSStartDate(FormatDate(elm->sStartDate()));
         elm->setSEndDate(FormatDate(elm->sEndDate()));
         DBInterface::getInstance()->account_report_dataRange_function(elm->sSevaName(),elm->iSevaType(),elm->sStartDate(),elm->sEndDate());
         break;
     }
-    case  ReportFilterElements::REPORT_DATE_SELECTION_TYPE::MONTH_REPORT : {
+    case  ReportEnums::MONTH_REPORT : {
         qDebug() << Q_FUNC_INFO << " Generate the Month Report " << Qt::endl;
         DBInterface::getInstance()->account_report_cmonth_function(elm->sSevaName(),elm->iSevaType(),elm->sMonth().toInt(),elm->sYear().toInt());
         break;

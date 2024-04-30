@@ -3,6 +3,8 @@
 
 #include <QObject>
 #include <QDebug>
+#include "ReportEnums.h"
+
 class AccountReportElement : public QObject
 {
     Q_OBJECT
@@ -11,9 +13,9 @@ class AccountReportElement : public QObject
     Q_PROPERTY(double totalAmount READ getSeva_total WRITE setSeva_total NOTIFY totalAmountChanged)
     Q_PROPERTY(int sevaType READ sevaType WRITE setSevaType NOTIFY sevaTypeChanged)
     Q_PROPERTY(QString sevaName READ getSeva_name WRITE  setSeva_name NOTIFY sevaNameChanged)
-    Q_PROPERTY(int reportGenerationSource READ getReportGenerationSource WRITE setReportGenerationSource NOTIFY reportGenerationSourceChanged FINAL)
     Q_PROPERTY(QString month READ month WRITE setMonth NOTIFY monthChanged FINAL)
     Q_PROPERTY(QString year READ year WRITE setYear NOTIFY yearChanged FINAL)
+    Q_PROPERTY(ReportEnums::REPORT_GENERATION_SOURCE reportGenerationSource READ reportGenerationSource WRITE setReportGenerationSource NOTIFY reportGenerationSourceChanged FINAL)
 
 public:
     explicit AccountReportElement(QObject *parent = nullptr);
@@ -56,28 +58,24 @@ public:
 
     Q_INVOKABLE void print();
 
-    int getReportGenerationSource() const;
-    void setReportGenerationSource(int newReportGenerationSource);
-
     QString month() const;
     void setMonth(const QString &newMonth);
 
     QString year() const;
     void setYear(const QString &newYear);
 
+    ReportEnums::REPORT_GENERATION_SOURCE reportGenerationSource() const;
+    void setReportGenerationSource(const ReportEnums::REPORT_GENERATION_SOURCE &newReportGenerationSource);
+
 signals:
     void dateChanged();
     void totalSevaCountChanged();
     void totalAmountChanged();
     void sevaNameChanged();
-
     void sevaTypeChanged();
-
-    void reportGenerationSourceChanged();
-
     void monthChanged();
-
     void yearChanged();
+    void reportGenerationSourceChanged();
 
 private:
 
@@ -93,9 +91,9 @@ private:
     float cheque;
     float upi;
     QString transaction_mode;
-    int   reportGenerationSource;
     QString m_month;
     QString m_year;
+    ReportEnums::REPORT_GENERATION_SOURCE m_reportGenerationSource;
 };
 
 #endif // ACCOUNTREPORTELEMENT_H

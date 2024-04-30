@@ -9,6 +9,7 @@
 #include <QAbstractTableModel>
 #include "./model/DBInterface.h"
 #include "common.h"
+#include "ReportEnums.h"
 
 class AccountFullReportModel : public QAbstractTableModel
 {

@@ -69,7 +69,7 @@ int main(int argc, char *argv[])
     qmlRegisterUncreatableType<QAbstractItemModel>("Utils",1,0,"Abc","DontCreate");
     qmlRegisterType<ReportFilterElements>("ReportElements",1,0,"ReportFilterItems");
     qmlRegisterUncreatableType<ReportFilterElements>("ReportElements",1,0,"ReportFilterEnum","Enum is not a data type");
-
+    qmlRegisterUncreatableType<ReportFilterElements>("ReportElements",1,0,"ReportEnums","Enum is not a data type");
 
     qmlRegisterType<VoucherElement>("VoucherElement",1,0,"VouEle");
     qmlRegisterType<SevaBookingElement>("SevaBookingElement",1,0,"SevaBookingEle");

@@ -4,7 +4,7 @@
 ReportFilterElements::ReportFilterElements(QObject *parent)
     : QObject{parent}
 {
-
+    this->setReportGenerationSource(ReportEnums::CLICK_ON_REPORT);
 }
 
 bool ReportFilterElements::bSevawise() const
@@ -148,18 +148,18 @@ void ReportFilterElements::print()
     }
     qDebug() << " SevaType Index =" << this->iSevaType() << " Name="<<this->sevaType();
     qDebug() << " SevaName Index =" << this->sevaNameIndex() << " Name  =" << this->sSevaName();
-    QMetaEnum metaEnum = QMetaEnum::fromType<ReportFilterElements::REPORT_DATE_SELECTION_TYPE>();
-    qDebug() << " Which Date Report = ?" << metaEnum.valueToKey(ReportFilterElements::REPORT_DATE_SELECTION_TYPE(this->iSelectedType()));
+    QMetaEnum metaEnum = QMetaEnum::fromType<ReportEnums::REPORT_DATE_SELECTION_TYPE>();
+    qDebug() << " Which Date Report = ?" << metaEnum.valueToKey(ReportEnums::REPORT_DATE_SELECTION_TYPE(this->iSelectedType()));
 
-    QMetaEnum metaEnum1 = QMetaEnum::fromType<ReportFilterElements::REPORT_TYPE>();
-    qDebug() << " TypeOfReport = " << metaEnum1.valueToKey(ReportFilterElements::REPORT_TYPE(this->reportType()));
-    if (this->iSelectedType() == REPORT_DATE_SELECTION_TYPE::SINGLE_DATE_REPORT){
+    QMetaEnum metaEnum1 = QMetaEnum::fromType<ReportEnums::REPORT_TYPE>();
+    qDebug() << " TypeOfReport = " << metaEnum1.valueToKey(ReportEnums::REPORT_TYPE(this->reportType()));
+    if (this->iSelectedType() == ReportEnums::SINGLE_DATE_REPORT){
         qDebug() << " Date Report. Date =" << this->sSingleDate();
     }
-    if (this->iSelectedType() == REPORT_DATE_SELECTION_TYPE::DATE_RANGE_REPORT){
+    if (this->iSelectedType() == ReportEnums::DATE_RANGE_REPORT){
         qDebug() << " Date Range Report. Start Date =" << this->sStartDate() << " EndDate="<<this->sEndDate();
     }
-    if (this->iSelectedType() == REPORT_DATE_SELECTION_TYPE::MONTH_REPORT){
+    if (this->iSelectedType() == ReportEnums::MONTH_REPORT){
         qDebug() << " Month Report. Year =" << this->sYear() << " Month =" << this->sMonth();
     }
 }
@@ -188,4 +188,17 @@ void ReportFilterElements::setSevaNameIndex(int newSevaNameIndex)
         return;
     m_sevaNameIndex = newSevaNameIndex;
     emit sevaNameIndexChanged();
+}
+
+ReportEnums::REPORT_GENERATION_SOURCE ReportFilterElements::reportGenerationSource() const
+{
+    return m_reportGenerationSource;
+}
+
+void ReportFilterElements::setReportGenerationSource(const ReportEnums::REPORT_GENERATION_SOURCE &newReportGenerationSource)
+{
+    if (m_reportGenerationSource == newReportGenerationSource)
+        return;
+    m_reportGenerationSource = newReportGenerationSource;
+    emit reportGenerationSourceChanged();
 }

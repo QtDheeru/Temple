@@ -16,6 +16,7 @@ HEADERS += \
     $$PWD/BookingReportModel.h \
     $$PWD/BookingReportMonthRangeElement.h \
     $$PWD/BookingReportMonthWiseModel.h \
+    $$PWD/ReportEnums.h \
     $$PWD/ReportFilterElements.h \
     $$PWD/SevaBookingElement.h \
     $$PWD/SevaBookingSearchModel.h \
