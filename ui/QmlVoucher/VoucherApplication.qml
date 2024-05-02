@@ -9,6 +9,7 @@ ColumnLayout
     spacing:-30
     property var comp;
     signal loadAdminrights()
+    focus: true
     Component.onCompleted:
     {
         comp=Qt.createComponent("qrc:/ui/QmlVoucher/SubTableCategory.qml")
