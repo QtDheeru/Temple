@@ -8,7 +8,6 @@ Rectangle{
     color: "skyblue"
     anchors.fill: parent
     signal loadAdminrights();
-    signal loadMenuPage()
     Label{
         id:_header
         text:"Admin Actions"
@@ -162,6 +161,6 @@ Rectangle{
         }
     }
     Keys.onEscapePressed: {
-        loadMenuPage()
+        loadAdminrights();
     }
 }

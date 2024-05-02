@@ -2,7 +2,7 @@ import QtQuick 2.15
 import QtQuick.Layouts 1.3
 
 RowLayout{spacing: 1
-    signal loadMenuPage()
+    signal loadAdminrights();
     Rectangle
     {
         color: "lightgrey"
@@ -25,7 +25,7 @@ RowLayout{spacing: 1
     }
 
     Keys.onEscapePressed: {
-        loadMenuPage()
+        loadAdminrights()
         console.log("Esc pressed in Integrate file")
     }
 
