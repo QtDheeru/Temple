@@ -402,7 +402,7 @@ Rectangle{
     Keys.onEscapePressed: {
         console.log("Esc pressed in select seva type view")
         _sevaP.clearData();
-        loadMenuPage()
+        loadDevoteeSelection()
     }
     Component.onCompleted: {
         console.log("Component.onCompleted: of seva booking view",dgothra,dNakshtra)

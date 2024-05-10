@@ -8,7 +8,7 @@ Rectangle {
     anchors.fill: parent
     anchors.centerIn: parent
     anchors.margins: 5
-    signal loadMenuPage()
+    signal loadAdminrights()
     focus: true
     ColumnLayout{
         anchors.fill: parent
@@ -94,7 +94,7 @@ Rectangle {
     }
     Keys.onEscapePressed: {
         console.log("Esc pressed in Admin Page...")
-        loadMenuPage()
+        loadAdminrights()
     }
     Component.onCompleted: {
         console.log("Admin Page is created........")

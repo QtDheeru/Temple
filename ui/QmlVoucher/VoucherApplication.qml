@@ -8,7 +8,8 @@ ColumnLayout
     anchors.fill: parent
     spacing:-30
     property var comp;
-    signal loadMenuPage()
+    signal loadAdminrights()
+    focus: true
     Component.onCompleted:
     {
         comp=Qt.createComponent("qrc:/ui/QmlVoucher/SubTableCategory.qml")
@@ -72,7 +73,7 @@ ColumnLayout
     }
 
     Keys.onEscapePressed: {
-        loadMenuPage();
+        loadAdminrights();
         console.log("Escape pressed in VoucherApplication");
     }
 
