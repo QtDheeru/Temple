@@ -16,6 +16,7 @@
 #include "BookingReportDateRangeModel.h"
 #include"BookingReportMonthWiseModel.h"
 #include "AccountFullReportModel.h"
+
 class SevaReport : public QObject
 {
     Q_OBJECT
@@ -33,9 +34,7 @@ public:
 
     Q_PROPERTY(BookingReportMonthWiseModel* bookingReportMonthWiseModel READ bookingReportMonthWiseModel NOTIFY BookingReportMonthRangeModelChanged)
 
-
     void setSevaOnDateModel(SevaDetailsOnDateModel *newSevaOnDateModel);
-
     SevaDetailsOnDateModel *sevaOnDateModel() const;
 
     const QList<SevaBookingElement *> &sevaDetailsOnDateRange() const;
@@ -45,7 +44,6 @@ public:
     void setAccountreportModel(AccountReportModel *newAccountreportModel);
 
     ReportFilterElements* getReportElements() const;
-
     BookingReportModel *bookingReportModel() const;
 
     AccountReportDateRangeModel *accountReportDateRangeModel() const;
@@ -76,7 +74,6 @@ private:
 
     // QList<SevaBookingElement*> m_sevaDetailsOnDate;
 
-
 public slots:
     void onDateSelected(QString);
     void onDateRangeSelected(QString,QString);
@@ -88,7 +85,6 @@ public slots:
     void generateAccReportForEachDate(ReportFilterElements*);
     void generateAccReportForEachDateForWholeMonth(ReportFilterElements*);
     void generateAccReportForEachMonth(ReportFilterElements*);
-
 
     void generateBookReport(ReportFilterElements*);
     void generateBookingReportForEachDate(ReportFilterElements*);
@@ -113,7 +109,6 @@ signals:
 
     void BookingReportDateRangeModelChanged();
     void BookingReportMonthRangeModelChanged();
-
 
     void accountFullReportModelChanged();
 };

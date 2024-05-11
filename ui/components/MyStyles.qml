@@ -20,6 +20,7 @@ QtObject  {
     property real firstRowFontSize : screenHeight/40
     property real lastRowHeight : screenHeight*1/11
     property real verticalSpacing : 5 //screenHeight/50
+    property real receiptDateFontSize: screenHeight/30
 
     property color backgroundcolorOfApp: "white"//"#445566" //"#4169e1"//"#445566"
     property color buttonColor: "#FFE5B4"

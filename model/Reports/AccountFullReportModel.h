@@ -21,6 +21,7 @@ class AccountFullReportModel : public QAbstractTableModel
     Q_PROPERTY(double upiTotal READ upiTotal WRITE setUpiTotal NOTIFY upiTotalChanged)
     // QAbstractItemModel interface
     Q_PROPERTY(double unknownTypeTotal READ unknownTypeTotal WRITE setUnknownTypeTotal NOTIFY unknownTypeTotalChanged FINAL)
+    Q_PROPERTY(int sevasCount READ sevasCount WRITE setSevasCount NOTIFY sevasCountChanged FINAL)
 
     Q_PROPERTY(AccountReportCSVProcessor *accountCSVProcessor READ getAccountCSVProcessor WRITE setAccountCSVProcessor NOTIFY accountCSVProcessorChanged)
 
@@ -70,6 +71,9 @@ public:
     double unknownTypeTotal() const;
     void setUnknownTypeTotal(double newUnknownTypeTotal);
 
+    int sevasCount() const;
+    void setSevasCount(int newSevasCount);
+
 signals:
 
     void iGrandTotalChanged();
@@ -83,6 +87,8 @@ signals:
     void successMessage(QString exportmsg);
 
     void unknownTypeTotalChanged();
+
+    void sevasCountChanged();
 
 public slots:
     void insertrows(AccountFullreportElement*);
@@ -102,9 +108,10 @@ private:
     double m_chequeTotal;
     double m_upiTotal;
     double m_unknownTypeTotal;
+    int m_sevasCount;
 
     Account_Summary *m_accountSummary;
     AccountReportCSVProcessor *accountCSVProcessor = nullptr;
- };
+};
 
 #endif // ACCOUNTFULLREPORTMODEL_H

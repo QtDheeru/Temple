@@ -44,7 +44,7 @@ Item {
         }
         onClicked:{
             if(showPopup==true)
-            calPopup.showCalendar(true)
+                calPopup.showCalendar(true)
         }
     }
     Popup{
@@ -58,54 +58,54 @@ Item {
             anchors.fill: parent
             style: CalStyle.CalendarStyle {
                 gridVisible: true
-//                dayDelegate: Rectangle
-//                {
-//                    Label {
-//                        text: styleData.date.getDate()
-//                        anchors.centerIn: parent
-//                        color: styleData.valid ? "black" : "grey"
-//                        font.pixelSize: 20
-//                        font.bold: true
-//                    }
+                //                dayDelegate: Rectangle
+                //                {
+                //                    Label {
+                //                        text: styleData.date.getDate()
+                //                        anchors.centerIn: parent
+                //                        color: styleData.valid ? "black" : "grey"
+                //                        font.pixelSize: 20
+                //                        font.bold: true
+                //                    }
 
-//                    Rectangle {
-//                        width: parent.width
-//                        height: 1
-//                        color: "#555"
-//                        anchors.bottom: parent.bottom
-//                    }
+                //                    Rectangle {
+                //                        width: parent.width
+                //                        height: 1
+                //                        color: "#555"
+                //                        anchors.bottom: parent.bottom
+                //                    }
 
-//                    Rectangle {
-//                        width: 1
-//                        height: parent.height
-//                        color: "#555"
-//                        anchors.right: parent.right
-//                    }
-//                }
-//                dayOfWeekDelegate :
-//                    Rectangle {
-//                    width: parent.width
-//                    Label {
-//                        text: styleData.dayOfWeek
-//                        anchors.centerIn: parent
-//                        color: styleData.valid ? "black" : "grey"
-//                        font.pixelSize: 20
-//                        font.bold: true
-//                    }
-//                    Rectangle {
-//                        width: parent.width
-//                        height: 1
-//                        color: "#555"
-//                        anchors.bottom: parent.bottom
-//                    }
+                //                    Rectangle {
+                //                        width: 1
+                //                        height: parent.height
+                //                        color: "#555"
+                //                        anchors.right: parent.right
+                //                    }
+                //                }
+                //                dayOfWeekDelegate :
+                //                    Rectangle {
+                //                    width: parent.width
+                //                    Label {
+                //                        text: styleData.dayOfWeek
+                //                        anchors.centerIn: parent
+                //                        color: styleData.valid ? "black" : "grey"
+                //                        font.pixelSize: 20
+                //                        font.bold: true
+                //                    }
+                //                    Rectangle {
+                //                        width: parent.width
+                //                        height: 1
+                //                        color: "#555"
+                //                        anchors.bottom: parent.bottom
+                //                    }
 
-//                    Rectangle {
-//                        width: 1
-//                        height: parent.height
-//                        color: "#555"
-//                        anchors.right: parent.right
-//                    }
-//                }
+                //                    Rectangle {
+                //                        width: 1
+                //                        height: parent.height
+                //                        color: "#555"
+                //                        anchors.right: parent.right
+                //                    }
+                //                }
 
 
             }

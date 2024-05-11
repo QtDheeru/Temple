@@ -80,9 +80,9 @@ signals:
 private:
 
     QString m_date;
-    int     m_slNo;
+    int m_slNo;
     QString seva_name;
-    int     m_sevaType;
+    int m_sevaType;
     int seva_ticket;
     float seva_cost;
     double seva_total;

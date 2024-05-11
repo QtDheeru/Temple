@@ -8,7 +8,7 @@ Rectangle{
     implicitWidth: 400;
     implicitHeight: 80
     property int wid : 100
-    property double totalSevaCount : 0
+    property int totalSevaCount : 0
     property double cashTotal : 0
     property double chequeTotal : 0
     property double neftTotal : 0
@@ -21,7 +21,7 @@ Rectangle{
         anchors.fill: parent
         spacing:  0
         Rectangle{
-            id:_totalSevaCount
+            id: _totalSevaCount
             color: "#72FFFF"
             Layout.fillWidth: true
             Layout.minimumWidth: root.wid

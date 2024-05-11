@@ -124,9 +124,8 @@ Rectangle {
                     }
                 }
 
-                MyComboEntry{id:_sevaType;
-                    anchors.right: parent.right
-                    anchors.rightMargin: 7
+                MyComboEntry{
+                    id: _sevaType;
                     Layout.preferredWidth: parent.width
                     myHeight:_rootReportFilter.subComponentHeight;
                     myWidth: _rootReportFilter.width/1.1
@@ -162,9 +161,8 @@ Rectangle {
                     }
                 }
 
-                MyComboEntry{id:_sevaName;
-                    anchors.right: parent.right
-                    anchors.rightMargin: 7
+                MyComboEntry{
+                    id:_sevaName;
                     Layout.preferredWidth: parent.width
                     myHeight:_rootReportFilter.subComponentHeight;
                     myWidth: _rootReportFilter.width/1.1
@@ -213,11 +211,8 @@ Rectangle {
                     }
                 }
                 MyDateEntry{
-
                     id:r1;
-                    anchors.right: parent.right
                     enabled: true
-                    anchors.rightMargin: 7
                     Layout.preferredWidth: parent.width
                     myHeight:_rootReportFilter.subComponentHeight;
                     myWidth: _rootReportFilter.width/1.1
@@ -261,8 +256,6 @@ Rectangle {
                 MyDateEntry{
                     id:r2;
                     enabled: false
-                    anchors.right: parent.right
-                    anchors.rightMargin: 7
                     myHeight:_rootReportFilter.subComponentHeight;
                     myWidth: _rootReportFilter.width/1.1
                     fontPixelSize: _rootReportFilter.subComponentPixelSize
@@ -271,8 +264,6 @@ Rectangle {
                 MyDateEntry{
                     id:r3;
                     enabled: false
-                    anchors.right: parent.right
-                    anchors.rightMargin: 7
                     myHeight:_rootReportFilter.subComponentHeight;
                     myWidth: _rootReportFilter.width/1.1
                     fontPixelSize: _rootReportFilter.subComponentPixelSize
@@ -328,9 +319,8 @@ Rectangle {
                         }
                     }
                 }
-                MyComboEntry{id:_month;
-                    anchors.right: parent.right
-                    anchors.rightMargin: 7
+                MyComboEntry{
+                    id:_month;
                     Layout.preferredWidth: parent.width
                     myHeight:_rootReportFilter.subComponentHeight;
                     myWidth: _rootReportFilter.width/1.1
@@ -339,9 +329,8 @@ Rectangle {
                     _labelText :qsTr("Month")
                     _dataModel:["January","February","March","April","May","June","July","August","September","October","November","December","All"]
                 }
-                MyComboEntry{id:_year;
-                    anchors.right: parent.right
-                    anchors.rightMargin: 7
+                MyComboEntry{
+                    id:_year;
                     Layout.preferredWidth: parent.width
                     myHeight:_rootReportFilter.subComponentHeight;
                     myWidth: _rootReportFilter.width/1.1

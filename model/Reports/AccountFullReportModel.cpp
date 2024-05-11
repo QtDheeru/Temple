@@ -3,9 +3,10 @@
 AccountFullReportModel::AccountFullReportModel(QObject *parent)
     :QAbstractTableModel(parent)
 {
-    qDebug()<<Q_FUNC_INFO<<Qt::endl;
+    qDebug() << Q_FUNC_INFO << Qt::endl;
     m_iGrandTotal = 0;
-    accountCSVProcessor  = new AccountReportCSVProcessor;
+    m_sevasCount = 0;
+    accountCSVProcessor = new AccountReportCSVProcessor;
     m_accountSummary = new Account_Summary;
     this->accountCSVProcessor->addSummary(m_accountSummary);
     m_accountSummary->cashTotal = 0;
@@ -29,6 +30,7 @@ void AccountFullReportModel::insertrows(AccountFullreportElement * elememt)
     endInsertRows();
     m_iGrandTotal += elememt->total();
     this->setIGrandTotal(m_iGrandTotal);
+    this->setSevasCount(m_sevasCount + 1);
     qDebug() << Q_FUNC_INFO << "mode = " << elememt->paymentmode() << Qt::endl;
     if((elememt->paymentmode().compare("Cash",Qt::CaseInsensitive)==0) || elememt->paymentmode() == "0"){
         qDebug() << Q_FUNC_INFO << "cash" << Qt::endl;
@@ -59,7 +61,7 @@ void AccountFullReportModel::insertrows(AccountFullreportElement * elememt)
 
 void AccountFullReportModel::generateAccountReport(ReportFilterElements * filterelement)
 {
-    qDebug()<<Q_FUNC_INFO<<Qt::endl;
+    qDebug() << Q_FUNC_INFO << Qt::endl;
 }
 
 void AccountFullReportModel::generateFullAccountReportEachdate(ReportFilterElements * filterelement)
@@ -67,6 +69,7 @@ void AccountFullReportModel::generateFullAccountReportEachdate(ReportFilterEleme
     m_iGrandTotal = 0;
     m_neftTotal = 0;
     m_cashTotal = 0;
+    m_sevasCount = 0;
     beginResetModel();
     m_accountFullreportElementList.clear();
     endResetModel();
@@ -94,7 +97,6 @@ void AccountFullReportModel::generateFullAccountReportEachdate(ReportFilterEleme
         qDebug() << Q_FUNC_INFO << " Wrong selection type. No full reports" << Qt::endl;
         break;
     }
-
     }
 }
 
@@ -103,19 +105,20 @@ void AccountFullReportModel::generateFullAccountReportForDateRange(ReportFilterE
     m_iGrandTotal = 0;
     m_neftTotal = 0;
     m_cashTotal = 0;
-    qDebug()<<Q_FUNC_INFO<<Qt::endl;
+    m_sevasCount = 0;
+    qDebug() << Q_FUNC_INFO << Qt::endl;
     beginResetModel();
     m_accountFullreportElementList.clear();
     endResetModel();
-    qDebug()<<Q_FUNC_INFO<<m_accountFullreportElementList.size()<<Qt::endl;
-    qDebug()<<Q_FUNC_INFO<<"elm date"<<filterelement->sSingleDate()<<Qt::endl;
-    qDebug()<<Q_FUNC_INFO<<"elm ddetails"<<filterelement->sSevaName()<<filterelement->iSevaType()<<Qt::endl;
+    qDebug() << Q_FUNC_INFO << m_accountFullreportElementList.size() << Qt::endl;
+    qDebug() << Q_FUNC_INFO << "elm date"<<filterelement->sSingleDate() << Qt::endl;
+    qDebug() << Q_FUNC_INFO << "elm ddetails"<<filterelement->sSevaName() << filterelement->iSevaType() << Qt::endl;
 
-    if(filterelement->iSelectedType()==0)
+    if(filterelement->iSelectedType() == 0)
     {
-        qDebug()<<Q_FUNC_INFO<<"Inside c date acc rep"<<Qt::endl;
+        qDebug() << Q_FUNC_INFO << "Inside c date acc rep" << Qt::endl;
         filterelement->setSSingleDate(FormatDate(filterelement->sSingleDate()));
-        qDebug()<<Q_FUNC_INFO<<"elm->setSSingleDate(FormatDate(elm->sSingleDate()))"<<filterelement->sSingleDate()<<Qt::endl;
+        qDebug() << Q_FUNC_INFO << "elm->setSSingleDate(FormatDate(elm->sSingleDate()))" << filterelement->sSingleDate() << Qt::endl;
         DBInterface::getInstance()->fullAccounDetailsDateWise(filterelement->sSevaName(),filterelement->iSevaType(),(filterelement->sSingleDate()));
     }
     else if(filterelement->iSelectedType()==1)
@@ -135,6 +138,7 @@ void AccountFullReportModel::generateFullAccountReportForMonth(ReportFilterEleme
     m_iGrandTotal = 0;
     m_neftTotal = 0;
     m_cashTotal = 0;
+    m_sevasCount = 0;
     qDebug()<<Q_FUNC_INFO<<Qt::endl;
     beginResetModel();
     m_accountFullreportElementList.clear();
@@ -184,6 +188,20 @@ void AccountFullReportModel::setGrandTotalToZero()
 {
     qDebug()<<Q_FUNC_INFO<<Qt::endl;
     this->setIGrandTotal(0);
+}
+
+int AccountFullReportModel::sevasCount() const
+{
+    return m_sevasCount;
+}
+
+void AccountFullReportModel::setSevasCount(int newSevasCount)
+{
+    qDebug()<<Q_FUNC_INFO <<  "Old seva count" << m_sevasCount  << "Seva Count =" <<  newSevasCount << Qt::endl;
+    if (m_sevasCount == newSevasCount)
+        return;
+    m_sevasCount = newSevasCount;
+    emit sevasCountChanged();
 }
 
 double AccountFullReportModel::unknownTypeTotal() const
@@ -274,6 +292,7 @@ void AccountFullReportModel::resetAccModel()
     m_accountSummary->upiTotal = 0;
     m_accountSummary->unknownTypeTotal = 0;
     m_accountSummary->total = 0;
+    m_sevasCount = 0;
     endResetModel();
 }
 

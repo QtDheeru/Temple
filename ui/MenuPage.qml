@@ -71,7 +71,7 @@ Rectangle {
             onButtonClikcked: {
                 console.log("booking report button clicked");
                 bookingreport();
-                _errorPopup.open()
+                // _errorPopup.open()
             }
         }
         TempleButton{

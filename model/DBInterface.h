@@ -128,6 +128,23 @@ signals:
     void mySelectSignalAll(QString,QString,QString);
     void signalClosedStatus(QString);
 
+    void sendSevaType(SevaType *);
+    void sendSevaName(SevaName *);
+    void sendOneSevaBooking(SevaBookingElement*);
+    void sendoneByoneSevaBooking(SevaBookingElement*);
+    void setGrandTotalToZero();
+    void dbError(QString errorMsg);
+    void sendRolenumber(int rolenum,QString signInName);
+    void sendVoucheronebyone(VoucherElement*); //Suman N
+    void sendAcoountoneByone(AccountReportElement*); //Suman N
+    void sendFullAccountDataElement(AccountFullreportElement*);
+    void sendChangedDataToSevaBookingTablemodel(QString);
+    void insert_Success(QString,QString,QString);
+    void refreshModel(QString);
+    void sendUpdateStatus(QString);
+    void signalClose(int);
+    void updateToDbFailed();
+
 public slots:
     bool add_seva_type(QString seva_type, int seva_code, QString seva_adder_name);
     void modify_db_type(int,QString,int,QString,int);
@@ -173,7 +190,6 @@ public slots:
     void account_report_eachMonth_function(QString SEVA,int TYPE,int month,int year);
     void account_report_eachDateDataRangeForMonth_function(QString,int,int,int);
     void account_report_eachDateDataRangeForWholeMonth_function(QString,int,int,int);
-
 
     void voucher_report_cdate_function(QString,QString,QString);
     void voucher_report_cmonth_function(int, int, QString, QString);
@@ -229,24 +245,6 @@ public slots:
     void recvDeletedRecptNo(QString recptNo); //Suman N added
     void modifySeva(int sevaId, QString sevaName,int cost,QString Date); //Suman N added
     void closeSeva(int SevaId);                                          //Suman N added
-
-signals :
-    void sendSevaType(SevaType *);
-    void sendSevaName(SevaName *);
-    void sendOneSevaBooking(SevaBookingElement*);
-    void sendoneByoneSevaBooking(SevaBookingElement*);
-    void setGrandTotalToZero();
-    void dbError(QString errorMsg);
-    void sendRolenumber(int rolenum,QString signInName);
-    void sendVoucheronebyone(VoucherElement*); //Suman N
-    void sendAcoountoneByone(AccountReportElement*); //Suman N
-    void sendFullAccountDataElement(AccountFullreportElement*);
-    void sendChangedDataToSevaBookingTablemodel(QString);
-    void insert_Success(QString,QString,QString);
-    void refreshModel(QString);
-    void sendUpdateStatus(QString);
-    void signalClose(int);
-    void updateToDbFailed();
 
 private:
     explicit DBInterface(QObject *parent=nullptr);
