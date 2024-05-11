@@ -6,18 +6,20 @@ import QtQuick.Controls 1.4
 import "../../components"
 import ReportElements 1.0
 Rectangle{
-    id:_rr1
+    id: _root
+
+    property var styles : MyStyles{}
+
     signal loadSingleDatePage(string obj);
     signal generateReportForDate(var reportElement)
     signal loadMonthWisePage();
     signal loadMenuPage();
     signal back();
-    property var styles : MyStyles{}
-    // color: "yellow"
+
     TableView{
         id: lv1
         model: sevaProxy.sevaReport.accountReportDateRangeModel
-        width:parent.width
+        width: parent.width
         height: parent.height - styles.screenHeight/15
         property var selectedRow;
         style: TableViewStyle {
@@ -26,7 +28,6 @@ Rectangle{
                 color: "#72FFFF"
                 Text {
                     id: headerItem
-                   // anchors.centerIn: parent
                     text: styleData.value
                     font.bold: true
                     font.pixelSize: 15
@@ -34,12 +35,9 @@ Rectangle{
                 }
             }
             rowDelegate: Rectangle {
-                id:r1
+                id: r1
                 height:20
-                // z:5
                 color: styleData.selected ? "skyblue"  : "white"
-
-                /*styleData.selected ?*/  /*: "white"*/
                 MouseArea {
                     anchors.fill: parent
                     acceptedButtons: Qt.LeftButton
@@ -53,7 +51,6 @@ Rectangle{
 
                         // select this row
                         // styleData.selected = true
-                        //                    color= styleData.selected ? "skyblue" : "white"
                         console.log("clicked cell in table view ",lv1.currentRow)
 
                         // convert mouse position from delegate to tableview coordinates
@@ -69,7 +66,6 @@ Rectangle{
                         }
                         //       consume the mouse event
                         mouse.accepted = true
-
                         if (mouse.button === Qt.LeftButton)
                         {
                             console.log(" Generate the report for a Day at Row ="+lv1.currentRow)
@@ -81,42 +77,26 @@ Rectangle{
                 }
             }
             itemDelegate:Rectangle{
-                id:_itmdel
+                id: _itmdel
                 height:20
                 color: styleData.selected ? "skyblue" : styleData.row%2 ? "light gray" : "white"
                 Text {
                      anchors.fill: parent
-                   // anchors.centerIn: parent
                     text: styleData.value
-                    // horizontalAlignment: styleData.column === 0? Text.AlignLeft:Text.AlignRight
-                    // verticalAlignment: Qt.AlignVCenter
-
                     font.pixelSize: 14
                 }
-
-//                Rectangle{
-//                    anchors.right: parent.right
-//                    width:1
-//                    color:"black"
-//                    height:parent.height
-//                }
             }
         }
         onClicked: {
             console.log("clicked cell in table view ",row)
-            //        var rowItem =  (sevaProxy.sevaBSearchModel).index(row)
             selectedRow = row
-            //        (sevaProxy.sevaBSearchModel)
-            //         if (mouse.button == Qt.RightButton)
             {
                 console.log("clicked cell in table view ",row)
             }
-
         }
         TableViewColumn {
-            id:_slNo;title: "Sl No"; role: "index";
-            width: _rr1.width/8.1
-
+            id: _slNo;title: "Sl No"; role: "index";
+            width: _root.width/8.1
             movable: false
             resizable: false
             delegate: Rectangle {
@@ -131,51 +111,49 @@ Rectangle{
             }
         }
         TableViewColumn {
-            id:_sevaName;title: "Date"; role: "date";
-            width: (_rr1.width-_slNo.width)/8
-
+            id: _sevaName;title: "Date"; role: "date";
+            width: (_root.width-_slNo.width)/8
             movable: false
             resizable: true
         }
         TableViewColumn {
-            id:_cost;title: "SevaCount"; role: "totalSevaCount";
-            width: (_rr1.width-_slNo.width)/8
+            id: _cost;title: "SevaCount"; role: "totalSevaCount";
+            width: (_root.width-_slNo.width)/8
             horizontalAlignment: Text.AlignLeft
             movable: false
             resizable: true
         }
         TableViewColumn {
-            id:cash;title: "Cash"; role: "cash";
-            width: (_rr1.width-_slNo.width)/8
+            id: cash;title: "Cash"; role: "cash";
+            width: (_root.width-_slNo.width)/8
             horizontalAlignment: Text.AlignRight
             movable: false
             resizable: true
         }
         TableViewColumn {
-            id:_cheque;title: "Cheque"; role: "cheque";
-            width: (_rr1.width-_slNo.width)/8
+            id: _cheque;title: "Cheque"; role: "cheque";
+            width: (_root.width-_slNo.width)/8
             horizontalAlignment: Text.AlignRight
             movable: false
             resizable: true
         }
         TableViewColumn {
-            id:_upi;title: "UPI"; role: "upi";
-            width: (_rr1.width-_slNo.width)/8
+            id: _upi;title: "UPI"; role: "upi";
+            width: (_root.width-_slNo.width)/8
             horizontalAlignment: Text.AlignRight
             movable: false
             resizable: true
         }
         TableViewColumn {
-            id:_neft;title: "NEFT"; role: "neft";
-            width: (_rr1.width-_slNo.width)/8
+            id: _neft;title: "NEFT"; role: "neft";
+            width: (_root.width-_slNo.width)/8
             horizontalAlignment: Text.AlignRight
             movable: false
             resizable: true
         }
-
         TableViewColumn {
-            id:_totalAmount;title: "Total Amount"; role: "totalAmount";
-            width:(_rr1.width-_slNo.width)/8
+            id: _totalAmount;title: "Total Amount"; role: "totalAmount";
+            width:(_root.width-_slNo.width)/8
             movable: false
             resizable: true
             delegate: Rectangle {
@@ -192,7 +170,7 @@ Rectangle{
     }
     ReportFooter{
         id : footer
-        width: _rr1.width
+        width: _root.width
         height:  footerHeight
         cashTotal : sevaProxy.sevaReport.accReportModel.cashTotal
         chequeTotal: sevaProxy.sevaReport.accReportModel.chequeTotal;
@@ -202,15 +180,15 @@ Rectangle{
         grandTotal: sevaProxy.sevaReport.accountReportDateRangeModel.grandTotal
     }
 
+    Keys.onEscapePressed: {
+        back()
+        console.log("Esc pressed in  seva acc report on Date Range page"+isAllSel)
+    }
     Component.onCompleted:  {
         console.log("Component.completed: of SevaAccountReportOnDateRange.qml")
         forceActiveFocus();
     }
     Component.onDestruction: {
         console.log(" Component.onDestruction of SevaAccountReportOnDateRange.qml")
-    }
-    Keys.onEscapePressed: {
-        back()
-        console.log("Esc pressed in  seva acc report on Date Range page"+isAllSel)
     }
 }

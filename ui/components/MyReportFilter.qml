@@ -141,8 +141,6 @@ Rectangle {
 
                 MyComboEntry{
                     id:_sevaType;
-                    anchors.right: parent.right
-                    anchors.rightMargin: 7
                     Layout.preferredWidth: parent.width
                     myHeight:root.subComponentHeight;
                     myWidth: root.width/1.1
@@ -178,8 +176,6 @@ Rectangle {
 
                 MyComboEntry{
                     id: _sevaName;
-                    anchors.right: parent.right
-                    anchors.rightMargin: 7
                     Layout.preferredWidth: parent.width
                     myHeight:root.subComponentHeight;
                     myWidth: root.width/1.1
@@ -221,9 +217,7 @@ Rectangle {
                 }
                 MyDateEntry{
                     id: r1;
-                    anchors.right: parent.right
                     enabled: true
-                    anchors.rightMargin: 7
                     Layout.preferredWidth: parent.width
                     myHeight: root.subComponentHeight;
                     myWidth: root.width/1.1
@@ -267,8 +261,6 @@ Rectangle {
                 MyDateEntry{
                     id:r2;
                     enabled: false
-                    anchors.right: parent.right
-                    anchors.rightMargin: 7
                     myHeight: root.subComponentHeight;
                     myWidth: root.width/1.1
                     fontPixelSize: root.subComponentPixelSize
@@ -277,8 +269,6 @@ Rectangle {
                 MyDateEntry{
                     id:r3;
                     enabled: false
-                    anchors.right: parent.right
-                    anchors.rightMargin: 7
                     myHeight: root.subComponentHeight;
                     myWidth: root.width/1.1
                     fontPixelSize: root.subComponentPixelSize
@@ -320,8 +310,6 @@ Rectangle {
                 }
                 MyComboEntry{
                     id: _month;
-                    anchors.right: parent.right
-                    anchors.rightMargin: 7
                     Layout.preferredWidth: parent.width
                     myHeight: root.subComponentHeight;
                     myWidth: root.width/1.1
@@ -332,8 +320,6 @@ Rectangle {
                 }
                 MyComboEntry{
                     id: _year;
-                    anchors.right: parent.right
-                    anchors.rightMargin: 7
                     Layout.preferredWidth: parent.width
                     myHeight: root.subComponentHeight;
                     myWidth: root.width/1.1

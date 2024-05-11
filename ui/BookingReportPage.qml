@@ -6,11 +6,16 @@ import QtQuick.Controls 1.4
 import "./components"
 import ReportElements 1.0
 Rectangle{
-    id:_r1
-    property var styles : MyStyles{}
+    id: _root
     width: styles.screenWidth
     height: styles.screenHeight
-    //  color: "#72FFFF"
+
+    property var styles : MyStyles{}
+    property int footerHeight: _root.height/15
+    property alias  isRangeDateSelected :_reportitems.isRangeDateSelected
+    property alias isAllselected : _reportitems.isAllselected
+    property alias  isSingleDateSelected :_reportitems.isSingleDateSelected
+
     signal reportDisplay(var date);
     signal sendBookReportImput(var obj);
     signal loadMenuPage()
@@ -19,61 +24,9 @@ Rectangle{
     signal sendSingleDateBookingReportInput(var obj);
     signal sendBookingReportDateRangeImputForWholeMonth(var obj);
     signal sendBookingReportMonthRangeImput(var obj);
-    // property var styles : MyStyles{}
-    property int footerHeight: _r1.height/15
-    // property alias tot :total.text
-    property alias  isRangeDateSelected :_reportitems.isRangeDateSelected
-    property alias isAllselected : _reportitems.isAllselected
-    property alias  isSingleDateSelected :_reportitems.isSingleDateSelected
-    Connections{
-        target: _reportitems
-        function onSendBookReportInput(obj){
-            console.log("sendBookReportInputEmitted")
-            sendBookReportImput(obj)
-            _load.sourceComponent = undefined
-            _load.source = "SevaBookingReportForSingleDate.qml"
-        }
-        function onSendBookingReportDateRangeInput(obj){
-            console.log("In  onsendBookingReportDateRangeInput;")
-            sendBookingReportDateRangeImput(obj);
-        }
-        function onBookingDateRangeSelected(){
-            console.log("In onBookingDateRangeSelected")
-            _load.source = "SevaBookingReportOnDateRange.qml"
 
-        }
-        function onSendBookingReportDateRangeInputForWholeMonth(obj)
-        {
-            console.log("In onSendBookingReportDateRangeInputForWholeMonth")
-            sendBookingReportDateRangeImputForWholeMonth(obj);
-            //isAllselected = false;
-        }
-        function onSendBookingReportMonthRangeInput(obj)
-        {
-            console.log("In onSendBookingReportMonthRangeInput")
-            sendBookingReportMonthRangeImput(obj);
-            //  isAllselected = true;
-        }
-        function onBookingMonthWiseSelected(){
-            console.log("In onBookingMonthWiseSelected")
-            _load.source = "SevaBookingReportMonthWise.qml"
-
-        }
-        function   onLoadDateWiseBookingPage(){
-            console.log("In onLoadDateWiseBookingPage")
-            _load.source = "SevaBookingReportOnDateRange.qml"
-        }
-        function   onSendError(err){
-            console.log("In onSendError")
-            _errorDialog.showError(err);
-        }
-    }
     ReportFilterItems{
         id:_rip
-    }
-    Component.onDestruction: {
-        console.log("Closing the report")
-        resetBookingModel();
     }
     RowLayout{
         anchors.fill: parent
@@ -116,13 +69,6 @@ Rectangle{
                             font.pixelSize: 15
                             font.family: "Helvetica"
                         }
-                        //                        Rectangle {
-                        //                            anchors.right: parent.right
-                        //                            anchors.top: parent.top
-                        //                            anchors.bottom: parent.bottom
-                        //                            width: 1
-                        //                            color: "black"
-                        //                        }
                     }
                     rowDelegate: Rectangle {
                         height:20
@@ -139,43 +85,36 @@ Rectangle{
                             elide: Text.ElideRight
                             horizontalAlignment: Text.AlignLeft
                             verticalAlignment: Qt.AlignVCenter
-
                             font.pixelSize: 14
                         }
-
-                        //                        Rectangle{
-                        //                            anchors.right: parent.right
-                        //                            width:1
-                        //                            color:"black"
-                        //                            height:parent.height
-                        //                        }
                     }
                 }
 
                 TableViewColumn {
                     id:_name;title: "Name"; role: "name";
                     width: leftpart.width/7.1
-
                     movable: false
-                    resizable: false}
+                    resizable: false
+                }
                 TableViewColumn {
                     id:_gothra;title: "Gothra"; role: "gothra";
                     width: leftpart.width/7.1
                     horizontalAlignment: Text.AlignRight
                     movable: false
-                    resizable: false}
+                    resizable: false
+                }
                 TableViewColumn {
                     id:_nakshatra;title: "Nakshatra"; role: "nakshatra";
                     width: leftpart.width/7.1
                     movable: false
-                    resizable: false}
+                    resizable: false
+                }
                 TableViewColumn {
                     id:_sevaName;title: "Seva Name"; role: "sevaName";
                     width: leftpart.width/7.1
                     movable: false
-                    resizable: false}
-
-
+                    resizable: false
+                }
                 TableViewColumn {
                     id:_teerthaPrasada;title: "SevaCount"; role: "SevaCount";
                     width: leftpart.width/7.1
@@ -189,22 +128,17 @@ Rectangle{
                             anchors.fill: parent
                             text: styleData.value
                             horizontalAlignment:Text.AlignHCenter
-                            // padding: _cost.width/3
                             verticalAlignment: Qt.AlignVCenter
-
                             font.pixelSize: 14
                         }
                     }
                 }
-
-
                 TableViewColumn {
                     id:_mobileNumber;title: "Mobile Number"; role: "mobileNumber";
                     width: leftpart.width/7.1
                     movable: true
-                    resizable: true}
-
-
+                    resizable: true
+                }
                 TableViewColumn {
                     id:_note;title: "Note"; role: "note";
                     width: leftpart.width/7.1
@@ -213,25 +147,21 @@ Rectangle{
                 }
                 Component.onCompleted: {
                     console.log("In  Component.onCompleted: of table view of brp "+sevaProxy.sevaReport.bookReportModel.getBookingReportQryListSize)
-                    // total.text = tot;
-
                 }
-
             }
 
             Loader{
                 id:_load
                 height:parent.height
                 width:parent.width
-                property  string isAllSel : _r1.isAllselected
+                property  string isAllSel : _root.isAllselected
                 Connections{
                     target: _load.item
                     function  onLoadSingleDateBookingPage(dt){
                         console.log("In   1111111111onLoadSingleDateBookingPage(obj.date) "+dt)
-                        _load.source = "SevaBookingReportForSingleDate.qml"
+                        _load.source = "qrc:/ui/Reports/Booking/SevaBookingReportForSingleDate.qml"
                         var li = dt.split("-");
                         console.log("******** "+li[2]+"-"+li[1]+"-"+li[0])
-                        // dat
                         _rip.bSevawise = _reportitems.seWise
                         _rip.bDatewise = _reportitems.dtWise
                         _rip.sSingleDate = li[2]+"-"+li[1]+"-"+li[0];
@@ -249,17 +179,15 @@ Rectangle{
                         console.log("In Loader of booking report page    _rip.iSevaType "+ _rip.iSevaType)
                         console.log("In Loader of booking report page    _rip.sSevaName"+    _rip.sSevaName)
                         sendSingleDateBookingReportInput(_rip);
-                        // loadReportForSingleDate(date);
-
                     }
 
                     function   onLoadDateWiseBookingPage(){
                         console.log("In onLoadDateWiseBookingPage")
-                        _load.source = "SevaBookingReportOnDateRange.qml"
+                        _load.source = "qrc:/ui/Reports/Booking/SevaBookingReportOnDateRange.qml"
                     }
                     function  onLoadMonthWiseBookingPage(){
                         console.log("In onLoadMonthWiseBookingPage")
-                        _load.source = "SevaBookingReportMonthWise.qml"
+                        _load.source = "qrc:/ui/Reports/Booking/SevaBookingReportMonthWise.qml"
                     }
                     function  onLoadDateWiseBookingForSlectedMonthPage(obj)
                     {
@@ -275,7 +203,7 @@ Rectangle{
                         _rip.sMonth = obj;
                         _rip.sYear = _reportitems.yr;
                         sendBookingReportDateRangeImput(_rip)
-                        _load.source = "SevaBookingReportOnDateRange.qml"
+                        _load.source = "qrc:/ui/Reports/Booking/SevaBookingReportOnDateRange.qml"
                     }
                     function  onLoadMenuPage(){
                         console.log("In onLoadMenuPage")
@@ -284,7 +212,6 @@ Rectangle{
                 }
                 Component.onCompleted: {
                     console.log("In  Component.onCompleted: loader brp")
-                    // total.text = tot;
                 }
             }
             DisplayDialog {
@@ -303,6 +230,47 @@ Rectangle{
             }
         }
     }
+    Connections{
+        target: _reportitems
+        function onSendBookReportInput(obj){
+            console.log("sendBookReportInputEmitted")
+            sendBookReportImput(obj)
+            _load.sourceComponent = undefined
+            _load.source = "qrc:/ui/Reports/Booking/SevaBookingReportForSingleDate.qml"
+        }
+        function onSendBookingReportDateRangeInput(obj){
+            console.log("In  onsendBookingReportDateRangeInput;")
+            sendBookingReportDateRangeImput(obj);
+        }
+        function onBookingDateRangeSelected(){
+            console.log("In onBookingDateRangeSelected")
+            _load.source = "qrc:/ui/Reports/Booking/SevaBookingReportOnDateRange.qml"
+
+        }
+        function onSendBookingReportDateRangeInputForWholeMonth(obj)
+        {
+            console.log("In onSendBookingReportDateRangeInputForWholeMonth")
+            sendBookingReportDateRangeImputForWholeMonth(obj);
+        }
+        function onSendBookingReportMonthRangeInput(obj)
+        {
+            console.log("In onSendBookingReportMonthRangeInput")
+            sendBookingReportMonthRangeImput(obj);
+        }
+        function onBookingMonthWiseSelected(){
+            console.log("In onBookingMonthWiseSelected")
+            _load.source = "qrc:/ui/Reports/Booking/SevaBookingReportMonthWise.qml"
+
+        }
+        function   onLoadDateWiseBookingPage(){
+            console.log("In onLoadDateWiseBookingPage")
+            _load.source = "qrc:/ui/Reports/Booking/SevaBookingReportOnDateRange.qml"
+        }
+        function   onSendError(err){
+            console.log("In onSendError")
+            _errorDialog.showError(err);
+        }
+    }
 
     Keys.onEscapePressed: {
         console.log("Esc pressed in select booking report page")
@@ -310,17 +278,10 @@ Rectangle{
     }
     Component.onCompleted: {
         console.log("In Component.onCompleted: of booking report page")
-        //        _r1.focus = true
-
         forceActiveFocus();
     }
+    Component.onDestruction: {
+        console.log("Closing the report")
+        resetBookingModel();
+    }
 }
-
-
-//roles[1] ="name";
-//roles[2] = "gothra";
-//roles[3] = "nakshatra";
-//roles[4] = "savaName";
-//roles[5] = "teerthaPrasada";
-//roles[6] = "mobileNumber";
-//roles[7] = "note";

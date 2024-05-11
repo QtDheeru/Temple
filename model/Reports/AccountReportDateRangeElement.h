@@ -21,7 +21,6 @@ public:
     float totalAmount() const;
     void setTotalAmount(float newTotalAmount);
 
-    //    void resetAccModel();
     int slNo() const;
     void setSlNo(int newSlNo);
 

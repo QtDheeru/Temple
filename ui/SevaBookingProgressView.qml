@@ -8,10 +8,10 @@ Rectangle {
     width: 250;
     Layout.fillWidth: true
     height: styles.firstRowHeight;//150
+    color: "lightblue"
+
     property int subComponentHeight : height/8
     property int subComponentPixelSize : styles.fontSize
-
-    color: "lightblue"
     property alias sevaCount : _bookedView.count
     property alias _dataModel : _bookedView.model
     property double _total  : 0.00
@@ -24,27 +24,12 @@ Rectangle {
             _errorDialog.visible = true;
             _errorDialog.text2Display = message
             _errorDialog.open();
-
         }
         onYesAction :{
             console.log("Deleting the seva")
-            //sevaProxy.deleteSeva(sevaid,sevaName1);
         }
         onNoAction: {
             _errorDialog.close()
-        }
-    }
-
-    function deleteSeva(idx,sevaid,sevaName1){
-        console.log(" Deleting the seva. Please confirm Index ="+idx +  "Seva Name ="+sevaName1 + " Seva Id="+sevaid)
-        var b = sevaProxy.deleteSeva(sevaid,sevaName1);
-        if(b===true)
-        {
-            _deleteDialog.deleteConfirm("Seva Deleted")
-            sevaProxy.deleteSeva(sevaid,sevaName1);
-        }
-        else{
-            errorOccur("seva not deleted")
         }
     }
 
@@ -60,7 +45,6 @@ Rectangle {
             spacing: 15
             Text {
                 Layout.leftMargin: 10;
-                // Layout.preferredWidth:20;
                 Layout.fillWidth: true;
                 text : "No"
                 font.bold : true
@@ -69,7 +53,6 @@ Rectangle {
             }
             Text {
                 Layout.fillWidth: true;
-                // Layout.preferredWidth: 120
                 Layout.leftMargin: 50
                 text : "SevaName"
                 font.bold : true
@@ -79,7 +62,6 @@ Rectangle {
             Text {
                 Layout.leftMargin: 90;
                 Layout.fillWidth: true;
-                //Layout.preferredWidth: 40
                 text : "SevaCost"
                 font.bold : true
                 font.italic: true
@@ -88,18 +70,11 @@ Rectangle {
             Text {
                 Layout.fillWidth: true;
                 Layout.leftMargin: 10
-                //Layout.preferredWidth: 70
                 text : "Additional Cost"
                 font.bold : true
                 font.italic: true
                 font.pixelSize: styles.headerTextFont1
             }
-            //            Text {
-            //                Layout.fillWidth: true;text : "Delete ?"
-            //                font.bold : true
-            //                font.italic: true
-            //                font.pixelSize: 12
-            //            }
         }
     }
 
@@ -159,12 +134,25 @@ Rectangle {
     }
 
     ListView{
-        id :_bookedView
+        id : _bookedView
         anchors.top: _header.bottom
         width: parent.width
         height: parent.height - 50
         model : sevaProxy.getBookedView();
         delegate: _c1
+    }
+
+    function deleteSeva(idx,sevaid,sevaName1){
+        console.log(" Deleting the seva. Please confirm Index ="+idx +  "Seva Name ="+sevaName1 + " Seva Id="+sevaid)
+        var b = sevaProxy.deleteSeva(sevaid,sevaName1);
+        if(b===true)
+        {
+            _deleteDialog.deleteConfirm("Seva Deleted")
+            sevaProxy.deleteSeva(sevaid,sevaName1);
+        }
+        else{
+            errorOccur("seva not deleted")
+        }
     }
 
     function clearData(){

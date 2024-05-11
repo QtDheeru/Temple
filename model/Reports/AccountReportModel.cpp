@@ -8,14 +8,15 @@ AccountReportModel::AccountReportModel(QObject *parent)
     ,m_neftTotal(0)
     ,m_upiTotal(0)
     ,m_unknownTypeTotal(0)
+    ,m_sevasCount(0)
 {
-    qDebug()<<Q_FUNC_INFO<<" Account Report Model object is created " << Qt::endl;
+    qDebug() << Q_FUNC_INFO << " Account Report Model object is created " << Qt::endl;
     accountCSVProcessor = nullptr;
 }
 
 AccountReportModel::~AccountReportModel()
 {
-    qDebug()<<Q_FUNC_INFO<<Qt::endl;
+    qDebug() << Q_FUNC_INFO << Qt::endl;
 }
 
 QVariant AccountReportModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -27,7 +28,7 @@ QVariant AccountReportModel::headerData(int section, Qt::Orientation orientation
 int AccountReportModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
-    qDebug()<<Q_FUNC_INFO<<m_accountReportQryList.size()<<Qt::endl;
+    qDebug() << Q_FUNC_INFO << m_accountReportQryList.size() << Qt::endl;
     for (auto it=m_accountReportQryList.begin();it != m_accountReportQryList.end(); it++){
         QString d1;
         d1.append((*it)->slNo()).append(" ");
@@ -112,8 +113,9 @@ void AccountReportModel::onDateRangeSelectedAccountModel(QString start, QString 
 
 bool AccountReportModel::insertSevaRow(AccountReportElement *elm)
 {
-    qDebug()<<Q_FUNC_INFO<<" New Row of Data Received from Data Store. Inserting.."<<Qt::endl;
+    qDebug() << Q_FUNC_INFO << " New Row of Data Received from Data Store. Inserting.." << Qt::endl;
     if (m_sevaName2AccReport.contains(elm->getSeva_name().trimmed())){
+        qDebug() << Q_FUNC_INFO << " contains name in seva name report" << Qt::endl;
         AccountReportElement *el1 = m_sevaName2AccReport.value(elm->getSeva_name());
         double val = el1->getCash() + elm->getCash();
         el1->setCash(val);
@@ -128,6 +130,7 @@ bool AccountReportModel::insertSevaRow(AccountReportElement *elm)
         val = el1->getSeva_ticket() + elm->getSeva_ticket();
         el1->setSeva_ticket(val);
     } else {
+        qDebug() << Q_FUNC_INFO << " no name in seva name report " << Qt::endl;
         beginInsertRows(QModelIndex(),m_accountReportQryList.size(),m_accountReportQryList.size());
         this->m_sevaName2AccReport.insert(elm->getSeva_name().trimmed(),elm);
         this->m_accountReportQryList.append(elm);
@@ -139,8 +142,8 @@ bool AccountReportModel::insertSevaRow(AccountReportElement *elm)
     setChequeTotal(m_chequeTotal + elm->getCheque());
     setUpiTotal(m_upiTotal + elm->getUpi());
     setNeftTotal(m_neftTotal + elm->getNeft());
+    setSevasCount(m_sevasCount + 1);
     this->setUnknownTypeTotal(0);
-
     return true;
 }
 
@@ -184,21 +187,21 @@ void AccountReportModel::generateAccReport(ReportFilterElements *elm)
 
 QString AccountReportModel::FormatDate(QString unformat)
 {
-    qDebug()<<Q_FUNC_INFO<<unformat<<Qt::endl;
+    qDebug() << Q_FUNC_INFO << unformat << Qt::endl;
     QDate date1 = QDate::fromString(unformat,"yyyy-MM-dd");
     if (date1.isValid()) return unformat;
 
     QString format;
     QDate Date = QDate::fromString(unformat,"dd-MM-yyyy");
-    qDebug()<<Q_FUNC_INFO<<Date<<Qt::endl;
-    format =Date.toString("yyyy-MM-dd");
-    qDebug()<<Q_FUNC_INFO<<format<<Qt::endl;
+    qDebug() << Q_FUNC_INFO << Date << Qt::endl;
+    format = Date.toString("yyyy-MM-dd");
+    qDebug() << Q_FUNC_INFO << format << Qt::endl;
     return format;
 }
 
 void AccountReportModel::resetAccModel()
 {
-    qDebug()<<Q_FUNC_INFO<<Qt::endl;
+    qDebug() << Q_FUNC_INFO << Qt::endl;
     beginResetModel();
     m_accountReportQryList.clear();
     m_sevaName2AccReport.clear();
@@ -212,27 +215,28 @@ AccountReportElement *AccountReportModel::getAccountReportElement(int idx)
         // Return dummy. Avoid crash
         return new AccountReportElement;
     }
+
     return m_accountReportQryList.at(idx);
 }
 
 int AccountReportModel::getAccountReportQryListSize()
 {
-    qDebug()<<Q_FUNC_INFO<<" Number of Rows in Account Report = " << m_accountReportQryList.size()<< Qt::endl;
+    qDebug() << Q_FUNC_INFO << " Number of Rows in Account Report = " << m_accountReportQryList.size() << Qt::endl;
     return m_accountReportQryList.size();
 }
 
 void AccountReportModel::setGrandTotalToZero()
 {
-    qDebug()<<Q_FUNC_INFO<<Qt::endl;
+    qDebug() << Q_FUNC_INFO << Qt::endl;
     setIGrandTotal(0);
 }
 
 void AccountReportModel::generateAccountCSV()
 {
-    qDebug()<<Q_FUNC_INFO<<Qt::endl;
-    if(accountCSVProcessor!=nullptr)
+    qDebug() << Q_FUNC_INFO << Qt::endl;
+    if(accountCSVProcessor != nullptr)
         delete accountCSVProcessor;
-    accountCSVProcessor  = new AccountReportCSVProcessor;
+    accountCSVProcessor = new AccountReportCSVProcessor;
     connect(this,&AccountReportModel::sendAccountReportList,accountCSVProcessor,
             &AccountReportCSVProcessor::recieveAccountReportList);
     emit sendAccountReportList(m_accountReportQryList);
@@ -312,5 +316,21 @@ bool AccountReportModel::reset()
     this->setChequeTotal(0);
     this->setUpiTotal(0);
     this->setUnknownTypeTotal(0);
+    this->setSevasCount(0);
     return true;
+}
+
+int AccountReportModel::sevasCount() const
+{
+    qDebug() << Q_FUNC_INFO << Qt::endl;
+    return m_sevasCount;
+}
+
+void AccountReportModel::setSevasCount(int newSevasCount)
+{
+    qDebug() << Q_FUNC_INFO << m_sevasCount << Qt::endl;
+    if (m_sevasCount == newSevasCount)
+        return;
+    m_sevasCount = newSevasCount;
+    emit sevasCountChanged();
 }

@@ -2947,8 +2947,8 @@ DBInterface::~DBInterface()
 
 void DBInterface::account_report_cdate_function(QString SEVA,int TYPE,QString formatchangedcalendar_str)
 {
-    qDebug()<<Q_FUNC_INFO<<Qt::endl;
-    qDebug()<<formatchangedcalendar_str<<"^^^^^^^^^^^^^^^^^^^^^^^^^^ "<<SEVA<< "  "<<TYPE<<Qt::endl;
+    qDebug() << Q_FUNC_INFO << Qt::endl;
+    qDebug() << formatchangedcalendar_str << "^^^^^^^^^^^^^^^^^^^^^^^^^^ " << SEVA << "  " << TYPE << Qt::endl;
     QList<QString> pay_mode={"cash","Cheque","NEFT","UPI"};
     QList<int> list_ticket;
     QList<float> list_cost,list_total;
@@ -2956,28 +2956,26 @@ void DBInterface::account_report_cdate_function(QString SEVA,int TYPE,QString fo
     QSqlQuery cash,cheque,neft,upi;
     QString que1;
     QString cashmode,cheqmode,neftmode,upimode;
-    //    AccountReportElement ele;
 
-    if(TYPE==0) {
-       qDebug() <<"First"<<Qt::endl;
+    if(TYPE == 0) {
+       qDebug() << "First" << Qt::endl;
        que1 = ("select SEVANAME,sum(QUANTITY) AS Qauntity,SEVACOST,sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) AS SEVATOTALPRICE,BANK AS Tran_type from sevabooking where sevabooking.RECEIPT_DATE LIKE '%1' Group by SEVANAME,BANK;");
        que1 = que1.arg(formatchangedcalendar_str);
     } else if (SEVA==ALLSEVANAME) {
-        qDebug() <<"Second"<<Qt::endl;
+        qDebug() << "Second" << Qt::endl;
         que1 = ("select SEVANAME,sum(QUANTITY) AS Qauntity ,SEVACOST,sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) AS SEVATOTALPRICE,BANK AS Tran_type from sevabooking where sevabooking.RECEIPT_DATE LIKE '%1' and sevabooking.SEVATYPE='%2' Group by sevabooking.SEVANAME,BANK;");
         que1 = que1.arg(formatchangedcalendar_str).arg(TYPE);
     } else {
-        qDebug() <<"Third"<<Qt::endl;
+        qDebug() << "Third" << Qt::endl;
         que1 = ("select SEVANAME,sum(QUANTITY) AS Qauntity,SEVACOST,sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) AS SEVATOTALPRICE,BANK AS Tran_type from sevabooking where sevabooking.RECEIPT_DATE LIKE '%1' and sevabooking.SEVATYPE LIKE '%2' and sevabooking.SEVANAME = '%3' Group by sevabooking.SEVANAME,BANK;");
         que1 = que1.arg(formatchangedcalendar_str).arg(TYPE).arg(SEVA);
     }
 
-    qDebug() << " Query string =" << que1 <<Qt::endl;
+    qDebug() << " Query string =" << que1 << Qt::endl;
     query_other1.prepare(que1);
 
     bool b =  query_other1.exec();
 
-    //    while(query_other1.next() && cash.next() && cheque.next() && neft.next() && upi.next())
     while(query_other1.next()) {
         AccountReportElement *ele = new AccountReportElement;
         ele->setDate(formatchangedcalendar_str);

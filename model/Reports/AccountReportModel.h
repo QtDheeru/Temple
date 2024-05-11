@@ -8,6 +8,7 @@
 #include "ReportFilterElements.h"
 #include "AccountReportCSVProcessor.h"
 #include "ReportEnums.h"
+
 class AccountReportModel : public QAbstractTableModel
 {
     Q_OBJECT
@@ -15,21 +16,17 @@ class AccountReportModel : public QAbstractTableModel
 public:
     explicit AccountReportModel(QObject *parent = nullptr);
     ~AccountReportModel();
-    Q_PROPERTY(float grandTotal READ iGrandTotal WRITE setIGrandTotal NOTIFY grandTotalChanged)
+    Q_PROPERTY(double grandTotal READ iGrandTotal WRITE setIGrandTotal NOTIFY grandTotalChanged)
     Q_PROPERTY(double cashTotal READ cashTotal WRITE setCashTotal NOTIFY cashTotalChanged FINAL)
     Q_PROPERTY(double chequeTotal READ chequeTotal WRITE setChequeTotal NOTIFY chequeTotalChanged FINAL)
     Q_PROPERTY(double neftTotal READ neftTotal WRITE setNeftTotal NOTIFY neftTotalChanged FINAL)
     Q_PROPERTY(double upiTotal READ upiTotal WRITE setUpiTotal NOTIFY upiTotalChanged FINAL)
     Q_PROPERTY(double unknownTypeTotal READ unknownTypeTotal WRITE setUnknownTypeTotal NOTIFY unknownTypeTotalChanged FINAL)
+    Q_PROPERTY(int sevasCount READ sevasCount WRITE setSevasCount NOTIFY sevasCountChanged FINAL)
 
-
-    // Header:
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
-
-    // Basic functionality:
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
-     int columnCount(const QModelIndex &parent) const override;
-
+    int columnCount(const QModelIndex &parent) const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
     QHash<int, QByteArray> roleNames() const override;
 
@@ -40,7 +37,6 @@ public:
     void generateAccReport(ReportFilterElements*);
     QString FormatDate(QString);
     void resetAccModel();
-
 
     double iGrandTotal() const;
     void setIGrandTotal(double newIGrandTotal);
@@ -65,6 +61,9 @@ public:
     double unknownTypeTotal() const;
     void setUnknownTypeTotal(double newUnknownTypeTotal);
 
+    int sevasCount() const;
+    void setSevasCount(int newSevasCount);
+
 private:
 
     bool reset();
@@ -78,6 +77,7 @@ private:
     double m_neftTotal;
     double m_upiTotal;
     double m_unknownTypeTotal;
+    int m_sevasCount;
 
 signals:
     void grandTotalChanged();
@@ -88,6 +88,7 @@ signals:
     void neftTotalChanged();
     void upiTotalChanged();
     void unknownTypeTotalChanged();
+    void sevasCountChanged();
 };
 
 #endif // ACCOUNTREPORTMODEL_H

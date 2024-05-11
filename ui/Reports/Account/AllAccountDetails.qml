@@ -179,6 +179,7 @@ Rectangle{
         id : footer
         width: _rr1.width
         height:  footerHeight
+        totalSevaCount : sevaProxy.sevaReport.accountFullReportModel.sevasCount
         cashTotal : sevaProxy.sevaReport.accountFullReportModel.cashTotal
         chequeTotal: sevaProxy.sevaReport.accountFullReportModel.chequeTotal;
         upiTotal: sevaProxy.sevaReport.accountFullReportModel.upiTotal
@@ -194,9 +195,9 @@ Rectangle{
     }
 
     Connections{
-        id:connection
+        id: connection
         target: sevaProxy.sevaReport.accountFullReportModel.accountCSVProcessor
-        onSuccessMessage:{
+        function onSuccessMessage(exportmsg){
             _errorDialog.showmsg(exportmsg)
         }
     }

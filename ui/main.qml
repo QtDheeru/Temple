@@ -71,6 +71,7 @@ ApplicationWindow {
                 console.log("str1 = --" + str1);
                 console.log("str2 = --" + str2);
                 loader.source = "Login.qml"
+                // loader.source = "qrc:/ui/Admin/DayExpenditure.qml"
             }
             if(trustListModel.getTrustListSize() === 0){
                 console.log("trustListModel.getTrustList===0");
@@ -222,6 +223,7 @@ ApplicationWindow {
         //seva Booking view Handlers
         function onLoadMenuPage() {
             console.log("loading Menu page from main")
+            loader.source = "";
             loader.source = "MenuPage.qml"
         }
         function onCloseAddSeva(){

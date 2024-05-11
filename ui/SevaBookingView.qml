@@ -18,7 +18,7 @@ Rectangle{
     property int myHeight : 30
     property int fontPixelSize : 20
     property alias selectedReceiptDate: _sevaDate.receiptdate
-    property alias selectedSevaDate: _sevaDate.sevadate
+    property alias selectedSevaDate: _sevaD.sevadate
     property var storeObject
     property string sevaname
     property string sevatype
@@ -71,11 +71,12 @@ Rectangle{
                         devoteeNameEditable: false
                         mobileNoEditable: false
                     }
-                    SevaDateTime{id: _sevaDate;Layout.fillWidth: true
-                        KeyNavigation.tab: _sevaD}
+                    SevaDateTime{
+                        id: _sevaDate;Layout.fillWidth: true
+                        KeyNavigation.tab: _sevaD
+                    }
                 }
                 RowLayout{
-                    //Layout.fillHeight: true
                     Layout.fillWidth: true
                     Layout.topMargin: root.height/100
                     Layout.rightMargin: root.height/100
@@ -150,6 +151,7 @@ Rectangle{
         }
         onYesAction: {
             _errorDialog.close()
+            continueAddingSeva();
         }
         onNoAction: {
             _errorDialog.close()
@@ -215,7 +217,7 @@ Rectangle{
                                            sevaObject.sevaId,
                                            sevaObject.sevaName,
                                            _sevaD.sevaCost,
-                                           _sevaDate.sevadate,
+                                           _sevaD.sevadate,
                                            _sevaDate.sevatime,
                                            _sevaD.addcost,
                                            _sevaD.count);
@@ -232,7 +234,6 @@ Rectangle{
         console.log(" Data is getting cleared")
         _sevaD.clearData();
         _sevaD.isCountEditable =  true;
-        _sevaD.isAddressEditable = true;
         _sevaD.isAdditionalCostEditable = true;
 
         _sevaDate.clearData();
@@ -251,10 +252,10 @@ Rectangle{
         _sevaReceipt.gothra = _personal.gothra.trim();
         _sevaReceipt.nakshtra = _personal.nakshatra.trim()
         _sevaReceipt.reference = _sevaD.reference.trim();
-        _sevaReceipt.address = _sevaD.address.trim();
+        // _sevaReceipt.address = _sevaD.address.trim();
 
         _sevaReceipt.receiptDate = _sevaDate.receiptdate.trim();
-        _sevaReceipt.momento = _sevaDate.momento.trim()
+        // _sevaReceipt.momento = _sevaDate.momento.trim()
         _sevaReceipt.sevatime = _sevaDate.sevatime.trim();
         _sevaReceipt.bookedBy = _sevaDate.bookedby.trim()
         _sevaReceipt.cash =  _paymentDialog.paymentObject.cashPaid.trim()
@@ -287,9 +288,15 @@ Rectangle{
         console.log(" Seva addition cost ="+_sevaD.addcost)
         console.log(" Seva count ="+_sevaD.count)
         console.log(" Receipt Date ="+_sevaDate.receiptdate)
-        console.log(" Seva    Date ="+_sevaDate.sevadate)
+        console.log(" Seva    Date ="+_sevaD.sevadate)
         console.log(" Seva sevatime ="+_sevaDate.sevatime)
         console.log(" Seva bookedby ="+_sevaDate.bookedby)
+    }
+    function continueAddingSeva()
+    {
+        saveOnlySeva();
+        resetPartial();
+        _sevaListView.selectFirstSeva();
     }
 
     Connections{
@@ -325,7 +332,7 @@ Rectangle{
         target: _sevaContoller
         function onStartPayment(){
             console.log(" Payment started ")
-            if (_sevaP.sevaCount==0){
+            if (_sevaP.sevaCount == 0){
                 console.log(" No sevas Booked. Please add Seva");
                 _errorDialog.showError("Sevas Not added. Please Add Seva");
                 return;
@@ -337,9 +344,14 @@ Rectangle{
         }
         function onAddMoreSeva(){
             console.log(" Add more seva")
-            saveOnlySeva();
-            resetPartial();
-            _sevaListView.selectFirstSeva();
+            if (_sevaP.sevaCount == 0){
+                _errorDialog.setButtons = false
+                _errorDialog.showError("Do you want continue with \n seva Date " + _sevaD.sevadate )
+            }else{
+                saveOnlySeva();
+                resetPartial();
+                _sevaListView.selectFirstSeva();
+            }
         }
         function onClearReceipt() {
             console.log(" Clear Receipt Data")

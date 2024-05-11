@@ -5,7 +5,7 @@ Dialog {
     visible: true
     title: "Information.."
     width: 400;height: 250
-    standardButtons: setButtons?Dialog.Ok :Dialog.Ok | Dialog.Close
+    // standardButtons: setButtons?Dialog.Ok :Dialog.Ok | Dialog.Close
     closePolicy: Popup.NoAutoClose
     x: (parent.width - width) / 2
     y: (parent.height - height) / 2
@@ -13,14 +13,18 @@ Dialog {
 
     property var page
     property alias text2Display : _t1.text
-    property string rectColor:"lightblue"
-    property string contentColor:"lightblue"
-    property bool footerVisible:true
-    property bool setButtons:false
+    property string rectColor: "lightblue"
+    property string contentColor: "lightblue"
+    property bool footerVisible: true
+    property bool setButtons: false
     property int context : 0
 
     signal yesAction();
     signal noAction();
+
+    onSetButtonsChanged : {
+        console.log("Set buttons changes =" + setButtons)
+    }
 
     background: Rectangle{
         anchors.fill: parent
@@ -67,7 +71,7 @@ Dialog {
     footer: DialogButtonBox{
         visible: footerVisible
         alignment: Qt.AlignCenter
-        standardButtons: DialogButtonBox.Ok
+        standardButtons: setButtons? DialogButtonBox.Ok :  DialogButtonBox.Ok | DialogButtonBox.Close
         onAccepted: {
             console.log("Ok clicked")
             yesAction();

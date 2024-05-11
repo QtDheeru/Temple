@@ -14,7 +14,6 @@ Rectangle {
     property alias selecteddate:_tInput.dateSelected
     property alias calendarEnabled:_tInput.calendarEnabled
     signal dateChanged(var date)
-    //border.color: "yellow";border.width: 1
     color: "transparent"
     focus: true
     Layout.fillWidth: true
@@ -24,7 +23,7 @@ Rectangle {
         spacing: myHeight/3
         Label{
             id : _label
-            text : "Mobile Number"
+            text : ""
             color: "Black"
             font.pixelSize: _rootDateEntry.fontPixelSize
             Layout.fillHeight: true
@@ -48,7 +47,6 @@ Rectangle {
             Layout.minimumHeight: _rootDateEntry.myHeight
             Layout.alignment:  Qt.AlignVCenter
             Layout.rightMargin: 10
-            //font.pixelSize: _root.fontPixelSize
             fontPixelSize: _rootDateEntry.fontPixelSize
             myheight: _rootDateEntry.myHeight
             myWidth: _rootDateEntry.myWidth - _label.width
