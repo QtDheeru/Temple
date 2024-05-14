@@ -2945,10 +2945,9 @@ DBInterface::~DBInterface()
     qDebug() <<"DBInterface Destructor is called"<<Qt::endl;
 }
 
-void DBInterface::account_report_cdate_function(QString SEVA,int TYPE,QString formatchangedcalendar_str)
+void DBInterface::account_report_cdate_function(QString seva_name,int seva_type,QString formatchangedcalendar_str)
 {
-    qDebug() << Q_FUNC_INFO << Qt::endl;
-    qDebug() << formatchangedcalendar_str << "^^^^^^^^^^^^^^^^^^^^^^^^^^ " << SEVA << "  " << TYPE << Qt::endl;
+    qDebug() << Q_FUNC_INFO << "Generate Report for SevaType ="<< seva_type << " Seva Name =" << seva_name << " Date =" << formatchangedcalendar_str << Qt::endl;
     QList<QString> pay_mode={"cash","Cheque","NEFT","UPI"};
     QList<int> list_ticket;
     QList<float> list_cost,list_total;
@@ -2957,18 +2956,18 @@ void DBInterface::account_report_cdate_function(QString SEVA,int TYPE,QString fo
     QString que1;
     QString cashmode,cheqmode,neftmode,upimode;
 
-    if(TYPE == 0) {
+    if(seva_type == 0) {
        qDebug() << "First" << Qt::endl;
        que1 = ("select SEVANAME,sum(QUANTITY) AS Qauntity,SEVACOST,sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) AS SEVATOTALPRICE,BANK AS Tran_type from sevabooking where sevabooking.RECEIPT_DATE LIKE '%1' Group by SEVANAME,BANK;");
        que1 = que1.arg(formatchangedcalendar_str);
-    } else if (SEVA==ALLSEVANAME) {
-        qDebug() << "Second" << Qt::endl;
+    } else if (seva_name==ALLSEVANAME) {
+        qDebug() << Q_FUNC_INFO << " This is ALL Seva Name Query " << Qt::endl;
         que1 = ("select SEVANAME,sum(QUANTITY) AS Qauntity ,SEVACOST,sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) AS SEVATOTALPRICE,BANK AS Tran_type from sevabooking where sevabooking.RECEIPT_DATE LIKE '%1' and sevabooking.SEVATYPE='%2' Group by sevabooking.SEVANAME,BANK;");
-        que1 = que1.arg(formatchangedcalendar_str).arg(TYPE);
+        que1 = que1.arg(formatchangedcalendar_str).arg(seva_type);
     } else {
-        qDebug() << "Third" << Qt::endl;
+        qDebug() << Q_FUNC_INFO << " Seva Type & Seva Name is specified.." << Qt::endl;
         que1 = ("select SEVANAME,sum(QUANTITY) AS Qauntity,SEVACOST,sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) AS SEVATOTALPRICE,BANK AS Tran_type from sevabooking where sevabooking.RECEIPT_DATE LIKE '%1' and sevabooking.SEVATYPE LIKE '%2' and sevabooking.SEVANAME = '%3' Group by sevabooking.SEVANAME,BANK;");
-        que1 = que1.arg(formatchangedcalendar_str).arg(TYPE).arg(SEVA);
+        que1 = que1.arg(formatchangedcalendar_str).arg(seva_type).arg(seva_name);
     }
 
     qDebug() << " Query string =" << que1 << Qt::endl;
@@ -2979,7 +2978,7 @@ void DBInterface::account_report_cdate_function(QString SEVA,int TYPE,QString fo
     while(query_other1.next()) {
         AccountReportElement *ele = new AccountReportElement;
         ele->setDate(formatchangedcalendar_str);
-        ele->setSevaType(TYPE);
+        ele->setSevaType(seva_type);
         ele->setSeva_name( query_other1.value(0).toString());
         ele->setSeva_ticket( query_other1.value(1).toInt());
         ele->setSeva_cost(query_other1.value(2).toFloat());//cost

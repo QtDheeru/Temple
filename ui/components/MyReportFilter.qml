@@ -508,10 +508,10 @@ Rectangle {
         } else if (_sevanameCheck.checked == true) {
              // Report for all seva for selected seva type
             _rip.sevaType = _sevaType._enteredText;
-            _rip.iSevaType = _sevaName.currentIndex;
+            _rip.iSevaType = _sevaType.currentIndex;
             _rip.sSevaName = root.defaultSevaName
         } else {
-            _rip.iSevaType = _sevaName.currentIndex;
+            _rip.iSevaType = _sevaType.currentIndex;
             _rip.sevaType = _sevaType._enteredText;
             _rip.sSevaName = _sevaName._enteredText;
             _rip.sevaNameIndex = _sevaName.currentIndex
