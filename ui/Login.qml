@@ -5,11 +5,12 @@ import QtQuick.Controls 2.15
 import "./components"
 
 Item {
-    id:root
-    property var styles: MyStyles{}
+    id: root
     width: styles.screenWidth
     height: styles.screenHeight
     visible: true
+
+    property var styles: MyStyles{}
     property int fpixelsize: styles.firstRowFontSize
     property string tex1
     property string tex2
@@ -17,10 +18,12 @@ Item {
     property color backgroundColor :"#f3f8f9"
     property string loginErrorString: "Incorrect password"
     property string loginPageImage: styles.loginPageImage
-    property var  imgVisible
+    property var imgVisible
+
     signal wrongCred()
     signal closeWindow();
     signal loginSuccess(int pcount)
+
     Rectangle
     {
         id : mainRectangle
@@ -69,7 +72,7 @@ Item {
         }
         Column
         {
-            id:_column
+            id: _column
             anchors.bottomMargin: root.height/10
             anchors.bottom: parent.bottom
             anchors.horizontalCenter: parent.horizontalCenter
@@ -78,34 +81,32 @@ Item {
                 id: image03
                 source: loginPageImage
                 visible: imgVisible
-                //                source:"qrc:/ui/assets/Images/TempleInviteSnap.PNG"
-                //                source: "file:D:/Temple_Raj/Temple_Kiosk_8/Temple_Kiosk_8/bins/Data/RamaTempleBenglauru/TempleInviteSnap1.PNG"
                 anchors.horizontalCenter: parent.horizontalCenter
                 height: root.height/2
                 width: root.width/3
             }
             RoundButton
             {
-                id:columnrect
+                id: columnrect
                 width: mainRectangle.width/3
                 height: mainRectangle.height/13
                 radius: columnrect.width/4
                 palette { button: "#ebdafe" }
                 TextInput {
-                    id:userNameID
-                    text:""
+                    id: userNameID
+                    text: ""
                     focus: true
                     horizontalAlignment: TextInput.AlignHCenter
                     verticalAlignment: TextInput.AlignVCenter
                     font.pixelSize: fpixelsize
                     anchors.fill: parent
-                    property string placeholderText: "Enter your Login ID"
                     clip: true
+                    property string placeholderText: "Enter your Login ID"
                     Text {
-                        id:placeHolderTextID
+                        id: placeHolderTextID
                         text: userNameID.placeholderText
                         color: "#9C51B6"
-                        visible: !userNameID.text
+                        visible: !(userNameID.activeFocus || userNameID.text)
                         font.bold: true
                         font.pixelSize: styles.firstRowFontSize
                         anchors.centerIn: parent
@@ -124,29 +125,29 @@ Item {
                 radius: columnrect2.width/4
                 palette { button: "#ebdafe" }
                 TextInput{
-                    id:passwordInput
-                    text:""
-                    focus: columnrect2.focus
+                    id: passwordInput
+                    text: ""
+                    focus: true
                     font.pixelSize: fpixelsize
                     horizontalAlignment: TextInput.AlignHCenter
                     verticalAlignment: TextInput.AlignVCenter
-                    //                    width: mainRectangle.width/3
-                    //                    height: mainRectangle.height/13
                     anchors.fill: parent
                     property string placeholderText: "Enter your password"
                     echoMode : TextInput.Password
                     clip: true
                     Text {
-                        id:passwordPlaceTextID
+                        id: passwordPlaceTextID
                         text: passwordInput.placeholderText
                         color: "#9C51B6"
-                        visible: !passwordInput.text
+                        visible: !(passwordInput.activeFocus || passwordInput.text)
                         font.bold: true
                         font.pixelSize: styles.firstRowFontSize
                         anchors.centerIn: parent
                         clip: true
                     }
-
+                }
+                onActiveFocusChanged: {
+                    if(activeFocus) passwordInput.forceActiveFocus()
                 }
             }
             RoundButton{
@@ -154,14 +155,8 @@ Item {
                 width: mainRectangle.width/3
                 height: mainRectangle.height/13
                 radius: columnrect3.width/4
-                palette {  button:"#9B26B6" }
-                onClicked: {
-//                    dbchecker.checkCredentials(userNameID.text,passwordInput.text)
-                    sevaProxy.userManagement.authorize(userNameID.text,passwordInput.text)
-                    userNameID.text = ""
-                    passwordInput.text = ""
-
-                }
+                focus : true
+                palette { button:"#9B26B6" }
                 Text {
                     id: loginPageLogin
                     text: "Login"
@@ -170,15 +165,43 @@ Item {
                     anchors.centerIn: parent
                     clip: true
                 }
-
+                onClicked: {
+                    sevaProxy.userManagement.authorize(userNameID.text,passwordInput.text)
+                    userNameID.text = ""
+                    passwordInput.text = ""
+                }
+                onFocusChanged: {
+                    console.log("login button focus changed"+ focus)
+                }
+                Keys.onEnterPressed: {
+                    console.log("login button Entered ")
+                    sevaProxy.userManagement.authorize(userNameID.text,passwordInput.text)
+                    userNameID.text = ""
+                    passwordInput.text = ""
+                }
+                Keys.onPressed: (event)=>{
+                                    console.log("login button pressed")
+                                    if (event.key == Qt.Key_Enter || event.key == Qt.Key_Return) {
+                                        sevaProxy.userManagement.authorize(userNameID.text,passwordInput.text)
+                                        userNameID.text = ""
+                                        passwordInput.text = ""
+                                    }
+                                }
+                onActiveFocusChanged: {
+                    if(activeFocus) columnrect3.forceActiveFocus()
+                }
             }
-            Text {
-                id: errortext
-                text: qsTr(loginErrorString)
-                color: "red"
-                visible: false
-                font.pixelSize: styles.headerTextFont4
-                anchors.horizontalCenter: parent.horizontalCenter
+            Rectangle{
+                width: mainRectangle.width/3
+                height: mainRectangle.height/30
+                Text {
+                    id: errortext
+                    text: qsTr(loginErrorString)
+                    color: "red"
+                    visible: false
+                    font.pixelSize: styles.headerTextFont4
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
             }
         }
     }
@@ -188,7 +211,6 @@ Item {
         {
             console.log("Credentials are correct")
             loginSuccess(pageNumber)
-            //callLoad();
         }
         function onWrongCredentials()
         {
@@ -197,6 +219,18 @@ Item {
             errortext.visible = true
         }
     }
+
+    function callLoad(){
+        voucherProxy.loadTbViewInProxy();
+        voucherProxy.voucherHeadsTableModel.rowClicked(0);
+    }
+
+    Keys.onEnterPressed: {
+        console.log( "enter key pressed")
+        sevaProxy.userManagement.authorize(userNameID.text,passwordInput.text)
+        userNameID.text = ""
+        passwordInput.text = ""
+    }
     Keys.onEscapePressed: {
         console.log("Escape Pressed ==== ",pageNumber)
         if(pageNumber === 2 || pageNumber === 4){
@@ -204,18 +238,18 @@ Item {
         }
     }
     Component.onCompleted: {
-        console.log("The Page Number===",pageNumber)
+        console.log("Login :: The Page Number===",pageNumber)
         if(pageNumber === 2){
             _column.anchors.centerIn = parent
-            columnrect.width=mainRectangle.width/3.5
+            columnrect.width = mainRectangle.width/3.5
             columnrect.height = mainRectangle.height/11
             backgroundColor = "cornflowerblue"
             mainRectangle.border.width = 2
 
-            columnrect2.width=mainRectangle.width/3.5
+            columnrect2.width = mainRectangle.width/3.5
             columnrect2.height = mainRectangle.height/11
 
-            columnrect3.width=mainRectangle.width/3.5
+            columnrect3.width = mainRectangle.width/3.5
             columnrect3.height = mainRectangle.height/11
         }
         else if(pageNumber === 4){
@@ -234,17 +268,6 @@ Item {
         else {
             console.log( "The page number is 0")
         }
-    }
-    Keys.onEnterPressed: {
-        console.log( "enter key pressed")
-        sevaProxy.userManagement.authorize(userNameID.text,passwordInput.text)
-        userNameID.text = ""
-        passwordInput.text = ""
-    }
-
-    function callLoad(){
-        voucherProxy.loadTbViewInProxy();
-        voucherProxy.voucherHeadsTableModel.rowClicked(0);
     }
 }
 
