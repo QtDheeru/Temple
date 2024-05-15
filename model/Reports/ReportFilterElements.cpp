@@ -202,3 +202,11 @@ void ReportFilterElements::setReportGenerationSource(const ReportEnums::REPORT_G
     m_reportGenerationSource = newReportGenerationSource;
     emit reportGenerationSourceChanged();
 }
+
+void ReportFilterElements::reset()
+{
+    this->setSevaType("");
+    this->setISevaType(-1);
+    this->setSevaNameIndex(-1);
+    this->setSSevaName("");
+}

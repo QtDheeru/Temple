@@ -25,6 +25,7 @@
 #include "BookingReportMonthRangeElement.h"
 #include "AccountFullreportElement.h"
 #include <QQmlEngine>
+#include "../DataStore/AccountReportsDBInterface.h"
 
 //#include "voucher/VoucherFilterElements.h"
 #include "IDataWriter.h"
@@ -261,6 +262,14 @@ private:
 
     QString m_error;
     QList<QString> m_pay_mode={"cash","Cheque","NEFT","UPI"};
+
+private  :
+    AccountReportsDBInterface *m_accountReportInterface;
+
+public slots :
+    bool generateSingleDateReport(ReportFilterElements *elm);
+    bool generateDateRangeReport(ReportFilterElements *elm);
+    bool generateMonthReport(ReportFilterElements *elm);
 
 };
 

@@ -499,6 +499,7 @@ Rectangle {
     }
 
     function collectCurrentFilterOptions(typeOfReport) {
+        _rip.reset();
         _rip.reportType = typeOfReport;
         _rip.reportGenerationSource = ReportEnums.CLICK_ON_LEFT_SELECTION;
         if (_sevatypeCheck.checked == true){

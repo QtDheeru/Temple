@@ -166,19 +166,20 @@ void AccountReportModel::generateAccReport(ReportFilterElements *elm)
         qDebug() << Q_FUNC_INFO << " Generate the Single Date Report " << Qt::endl;
         // convert the date from dd-mm-yyyy format to yyyy-mm-dd. DB expects this.
         elm->setSSingleDate(FormatDate(elm->sSingleDate()));
-        DBInterface::getInstance()->account_report_cdate_function(elm->sSevaName(),elm->iSevaType(),(elm->sSingleDate()));
+        DBInterface::getInstance()->generateSingleDateReport(elm);
         break;
     }
     case  ReportEnums::DATE_RANGE_REPORT : {
         qDebug() << Q_FUNC_INFO << " Generate the Date Ranged Report " << Qt::endl;
         elm->setSStartDate(FormatDate(elm->sStartDate()));
         elm->setSEndDate(FormatDate(elm->sEndDate()));
-        DBInterface::getInstance()->account_report_dataRange_function(elm->sSevaName(),elm->iSevaType(),elm->sStartDate(),elm->sEndDate());
+        DBInterface::getInstance()->generateDateRangeReport(elm);
         break;
     }
     case  ReportEnums::MONTH_REPORT : {
         qDebug() << Q_FUNC_INFO << " Generate the Month Report " << Qt::endl;
-        DBInterface::getInstance()->account_report_cmonth_function(elm->sSevaName(),elm->iSevaType(),elm->sMonth().toInt(),elm->sYear().toInt());
+        DBInterface::getInstance()->generateMonthReport(elm);
+        //DBInterface::getInstance()->account_report_cmonth_function(elm->sSevaName(),elm->iSevaType(),elm->sMonth().toInt(),elm->sYear().toInt());
         break;
     }
     default : {qDebug() << Q_FUNC_INFO << " Wrong selection type. No reports" << Qt::endl; break;}
