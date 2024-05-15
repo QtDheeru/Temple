@@ -99,6 +99,7 @@ include(model/Seva/seva.pri)
 include(model/DataSave/DataSave.pri)
 include(model/voucher/voucher.pri)
 include(model/DevoteeManager/Devotee.pri)
+include(DataStore/DataStore.pri)
 #Reports integrated for all views
 #
 

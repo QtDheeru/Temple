@@ -31,6 +31,7 @@ public:
     SevaType* getSevaTypeByIndex(int index);
 
     Q_INVOKABLE QString getSevaTypeName(int id);
+    Q_INVOKABLE int     getSevaTypeDBID(QString sevaTypeName);
 
 private :
     bool init();

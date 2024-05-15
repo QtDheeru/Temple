@@ -92,6 +92,17 @@ QString SevaTypeViewModel::getSevaTypeName(int id)
     return SevatypeName;
 }
 
+int SevaTypeViewModel::getSevaTypeDBID(QString sevaTypeName)
+{
+    int SevatypeDBID = -1;
+    for(auto it = m_sevaTypes.begin(); it != m_sevaTypes.end();it++){
+        if(sevaTypeName==(*it)->sevaTypeId()){
+            SevatypeDBID = (*it)->sevaTypeId();
+        }
+    }
+    return SevatypeDBID;
+}
+
 
 QHash<int, QByteArray> SevaTypeViewModel::roleNames() const
 {

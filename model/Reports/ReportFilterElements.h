@@ -71,6 +71,7 @@ public:
     ReportEnums::REPORT_GENERATION_SOURCE reportGenerationSource() const;
     void setReportGenerationSource(const ReportEnums::REPORT_GENERATION_SOURCE &newReportGenerationSource);
 
+    Q_INVOKABLE void reset();
 signals:
     void bSevawiseChanged();
     void bDatewiseChanged();
