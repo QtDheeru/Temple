@@ -140,17 +140,14 @@ void AccountReportDateRangeModel::generateAccDateRangeReport(ReportFilterElement
     qDebug()<<Q_FUNC_INFO<<"elm date"<<elm->sSingleDate()<<Qt::endl;
     qDebug()<<Q_FUNC_INFO<<"elm ddetails"<<elm->sSevaName()<<elm->iSevaType()<<Qt::endl;
     qDebug()<<Q_FUNC_INFO<<"elm ddetailqqqqqqqqqqqqqqqqqs"<<elm->iSelectedType()<<Qt::endl;
-    if((elm->iSelectedType()==1)&&(elm->sStartDate()=="null")&&(elm->sEndDate()=="null"))
-    {
+    if((elm->iSelectedType()==ReportEnums::DATE_RANGE_REPORT) && (elm->sStartDate()=="null") && (elm->sEndDate()=="null")) {
         qDebug()<<Q_FUNC_INFO<<Qt::endl;
-        DBInterface::getInstance()->account_report_eachDateDataRangeForMonth_function(elm->sSevaName(),elm->iSevaType(),elm->sMonth().toInt(),elm->sYear().toInt());
-    }
-    else
-    {
+        DBInterface::getInstance()->generateReportForEachDateOfMonth(elm);
+    } else {
         qDebug()<<Q_FUNC_INFO<<Qt::endl;
         elm->setSStartDate(FormatDate(elm->sStartDate()));
         elm->setSEndDate(FormatDate(elm->sEndDate()));
-        DBInterface::getInstance()->account_report_eachDateDataRange_function(elm->sSevaName(),elm->iSevaType(),elm->sStartDate(),elm->sEndDate());
+        DBInterface::getInstance()->generateReportForEachDateInDateRange(elm);
     }
 }
 
@@ -161,10 +158,11 @@ void AccountReportDateRangeModel::generateAccDateRangeReportForWholeMonth(Report
     m_accReportDateRangeList.clear();
     m_date2AccReport.clear();
     endResetModel();
-    qDebug() << Q_FUNC_INFO << " Generated the Report for complete month " << Qt::endl;
+    qDebug() << Q_FUNC_INFO << " Generate the Report for complete month " << Qt::endl;
     elm->print();
 
-    DBInterface::getInstance()->account_report_eachDateDataRangeForMonth_function(elm->sSevaName(),elm->iSevaType(),elm->sMonth().toInt(),elm->sYear().toInt());
+    DBInterface::getInstance()->generateReportForEachDateOfMonth(elm);
+    //DBInterface::getInstance()->account_report_eachDateDataRangeForMonth_function(elm->sSevaName(),elm->iSevaType(),elm->sMonth().toInt(),elm->sYear().toInt());
 }
 QString AccountReportDateRangeModel::FormatDate(QString unformat)
 {

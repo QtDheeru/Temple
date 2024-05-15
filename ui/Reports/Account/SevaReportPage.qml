@@ -174,7 +174,7 @@ Rectangle{
     Timer{
         repeat: true
         interval: 5000
-        running: true
+        running: false
         onTriggered: {
            console.log(fileName + " - Current StackView Depth =" + _reportStackView.depth)
         }
@@ -187,6 +187,7 @@ Rectangle{
         filterObj.bDatewise = _reportitems.dtWise
         filterObj.iSelectedType = ReportEnums.SINGLE_DATE_REPORT;
         filterObj.reportType = ReportEnums.DETAIL_REPORT
+        filterObj.sevaType = accountElement.sevaTypeName;
         filterObj.iSevaType = accountElement.sevaType;
         filterObj.sSevaName = accountElement.sevaName;
         filterObj.sSingleDate = accountElement.date
@@ -207,6 +208,7 @@ Rectangle{
         filterObj.iSelectedType = ReportEnums.SINGLE_DATE_REPORT;
         filterObj.reportType = ReportEnums.SUMMARY_REPORT
         filterObj.iSevaType = accountElement.sevaType;
+        filterObj.sevaType = accountElement.sevaTypeName;
         filterObj.sSevaName = accountElement.sevaName;
         filterObj.sSingleDate = accountElement.date
         filterObj.sStartDate = "null"
@@ -225,6 +227,7 @@ Rectangle{
         filterObj.iSelectedType = ReportEnums.MONTH_REPORT;
         filterObj.reportType = ReportEnums.SUMMARY_REPORT
         filterObj.iSevaType = accountElement.sevaType;
+        filterObj.sevaType = accountElement.sevaTypeName;
         filterObj.sSevaName = accountElement.sevaName;
         filterObj.sSingleDate = accountElement.date
         filterObj.sStartDate = "null"

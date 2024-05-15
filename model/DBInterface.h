@@ -270,7 +270,9 @@ public slots :
     bool generateSingleDateReport(ReportFilterElements *elm);
     bool generateDateRangeReport(ReportFilterElements *elm);
     bool generateMonthReport(ReportFilterElements *elm);
-
+    bool generateReportForEachDateOfMonth(ReportFilterElements *elm);
+    bool generateReportForEachDateInDateRange(ReportFilterElements *elm);
+    bool fullAccounDetailsDateWise(ReportFilterElements *elm);
 };
 
 #endif // DBFILE_H

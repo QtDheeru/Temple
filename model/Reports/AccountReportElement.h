@@ -16,6 +16,7 @@ class AccountReportElement : public QObject
     Q_PROPERTY(QString month READ month WRITE setMonth NOTIFY monthChanged FINAL)
     Q_PROPERTY(QString year READ year WRITE setYear NOTIFY yearChanged FINAL)
     Q_PROPERTY(ReportEnums::REPORT_GENERATION_SOURCE reportGenerationSource READ reportGenerationSource WRITE setReportGenerationSource NOTIFY reportGenerationSourceChanged FINAL)
+    Q_PROPERTY(QString sevaTypeName READ sevaTypeName WRITE setSevaTypeName NOTIFY sevaTypeNameChanged FINAL)
 
 public:
     explicit AccountReportElement(QObject *parent = nullptr);
@@ -67,6 +68,9 @@ public:
     ReportEnums::REPORT_GENERATION_SOURCE reportGenerationSource() const;
     void setReportGenerationSource(const ReportEnums::REPORT_GENERATION_SOURCE &newReportGenerationSource);
 
+    QString sevaTypeName() const;
+    void setSevaTypeName(const QString &newSevaRypeName);
+
 signals:
     void dateChanged();
     void totalSevaCountChanged();
@@ -77,12 +81,15 @@ signals:
     void yearChanged();
     void reportGenerationSourceChanged();
 
+    void sevaTypeNameChanged();
+
 private:
 
     QString m_date;
     int m_slNo;
     QString seva_name;
     int m_sevaType;
+    QString m_sevaTypeName;
     int seva_ticket;
     float seva_cost;
     double seva_total;
