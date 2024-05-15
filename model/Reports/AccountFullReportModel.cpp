@@ -80,7 +80,7 @@ void AccountFullReportModel::generateFullAccountReportEachdate(ReportFilterEleme
     case ReportEnums::SINGLE_DATE_REPORT:{
         qDebug() << Q_FUNC_INFO << " Generate the Single Date Full Report " << Qt::endl;
         filterelement->setSSingleDate(FormatDate(filterelement->sSingleDate()));
-        DBInterface::getInstance()->fullAccounDetailsDateWise(filterelement->sSevaName(),filterelement->iSevaType(),(filterelement->sSingleDate()));
+        DBInterface::getInstance()->fullAccounDetailsDateWise(filterelement);
         break;
     }
     case ReportEnums::DATE_RANGE_REPORT : {

@@ -157,6 +157,19 @@ void AccountReportElement::setReportGenerationSource(const ReportEnums::REPORT_G
     emit reportGenerationSourceChanged();
 }
 
+QString AccountReportElement::sevaTypeName() const
+{
+    return m_sevaTypeName;
+}
+
+void AccountReportElement::setSevaTypeName(const QString &newSevaTypeName)
+{
+    if (m_sevaTypeName == newSevaTypeName)
+        return;
+    m_sevaTypeName = newSevaTypeName;
+    emit sevaTypeNameChanged();
+}
+
 QString AccountReportElement::date() const
 {
     return m_date;
