@@ -59,11 +59,9 @@ Rectangle {
     signal sendError(string err);
 
     ColumnLayout {
-        //        anchors.fill: parent
         width: parent.width
         id : _c1
         spacing: 5
-        //Layout.alignment: Qt.AlignTop
         Rectangle{
             Layout.preferredWidth: parent.width -5
             Layout.preferredHeight:root.subComponentHeight*1.5
@@ -97,8 +95,8 @@ Rectangle {
             }
         }
         Rectangle{
-            Layout.preferredWidth: parent.width -5
-            Layout.preferredHeight: (root.subComponentHeight+_comboboxLayout.spacing + _sevatypeCheck.height)*2.3
+            Layout.preferredWidth: parent.width - 5
+            Layout.preferredHeight: (root.subComponentHeight + _comboboxLayout.spacing + _sevatypeCheck.height)*2.3
             color: "#00A2ED"
             border.width: 1
             border.color: "black"
@@ -114,7 +112,7 @@ Rectangle {
                     text: qsTr("All Seva Types")
                     font.pixelSize:  root.subComponentPixelSize
                     Layout.alignment: Qt.AlignLeft
-                    Layout.leftMargin:   parent.width*0.33
+                    Layout.leftMargin:   parent.width * 0.33
                     onCheckedChanged: {
                         if(checked==false)
                         {
@@ -130,7 +128,7 @@ Rectangle {
                         }
                         else
                         {
-                            _rip.iSevaType=  0;
+                            _rip.iSevaType = 0;
                             console.log("SevaType checked")
                             _sevaType.enabled = false
                             _sevaName.enabled = false
@@ -140,13 +138,13 @@ Rectangle {
                 }
 
                 MyComboEntry{
-                    id:_sevaType;
+                    id: _sevaType;
                     Layout.preferredWidth: parent.width
-                    myHeight:root.subComponentHeight;
+                    myHeight: root.subComponentHeight;
                     myWidth: root.width/1.1
                     fontPixelSize: root.subComponentPixelSize
                     enabled: false
-                    _labelText :qsTr("Seva Type")
+                    _labelText : qsTr("Seva Type")
                 }
                 Rectangle{
                     Layout.preferredWidth: parent.width
@@ -161,7 +159,7 @@ Rectangle {
                     font.pixelSize: root.subComponentPixelSize
                     text: qsTr("All Seva Names")
                     Layout.alignment: Qt.AlignLeft
-                    Layout.leftMargin:   parent.width*0.33
+                    Layout.leftMargin:   parent.width * 0.33
                     onCheckedChanged: {
                         if(checked==false)
                         {
@@ -177,7 +175,7 @@ Rectangle {
                 MyComboEntry{
                     id: _sevaName;
                     Layout.preferredWidth: parent.width
-                    myHeight:root.subComponentHeight;
+                    myHeight: root.subComponentHeight;
                     myWidth: root.width/1.1
                     fontPixelSize: root.subComponentPixelSize
                     enabled: false
@@ -195,7 +193,7 @@ Rectangle {
             Layout.alignment: Qt.AlignTop
             ColumnLayout{
                 width: parent.width
-                height:  parent.height/1.1
+                height: parent.height/1.1
                 anchors.horizontalCenter: parent.horizontalCenter
                 id: _singleDateLayout
                 RadioButton{
@@ -207,7 +205,7 @@ Rectangle {
                     text: "Select Date"
                     checked: true
                     onCheckedChanged: {
-                        if(checked==false)
+                        if(checked == false)
                             r1.enabled = false
                         else{
                             r1.enabled = true
@@ -228,8 +226,8 @@ Rectangle {
         }
 
         Rectangle{
-            Layout.preferredWidth: parent.width -5
-            Layout.preferredHeight: (root.subComponentHeight +_rangeDateLayout.spacing)*3.5
+            Layout.preferredWidth: parent.width - 5
+            Layout.preferredHeight: (root.subComponentHeight + _rangeDateLayout.spacing)*3.5
             color: "#00A2ED"
             border.width: 1
             border.color: "black"
@@ -237,7 +235,7 @@ Rectangle {
             ColumnLayout{
                 width: parent.width
                 height: parent.height/1.1
-                id:_rangeDateLayout
+                id: _rangeDateLayout
                 RadioButton{
                     ButtonGroup.group: radioGroup
                     id: _rangeSelectedRadio
@@ -259,7 +257,7 @@ Rectangle {
                     }
                 }
                 MyDateEntry{
-                    id:r2;
+                    id: r2;
                     enabled: false
                     myHeight: root.subComponentHeight;
                     myWidth: root.width/1.1
@@ -267,7 +265,7 @@ Rectangle {
                     _labelText: qsTr(" Start Date")
                 }
                 MyDateEntry{
-                    id:r3;
+                    id: r3;
                     enabled: false
                     myHeight: root.subComponentHeight;
                     myWidth: root.width/1.1

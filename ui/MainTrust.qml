@@ -38,7 +38,7 @@ Rectangle{
             id:r1
             model : trustListModel
             delegate : TrustDelegate{
-                id:tstDel
+                id: tstDel
                 Component.onCompleted: {
                     tstDel.loadLoginPage.connect(abhishek)
                 }

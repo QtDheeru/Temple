@@ -26,6 +26,7 @@
 #include "AccountFullreportElement.h"
 #include <QQmlEngine>
 #include "../DataStore/AccountReportsDBInterface.h"
+#include "../DataStore/ProfitAndLossDBInterface.h"
 
 //#include "voucher/VoucherFilterElements.h"
 #include "IDataWriter.h"
@@ -98,6 +99,13 @@ signals:
     void account_report_Month_Range(AccountReportElement*);
     void booking_report_Month_Range(BookingReportMonthRangeElement*);
     void voucher_report(VoucherElement*);
+
+    void profitAndLoss_SevaBooked_report(AccountReportElement *);
+    void profitAndLoss_Voucher_report(VoucherReportElement *);
+    void profitNLoss_DateRange_SevaBooked_report(AccountReportElement *);
+    void profitNLoss_DateRange_Voucher_report(VoucherReportElement *);
+    void profitNLoss_Month_SevaBooked_report(AccountReportElement *);
+    void profitNLoss_Month_Voucher_report(VoucherReportElement *);
 
     void correct_password(QString);
     void success();
@@ -177,13 +185,14 @@ public slots:
     void gotra_list();
     void Checking_sevacharge(QString);
     void receipt_no_printing();
+    //booking report
     void booking_report_cdate_function(QString,QString,int);
     void booking_report_dataRange_function(QString,int,QString,QString);
     void booking_report_cmonth_function(QString,int,int,int);
     void booking_report_eachDateDataRange_function(QString,int,QString,QString);
     void booking_report_eachDateDataRangeForMonth_function(QString,int,int,int);
     void booking_report_eachMonth_function(QString SEVA,int TYPE,int month,int year);
-
+    //account report
     void account_report_cdate_function(QString, int, QString);
     void account_report_dataRange_function(QString,int,QString,QString);
     void account_report_eachDateDataRange_function(QString,int,QString,QString);
@@ -192,13 +201,14 @@ public slots:
     void account_report_eachDateDataRangeForMonth_function(QString,int,int,int);
     void account_report_eachDateDataRangeForWholeMonth_function(QString,int,int,int);
 
-    void voucher_report_cdate_function(QString,QString,QString);
-    void voucher_report_cmonth_function(int, int, QString, QString);
-    void voucher_report_dataRange_function(QString,QString,QString,QString);
-
     void fullAccounDetailsDateWise(QString, int, QString);              //Suman
     void fullAccounDetailsDateRangeWise(QString,int,QString,QString);   //Suman
     void fullAccounDetailsMonthwise(QString ,int ,int ,int );           //Suman
+
+    //voucher report
+    void voucher_report_cdate_function(QString,QString,QString);
+    void voucher_report_cmonth_function(int, int, QString, QString);
+    void voucher_report_dataRange_function(QString,QString,QString,QString);
 
     void signin_clicked(QString, QString, int);
     void old_password(QString l_userfirstname, QString l_userlastname);
@@ -238,7 +248,6 @@ public slots:
     int getLastReceiptNumber();
     int getLastVoucherNumber();
     int getLastSevatypeNumber(); //Suman N added
-    int getLastSevaNameNumber(); //suman N added
 
     void getvoucherdata();  //Suman N added
     void getAccountData();  //Suman N added
@@ -248,23 +257,24 @@ public slots:
     void closeSeva(int SevaId);                                          //Suman N added
 
 private:
-    explicit DBInterface(QObject *parent=nullptr);
+    explicit DBInterface(QObject *parent = nullptr);
     int val;
     int last_s_no;
     QList<QString> l_sno,l_person_id,l_sevatype,l_sevaname,l_quantity,l_s_date,l_s_month,l_s_year ,l_sevadate,l_r_date,l_r_month,l_r_year,l_receiptdate,l_seva_cost,l_add_cost,l_total_cost,l_note;
     QString p_name,p_gotra, p_nakshtra, p_mobile,personid,p_sevaname,sevadate,note,que ;
     int  quantity,prasada;
-    int total_prasada=0;
+    int total_prasada = 0;
     QDate yy_date;
     PersonDetails *m_person;
     SevaTypeJsonProcessor* m_proc;
     QList<SevaBookingElement*> m_sevabooking;
 
     QString m_error;
-    QList<QString> m_pay_mode={"cash","Cheque","NEFT","UPI"};
+    QList<QString> m_pay_mode = {"cash","Cheque","NEFT","UPI"};
 
 private  :
     AccountReportsDBInterface *m_accountReportInterface;
+    ProfitAndLossDBInterface *m_profitAndLossInterface;
 
 public slots :
     bool generateSingleDateReport(ReportFilterElements *elm);
@@ -273,6 +283,10 @@ public slots :
     bool generateReportForEachDateOfMonth(ReportFilterElements *elm);
     bool generateReportForEachDateInDateRange(ReportFilterElements *elm);
     bool fullAccounDetailsDateWise(ReportFilterElements *elm);
+
+    bool generateSingleDateReportForProfitNLoss(ReportFilterElements *elm);
+    bool generateDateRangeReportForProfitNLoss(ReportFilterElements *elm);
+    bool generateMonthReportForProfitNLoss(ReportFilterElements *elm);
 };
 
 #endif // DBFILE_H

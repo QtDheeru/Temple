@@ -243,14 +243,14 @@ Rectangle{
     }
 
     Component.onCompleted:  {
-        console.log("Component.completed: of SevaAccountReportForSingleDate.qml")
+        console.log("Component.completed: of SevaBookingReportForSingleDate.qml")
         _rr1.focus = true
 
         //        sevaProxy.sevaReport.accReportModel.setGrandTotalToZero();
         //sevaProxy.sevaReport.resetAccModel();
     }
     Component.onDestruction: {
-        console.log(" Component.onDestruction of SevaAccountReportForSingleDate.qml")
+        console.log(" Component.onDestruction of SevaBookingReportForSingleDate.qml")
         // resetAccModel();
         //          _rr1.focus = false
 

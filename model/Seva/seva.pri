@@ -19,3 +19,6 @@ SOURCES += \
 
 include(./SevaJson/SevaJson.pri)
 include(../Reports/Reports.pri)
+include(../ProfitAndLoss/ProfitAndLoss.pri)
+
+DISTFILES +=

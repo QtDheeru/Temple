@@ -65,7 +65,6 @@ public:
     void setSevasCount(int newSevasCount);
 
 private:
-
     bool reset();
     QList<AccountReportElement*> m_accountReportQryList;
     QMap<QString , AccountReportElement*> m_sevaName2AccReport;

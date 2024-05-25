@@ -13,8 +13,6 @@ Rectangle{
     property string fileName : "SevaAccountReportForSingleDate.qml"
 
     signal back();
-    signal loadDateWisePage();
-    signal loadMenuPage();
     signal loadSevaDetails(var obj)
 
     TableView{
@@ -59,6 +57,7 @@ Rectangle{
                         mouse.accepted = true
                         if (mouse.button === Qt.LeftButton){
                             var accountElement = sevaProxy.sevaReport.accReportModel.getAccountReportElement(clickIndex);
+                            console.log(fileName + " accountElement ="+ accountElement)
                             accountElement.reportGenerationSource = ReportEnums.CLICK_ON_REPORT;
                             loadSevaDetails(accountElement);
                         }

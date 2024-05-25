@@ -10,13 +10,17 @@ Rectangle {
     border.color: "black"
     border.width: 4
     focus: true
+
+    property int buttonsCount : 5
+    property string fileName: "AdminRights.qml "
+
     signal loadUserManagement();
     signal loadMenuPage()
     signal admin()
     signal loadBankRegistration()
     signal loadVoucherAdministration();
     signal showAllDataView()
-    property int buttonsCount : 5
+    signal loadProfitAndLossBasePage()
 
     Grid{
         anchors.fill: parent
@@ -42,45 +46,45 @@ Rectangle {
             }
         }
         TempleButton{
-            id:_addSeva
-            width:parent.width/4
+            id: _addSeva
+            width: parent.width/4
             height: parent.height/3
             color: "aqua"
             buttonText: "ADD SEVA"
             border.width: _mainrect.width/300
             onButtonClikcked: {
-                console.log("AddSeva button clicked");
+                console.log(fileName + "AddSeva button clicked");
                 admin()
             }
         }
         TempleButton{
-            id:_allData
-            width:parent.width/4
+            id: _allData
+            width: parent.width/4
             height: parent.height/3
             color: "aqua"
             buttonText: "ALL DATA"
             border.width: _mainrect.width/300
             onButtonClikcked: {
-                console.log("AddSeva button clicked");
+                console.log(fileName + "AddSeva button clicked");
                 showAllDataView()
             }
         }
         TempleButton{
-            id:_usermanagement1
-            width:parent.width/4
+            id: _bankRegister
+            width: parent.width/4
             height: parent.height/3
             color: "aqua"
             buttonText: "BANK REGISTER"
             border.width: _mainrect.width/300
             onButtonClikcked: {
-                console.log("User Management button clicked");
+                console.log(fileName + "User Management button clicked");
                 checkEntry.fetchFromDataBase()
                 loadBankRegistration()
                 myModel.initial();
             }
         }
         TempleButton{
-            id:_addSeva2
+            id: _voucher
             width:parent.width/4
             height: parent.height/3
             color: "aqua"
@@ -88,17 +92,30 @@ Rectangle {
             border.width: _mainrect.width/300
             onButtonClikcked:
             {
-                console.log("voucher admin..button clicked");
+                console.log(fileName + "voucher button clicked");
                 loadVoucherAdministration();
             }
         }
+        TempleButton{
+            id: _profitNLoss
+            width:parent.width/4
+            height: parent.height/3
+            color: "aqua"
+            buttonText: "Profit And Loss"
+            border.width: _mainrect.width/300
+            onButtonClikcked:
+            {
+                console.log(fileName + "Profit And Loss button clicked");
+                loadProfitAndLossBasePage();
+            }
+        }
         Keys.onEscapePressed: {
-            console.log("AdminRights :: Esc pressed")
+            console.log(fileName + " Esc pressed")
             loadMenuPage()
         }
     }
     Keys.onEscapePressed: {
-        console.log("AdminRights :: Esc pressed")
+        console.log(fileName + " Esc pressed")
         loadMenuPage()
     }
 }
