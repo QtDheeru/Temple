@@ -113,5 +113,7 @@
         <file>ui/Reports/Account/AllAccountDetails.qml</file>
         <file>ui/Reports/Account/SevaReportPage.qml</file>
         <file>ui/Reports/Booking/BookingReportPage.qml</file>
+        <file>ui/Reports/ProfitAndLoss/ProfitAndLossBasePage.qml</file>
+        <file>ui/Reports/ProfitAndLoss/ProfitAndLossForSingleDate.qml</file>
     </qresource>
 </RCC>

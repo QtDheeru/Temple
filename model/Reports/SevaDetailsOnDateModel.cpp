@@ -68,13 +68,11 @@ bool SevaDetailsOnDateModel::insertSevaRow(SevaBookingElement *elm)
     return true;
 }
 
-
-
 bool SevaDetailsOnDateModel::onDateSelected(QString date)
 {
     qDebug()<<Q_FUNC_INFO<<date<<Qt::endl;
     DBInterface::getInstance()->qrySevabookingBySevaDate(date);
-
+    return true;
 }
 
 void SevaDetailsOnDateModel::onDateRangeSelected(QString start, QString end)

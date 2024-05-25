@@ -34,6 +34,7 @@ signals:
 private :
     QSqlDatabase m_db;
     QList<QString> pay_mode={"cash","Cheque","NEFT","UPI"};
+    AccountReportElement *getNewAccountElement();
 };
 
 #endif // ACCOUNTREPORTSDBINTERFACE_H

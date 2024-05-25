@@ -183,5 +183,6 @@ Rectangle{
     }
     Component.onDestruction: {
         console.log(fileName + " Component.onDestruction of SevaAccountReportForSingleDate.qml")
+        sevaProxy.sevaReport.resetBookingDateRangeModel();
     }
 }

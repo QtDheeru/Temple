@@ -216,7 +216,6 @@ AccountReportElement *AccountReportModel::getAccountReportElement(int idx)
         // Return dummy. Avoid crash
         return new AccountReportElement;
     }
-
     return m_accountReportQryList.at(idx);
 }
 

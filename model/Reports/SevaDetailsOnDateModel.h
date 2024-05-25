@@ -4,6 +4,7 @@
 #include <QAbstractListModel>
 #include "./model/DBInterface.h"
 #include <QDebug>
+
 class SevaDetailsOnDateModel : public QAbstractListModel
 {
     Q_OBJECT
@@ -25,8 +26,8 @@ public:
     void onDateRangeSelected(QString,QString);
 
 private:
-
     QList<SevaBookingElement*> m_sevaDetailsOnDate;
+
 public slots:
 
 };

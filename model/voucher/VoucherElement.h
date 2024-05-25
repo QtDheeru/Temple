@@ -27,34 +27,26 @@ public:
     int voucherNo() const;
     void setVoucherNo(int newVoucherNo);
 
-
     const QString &voucherName() const;
     void setVoucherName(const QString &newVoucherName);
-
 
     QString mobileNo() const;
     void setMobileNo(QString newMobileNo);
 
-
     const QString &voucherType() const;
     void setVoucherType(const QString &newVoucherType);
-
 
     const QString &voucherItem() const;
     void setVoucherItem(const QString &newVoucherItem);
 
-
     const QString &voucherNote() const;
     void setVoucherNote(const QString &newVoucherNote);
-
 
     const QString &voucherCost() const;
     void setVoucherCost(const QString &newVoucherCost);
 
-
     const QString &voucherPaymentMode() const;
     void setVoucherPaymentMode(const QString &newVoucherPaymentMode);
-
 
     const QString &PaymentReference() const;
     void setPaymentReference(const QString &newPaymentReference);

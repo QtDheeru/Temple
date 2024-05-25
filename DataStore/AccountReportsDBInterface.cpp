@@ -49,7 +49,7 @@ bool AccountReportsDBInterface::generateSingleDateReport(ReportFilterElements *e
     query_other1.exec();
 
     while(query_other1.next()) {
-        AccountReportElement *ele = new AccountReportElement;
+        AccountReportElement *ele = this->getNewAccountElement();
         ele->setDate(date2Query);
         ele->setSevaType(seva_type_int);
         ele->setSevaTypeName(seva_type_string);
@@ -108,7 +108,7 @@ bool AccountReportsDBInterface::generateDateRangeReport(ReportFilterElements *el
 
     while(query_other1.next())
     {
-        AccountReportElement *ele = new AccountReportElement;
+        AccountReportElement *ele = this->getNewAccountElement();
         ele->setSevaType(seva_type_int);
         ele->setSevaTypeName(seva_type_string);
         ele->setSeva_name( query_other1.value(0).toString());
@@ -158,7 +158,7 @@ bool AccountReportsDBInterface::generateMonthReport(ReportFilterElements *elm)
     query_other1.exec();
     while(query_other1.next())
     {
-        AccountReportElement *ele = new AccountReportElement;
+        AccountReportElement *ele = this->getNewAccountElement();
         ele->setSevaType(seva_type_int);
         ele->setSevaTypeName(seva_type_string);
         ele->setSeva_name( query_other1.value(0).toString());
@@ -169,6 +169,13 @@ bool AccountReportsDBInterface::generateMonthReport(ReportFilterElements *elm)
     }
     return true;
 }
+
+AccountReportElement *AccountReportsDBInterface::getNewAccountElement(){
+    AccountReportElement *ele = new AccountReportElement;
+    QQmlEngine::setObjectOwnership(ele, QQmlEngine::CppOwnership);
+    return ele;
+}
+
 
 bool AccountReportsDBInterface::generateReportForEachDateOfMonth(ReportFilterElements *elm)
 {
@@ -207,8 +214,7 @@ bool AccountReportsDBInterface::generateReportForEachDateOfMonth(ReportFilterEle
     query_other1.exec();
     while(query_other1.next())
     {
-        AccountReportElement *ele = new AccountReportElement;
-        QQmlEngine::setObjectOwnership(ele, QQmlEngine::CppOwnership);
+        AccountReportElement *ele = this->getNewAccountElement();
         ele->setSeva_name(seva_name);
         ele->setSevaType(seva_type_int);
         ele->setSevaTypeName(seva_type_string);
@@ -269,7 +275,7 @@ bool AccountReportsDBInterface::generateReportForEachDateInDateRange(ReportFilte
 
     while(query_other1.next())
     {
-        AccountReportElement *ele = new AccountReportElement;
+        AccountReportElement *ele = this->getNewAccountElement();
         ele->setSeva_name(seva_name);
         ele->setSevaType(seva_type_int);
         ele->setSevaTypeName(seva_type_string);
@@ -328,7 +334,7 @@ bool AccountReportsDBInterface::fullAccounDetailsDateWise(QString sevaName,int s
 
     while(query_other1.next()){
         qDebug()<<Q_FUNC_INFO << " Records Found. Iteratring.."<<Qt::endl;
-        AccountFullreportElement* felement= new AccountFullreportElement;
+        AccountFullreportElement* felement = new AccountFullreportElement;
         felement->setRecieptnumber(query_other1.value(0).toString());
         felement->setRecptDate(query_other1.value(1).toString());
         felement->setSevadate(query_other1.value(2).toString());

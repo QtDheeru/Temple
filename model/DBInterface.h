@@ -27,6 +27,7 @@
 #include <QQmlEngine>
 #include "../DataStore/AccountReportsDBInterface.h"
 #include "../DataStore/BookingReportsDBInterface.h"
+#include "../DataStore/ProfitAndLossDBInterface.h"
 
 //#include "voucher/VoucherFilterElements.h"
 #include "IDataWriter.h"
@@ -99,6 +100,13 @@ signals:
     void account_report_Month_Range(AccountReportElement*);
     void booking_report_Month_Range(BookingReportMonthRangeElement*);
     void voucher_report(VoucherElement*);
+
+    void profitAndLoss_SevaBooked_report(AccountReportElement *);
+    void profitAndLoss_Voucher_report(VoucherReportElement *);
+    void profitNLoss_DateRange_SevaBooked_report(AccountReportElement *);
+    void profitNLoss_DateRange_Voucher_report(VoucherReportElement *);
+    void profitNLoss_Month_SevaBooked_report(AccountReportElement *);
+    void profitNLoss_Month_Voucher_report(VoucherReportElement *);
 
     void correct_password(QString);
     void success();
@@ -178,7 +186,6 @@ public slots:
     void gotra_list();
     void Checking_sevacharge(QString);
     void receipt_no_printing();
-
     void account_report_cdate_function(QString, int, QString);
     void account_report_dataRange_function(QString,int,QString,QString);
     void account_report_eachDateDataRange_function(QString,int,QString,QString);
@@ -243,24 +250,25 @@ public slots:
     void closeSeva(int SevaId);
 
 private:
-    explicit DBInterface(QObject *parent=nullptr);
+    explicit DBInterface(QObject *parent = nullptr);
     int val;
     int last_s_no;
     QList<QString> l_sno,l_person_id,l_sevatype,l_sevaname,l_quantity,l_s_date,l_s_month,l_s_year ,l_sevadate,l_r_date,l_r_month,l_r_year,l_receiptdate,l_seva_cost,l_add_cost,l_total_cost,l_note;
     QString p_name,p_gotra, p_nakshtra, p_mobile,personid,p_sevaname,sevadate,note,que ;
     int  quantity,prasada;
-    int total_prasada=0;
+    int total_prasada = 0;
     QDate yy_date;
     PersonDetails *m_person;
     SevaTypeJsonProcessor* m_proc;
     QList<SevaBookingElement*> m_sevabooking;
 
     QString m_error;
-    QList<QString> m_pay_mode={"cash","Cheque","NEFT","UPI"};
+    QList<QString> m_pay_mode = {"cash","Cheque","NEFT","UPI"};
 
 private  :
     AccountReportsDBInterface *m_accountReportInterface;
     BookingReportsDBInterface *m_bookingReportInterface;
+    ProfitAndLossDBInterface *m_profitAndLossInterface;
 
 public slots :
     bool generateSingleDateReport(ReportFilterElements *elm);
@@ -277,6 +285,11 @@ public slots :
     bool generateBookingReportForEachDateOfMonth(ReportFilterElements *elm);
     bool generateBookingReportForEachDateInDateRange(ReportFilterElements *elm);
     bool generateBookingReportForAllMonths(ReportFilterElements *elm);
+
+    // Adding slots for ProfitLoss
+    bool generateSingleDateReportForProfitNLoss(ReportFilterElements *elm);
+    bool generateDateRangeReportForProfitNLoss(ReportFilterElements *elm);
+    bool generateMonthReportForProfitNLoss(ReportFilterElements *elm);
 };
 
 #endif // DBFILE_H
