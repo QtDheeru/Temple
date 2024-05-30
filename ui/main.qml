@@ -256,7 +256,6 @@ ApplicationWindow {
             loader.source = "qrc:/ui/Devotee/DevoteeSelectionPage.qml";
         }
         function onLoadSevabooking( d_name,d_mobile,d_gothra,d_nakshatra){
-            console.log("main loadSevabooking-----",d_nakshatra)
             loader.source = "";
             loader.setSource("SevaBookingView.qml",{dname:d_name,dmobile:d_mobile,dgothra:d_gothra,dNakshtra:d_nakshatra})
         }

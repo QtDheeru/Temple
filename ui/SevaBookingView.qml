@@ -62,7 +62,8 @@ Rectangle{
                     Layout.rightMargin: root.height/100
                     Layout.fillWidth: true
                     PersonalDetails{
-                        id: _personal;Layout.fillWidth: true
+                        id: _personal;
+                        Layout.fillWidth: true
                         receiptNumber: sevaProxy.receiptNumber
                         KeyNavigation.tab: _sevaDate
                         Layout.alignment: Qt.AlignTop
@@ -171,8 +172,10 @@ Rectangle{
             _timer.start();
         }
     }
-    SevaReceipt{
-        id : _sevaReceipt
+
+    Component{
+        id : sevaReceiptComp
+        SevaReceipt{}
     }
     Loader{
         id : _ld
@@ -204,12 +207,12 @@ Rectangle{
         console.log(" Mobile ="+_personal.mobileNo)
         console.log(" Nakshatra ="+_personal.nakshatra)
         console.log(" Gotra ="+_personal.gotra)
-        buildSevaReceipt();
-        var b = sevaProxy.saveReceipt(_sevaReceipt);
-        if(b === false)
-        {
+        var sevaReceipt = buildSevaReceipt();
+        var b = sevaProxy.saveReceipt(sevaReceipt);
+        if(b === false) {
             errorOccur("Cannot store seva receipt details into db");
         }
+        sevaReceipt.destroy();
     }
     function saveOnlySeva() {
         printSevaObject();
@@ -246,6 +249,7 @@ Rectangle{
         _sevaD.resetPartial();
     }
     function buildSevaReceipt() {
+        var _sevaReceipt = sevaReceiptComp.createObject();
         _sevaReceipt.receiptNo = _personal.receiptNumber.trim();
         _sevaReceipt.devoteeName = _personal.devoteeName.trim();
         _sevaReceipt.mobileNo = _personal.mobileNo.trim();
@@ -264,6 +268,7 @@ Rectangle{
         _sevaReceipt.bookingStatus =_paymentDialog.status
         _sevaReceipt.onlineRef =  _paymentDialog.paymentObject.checkOrTransactionId.trim()
         _sevaReceipt.note = _paymentDialog.paymentObject.note
+        return _sevaReceipt;
     }
     function disableControls(){
         _sevaContoller.setButtons(false);
@@ -418,6 +423,7 @@ Rectangle{
     }
     Component.onCompleted: {
         console.log("Component.onCompleted: of seva booking view",dgothra,dNakshtra)
+        sevaProxy.getNextReceiptNumber();
         _personal.setGothras(sevaProxy.getGothras());
         _personal.setNakshatras(sevaProxy.getNakshatras());
         _personal.setNakshatraCombo(dNakshtra)
