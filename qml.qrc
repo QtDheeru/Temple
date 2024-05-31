@@ -113,5 +113,7 @@
         <file>ui/Reports/Booking/SevaBookingReportOnDateRange.qml</file>
         <file>ui/Reports/Account/AllAccountDetails.qml</file>
         <file>ui/Reports/Account/SevaReportPage.qml</file>
+        <file>ui/Reports/Booking/AllBookingDetails.qml</file>
+        <file>ui/Reports/Booking/BookingReportPage.qml</file>
     </qresource>
 </RCC>

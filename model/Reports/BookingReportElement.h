@@ -2,10 +2,13 @@
 #define BOOKINGREPORTELEMENT_H
 
 #include <QObject>
+#include "ReportEnums.h"
 
 class BookingReportElement : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(ReportEnums::REPORT_GENERATION_SOURCE reportGenerationSource READ reportGenerationSource WRITE setReportGenerationSource NOTIFY reportGenerationSourceChanged FINAL)
+
 public:
     explicit BookingReportElement(QObject *parent = nullptr);
 
@@ -54,7 +57,11 @@ public:
     int sevaCount() const;
     void setSevaCount(int newSevaCount);
 
+    ReportEnums::REPORT_GENERATION_SOURCE reportGenerationSource() const;
+    void setReportGenerationSource(const ReportEnums::REPORT_GENERATION_SOURCE &newReportGenerationSource);
+
 signals:
+    void reportGenerationSourceChanged();
 
 private:
     int m_sNO;
@@ -72,9 +79,7 @@ private:
     QString m_paymntMode;
     QString m_referenceNo;
     QString m_address;
-
-
-
+    ReportEnums::REPORT_GENERATION_SOURCE m_reportGenerationSource;
 };
 
 #endif // BOOKINGREPORTELEMENT_H

@@ -89,6 +89,7 @@ void SevaReceiptCsvProcessor::recieveBookingReportList(QList<BookingReportElemen
                             (*it)->sevaDate()+","+
                             QString::number((*it)->sevaCount())+'\n' ;
                 out<<storeData;
+                emit successMessage(msg);
             }
             qDebug() << "File saved: " << fileName;
             file.close();

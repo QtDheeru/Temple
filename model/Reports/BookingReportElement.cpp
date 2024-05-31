@@ -3,7 +3,7 @@
 BookingReportElement::BookingReportElement(QObject *parent)
     : QObject{parent}
 {
-
+    this->m_reportGenerationSource = ReportEnums::CLICK_ON_LEFT_SELECTION;
 }
 
 const QString &BookingReportElement::name() const
@@ -154,4 +154,17 @@ int BookingReportElement::sevaCount() const
 void BookingReportElement::setSevaCount(int newSevaCount)
 {
     m_sevaCount = newSevaCount;
+}
+
+ReportEnums::REPORT_GENERATION_SOURCE BookingReportElement::reportGenerationSource() const
+{
+    return m_reportGenerationSource;
+}
+
+void BookingReportElement::setReportGenerationSource(const ReportEnums::REPORT_GENERATION_SOURCE &newReportGenerationSource)
+{
+    if (m_reportGenerationSource == newReportGenerationSource)
+        return;
+    m_reportGenerationSource = newReportGenerationSource;
+    emit reportGenerationSourceChanged();
 }

@@ -92,32 +92,27 @@ void BookingReportModel::generateBookReport(ReportFilterElements *elm)
     beginResetModel();
     m_bookingReportQryList.clear();
     endResetModel();
-    qDebug()<<Q_FUNC_INFO<<m_bookingReportQryList.size()<<Qt::endl;
-    qDebug()<<Q_FUNC_INFO<<Qt::endl;
-    qDebug()<<"Selected Type "<< elm->iSelectedType()<<Qt::endl;
-    qDebug()<<"Selected Month "<< elm->sMonth().toInt()<<Qt::endl;
-    qDebug()<<"Selected Year "<< elm->sYear().toInt()<<Qt::endl;
-    qDebug()<<"Selected date "<< elm->sSingleDate()<<Qt::endl;
-
-    if(elm->iSelectedType()==0)
-    {
-        qDebug()<<Q_FUNC_INFO<<"Inside c date book rep 0"<<Qt::endl;
+    switch(elm->iSelectedType()){
+    case  ReportEnums::SINGLE_DATE_REPORT:{
+        qDebug() << Q_FUNC_INFO << " Generate the Single Date Report " << Qt::endl;
+        // convert the date from dd-mm-yyyy format to yyyy-mm-dd. DB expects this.
         elm->setSSingleDate(FormatDate(elm->sSingleDate()));
-        qDebug()<<Q_FUNC_INFO<<"elm->setSSingleDate(FormatDate(elm->sSingleDate()))"<<elm->sSingleDate()<<Qt::endl;
         DBInterface::getInstance()->booking_report_cdate_function(elm->sSingleDate(),elm->sSevaName(),elm->iSevaType());
+        break;
     }
-    else if(elm->iSelectedType()==1)
-    {
-        qDebug()<<Q_FUNC_INFO<<"Inside c date book rep 1"<<Qt::endl;
+    case  ReportEnums::DATE_RANGE_REPORT : {
+        qDebug() << Q_FUNC_INFO << " Generate the Date Ranged Report " << Qt::endl;
         elm->setSStartDate(FormatDate(elm->sStartDate()));
         elm->setSEndDate(FormatDate(elm->sEndDate()));
         DBInterface::getInstance()->booking_report_dataRange_function(elm->sSevaName(),elm->iSevaType(),elm->sStartDate(),elm->sEndDate());
+        break;
     }
-    else
-    {
-        qDebug()<<Q_FUNC_INFO<<"Inside c date book rep 2"<<Qt::endl;
-
+    case  ReportEnums::MONTH_REPORT : {
+        qDebug() << Q_FUNC_INFO << " Generate the Month Report " << Qt::endl;
         DBInterface::getInstance()->booking_report_cmonth_function(elm->sSevaName(),elm->iSevaType(),elm->sMonth().toInt(),elm->sYear().toInt());
+        break;
+    }
+    default : {qDebug() << Q_FUNC_INFO << " Wrong selection type. No reports" << Qt::endl; break;}
     }
 }
 

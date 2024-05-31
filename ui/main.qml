@@ -193,7 +193,7 @@ ApplicationWindow {
         }
         function onBookingreport() {
             console.log("Clicked on Bookingreport")
-            loader.source = "BookingReportPage.qml"
+            loader.source = "Reports/Booking/BookingReportPage.qml"
         }
         function onAdmin() {
             console.log("Clicked on Admin")

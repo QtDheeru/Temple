@@ -3,15 +3,17 @@ import QtQuick.Layouts 1.13
 import QtQuick.Controls 2.14
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Controls 1.4
-import "./components"
-//import ReportElements 1.0
+import "../../components"
+import ReportElements 1.0
 Rectangle{
-    id:_rr1
+    id:_root
     anchors.fill: parent
+    property alias model : lv1.model
+    property var styles : MyStyles{}
+
     signal loadMenuPage();
     signal loadDateWiseBookingPage();
-    property var styles : MyStyles{}
-    property alias model : lv1.model
+    signal back()
     TableView{
         id: lv1
         model: sevaProxy.sevaReport.bookReportModel
@@ -40,11 +42,7 @@ Rectangle{
                 color: styleData.selected ? "skyblue" : styleData.row%2 ? "light gray" : "white"
                 Text {
                     anchors.fill: parent
-                    //   anchors.centerIn: parent
                     text: styleData.value
-                    //                    horizontalAlignment: styleData.column === 0? Text.AlignLeft:Text.AlignRight
-                    //                    verticalAlignment: Qt.AlignVCenter
-
                     font.pixelSize: 14
                 }
             }
@@ -52,65 +50,51 @@ Rectangle{
 
         TableViewColumn {
             id:_name;title: "Name"; role: "name";
-            width: leftpart.width/7.1
+            width: _root.width/7.1
             movable: false
             resizable: false
         }
         TableViewColumn {
             id:_gothra;title: "Gothra"; role: "gothra";
-            width: leftpart.width/7.1
+            width: _root.width/7.1
             horizontalAlignment: Text.AlignRight
             movable: false
             resizable: false}
         TableViewColumn {
             id:_nakshatra;title: "Nakshatra"; role: "nakshatra";
-            width: leftpart.width/7.1
+            width: _root.width/7.1
             movable: false
             resizable: false}
         TableViewColumn {
             id:_sevaName;title: "Seva Name"; role: "sevaName";
-            width: leftpart.width/7.1
+            width: _root.width/7.1
             movable: false
             resizable: false}
 
         TableViewColumn {
             id:_sevaDate;title: "Seva Date"; role: "sDate";
-            width: leftpart.width/7.1
+            width: _root.width/7.1
             movable: false
             resizable: false}
 
         TableViewColumn {
             id:_teerthaPrasada;title: "SevaCount"; role: "sevaCount";
-            width: leftpart.width/7.1
+            width: _root.width/7.1
             movable: false
             resizable: false
-            //            delegate: Rectangle{
-            //                id:_teerthaPrasadadel
-            //                height:20
-            //                color: styleData.row%2 ? "light gray":"white"
-            //                Text {
-            //                    anchors.fill: parent
-            //                    text: styleData.value
-            //                    horizontalAlignment:Text.AlignHCenter
-            //                    // padding: _cost.width/3
-            //                    verticalAlignment: Qt.AlignVCenter
-
-            //                    font.pixelSize: 14
-            //                }
-            //            }
         }
 
 
         TableViewColumn {
             id:_mobileNumber;title: "Mobile Number"; role: "mobileNumber";
-            width: leftpart.width/7.1
+            width: _root.width/7.1
             movable: true
             resizable: true}
 
 
         TableViewColumn {
             id:_note;title: "Note"; role: "note";
-            width: leftpart.width/7.1
+            width: _root.width/7.1
             movable: true
             resizable: true}
 
@@ -187,81 +171,16 @@ Rectangle{
         }
     }
 
-
-    //  }
-    //    Rectangle{
-    //        id:_footer
-    //        width: _rr1.width
-    //        height:  styles.screenHeight/15
-    //        anchors.bottom: _rr1.bottom
-    //        Rectangle{
-    //            id:_grandTotalText
-    //            width: parent.width/2
-    //            height: parent.height
-    //            color: "#72FFFF"
-    //            Text {
-    //                text:"Grand Total :" //+ sevaProxy.sevaReport.accReportModel.grandTotal
-    //                anchors.centerIn: parent
-    //                font.pixelSize: styles.headerTextFont1
-    //                font.italic: true
-    //                font.bold : true
-    //            }
-    //        }
-    //        Rectangle{
-    //            width: parent.width/2
-    //            height: parent.height
-    //            anchors.left: _grandTotalText.right
-    //            color: "#72FFFF"
-    //            //  color: "Black"
-    //            Text {
-    //                id:total
-    //                text:sevaProxy.sevaReport.accReportModel.grandTotal + ".00 ₹"
-    //                anchors.centerIn: parent
-    //                font.pixelSize: 30
-    //                font.italic: true
-    //                font.bold : true
-    //                Component.onCompleted: {
-    //                    console.log("In Component.onCompleted: of seva report page single date total text "+total.text)
-    //                    //  total.text = sevaProxy.sevaReport.accReportModel.grandTotal + ".00 ₹"
-
-    //                }
-    //            }
-    //        }
-    //    }
-
     Keys.onEscapePressed: {
         console.log("Esc pressed in SevaAccountReportForSingleDate ")
-        //sendReportDateRangeImputAgain();
-        // sevaProxy.sevaReport.resetAccDateRangeModel();
-        if(isSingleDateSelected)
-        {
-            loadMenuPage();
-        }
-        else{
-            loadDateWiseBookingPage();
-        }
+        back();
     }
 
     Component.onCompleted:  {
         console.log("Component.completed: of SevaAccountReportForSingleDate.qml")
-        _rr1.focus = true
-
-        //        sevaProxy.sevaReport.accReportModel.setGrandTotalToZero();
-        //sevaProxy.sevaReport.resetAccModel();
+        _root.focus = true
     }
     Component.onDestruction: {
         console.log(" Component.onDestruction of SevaAccountReportForSingleDate.qml")
-        // resetAccModel();
-        //          _rr1.focus = false
-
-        sevaProxy.sevaReport.resetBookingDateRangeModel();
     }
-    //    Connections
-    //    {
-    //        target: sevaProxy.sevaReport.accReportModel
-    //        function onGrandTotalChanged()
-    //        {
-    //          total.text = sevaProxy.sevaReport.accReportModel.grandTotal + ".00 ₹"
-    //        }
-    //    }
 }
