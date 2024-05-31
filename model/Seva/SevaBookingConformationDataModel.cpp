@@ -179,7 +179,7 @@ bool SevaBookingConformationDataModel::saveReceipt(MySevaReceipt *rec)
     this->m_sevaReceipt->setBookingStatus(rec->bookingStatus());
     this->m_sevaReceipt->setNote(rec->note());
     this->m_sevaReceipt->setPaymentMode(rec->paymentMode());
-    if ( DBInterface::getInstance()->saveData(this)) {
+    if (!DBInterface::getInstance()->saveData(this)) {
         qWarning() << Q_FUNC_INFO << " Danger - Saving the receipt failed...RNo=" << m_sevaReceipt->receiptNo() << Qt::endl;
         return false;
     }
