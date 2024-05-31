@@ -3,7 +3,33 @@
 
 MySevaReceipt::MySevaReceipt(QObject *parent) : QObject(parent)
 {
+    qDebug() << Q_FUNC_INFO << " Constructed =" << Qt::endl;
+}
 
+MySevaReceipt::~MySevaReceipt()
+{
+    qDebug() << Q_FUNC_INFO << " Destroyed =" << this->receiptNo();
+}
+
+void MySevaReceipt::clear()
+{
+    this->setReceiptNo("");
+    this->setDevoteeName("");
+    this->setMobilenumber("");
+    this->setNakshtra("");
+    this->setAddress("");
+    this->setGothra("");
+    this->setReceiptDate("");
+    this->setMomento("");
+    this->setBookedBy("");
+    this->setReference("");
+    this->setBank("");
+    this->setCash("");
+    this->setNote("");
+    this->setCheckOrTranscationId("");
+    this->setSevatime("");
+    this->setPaymentMode("");
+    this->setBookingStatus("");
 }
 
 QString MySevaReceipt::receiptNo() const

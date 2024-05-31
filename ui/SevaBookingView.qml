@@ -125,8 +125,10 @@ Rectangle{
         id : _paymentDialog
         onPaymentComplete: {
             console.log("Payment is completed. Store the Seva details in Data Store..")
+            // if (!saveFullReceipt()){
+            //     return;
+            // }
             _sevaContoller.bookingComplete();
-            saveFullReceipt();
             sevaProxy.printReceipt();
             resetBaseScreen();
             paymentOver();
@@ -173,6 +175,23 @@ Rectangle{
         }
     }
 
+    DisplayDialog {
+        id : _errorDialog3
+        visible: false
+        function showError(message){
+            _errorDialog3.visible = true;
+            _errorDialog3.text2Display = message
+            _errorDialog3.open();
+        }
+        onYesAction: {
+            sevaProxy.getNextReceiptNumber();
+            _errorDialog3.close()
+        }
+        onNoAction: {
+            _errorDialog3.close()
+        }
+    }
+
     Component{
         id : sevaReceiptComp
         SevaReceipt{}
@@ -208,11 +227,12 @@ Rectangle{
         console.log(" Nakshatra ="+_personal.nakshatra)
         console.log(" Gotra ="+_personal.gotra)
         var sevaReceipt = buildSevaReceipt();
-        var b = sevaProxy.saveReceipt(sevaReceipt);
-        if(b === false) {
-            errorOccur("Cannot store seva receipt details into db");
+        var isSaveSuccess = sevaProxy.saveReceipt(sevaReceipt);
+        if(isSaveSuccess === false) {
+            _errorDialog3.showError("Seva Not Stored \n Receipt = "+_personal.receiptNumber);
         }
         sevaReceipt.destroy();
+        return isSaveSuccess;
     }
     function saveOnlySeva() {
         printSevaObject();
@@ -340,6 +360,9 @@ Rectangle{
             if (_sevaP.sevaCount == 0){
                 console.log(" No sevas Booked. Please add Seva");
                 _errorDialog.showError("Sevas Not added. Please Add Seva");
+                return;
+            }
+            if (!saveFullReceipt()){
                 return;
             }
             //saveOnlySeva();// Don't add seva to list as it is not confirmed
