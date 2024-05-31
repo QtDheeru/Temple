@@ -26,6 +26,8 @@ class MySevaReceipt : public QObject
     Q_PROPERTY(QString bookingStatus READ bookingStatus WRITE setBookingStatus NOTIFY bookingStatusChanged)
 public:
     explicit MySevaReceipt(QObject *parent = nullptr);
+    ~MySevaReceipt();
+    void clear();
 
     QString receiptNo() const;
     void setReceiptNo(const QString &receiptNo);
@@ -124,7 +126,6 @@ private :
     QString m_checkOrTranscationId;
     QString m_note;
     QString m_paymentMode;
-
 };
 
 #endif // MYSEVARECEIPT_H

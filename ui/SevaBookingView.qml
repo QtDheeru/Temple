@@ -62,7 +62,8 @@ Rectangle{
                     Layout.rightMargin: root.height/100
                     Layout.fillWidth: true
                     PersonalDetails{
-                        id: _personal;Layout.fillWidth: true
+                        id: _personal;
+                        Layout.fillWidth: true
                         receiptNumber: sevaProxy.receiptNumber
                         KeyNavigation.tab: _sevaDate
                         Layout.alignment: Qt.AlignTop
@@ -124,8 +125,10 @@ Rectangle{
         id : _paymentDialog
         onPaymentComplete: {
             console.log("Payment is completed. Store the Seva details in Data Store..")
+            // if (!saveFullReceipt()){
+            //     return;
+            // }
             _sevaContoller.bookingComplete();
-            saveFullReceipt();
             sevaProxy.printReceipt();
             resetBaseScreen();
             paymentOver();
@@ -171,8 +174,27 @@ Rectangle{
             _timer.start();
         }
     }
-    SevaReceipt{
-        id : _sevaReceipt
+
+    DisplayDialog {
+        id : _errorDialog3
+        visible: false
+        function showError(message){
+            _errorDialog3.visible = true;
+            _errorDialog3.text2Display = message
+            _errorDialog3.open();
+        }
+        onYesAction: {
+            sevaProxy.getNextReceiptNumber();
+            _errorDialog3.close()
+        }
+        onNoAction: {
+            _errorDialog3.close()
+        }
+    }
+
+    Component{
+        id : sevaReceiptComp
+        SevaReceipt{}
     }
     Loader{
         id : _ld
@@ -204,12 +226,13 @@ Rectangle{
         console.log(" Mobile ="+_personal.mobileNo)
         console.log(" Nakshatra ="+_personal.nakshatra)
         console.log(" Gotra ="+_personal.gotra)
-        buildSevaReceipt();
-        var b = sevaProxy.saveReceipt(_sevaReceipt);
-        if(b === false)
-        {
-            errorOccur("Cannot store seva receipt details into db");
+        var sevaReceipt = buildSevaReceipt();
+        var isSaveSuccess = sevaProxy.saveReceipt(sevaReceipt);
+        if(isSaveSuccess === false) {
+            _errorDialog3.showError("Seva Not Stored \n Receipt = "+_personal.receiptNumber);
         }
+        sevaReceipt.destroy();
+        return isSaveSuccess;
     }
     function saveOnlySeva() {
         printSevaObject();
@@ -246,6 +269,7 @@ Rectangle{
         _sevaD.resetPartial();
     }
     function buildSevaReceipt() {
+        var _sevaReceipt = sevaReceiptComp.createObject();
         _sevaReceipt.receiptNo = _personal.receiptNumber.trim();
         _sevaReceipt.devoteeName = _personal.devoteeName.trim();
         _sevaReceipt.mobileNo = _personal.mobileNo.trim();
@@ -264,6 +288,7 @@ Rectangle{
         _sevaReceipt.bookingStatus =_paymentDialog.status
         _sevaReceipt.onlineRef =  _paymentDialog.paymentObject.checkOrTransactionId.trim()
         _sevaReceipt.note = _paymentDialog.paymentObject.note
+        return _sevaReceipt;
     }
     function disableControls(){
         _sevaContoller.setButtons(false);
@@ -335,6 +360,9 @@ Rectangle{
             if (_sevaP.sevaCount == 0){
                 console.log(" No sevas Booked. Please add Seva");
                 _errorDialog.showError("Sevas Not added. Please Add Seva");
+                return;
+            }
+            if (!saveFullReceipt()){
                 return;
             }
             //saveOnlySeva();// Don't add seva to list as it is not confirmed
@@ -418,6 +446,7 @@ Rectangle{
     }
     Component.onCompleted: {
         console.log("Component.onCompleted: of seva booking view",dgothra,dNakshtra)
+        sevaProxy.getNextReceiptNumber();
         _personal.setGothras(sevaProxy.getGothras());
         _personal.setNakshatras(sevaProxy.getNakshatras());
         _personal.setNakshatraCombo(dNakshtra)

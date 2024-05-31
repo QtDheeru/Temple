@@ -158,6 +158,7 @@ void SevaBookingConformationDataModel::saveReceiptDetails(QString receiptNumber,
 bool SevaBookingConformationDataModel::saveReceipt(MySevaReceipt *rec)
 {
     qDebug() << Q_FUNC_INFO << Qt::endl;
+    m_sevaReceipt->clear();
     this->m_sevaReceipt->setReceiptNo(rec->receiptNo());
     this->m_sevaReceipt->setDevoteeName(rec->devoteeName());
     this->m_sevaReceipt->setGothra(rec->gothra());
@@ -178,7 +179,10 @@ bool SevaBookingConformationDataModel::saveReceipt(MySevaReceipt *rec)
     this->m_sevaReceipt->setBookingStatus(rec->bookingStatus());
     this->m_sevaReceipt->setNote(rec->note());
     this->m_sevaReceipt->setPaymentMode(rec->paymentMode());
-    DBInterface::getInstance()->saveData(this);
+    if (!DBInterface::getInstance()->saveData(this)) {
+        qWarning() << Q_FUNC_INFO << " Danger - Saving the receipt failed...RNo=" << m_sevaReceipt->receiptNo() << Qt::endl;
+        return false;
+    }
     this->m_dataWriter->saveData(this);
     return true;
 }

@@ -105,7 +105,6 @@ QAbstractItemModel *SevaViewProxy::getBookedView()
 
 bool SevaViewProxy::resetBookView()
 {
-    this->getNextReceiptNumber();
     m_sevaBookingModelData->resetBookingProgressModel();
     return true;
 }
