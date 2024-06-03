@@ -2181,21 +2181,23 @@ bool DBInterface::saveData(QObject *obj)
     if(rec->paymentMode()=="Cash"){
         rec->setBank("");
     }
-    // to Test ---------
-    QSqlQuery qry;
-    QString que;
-    que = ("select * from sevabooking where sevabooking.SNO = '%1';");
     QStringList recieptNumber=rec->receiptNo().split("_");
     QString rcptNo=rec->receiptNo();
-    int rcptNum=recieptNumber[2].toInt();
+    int sno=recieptNumber[2].toInt();
 
-    que = que.arg(rec->receiptNo());
+    // to Test ---------
+    QSqlQuery qry;
+    QString que = ("select * from sevabooking where sevabooking.SNO LIKE '%1';");
+    que = que.arg(sno);
     qry.prepare(que);
-    qry.exec();
+    if (!qry.exec()){
+        qWarning() << Q_FUNC_INFO << " Query Failied " << qry.lastError().text() << Qt::endl;
+        return false;
+    }
 
     if(qry.next()) {
-        qDebug() << Q_FUNC_INFO <<  "Add ####Inside if ######## =" << Qt::endl;
-        return false;
+        qDebug() << Q_FUNC_INFO <<  "Warning - Receipt = " << rcptNo << " SNO=" << sno << "Exist already" << Qt::endl;
+       return false;
     }
     // to Test --------
     QList<SevaName*> sevas = sevaData->sevabookinglist();
@@ -2209,7 +2211,7 @@ bool DBInterface::saveData(QObject *obj)
                                    QString::number(seva->count()),rec->receiptDate(),
                                    seva->sevaStartDate(),rec->note(),
                                    seva->sevaName(),(seva->sevaCost()*seva->count())+seva->additionalCost(),
-                                   rcptNum,rec->cash(),
+                                   sno,rec->cash(),
                                    rec->paymentMode(),rec->bank(),
                                    QString("%1").arg(seva->sevaType()),
                                    rec->checkOrTranscationId(),rec->bookingStatus(),rec->address(),rec->momento(),QString("%1").arg(seva->sevaStartTime()));

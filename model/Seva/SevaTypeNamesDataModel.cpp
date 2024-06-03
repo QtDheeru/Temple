@@ -251,6 +251,5 @@ bool SevaTypeNamesDataModel::saveReceiptDetails(QString recNumber, QString devNa
 
 bool SevaTypeNamesDataModel::saveReceipt(MySevaReceipt *receipt)
 {
-    this->m_sevaBookingModel->saveReceipt(receipt);
-    return true;
+    return this->m_sevaBookingModel->saveReceipt(receipt);
 }
