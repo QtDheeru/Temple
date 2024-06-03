@@ -92,23 +92,30 @@ void BookingReportModel::generateBookReport(ReportFilterElements *elm)
     beginResetModel();
     m_bookingReportQryList.clear();
     endResetModel();
+    qDebug()<<Q_FUNC_INFO<<m_bookingReportQryList.size()<<Qt::endl;
+    qDebug()<<Q_FUNC_INFO<<Qt::endl;
+    qDebug()<<"Selected Type "<< elm->iSelectedType()<<Qt::endl;
+    qDebug()<<"Selected Month "<< elm->sMonth().toInt()<<Qt::endl;
+    qDebug()<<"Selected Year "<< elm->sYear().toInt()<<Qt::endl;
+    qDebug()<<"Selected date "<< elm->sSingleDate()<<Qt::endl;
+
     switch(elm->iSelectedType()){
     case  ReportEnums::SINGLE_DATE_REPORT:{
-        qDebug() << Q_FUNC_INFO << " Generate the Single Date Report " << Qt::endl;
-        // convert the date from dd-mm-yyyy format to yyyy-mm-dd. DB expects this.
+        qDebug()<<Q_FUNC_INFO<<"Inside c date book rep 0"<<Qt::endl;
         elm->setSSingleDate(FormatDate(elm->sSingleDate()));
+        qDebug()<<Q_FUNC_INFO<<"elm->setSSingleDate(FormatDate(elm->sSingleDate()))"<<elm->sSingleDate()<<Qt::endl;
         DBInterface::getInstance()->booking_report_cdate_function(elm->sSingleDate(),elm->sSevaName(),elm->iSevaType());
         break;
     }
     case  ReportEnums::DATE_RANGE_REPORT : {
-        qDebug() << Q_FUNC_INFO << " Generate the Date Ranged Report " << Qt::endl;
+        qDebug()<<Q_FUNC_INFO<<"Inside c date book rep 1"<<Qt::endl;
         elm->setSStartDate(FormatDate(elm->sStartDate()));
         elm->setSEndDate(FormatDate(elm->sEndDate()));
         DBInterface::getInstance()->booking_report_dataRange_function(elm->sSevaName(),elm->iSevaType(),elm->sStartDate(),elm->sEndDate());
         break;
     }
     case  ReportEnums::MONTH_REPORT : {
-        qDebug() << Q_FUNC_INFO << " Generate the Month Report " << Qt::endl;
+        qDebug()<<Q_FUNC_INFO<<"Inside c date book rep 2"<<Qt::endl;
         DBInterface::getInstance()->booking_report_cmonth_function(elm->sSevaName(),elm->iSevaType(),elm->sMonth().toInt(),elm->sYear().toInt());
         break;
     }
@@ -119,6 +126,9 @@ void BookingReportModel::generateBookReport(ReportFilterElements *elm)
 QString BookingReportModel::FormatDate(QString unformat)
 {
     qDebug()<<Q_FUNC_INFO<<unformat<<Qt::endl;
+    QDate date1 = QDate::fromString(unformat,"yyyy-MM-dd");
+    if (date1.isValid()) return unformat;
+
     QString format;
     QDate Date = QDate::fromString(unformat,"dd-MM-yyyy");
     qDebug()<<Q_FUNC_INFO<<Date<<Qt::endl;

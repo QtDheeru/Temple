@@ -201,7 +201,7 @@ Rectangle{
         console.log(" Component.onDestruction of SevaBookingReportOnDateRange.qml")
     }
     Keys.onEscapePressed: {
-        console.log("Esc pressed in  seva booking report on Date Range page"+isAllSel)
+        console.log("Esc pressed in  seva booking report on Date Range page")
         back();
     }
     DisplayDialog {

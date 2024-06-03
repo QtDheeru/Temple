@@ -1,8 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.13
-import QtQuick.Controls 2.14
+import QtQuick.Controls 2.15
 import QtQuick.Controls.Styles 1.4
-import QtQuick.Controls 1.4
 import "../../components"
 import ReportElements 1.0
 Rectangle{
@@ -66,10 +65,10 @@ Rectangle{
                 id : _bookingReportStackView
                 height: parent.height
                 width: parent.width
-                // pushEnter: Transition { XAnimator { duration: 0 } }
-                // pushExit: Transition { XAnimator { duration: 0 } }
-                // popEnter: Transition { XAnimator { duration: 0 } }
-                // popExit: Transition { XAnimator { duration: 0 } }
+                pushEnter: Transition { XAnimator { duration: 0 } }
+                pushExit: Transition { XAnimator { duration: 0 } }
+                popEnter: Transition { XAnimator { duration: 0 } }
+                popExit: Transition { XAnimator { duration: 0 } }
             }
 
             DisplayDialog {
@@ -88,32 +87,13 @@ Rectangle{
         }
     }
 
-    function loadAllSevaDetailsOnADay(accountElement){
-        console.log( " ***** Print Details of Seva on Day = " + accountElement.date);
-        var filterObj = reportFilterComp.createObject();
-        filterObj.bSevawise = _bookitems.seWise
-        filterObj.bDatewise = _bookitems.dtWise
-        filterObj.iSelectedType = ReportEnums.SINGLE_DATE_REPORT;
-        filterObj.reportType = ReportEnums.DETAIL_REPORT
-        filterObj.sevaType = accountElement.sevaTypeName;
-        filterObj.iSevaType = accountElement.sevaType;
-        filterObj.sSevaName = accountElement.sevaName;
-        filterObj.sSingleDate = accountElement.date
-        filterObj.sStartDate = "null"
-        filterObj.sEndDate = "null"
-        filterObj.sMonth = "null"
-        filterObj.sYear = "null"
-        filterObj.reportGenerationSource = accountElement.reportGenerationSource
-        generateReport(filterObj);
-    }
-
     function loadDaySummary(accountElement){
         console.log(" ***** Print Summary of Seva on Day = " + accountElement.date);
         var filterObj = reportFilterComp.createObject();
         filterObj.bSevawise = _bookitems.seWise
         filterObj.bDatewise = _bookitems.dtWise
-        filterObj.iSelectedType = ReportEnums.DATE_RANGE_REPORT;
-        filterObj.reportType = ReportEnums.DETAIL_REPORT
+        filterObj.iSelectedType = ReportEnums.SINGLE_DATE_REPORT;
+        filterObj.reportType = ReportEnums.SUMMARY_REPORT
         filterObj.iSevaType = _bookitems.iSevType;
         filterObj.sSevaName = _bookitems.sevNam
         filterObj.sSingleDate = accountElement.date
@@ -132,7 +112,7 @@ Rectangle{
         filterObj.bSevawise = _bookitems.seWise
         filterObj.bDatewise = _bookitems.dtWise
         filterObj.iSelectedType = ReportEnums.MONTH_REPORT;
-        filterObj.reportType = ReportEnums.DETAIL_REPORT
+        filterObj.reportType = ReportEnums.SUMMARY_REPORT
         filterObj.iSevaType = _bookitems.iSevType
         filterObj.sSevaName = _bookitems.sevNam
         filterObj.sSingleDate = "null"
@@ -153,36 +133,9 @@ Rectangle{
         }
         switch(filterObject.reportType)
         {
-        case ReportEnums.DETAIL_REPORT :
-            console.log(filterObject + " Generate report filter object")
-            _root.generateDetailsReport(filterObject)
-            break;
         case ReportEnums.SUMMARY_REPORT:
             console.log(filterObject + " Generate report filter object")
             _root.generateSummaryReport(filterObject);
-            break;
-        }
-    }
-
-    function generateDetailsReport(filterObject){
-        var selectionType = filterObject.iSelectedType;
-        console.log(" Start Generating the Details report =" + selectionType)
-        switch(selectionType){
-        case ReportEnums.SINGLE_DATE_REPORT: {
-             sevaProxy.sevaReport.generateBookReport(filterObject)
-             var item = _bookingReportStackView.push("qrc:/ui/Reports/Booking/AllBookingDetails.qml");
-             item.back.connect(_root.adjustStackView);
-             break;
-        }
-        case ReportEnums.DATE_RANGE_REPORT:
-            sevaProxy.sevaReport.generateBookingReportForEachDate(filterObject)
-            var item3 = _bookingReportStackView.push("qrc:/ui/Reports/Booking/AllBookingDetails.qml");
-            item3.back.connect(_root.adjustStackView);
-            break;
-        case ReportEnums.MONTH_REPORT:
-            sevaProxy.sevaReport.generateBookReport(filterObject)
-            var item2 = _bookingReportStackView.push("qrc:/ui/Reports/Booking/AllBookingDetails.qml");
-            item2.back.connect(_root.adjustStackView);
             break;
         }
     }
@@ -194,7 +147,6 @@ Rectangle{
         case ReportEnums.SINGLE_DATE_REPORT: {
              sevaProxy.sevaReport.generateBookReport(filterObject);
              var item = _bookingReportStackView.push("qrc:/ui/Reports/Booking/SevaBookingReportForSingleDate.qml");
-             // item.loadSevaDetails.connect(_root.loadAllSevaDetailsOnADay)
              item.back.connect(_root.adjustStackView);
              break;
         }
