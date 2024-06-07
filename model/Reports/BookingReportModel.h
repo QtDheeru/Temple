@@ -23,7 +23,7 @@ public:
 
     bool insertSevaRow(BookingReportElement *elm);
     void generateBookReport(ReportFilterElements*);
-    QString FormatDate(QString);
+    QString formatDate(QString);
     void resetBookingModel();
     Q_INVOKABLE int getBookingReportQryListSize();
     Q_INVOKABLE void generateBookingReportCSV(); //Suman N

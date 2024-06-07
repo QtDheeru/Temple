@@ -25,6 +25,7 @@ public:
     void writeToCsvFormate(SevaBookingElement* sr);                             //Suman N
 
 signals:
+    void successMessage(QString exportmsg);
 
 public slots:
     void recieveBookingReportList( QList<BookingReportElement*>);               //Suman N
@@ -33,7 +34,8 @@ private:
     QList<MySevaReceipt*> m_sevaReceiptList;
     static int m_addHeader;
     QFile m_file;
-    QString fileName;
+    QString m_fileName;
+    const QString msg= "Export completed";
 };
 
 #endif // SEVARECEIPTCSVPROCESSOR_H

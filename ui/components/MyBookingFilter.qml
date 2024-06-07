@@ -4,10 +4,8 @@ import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.3
 import ReportElements 1.0
 Rectangle {
-    id :_rootReportFilter
-    //width: parent.width
+    id :root
     property var styles : MyStyles{}
-    //height: styles.firstRowHeight;//150
     property int subComponentHeight : height/20
     property int subComponentPixelSize : styles.fontSize
     property var currentSevaType
@@ -21,11 +19,24 @@ Rectangle {
     property alias  yr: _rip.sYear
     property alias  isRangeDateSelected: _rangeSelectedRadio.checked
     property alias  isSingleDateSelected: _selectDateRadio.checked
-    //property alias  repItm: _rip
+
+    property string defaultSevaName : "All";
+    property int defaultSevaType : 0
+    property string fileName : "MyBookinhgFilter.qml"
+
+    property int dETAIL_REPORT  : ReportEnums.DETAIL_REPORT
+    property int sUMMARY_REPORT : ReportEnums.SUMMARY_REPORT
+
     property alias isAllselected:_month._data
     property var currentmonth
     property var currentyear
     // property alias repEle: _rip
+
+    signal reportFilterChanged(var filterObject)
+    signal singleDateReportFilterChanged(var filterObject)
+    signal rangeDateReportFilterChanged(var filterObject)
+    signal monthReportFilterChanged(var filterObject)
+
     signal dateRangeSelected();
     signal monthWiseSelected();
     //color: "lightblue"
@@ -52,7 +63,7 @@ Rectangle {
         //Layout.alignment: Qt.AlignTop
         Rectangle{
             Layout.preferredWidth: parent.width -5
-            Layout.preferredHeight:_rootReportFilter.subComponentHeight*1.5
+            Layout.preferredHeight:root.subComponentHeight*1.5
             color: "#00A2ED"
             border.width: 1
             border.color: "black"
@@ -65,17 +76,17 @@ Rectangle {
                 Layout.leftMargin: 10
                 RadioButton {
                     id: _sevawise
-                    Layout.preferredHeight: _rootReportFilter.subComponentHeight;
-                    Layout.preferredWidth: _rootReportFilter.width/2
-                    font.pixelSize:  _rootReportFilter.subComponentPixelSize
+                    Layout.preferredHeight: root.subComponentHeight;
+                    Layout.preferredWidth: root.width/2
+                    font.pixelSize:  root.subComponentPixelSize
                     text: "Seva wise"
                     checked: true
                 }
                 RadioButton {
                     id: _datewise
-                    Layout.preferredHeight: _rootReportFilter.subComponentHeight;
-                    Layout.preferredWidth: _rootReportFilter.width/2
-                    font.pixelSize:  _rootReportFilter.subComponentPixelSize
+                    Layout.preferredHeight: root.subComponentHeight;
+                    Layout.preferredWidth: root.width/2
+                    font.pixelSize:  root.subComponentPixelSize
                     text: "Date wise"
                     visible: false
                     checked: false
@@ -84,7 +95,7 @@ Rectangle {
         }
         Rectangle{
             Layout.preferredWidth: parent.width -5
-            Layout.preferredHeight: (_rootReportFilter.subComponentHeight+_comboboxLayout.spacing + _sevatypeCheck.height)*2.3
+            Layout.preferredHeight: (root.subComponentHeight+_comboboxLayout.spacing + _sevatypeCheck.height)*2.3
             color: "#00A2ED"
             border.width: 1
             border.color: "black"
@@ -93,19 +104,19 @@ Rectangle {
                 id: _comboboxLayout
                 width: parent.width
                 height:  parent.height/1.1
-                spacing: _rootReportFilter.subComponentHeight/4
+                spacing: root.subComponentHeight/4
                 CheckBox{
                     id:_sevatypeCheck
                     checked: true
                     text: qsTr("All Seva Types")
-                    font.pixelSize:  _rootReportFilter.subComponentPixelSize
+                    font.pixelSize:  root.subComponentPixelSize
                     Layout.alignment: Qt.AlignLeft
                     Layout.leftMargin:   parent.width*0.33
                     onCheckedChanged: {
                         if(checked==false)
                         {
                             _rip.iSevaType=  currentSevaType;
-                            console.log("SevaType unchecked")
+                            console.log(fileName + " SevaType unchecked")
                             _sevaType.enabled = true
                             if(_sevanameCheck.checked == false)
                                 _sevaName.enabled = true
@@ -116,7 +127,7 @@ Rectangle {
                         else
                         {
                             _rip.iSevaType=  0;
-                            console.log("SevaType checked")
+                            console.log(fileName + " SevaType checked")
                             _sevaType.enabled = false
                             _sevaName.enabled = false
                             _sevanameCheck.enabled = false
@@ -127,9 +138,9 @@ Rectangle {
                 MyComboEntry{
                     id: _sevaType;
                     Layout.preferredWidth: parent.width
-                    myHeight:_rootReportFilter.subComponentHeight;
-                    myWidth: _rootReportFilter.width/1.1
-                    fontPixelSize: _rootReportFilter.subComponentPixelSize
+                    myHeight:root.subComponentHeight;
+                    myWidth: root.width/1.1
+                    fontPixelSize: root.subComponentPixelSize
                     enabled: false
                     _labelText :qsTr("Seva Type")
                 }
@@ -143,7 +154,7 @@ Rectangle {
                     id:_sevanameCheck
                     enabled: false
                     checked: true
-                    font.pixelSize:  _rootReportFilter.subComponentPixelSize
+                    font.pixelSize:  root.subComponentPixelSize
                     text: qsTr("All Seva Names")
                     Layout.alignment: Qt.AlignLeft
                     Layout.leftMargin:   parent.width*0.33
@@ -164,9 +175,9 @@ Rectangle {
                 MyComboEntry{
                     id:_sevaName;
                     Layout.preferredWidth: parent.width
-                    myHeight:_rootReportFilter.subComponentHeight;
-                    myWidth: _rootReportFilter.width/1.1
-                    fontPixelSize: _rootReportFilter.subComponentPixelSize
+                    myHeight:root.subComponentHeight;
+                    myWidth: root.width/1.1
+                    fontPixelSize: root.subComponentPixelSize
                     enabled: false
                     _labelText :qsTr("Seva Name")
                 }
@@ -175,7 +186,7 @@ Rectangle {
 
         Rectangle{
             Layout.preferredWidth: parent.width -5
-            Layout.preferredHeight: (_rootReportFilter.subComponentHeight + _singleDateLayout.spacing ) *2.5
+            Layout.preferredHeight: (root.subComponentHeight + _singleDateLayout.spacing ) *2.5
             color: "#00A2ED"
             border.width: 1
             border.color: "black"
@@ -188,16 +199,16 @@ Rectangle {
                 RadioButton{
                     ButtonGroup.group: radioGroup
                     id : _selectDateRadio
-                    Layout.preferredHeight: _rootReportFilter.subComponentHeight;
+                    Layout.preferredHeight: root.subComponentHeight;
                     Layout.preferredWidth: parent.width
-                    font.pixelSize:  _rootReportFilter.subComponentPixelSize
+                    font.pixelSize:  root.subComponentPixelSize
                     text: "Select Date"
                     checked: true
                     onCheckedChanged: {
                         if(checked==false)
-                            r1.enabled = false
+                            _rowSelectDate.enabled = false
                         else{
-                            r1.enabled = true
+                            _rowSelectDate.enabled = true
                             _rip.iSelectedType = 0
 
                         }
@@ -211,12 +222,12 @@ Rectangle {
                     }
                 }
                 MyDateEntry{
-                    id:r1;
+                    id:_rowSelectDate;
                     enabled: true
                     Layout.preferredWidth: parent.width
-                    myHeight:_rootReportFilter.subComponentHeight;
-                    myWidth: _rootReportFilter.width/1.1
-                    fontPixelSize: _rootReportFilter.subComponentPixelSize
+                    myHeight:root.subComponentHeight;
+                    myWidth: root.width/1.1
+                    fontPixelSize: root.subComponentPixelSize
                     _labelText:qsTr(" Select Date")
                 }
             }
@@ -224,7 +235,7 @@ Rectangle {
 
         Rectangle{
             Layout.preferredWidth: parent.width -5
-            Layout.preferredHeight: (_rootReportFilter.subComponentHeight +_rangeDateLayout.spacing)*3.5
+            Layout.preferredHeight: (root.subComponentHeight +_rangeDateLayout.spacing)*3.5
             color: "#00A2ED"
             border.width: 1
             border.color: "black"
@@ -236,37 +247,37 @@ Rectangle {
                 RadioButton{
                     ButtonGroup.group: radioGroup
                     id: _rangeSelectedRadio
-                    Layout.preferredHeight: _rootReportFilter.subComponentHeight;
+                    Layout.preferredHeight: root.subComponentHeight;
                     Layout.preferredWidth: parent.width
-                    font.pixelSize:  _rootReportFilter.subComponentPixelSize
+                    font.pixelSize:  root.subComponentPixelSize
                     text: "Select Date Range"
                     checked: false
                     onCheckedChanged: {
                         if(checked==false){
-                            r2.enabled = false
-                            r3.enabled = false
+                            _rowStartDate.enabled = false
+                            _rowEndDate.enabled = false
                         }
                         else{
-                            r2.enabled = true
-                            r3.enabled = true
+                            _rowStartDate.enabled = true
+                            _rowEndDate.enabled = true
                             _rip.iSelectedType = 1
                         }
                     }
                 }
                 MyDateEntry{
-                    id:r2;
+                    id:_rowStartDate;
                     enabled: false
-                    myHeight:_rootReportFilter.subComponentHeight;
-                    myWidth: _rootReportFilter.width/1.1
-                    fontPixelSize: _rootReportFilter.subComponentPixelSize
+                    myHeight:root.subComponentHeight;
+                    myWidth: root.width/1.1
+                    fontPixelSize: root.subComponentPixelSize
                     _labelText:qsTr(" Start Date")
                 }
                 MyDateEntry{
-                    id:r3;
+                    id:_rowEndDate;
                     enabled: false
-                    myHeight:_rootReportFilter.subComponentHeight;
-                    myWidth: _rootReportFilter.width/1.1
-                    fontPixelSize: _rootReportFilter.subComponentPixelSize
+                    myHeight:root.subComponentHeight;
+                    myWidth: root.width/1.1
+                    fontPixelSize: root.subComponentPixelSize
                     _labelText:qsTr("End Date")
                 }
             }
@@ -274,7 +285,7 @@ Rectangle {
 
         Rectangle{
             Layout.preferredWidth: parent.width -5
-            Layout.preferredHeight: (_rootReportFilter.subComponentHeight +_rangeDateLayout.spacing)*3.5
+            Layout.preferredHeight: (root.subComponentHeight +_rangeDateLayout.spacing)*3.5
             color: "#00A2ED"
             border.width: 1
             border.color: "black"
@@ -286,9 +297,9 @@ Rectangle {
                 RadioButton{
                     ButtonGroup.group: radioGroup
                     id: _monthYearRadio
-                    Layout.preferredHeight: _rootReportFilter.subComponentHeight;
+                    Layout.preferredHeight: root.subComponentHeight;
                     Layout.preferredWidth: parent.width
-                    font.pixelSize:  _rootReportFilter.subComponentPixelSize
+                    font.pixelSize:  root.subComponentPixelSize
                     text: "Select Month Year"
                     checked: false
                     onCheckedChanged: {
@@ -314,17 +325,17 @@ Rectangle {
                             //                            _rip.sSingleDate =  "null"
                             //                            _rip.sStartDate =  "null"
                             //                            _rip.sEndDate = "null"
-                            console.log("_month.currentIndex+1 "+_month.currentIndex+1)
-                            console.log("_year._data "+_year._data)
+                            console.log(fileName + " _month.currentIndex+1 "+_month.currentIndex+1)
+                            console.log(fileName + " _year._data "+_year._data)
                         }
                     }
                 }
                 MyComboEntry{
                     id:_month;
                     Layout.preferredWidth: parent.width
-                    myHeight:_rootReportFilter.subComponentHeight;
-                    myWidth: _rootReportFilter.width/1.1
-                    fontPixelSize: _rootReportFilter.subComponentPixelSize
+                    myHeight:root.subComponentHeight;
+                    myWidth: root.width/1.1
+                    fontPixelSize: root.subComponentPixelSize
                     enabled: false
                     _labelText :qsTr("Month")
                     _dataModel:["January","February","March","April","May","June","July","August","September","October","November","December","All"]
@@ -332,9 +343,9 @@ Rectangle {
                 MyComboEntry{
                     id:_year;
                     Layout.preferredWidth: parent.width
-                    myHeight:_rootReportFilter.subComponentHeight;
-                    myWidth: _rootReportFilter.width/1.1
-                    fontPixelSize: _rootReportFilter.subComponentPixelSize
+                    myHeight:root.subComponentHeight;
+                    myWidth: root.width/1.1
+                    fontPixelSize: root.subComponentPixelSize
                     enabled: false
                     _labelText :qsTr("Year")
                     _dataModel:["2015","2016","2017","2018","2019","2020","2021","2022","2023","2024","2025","2026","2027","2028","2029","2030"]
@@ -344,145 +355,47 @@ Rectangle {
         Button{
             id:_button
             text: "Generate Report"
-            font.pixelSize: _rootReportFilter.subComponentPixelSize
+            font.pixelSize: root.subComponentPixelSize
             font.bold: true
             Layout.preferredWidth: parent.width-20
-            Layout.preferredHeight: _rootReportFilter.subComponentHeight;
+            Layout.preferredHeight: root.subComponentHeight;
             Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
             onClicked: {
-                if((_rip.sMonth==="13")&&(_monthYearRadio.checked))
-                {
-                    console.log("rip.sMonth===All")
+                root.collectCurrentFilterOptions(sUMMARY_REPORT);
+                // if((_rip.sMonth==="13")&&(_monthYearRadio.checked))
+                // {
+                //     console.log("rip.sMonth===All")
 
-                    sendBookingReportMonthRangeInput(_rip)
-                    bookingMonthWiseSelected();
-                    if(sevaProxy.sevaReport.bookingReportMonthWiseModel.getBookingReportMonthWiseQryListSize()===0)
-                    {
-                        console.log("sevaProxy.sevaReport.bookingReportMonthWiseModel.getBookingReportMonthWiseQryListSize()===0")
-                        sendError("No Reports for this Year");
-                    }
-                }
-
-                if(_rangeSelectedRadio.checked == true)
-                {
-                    console.log("---------a----------------")
-                    var date1 = Date.fromLocaleString(Qt.locale(), r2.selecteddate, "dd-MM-yyyy")
-                    var date2 = Date.fromLocaleString(Qt.locale(), r3.selecteddate, "dd-MM-yyyy")
-
-                    console.log("comparing dates : " +date1 +" "+date2)
-                    if(date1 > date2)
-                        _errorDialog.showError("Date Range Invalid")
-                    else
-                    {
-                        console.log("---------b----------------")
-                        _rip.bSevawise = _sevawise.checked
-                        _rip.bDatewise = _datewise.checked
-                        _rip.sSingleDate =  "null"
-                        _rip.sStartDate =  r2.selecteddate
-                        _rip.sEndDate = r3.selecteddate
-
-                        sendBookingReportDateRangeInput(_rip)
-                        if((sevaProxy.sevaReport.bookingReportDateRangeModel.getBookingReportDateRangeQryList()===0))
-                        {
-                            console.log("---------b2----------------")
-                            console.log(" sevaProxy.sevaReport.bookingReportDateRangeModel.getBookingReportDateRangeQryList()===0)")
-                            sendError("No Reports for this Date Range");
-                        }
-                    }
-                    //  _load.source = "SevaAccountReportOnDateRange.qml"
-                    //dateRangeSelected();
-                    bookingDateRangeSelected();
-                }
-                //else
-                if( _selectDateRadio.checked)
-                {
-                    console.log("---------c----------------")
-                    _rip.bSevawise = _sevawise.checked
-                    _rip.bDatewise = _datewise.checked
-                    _rip.sSingleDate = r1.selecteddate
-                    _rip.sStartDate =  "null"
-                    _rip.sEndDate = "null"
-                    console.log("  _rip.sSingleDate 1 "+ _rip.sSingleDate)
-                    console.log("-------------------------------------")
-
-                    console.log("-------------------------------------")
-                    sendBookReportInput(_rip)
-                    // loadSingleDatePage();
-                    if(sevaProxy.sevaReport.bookReportModel.getBookingReportQryListSize()===0)
-                    {
-                        console.log("sevaProxy.sevaReport.bookReportModel.getBookingReportQryListSize()===0")
-                        sendError("No Reports for this Date");
-
-                    }
-                    console.log("-------------------------------------")
-                }
-                if(( _rip.sMonth!="13")&&(_monthYearRadio.checked))
-                {
-                    console.log("I am hereeee")
-                    _rip.bSevawise = _sevawise.checked
-                    _rip.bDatewise = _datewise.checked
-                    _rip.sSingleDate = r1.selecteddate
-                    _rip.sStartDate =  "null"
-                    _rip.sEndDate = "null"
-                    // sendReportInput(_rip)
-                    //loadDateWisePage();
-                    console.log("---------11----------------")
-                    loadDateWiseBookingPage();
-                    console.log("---------12----------------")
-                    // sendReportDateRangeInputForWholeMonth(_rip)
-
-                    sendBookingReportDateRangeInputForWholeMonth(_rip)
-                    if((sevaProxy.sevaReport.bookingReportDateRangeModel.getBookingReportDateRangeQryList()===0))
-                    {
-                        console.log("sevaProxy.sevaReport.bookingReportDateRangeModel.getBookingReportDateRangeQryList()===0)")
-
-                        sendError("No Reports for this Month & Year");
-                    }
-                }
-                //                if(sevaProxy.sevaReport.accReportModel.getAccountReportQryListSize()===0)
-                //                {
-                //                    console.log("---------d----------------")
-                //                    tot = sevaProxy.sevaReport.accReportModel.grandTotal + ".00 ₹"
-                //                }
-                //                else{
-                //                    console.log("---------e----------------")
-                //                    tot = sevaProxy.sevaReport.accReportModel.grandTotal + ".00 ₹"
-                //                }
+                //     sendBookingReportMonthRangeInput(_rip)
+                //     bookingMonthWiseSelected();
+                //     if(sevaProxy.sevaReport.bookingReportMonthWiseModel.getBookingReportMonthWiseQryListSize()===0)
+                //     {
+                //         console.log("sevaProxy.sevaReport.bookingReportMonthWiseModel.getBookingReportMonthWiseQryListSize()===0")
+                //         sendError("No Reports for this Year");
+                //     }
+                // }
             }
         }
     }
     function clearData(){
-        console.log(" Clear all the selection")
+        console.log(fileName + " Clear all the selection")
         // r4.clearData()
     }
     Component.onCompleted: {
-        console.log(" Trying to get the list category")
+        console.log(fileName + " Trying to get the list category ")
 
         if( sevaProxy.getSevaTypeModel()===null)
         {
-            errorOccur("seva type model not found");
+            errorOccur(fileName + "seva type model not found");
         }
         else{
+          console.log(fileName + " get list from sevaType model ")
             _sevaType._dataModel = sevaProxy.getSevaTypeModel()
             _sevaType._dataModelRole = "sevaTypeName"
 
             _sevaName._dataModel = sevaProxy.getSevaModel(0);
             _sevaName._dataModelRole = "SevaName"
-            _rip.iSevaType=  0;
-            _rip.sSevaName=  "All";
-            _rip.iSelectedType = 0
-            _rip.sSingleDate =  Qt.formatDate(new Date(), "dd-MM-yyyy")
-            // sevaProxy.sevaReport.generateAccReport(_rip)
-            var li =  _rip.sSingleDate.split("-");
-            //console.log("******** "+li[2]+"-"+li[1]+"-"+li[0])
-            // _rip.sSingleDate = li[2]+"-"+li[1]+"-"+li[0]
-            console.log("  _rip.sSingleDate 2"+ _rip.sSingleDate)
-            sevaProxy.sevaReport.generateBookReport(_rip)
-            if(sevaProxy.sevaReport.bookReportModel.getBookingReportQryListSize()===0)
-            {
-                console.log("Component.completed:if of mft.qml")
-                sendError("No Reports for today");
-            }
+            collectCurrentFilterOptions(ReportEnums.SUMMARY_REPORT);
         }
     }
     DisplayDialog {
@@ -510,7 +423,7 @@ Rectangle {
             _rip.iSevaType=  i.model.sevaTypeId
             currentSevaType =  _rip.iSevaType
             _sevaName._dataModel = sevaProxy.getSevaModel(i.model.sevaTypeId);
-            console.log("Seva type selected in report filter : "+_rip.iSevaType)
+            console.log(fileName + " Seva type selected in report filter : "+_rip.iSevaType)
         }
     }
 
@@ -520,7 +433,7 @@ Rectangle {
 
             _rip.sSevaName=  i.model.SevaName
             currentSevaName = _rip.sSevaName
-            console.log("Seva name selected : "+_rip.sSevaName)
+            console.log(fileName + " Seva name selected : "+_rip.sSevaName)
         }
     }
     Connections{
@@ -528,7 +441,7 @@ Rectangle {
         function onIndexChanged(i){
 
             _rip.iSevaType=  i.model.sevaTypeId
-            console.log(_rip.iSevaType)
+            console.log(fileName + " SevaType : " + _rip.iSevaType)
         }
     }
 
@@ -539,7 +452,7 @@ Rectangle {
         }
         function onMonthChanged(mon){
             _rip.sMonth = mon
-            console.log("Selected month"+ _rip.sMonth)
+            console.log(fileName + " Selected month"+ _rip.sMonth)
         }
     }
     Connections{
@@ -549,10 +462,63 @@ Rectangle {
         }
         function onYearChanged(yr){
             _rip.sYear = yr
-            console.log(" bookings Selected year"+ _rip.sYear)
+            console.log(fileName + " bookings Selected year"+ _rip.sYear)
         }
     }
     ButtonGroup { id: radioGroup }
 
+    function collectCurrentFilterOptions(typeOfReport) {
+        _rip.reset();
+        _rip.reportType = typeOfReport;
+        _rip.reportGenerationSource = ReportEnums.CLICK_ON_LEFT_SELECTION;
+        if (_sevatypeCheck.checked == true){
+            // Report for all seva types & all seva names.
+            _rip.iSevaType = root.defaultSevaType
+            _rip.sSevaName = root.defaultSevaName
+        } else if (_sevanameCheck.checked == true) {
+             // Report for all seva for selected seva type
+            _rip.sevaType = _sevaType._enteredText;
+            _rip.iSevaType = _sevaType.currentIndex;
+            _rip.sSevaName = root.defaultSevaName
+        } else {
+            _rip.iSevaType = _sevaType.currentIndex;
+            _rip.sevaType = _sevaType._enteredText;
+            _rip.sSevaName = _sevaName._enteredText;
+            _rip.sevaNameIndex = _sevaName.currentIndex
+        }
+
+        _rip.bSevawise = _sevawise.checked
+        _rip.bDatewise = _datewise.checked
+        if (_selectDateRadio.checked){
+            console.log(fileName + " Single Date Selection ")
+            _rip.iSelectedType = ReportEnums.SINGLE_DATE_REPORT;
+            _rip.sSingleDate = _rowSelectDate.selecteddate
+            _rip.sStartDate = "null"
+            _rip.sEndDate = "null"
+            _rip.sMonth = "null"
+            _rip.sYear = "null"
+        }
+
+        if (_rangeSelectedRadio.checked){
+            console.log(fileName + " Date Range Selection ")
+            _rip.iSelectedType = ReportEnums.DATE_RANGE_REPORT;
+            _rip.sSingleDate = "null"
+            _rip.sStartDate = _rowStartDate.selecteddate
+            _rip.sEndDate = _rowEndDate.selecteddate
+            _rip.sMonth = "null"
+            _rip.sYear = "null"
+        }
+
+        if (_monthYearRadio.checked){
+            console.log(fileName + " Month Selection ")
+            _rip.iSelectedType = ReportEnums.MONTH_REPORT;
+            _rip.sSingleDate = "null";
+            _rip.sStartDate = "null"
+            _rip.sEndDate = "null"
+            _rip.sMonth = _month.currentIndex+1
+            _rip.sYear = _year._enteredText
+        }
+        reportFilterChanged(_rip);
+    }
 
 }

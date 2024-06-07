@@ -3,18 +3,21 @@ import QtQuick.Layouts 1.13
 import QtQuick.Controls 2.14
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Controls 1.4
-import "./components"
+import "../../components"
 import ReportElements 1.0
 Rectangle{
-    id:_rr1
+    id:_root
     signal loadSingleDatePage(string obj);
     signal loadSingleDateBookingPage(string obj);
     signal loadMonthWiseBookingPage();
     signal loadMenuPage();
+    signal generateReportForDate(var reportElement);
+    signal back();
     property var styles : MyStyles{}
+    property string fileName: "SevaBookingReportOnDateRage.qml";
     // color: "yellow"
     TableView{
-        id: lv1
+        id: _modelTableView
         model: sevaProxy.sevaReport.bookingReportDateRangeModel
         width:parent.width
         height: parent.height - styles.screenHeight/15
@@ -33,7 +36,7 @@ Rectangle{
                 }
             }
             rowDelegate: Rectangle {
-                id:r1
+                id: _modelRow
                 height:20
                 // z:5
                 color: styleData.selected ? "skyblue"  : "white"
@@ -44,37 +47,27 @@ Rectangle{
                     acceptedButtons: Qt.LeftButton
                     propagateComposedEvents: true
                     onClicked: {
-                        lv1.selection.clear()
-                        lv1.currentRow = styleData.row
-                        lv1.selection.select(styleData.row)
-                        console.log("mouse clicked left styleData.selected "+styleData.selected)
-                        // clear any other selected row
-
-                        // select this row
-                        // styleData.selected = true
-                        //                    color= styleData.selected ? "skyblue" : "white"
-                        console.log("clicked cell in table view ",lv1.currentRow)
-
-                        // convert mouse position from delegate to tableview coordinates
-                        var coordinates = r1.mapToItem(lv1, mouse.x, mouse.y);
-                        console.log("clicked cell in table view coordinates = ",coordinates)
-
-                        //   active and click the appropriate items (internal)
-                        var clickIndex = lv1.__listView.indexAt(0, coordinates.y + lv1.__listView.contentY)
-                        console.log("clicked cell in table view clickIndex = ",clickIndex)
+                        _modelTableView.selection.clear()
+                        _modelTableView.currentRow = styleData.row
+                        _modelTableView.selection.select(styleData.row)
+                        console.log(fileName + " mouse clicked left styleData.selected "+styleData.selected)
+                        console.log(fileName + " clicked cell in table view ",_modelTableView.currentRow)
+                        var coordinates = _modelRow.mapToItem(_modelTableView, mouse.x, mouse.y);
+                        console.log(fileName + " clicked cell in table view coordinates = ",coordinates)
+                        var clickIndex = _modelTableView.__listView.indexAt(0, coordinates.y + _modelTableView.__listView.contentY)
+                        console.log(fileName + " clicked cell in table view clickIndex = ",clickIndex)
                         if (clickIndex > -1) {
-                            if (lv1.__activateItemOnSingleClick) lv1.activated(clickIndex)
-                            lv1.clicked(clickIndex)
+                            if (_modelTableView.__activateItemOnSingleClick) _modelTableView.activated(clickIndex)
+                            _modelTableView.clicked(clickIndex)
                         }
-                        //       consume the mouse event
                         mouse.accepted = true
-
                         if (mouse.button === Qt.LeftButton)
                         {
-                            console.log("Left "+lv1.currentRow)
-                            var obj = sevaProxy.sevaReport.bookingReportDateRangeModel.getBookingReportDateRangeElementAt(lv1.currentRow);
-                            console.log("/////////////////////////////"+obj.date)
-                            loadSingleDateBookingPage(obj.date);
+                            console.log(fileName + " Left "+_modelTableView.currentRow)
+                            var accountElement = sevaProxy.sevaReport.bookingReportDateRangeModel.getBookingReportDateRangeElementAt(_modelTableView.currentRow);
+                            console.log(fileName + " model object "+accountElement.date);
+                            accountElement.reportGenerationSource = ReportEnums.CLICK_ON_REPORT;
+                            generateReportForDate(accountElement);
                         }
                     }
                 }
@@ -102,19 +95,19 @@ Rectangle{
             }
         }
         onClicked: {
-            console.log("clicked cell in table view ",row)
+            console.log(fileName + " clicked cell in table view ",row)
             //        var rowItem =  (sevaProxy.sevaBSearchModel).index(row)
             selectedRow = row
             //        (sevaProxy.sevaBSearchModel)
             //         if (mouse.button == Qt.RightButton)
             {
-                console.log("clicked cell in table view ",row)
+                console.log(fileName + " clicked cell in table view ",row)
             }
 
         }
         TableViewColumn {
             id:_slNo;title: "Sl No"; role: "SlNo";
-            width: _rr1.width/6.1
+            width: _root.width/6.1
 
             movable: false
             resizable: false
@@ -136,7 +129,7 @@ Rectangle{
         }
         TableViewColumn {
             id:_sevaName;title: "Date"; role: "date";
-            width: (_rr1.width-_slNo.width)/2.1
+            width: (_root.width-_slNo.width)/2.1
 
             movable: false
             resizable: true
@@ -157,7 +150,7 @@ Rectangle{
         }
         TableViewColumn {
             id:_cost;title: "Total Seva Count"; role: "totalSevaCount";
-            width: (_rr1.width-_slNo.width)/2.1
+            width: (_root.width-_slNo.width)/2.1
             horizontalAlignment: Text.AlignLeft
             movable: false
             resizable: true
@@ -181,8 +174,8 @@ Rectangle{
         id:_exportCsv
         height:60
         width: 200
-        anchors.top: lv1.bottom
-        anchors.horizontalCenter: lv1.horizontalCenter
+        anchors.top: _modelTableView.bottom
+        anchors.horizontalCenter: _modelTableView.horizontalCenter
         style: ButtonStyle{
             background: Rectangle{
                 id: bg
@@ -196,77 +189,28 @@ Rectangle{
             }
         }
         onClicked: {
-            console.log("export data clicked")
+            console.log(fileName + " export data clicked")
             sevaProxy.sevaReport.bookReportModel.generateBookingReportCSV()
         }
     }
-    //    Rectangle{
-    //        id:_footer
-    //        width: _rr1.width
-    //        height: styles.screenHeight/15
-    //        anchors.bottom: _rr1.bottom
-    //        Rectangle{
-    //            id:_grandTotalText
-    //            width: parent.width/2
-    //            height: parent.height
-    //            color: "#72FFFF"
-    //            Text {
-    //                text:"Grand Total :" //+ sevaProxy.sevaReport.accReportModel.grandTotal
-    //                anchors.centerIn: parent
-    //                font.pixelSize: styles.headerTextFont1
-    //                font.italic: true
-    //                font.bold : true
-    //            }
-    //        }
-    //        Rectangle{
-    //            width: parent.width/2
-    //            height: parent.height
-    //            anchors.left: _grandTotalText.right
-    //            color: "#72FFFF"
-    //            Text {
-    //                id:total
-    //                text:sevaProxy.sevaReport.accountReportDateRangeModel.grandTotal + ".00 ₹"
-    //                anchors.centerIn: parent
-    //                font.pixelSize: 30
-    //                font.italic: true
-    //                font.bold : true
-    //            }
-    //        }
-    //    }
-    //    ReportFilterItems{
-    //        id:_rip
-    //    }
 
     Component.onCompleted:  {
-        console.log("Component.completed: of SevaBookingReportOnDateRange.qml")
+        console.log(fileName + " Component.completed: of SevaBookingReportOnDateRange.qml")
         forceActiveFocus();
-        // sevaProxy.sevaReport.resetAccDateRangeModel();
-        //sevaProxy.sevaReport.generateAccReportForEachDate(obj);
     }
     Component.onDestruction: {
-        console.log(" Component.onDestruction of SevaBookingReportOnDateRange.qml")
-        // resetAccModel();
-        // sevaProxy.sevaReport.resetAccDateRangeModel();
+        console.log(fileName + " Component.onDestruction of SevaBookingReportOnDateRange.qml")
     }
     Keys.onEscapePressed: {
-        console.log("Esc pressed in  seva booking report on Date Range page"+isAllSel)
-        //  loadMenuPage();
-        if((!isRangeDateSelected)&&(isAllSel==="All"))
-        {
-            console.log("Esc pressed in  seva booking report on Date Range page loadMonthWisePage()")
-            loadMonthWiseBookingPage()
-        }
-        else{
-            console.log("Esc pressed in  seva booking report on Date Range page loadMenuPage();")
-            loadMenuPage();
-        }
+        console.log(fileName + " Esc pressed in  seva booking report on Date Range page")
+        back();
     }
     DisplayDialog {
         id :_errorDialog
         visible: false
         width: 600
         function showError(message){
-            console.log("Show eroor")
+            console.log(fileName + " Show eroor")
             _errorDialog.visible = true
             _errorDialog.text2Display = message
             _errorDialog.open();
@@ -274,14 +218,6 @@ Rectangle{
         }
         onNoAction: {
             _errorDialog.close()
-        }
-    }
-    Connections{
-        id:_connection
-        target:sevaProxy.sevaReport.bookReportModel
-        onSuccessMessage:{
-            console.log("OnSuccess Message");
-            _errorDialog.showError(exportmsg)
         }
     }
 }
