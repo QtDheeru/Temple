@@ -102,15 +102,15 @@ void BookingReportModel::generateBookReport(ReportFilterElements *elm)
     switch(elm->iSelectedType()){
     case  ReportEnums::SINGLE_DATE_REPORT:{
         qDebug()<<Q_FUNC_INFO<<"Inside c date book rep 0"<<Qt::endl;
-        elm->setSSingleDate(FormatDate(elm->sSingleDate()));
-        qDebug()<<Q_FUNC_INFO<<"elm->setSSingleDate(FormatDate(elm->sSingleDate()))"<<elm->sSingleDate()<<Qt::endl;
+        elm->setSSingleDate(formatDate(elm->sSingleDate()));
+        qDebug()<<Q_FUNC_INFO<<"elm->setSSingleDate(formatDate(elm->sSingleDate()))"<<elm->sSingleDate()<<Qt::endl;
         DBInterface::getInstance()->booking_report_cdate_function(elm->sSingleDate(),elm->sSevaName(),elm->iSevaType());
         break;
     }
     case  ReportEnums::DATE_RANGE_REPORT : {
         qDebug()<<Q_FUNC_INFO<<"Inside c date book rep 1"<<Qt::endl;
-        elm->setSStartDate(FormatDate(elm->sStartDate()));
-        elm->setSEndDate(FormatDate(elm->sEndDate()));
+        elm->setSStartDate(formatDate(elm->sStartDate()));
+        elm->setSEndDate(formatDate(elm->sEndDate()));
         DBInterface::getInstance()->booking_report_dataRange_function(elm->sSevaName(),elm->iSevaType(),elm->sStartDate(),elm->sEndDate());
         break;
     }
@@ -123,7 +123,7 @@ void BookingReportModel::generateBookReport(ReportFilterElements *elm)
     }
 }
 
-QString BookingReportModel::FormatDate(QString unformat)
+QString BookingReportModel::formatDate(QString unformat)
 {
     qDebug()<<Q_FUNC_INFO<<unformat<<Qt::endl;
     QDate date1 = QDate::fromString(unformat,"yyyy-MM-dd");

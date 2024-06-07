@@ -116,7 +116,7 @@ Rectangle {
                         if(checked==false)
                         {
                             _rip.iSevaType=  currentSevaType;
-                            console.log("SevaType unchecked")
+                            console.log(fileName + " SevaType unchecked")
                             _sevaType.enabled = true
                             if(_sevanameCheck.checked == false)
                                 _sevaName.enabled = true
@@ -127,7 +127,7 @@ Rectangle {
                         else
                         {
                             _rip.iSevaType=  0;
-                            console.log("SevaType checked")
+                            console.log(fileName + " SevaType checked")
                             _sevaType.enabled = false
                             _sevaName.enabled = false
                             _sevanameCheck.enabled = false
@@ -206,9 +206,9 @@ Rectangle {
                     checked: true
                     onCheckedChanged: {
                         if(checked==false)
-                            r1.enabled = false
+                            _rowSelectDate.enabled = false
                         else{
-                            r1.enabled = true
+                            _rowSelectDate.enabled = true
                             _rip.iSelectedType = 0
 
                         }
@@ -222,7 +222,7 @@ Rectangle {
                     }
                 }
                 MyDateEntry{
-                    id:r1;
+                    id:_rowSelectDate;
                     enabled: true
                     Layout.preferredWidth: parent.width
                     myHeight:root.subComponentHeight;
@@ -254,18 +254,18 @@ Rectangle {
                     checked: false
                     onCheckedChanged: {
                         if(checked==false){
-                            r2.enabled = false
-                            r3.enabled = false
+                            _rowStartDate.enabled = false
+                            _rowEndDate.enabled = false
                         }
                         else{
-                            r2.enabled = true
-                            r3.enabled = true
+                            _rowStartDate.enabled = true
+                            _rowEndDate.enabled = true
                             _rip.iSelectedType = 1
                         }
                     }
                 }
                 MyDateEntry{
-                    id:r2;
+                    id:_rowStartDate;
                     enabled: false
                     myHeight:root.subComponentHeight;
                     myWidth: root.width/1.1
@@ -273,7 +273,7 @@ Rectangle {
                     _labelText:qsTr(" Start Date")
                 }
                 MyDateEntry{
-                    id:r3;
+                    id:_rowEndDate;
                     enabled: false
                     myHeight:root.subComponentHeight;
                     myWidth: root.width/1.1
@@ -325,8 +325,8 @@ Rectangle {
                             //                            _rip.sSingleDate =  "null"
                             //                            _rip.sStartDate =  "null"
                             //                            _rip.sEndDate = "null"
-                            console.log("_month.currentIndex+1 "+_month.currentIndex+1)
-                            console.log("_year._data "+_year._data)
+                            console.log(fileName + " _month.currentIndex+1 "+_month.currentIndex+1)
+                            console.log(fileName + " _year._data "+_year._data)
                         }
                     }
                 }
@@ -378,7 +378,7 @@ Rectangle {
         }
     }
     function clearData(){
-        console.log(" Clear all the selection")
+        console.log(fileName + " Clear all the selection")
         // r4.clearData()
     }
     Component.onCompleted: {
@@ -423,7 +423,7 @@ Rectangle {
             _rip.iSevaType=  i.model.sevaTypeId
             currentSevaType =  _rip.iSevaType
             _sevaName._dataModel = sevaProxy.getSevaModel(i.model.sevaTypeId);
-            console.log("Seva type selected in report filter : "+_rip.iSevaType)
+            console.log(fileName + " Seva type selected in report filter : "+_rip.iSevaType)
         }
     }
 
@@ -433,7 +433,7 @@ Rectangle {
 
             _rip.sSevaName=  i.model.SevaName
             currentSevaName = _rip.sSevaName
-            console.log("Seva name selected : "+_rip.sSevaName)
+            console.log(fileName + " Seva name selected : "+_rip.sSevaName)
         }
     }
     Connections{
@@ -441,7 +441,7 @@ Rectangle {
         function onIndexChanged(i){
 
             _rip.iSevaType=  i.model.sevaTypeId
-            console.log(_rip.iSevaType)
+            console.log(fileName + " SevaType : " + _rip.iSevaType)
         }
     }
 
@@ -452,7 +452,7 @@ Rectangle {
         }
         function onMonthChanged(mon){
             _rip.sMonth = mon
-            console.log("Selected month"+ _rip.sMonth)
+            console.log(fileName + " Selected month"+ _rip.sMonth)
         }
     }
     Connections{
@@ -462,7 +462,7 @@ Rectangle {
         }
         function onYearChanged(yr){
             _rip.sYear = yr
-            console.log(" bookings Selected year"+ _rip.sYear)
+            console.log(fileName + " bookings Selected year"+ _rip.sYear)
         }
     }
     ButtonGroup { id: radioGroup }
@@ -490,9 +490,9 @@ Rectangle {
         _rip.bSevawise = _sevawise.checked
         _rip.bDatewise = _datewise.checked
         if (_selectDateRadio.checked){
-            console.log(" Single Date Selection ")
+            console.log(fileName + " Single Date Selection ")
             _rip.iSelectedType = ReportEnums.SINGLE_DATE_REPORT;
-            _rip.sSingleDate = r1.selecteddate
+            _rip.sSingleDate = _rowSelectDate.selecteddate
             _rip.sStartDate = "null"
             _rip.sEndDate = "null"
             _rip.sMonth = "null"
@@ -500,17 +500,17 @@ Rectangle {
         }
 
         if (_rangeSelectedRadio.checked){
-            console.log(" Date Range Selection ")
+            console.log(fileName + " Date Range Selection ")
             _rip.iSelectedType = ReportEnums.DATE_RANGE_REPORT;
             _rip.sSingleDate = "null"
-            _rip.sStartDate = r2.selecteddate
-            _rip.sEndDate = r3.selecteddate
+            _rip.sStartDate = _rowStartDate.selecteddate
+            _rip.sEndDate = _rowEndDate.selecteddate
             _rip.sMonth = "null"
             _rip.sYear = "null"
         }
 
         if (_monthYearRadio.checked){
-            console.log(" Month Selection ")
+            console.log(fileName + " Month Selection ")
             _rip.iSelectedType = ReportEnums.MONTH_REPORT;
             _rip.sSingleDate = "null";
             _rip.sStartDate = "null"

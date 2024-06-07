@@ -34,7 +34,7 @@ private:
     QList<MySevaReceipt*> m_sevaReceiptList;
     static int m_addHeader;
     QFile m_file;
-    QString fileName;
+    QString m_fileName;
     const QString msg= "Export completed";
 };
 

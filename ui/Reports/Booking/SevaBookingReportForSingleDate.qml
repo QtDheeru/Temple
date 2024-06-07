@@ -8,14 +8,15 @@ import ReportElements 1.0
 Rectangle{
     id:_root
     anchors.fill: parent
-    property alias model : lv1.model
+    property alias model : _modelTableView.model
     property var styles : MyStyles{}
+    property string fileName: "SevaBookingReportForSingleDate.qml";
 
     signal loadMenuPage();
     signal loadDateWiseBookingPage();
     signal back()
     TableView{
-        id: lv1
+        id: _modelTableView
         model: sevaProxy.sevaReport.bookReportModel
         width:parent.width
         height: parent.height - styles.screenHeight/15
@@ -100,8 +101,8 @@ Rectangle{
 
     }
     Row{
-        anchors.top: lv1.bottom
-        anchors.horizontalCenter: lv1.horizontalCenter
+        anchors.top: _modelTableView.bottom
+        anchors.horizontalCenter: _modelTableView.horizontalCenter
         spacing: parent.width/6
         Button{
             id:_exportCsv
@@ -122,7 +123,7 @@ Rectangle{
                 }
             }
             onClicked: {
-                console.log("export data clicked")
+                console.log(fileName + " export data clicked")
                 sevaProxy.sevaReport.bookReportModel.generateBookingReportCSV()
             }
         }
@@ -145,7 +146,7 @@ Rectangle{
                 }
             }
             onClicked: {
-                console.log("export data clicked")
+                console.log(fileName + " export data clicked")
                 sevaProxy.generateCSVSevaBookingReport()
             }
         }
@@ -172,15 +173,15 @@ Rectangle{
     }
 
     Keys.onEscapePressed: {
-        console.log("Esc pressed in SevaAccountReportForSingleDate ")
+        console.log(fileName + " Esc pressed in SevaAccountReportForSingleDate ")
         back();
     }
 
     Component.onCompleted:  {
-        console.log("Component.completed: of SevaAccountReportForSingleDate.qml")
+        console.log(fileName + " Component.completed: of SevaAccountReportForSingleDate.qml")
         _root.focus = true
     }
     Component.onDestruction: {
-        console.log(" Component.onDestruction of SevaAccountReportForSingleDate.qml")
+        console.log(fileName + " Component.onDestruction of SevaAccountReportForSingleDate.qml")
     }
 }

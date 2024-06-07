@@ -6,7 +6,7 @@ import QtQuick.Controls 1.4
 import "../../components"
 import ReportElements 1.0
 Rectangle{
-    id:_rr1
+    id:_root
     signal loadSingleDatePage(string obj);
     signal loadDateWiseForSlectedMonthPage(var obj);
     signal loadDateWiseBookingForSlectedMonthPage(var obj);
@@ -19,7 +19,7 @@ Rectangle{
 
     // color: "yellow"
     TableView{
-        id: lv1
+        id: _modelTableView
         model: sevaProxy.sevaReport.bookingReportMonthWiseModel
         width:parent.width
         height: parent.height - styles.screenHeight/15
@@ -38,22 +38,22 @@ Rectangle{
                 }
             }
             rowDelegate: Rectangle {
-                id:r1
+                id:_modelRow
                 height:20
                 MouseArea {
                     anchors.fill: parent
                     acceptedButtons: Qt.LeftButton
                     propagateComposedEvents: true
                     onClicked: {
-                        lv1.selection.clear()
-                        lv1.currentRow = styleData.row
-                        lv1.selection.select(styleData.row)
-                        console.log("mouse clicked left styleData.selected "+styleData.selected)
+                        _modelTableView.selection.clear()
+                        _modelTableView.currentRow = styleData.row
+                        _modelTableView.selection.select(styleData.row)
+                        console.log(fileName + " mouse clicked left styleData.selected "+styleData.selected)
                         mouse.accepted = true
                         if (mouse.button === Qt.LeftButton) {
-                            console.log("Left "+lv1.currentRow)
-                            var obj = sevaProxy.sevaReport.bookingReportMonthWiseModel.getBookingReportMonthRangeElementAt(lv1.currentRow);
-                            console.log("/////////////////////////////"+obj.month)
+                            console.log(fileName + " Left "+_modelTableView.currentRow)
+                            var obj = sevaProxy.sevaReport.bookingReportMonthWiseModel.getBookingReportMonthRangeElementAt(_modelTableView.currentRow);
+                            console.log(fileName + " model object "+obj.month)
                             obj.reportGenerationSource = ReportEnums.CLICK_ON_REPORT;
                             generateReportForOneMonth(obj);
                         }
@@ -75,21 +75,21 @@ Rectangle{
 
         TableViewColumn {
             id:_slNo;title: "Sl No"; role: "SlNo";
-            width: _rr1.width/8.1
+            width: _root.width/8.1
 
             movable: false
             resizable: false
         }
         TableViewColumn {
             id:_sevaName;title: "Month"; role: "month";
-            width: (_rr1.width-_slNo.width)/2.1
+            width: (_root.width-_slNo.width)/2.1
 
             movable: false
             resizable: true
         }
         TableViewColumn {
             id:_cost;title: "Total Seva Count"; role: "totalSevaCount";
-            width:  (_rr1.width-_slNo.width)/2.1
+            width:  (_root.width-_slNo.width)/2.1
             horizontalAlignment: Text.AlignLeft
             movable: false
             resizable: true
@@ -100,8 +100,8 @@ Rectangle{
         id:_exportCsv
         height:60
         width: 200
-        anchors.top: lv1.bottom
-        anchors.horizontalCenter: lv1.horizontalCenter
+        anchors.top: _modelTableView.bottom
+        anchors.horizontalCenter: _modelTableView.horizontalCenter
         style: ButtonStyle{
             background: Rectangle{
                 id: bg
@@ -115,7 +115,7 @@ Rectangle{
             }
         }
         onClicked: {
-            console.log("export data clicked")
+            console.log(fileName + " export data clicked")
             sevaProxy.sevaReport.bookReportModel.generateBookingReportCSV()
 
         }
@@ -135,14 +135,14 @@ Rectangle{
     }
 
     Component.onCompleted:  {
-        console.log("Component.completed: of SevaBookingReportMonthWise.qml")
+        console.log(fileName + " Component.completed: of SevaBookingReportMonthWise.qml")
         forceActiveFocus();
     }
     Component.onDestruction: {
-        console.log(" Component.onDestruction of SevaBookingReportMonthWise.qml")
+        console.log(fileName + " Component.onDestruction of SevaBookingReportMonthWise.qml")
     }
     Keys.onEscapePressed: {
-        console.log("Esc pressed in SevaBookingReportMonthWise")
+        console.log(fileName + "Esc pressed in SevaBookingReportMonthWise")
         back();
     }
 }

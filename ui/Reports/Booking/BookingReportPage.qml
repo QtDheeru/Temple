@@ -52,7 +52,7 @@ Rectangle{
                 color: "#576F72"
             }
             Component.onCompleted: {
-                console.log("The month and year initial",_bookitems.mnt," ",_bookitems.yr)
+                console.log(fileName + " The month and year initial",_bookitems.mnt," ",_bookitems.yr)
             }
         }
 
@@ -88,7 +88,7 @@ Rectangle{
     }
 
     function loadDaySummary(accountElement){
-        console.log(" ***** Print Summary of Seva on Day = " + accountElement.date);
+        console.log(fileName + " ***** Print Summary of Seva on Day = " + accountElement.date);
         var filterObj = reportFilterComp.createObject();
         filterObj.bSevawise = _bookitems.seWise
         filterObj.bDatewise = _bookitems.dtWise
@@ -107,7 +107,7 @@ Rectangle{
     }
 
     function loadDaySummaryForMonth(accountElement){
-        console.log(" ***** Print Summary of Seva on Day = " + accountElement.date);
+        console.log(fileName + " ***** Print Summary of Seva on Day = " + accountElement.date);
         var filterObj = reportFilterComp.createObject();
         filterObj.bSevawise = _bookitems.seWise
         filterObj.bDatewise = _bookitems.dtWise
@@ -126,7 +126,7 @@ Rectangle{
     }
 
     function generateReport(filterObject){
-        console.log(" Start Generating the booking report")
+        console.log(fileName + " Start Generating the booking report")
         filterObject.print();
         if (filterObject.reportGenerationSource === ReportEnums.CLICK_ON_LEFT_SELECTION){
             _bookingReportStackView.clear();
@@ -134,7 +134,7 @@ Rectangle{
         switch(filterObject.reportType)
         {
         case ReportEnums.SUMMARY_REPORT:
-            console.log(filterObject + " Generate report filter object")
+            console.log(fileName + " " + filterObject + " Generate report filter object")
             _root.generateSummaryReport(filterObject);
             break;
         }
@@ -142,7 +142,7 @@ Rectangle{
 
     function generateSummaryReport(filterObject){
         var selectionType = filterObject.iSelectedType;
-        console.log(" Start Generating the Summary report =" + selectionType)
+        console.log(fileName + " Start Generating the Summary report =" + selectionType)
         switch(selectionType){
         case ReportEnums.SINGLE_DATE_REPORT: {
              sevaProxy.sevaReport.generateBookReport(filterObject);
@@ -197,15 +197,15 @@ Rectangle{
     }
 
     Keys.onEscapePressed: {
-        console.log("Esc pressed in select booking report page")
+        console.log(fileName + "Esc pressed in select booking report page")
         _root.adjustStackView();
     }
     Component.onCompleted: {
-        console.log("   ")
+        console.log(fileName + " on completed")
         forceActiveFocus();
     }
     Component.onDestruction: {
-        console.log("Closing the booking report")
+        console.log(fileName + " Closing the booking report")
         resetBookingModel();
     }
 }

@@ -16,7 +16,7 @@ SevaReceiptCsvProcessor::SevaReceiptCsvProcessor(QObject *parent)
     //    }
     //    m_file.close();
     QString todayDate ="SevaBookings_"+ QDate::currentDate().toString("ddd_dd_MMM_yyyy");
-    fileName = QFileDialog::getSaveFileName(nullptr, "Save File", "" , "Text Files (*.csv)");  //Suman N added
+    m_fileName = QFileDialog::getSaveFileName(nullptr, "Save File", "" , "Text Files (*.csv)");  //Suman N added
 }
 
 SevaReceiptCsvProcessor::~SevaReceiptCsvProcessor()
@@ -30,8 +30,8 @@ int SevaReceiptCsvProcessor::m_addHeader =1;
 void SevaReceiptCsvProcessor::writeToCsvFormate(SevaBookingElement *sr)
 {
     qDebug()<<Q_FUNC_INFO<<Qt::endl;
-    if(!fileName.isEmpty()){
-        QFile file(fileName);
+    if(!m_fileName.isEmpty()){
+        QFile file(m_fileName);
         if (file.open(QIODevice::WriteOnly|QIODevice::Append))
         {
             QTextStream out(&file);
@@ -51,7 +51,7 @@ void SevaReceiptCsvProcessor::writeToCsvFormate(SevaBookingElement *sr)
                         sr->sevaDate()+","+
                         sr->quantity()+'\n';
             out<<storeData;
-            qDebug() << "File saved: " << fileName;
+            qDebug() << "File saved: " << m_fileName;
             file.close();
         }
         else
@@ -67,8 +67,8 @@ void SevaReceiptCsvProcessor::recieveBookingReportList(QList<BookingReportElemen
 {
     qDebug()<<Q_FUNC_INFO<<Qt::endl;
     int id=1;
-    if(!fileName.isEmpty()){
-        QFile file(fileName);
+    if(!m_fileName.isEmpty()){
+        QFile file(m_fileName);
         if (file.open(QIODevice::WriteOnly|QIODevice::Append))
         {
             QTextStream out(&file);
@@ -91,7 +91,7 @@ void SevaReceiptCsvProcessor::recieveBookingReportList(QList<BookingReportElemen
                 out<<storeData;
                 emit successMessage(msg);
             }
-            qDebug() << "File saved: " << fileName;
+            qDebug() << "File saved: " << m_fileName;
             file.close();
         }
         else
