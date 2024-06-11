@@ -362,40 +362,19 @@ Rectangle {
             Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
             onClicked: {
                 root.collectCurrentFilterOptions(sUMMARY_REPORT);
-                // if((_rip.sMonth==="13")&&(_monthYearRadio.checked))
-                // {
-                //     console.log("rip.sMonth===All")
+                if((_rip.sMonth==="13")&&(_monthYearRadio.checked))
+                {
+                    console.log("rip.sMonth===All")
 
-                //     sendBookingReportMonthRangeInput(_rip)
-                //     bookingMonthWiseSelected();
-                //     if(sevaProxy.sevaReport.bookingReportMonthWiseModel.getBookingReportMonthWiseQryListSize()===0)
-                //     {
-                //         console.log("sevaProxy.sevaReport.bookingReportMonthWiseModel.getBookingReportMonthWiseQryListSize()===0")
-                //         sendError("No Reports for this Year");
-                //     }
-                // }
+                    sendBookingReportMonthRangeInput(_rip)
+                    bookingMonthWiseSelected();
+                    if(sevaProxy.sevaReport.bookingReportMonthWiseModel.getBookingReportMonthWiseQryListSize()===0)
+                    {
+                        console.log("sevaProxy.sevaReport.bookingReportMonthWiseModel.getBookingReportMonthWiseQryListSize()===0")
+                        sendError("No Reports for this Year");
+                    }
+                }
             }
-        }
-    }
-    function clearData(){
-        console.log(fileName + " Clear all the selection")
-        // r4.clearData()
-    }
-    Component.onCompleted: {
-        console.log(fileName + " Trying to get the list category ")
-
-        if( sevaProxy.getSevaTypeModel()===null)
-        {
-            errorOccur(fileName + "seva type model not found");
-        }
-        else{
-          console.log(fileName + " get list from sevaType model ")
-            _sevaType._dataModel = sevaProxy.getSevaTypeModel()
-            _sevaType._dataModelRole = "sevaTypeName"
-
-            _sevaName._dataModel = sevaProxy.getSevaModel(0);
-            _sevaName._dataModelRole = "SevaName"
-            collectCurrentFilterOptions(ReportEnums.SUMMARY_REPORT);
         }
     }
     DisplayDialog {
@@ -434,6 +413,7 @@ Rectangle {
             _rip.sSevaName=  i.model.SevaName
             currentSevaName = _rip.sSevaName
             console.log(fileName + " Seva name selected : "+_rip.sSevaName)
+            checkSevaNameAndTypeStatus()
         }
     }
     Connections{
@@ -466,6 +446,29 @@ Rectangle {
         }
     }
     ButtonGroup { id: radioGroup }
+
+    function fillDefaultFilterValue(){
+        _rip.bSevawise = root.seWise
+        _rip.bDatewise = root.dtWise
+        _rip.sSingleDate = Qt.formatDate(new Date(), "dd-MM-yyyy");
+        _rip.sStartDate = "null"
+        _rip.sEndDate = "null"
+        _rip.iSelectedType = 0
+        _rip.iSevaType = root.defaultSevaType
+        _rip.sSevaName = root.defaultSevaName
+    }
+
+    function setReportFilters(date1){
+        _rip.bSevawise = root.seWise
+        _rip.bDatewise = root.dtWise
+        _rip.sSingleDate = date1;
+        _rip.sStartDate =  "null"
+        _rip.sEndDate = "null"
+        _rip.iSelectedType = 0
+        _rip.iSevaType = root.defaultSevaType
+        _rip.sSevaName = root.defaultSevaName
+        sendReportInput(_rip);
+    }
 
     function collectCurrentFilterOptions(typeOfReport) {
         _rip.reset();
@@ -521,4 +524,32 @@ Rectangle {
         reportFilterChanged(_rip);
     }
 
+    function checkSevaNameAndTypeStatus() {
+        if (_sevatypeCheck.checked == true){
+             _rip.iSevaType = 0;
+        }
+        if (_sevanameCheck.checked == true ){
+            _rip.sSevaName = defaultSevaName;
+        }
+    }
+
+    function clearData(){
+        console.log(fileName + " Clear all the selection")
+        // r4.clearData()
+    }
+
+    Component.onCompleted: {
+        console.log(fileName + " Trying to get the list category ")
+        if( sevaProxy.getSevaTypeModel()===null) {
+            errorOccur(fileName + "seva type model not found");
+        } else {
+          console.log(fileName + " get list from sevaType model ")
+            _sevaType._dataModel = sevaProxy.getSevaTypeModel()
+            _sevaType._dataModelRole = "sevaTypeName"
+
+            _sevaName._dataModel = sevaProxy.getSevaModel(0);
+            _sevaName._dataModelRole = "SevaName"
+            collectCurrentFilterOptions(ReportEnums.SUMMARY_REPORT);
+        }
+    }
 }

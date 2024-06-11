@@ -168,3 +168,29 @@ void BookingReportElement::setReportGenerationSource(const ReportEnums::REPORT_G
     m_reportGenerationSource = newReportGenerationSource;
     emit reportGenerationSourceChanged();
 }
+
+QString BookingReportElement::sevaTypeName() const
+{
+    return m_sevaTypeName;
+}
+
+void BookingReportElement::setSevaTypeName(const QString &newSevaTypeName)
+{
+    if (m_sevaTypeName == newSevaTypeName)
+        return;
+    m_sevaTypeName = newSevaTypeName;
+    emit sevaTypeNameChanged();
+}
+
+int BookingReportElement::sevaType() const
+{
+    return m_sevaType;
+}
+
+void BookingReportElement::setSevaType(int newSevaType)
+{
+    if (m_sevaType == newSevaType)
+        return;
+    m_sevaType = newSevaType;
+    emit sevaTypeChanged();
+}

@@ -60,8 +60,18 @@ public:
     ReportEnums::REPORT_GENERATION_SOURCE reportGenerationSource() const;
     void setReportGenerationSource(const ReportEnums::REPORT_GENERATION_SOURCE &newReportGenerationSource);
 
+    QString sevaTypeName() const;
+    void setSevaTypeName(const QString &newSevaTypeName);
+
+    int sevaType() const;
+    void setSevaType(int newSevaType);
+
 signals:
     void reportGenerationSourceChanged();
+
+    void sevaTypeNameChanged();
+
+    void sevaTypeChanged();
 
 private:
     int m_sNO;
@@ -69,6 +79,8 @@ private:
     QString m_gothra;
     QString m_nakshatra;
     QString m_sevaName;
+    QString m_sevaTypeName;
+    int m_sevaType;
     int  m_teerthaPrasada;
     QString m_mobileNumber;
     QString m_note;
@@ -80,6 +92,8 @@ private:
     QString m_referenceNo;
     QString m_address;
     ReportEnums::REPORT_GENERATION_SOURCE m_reportGenerationSource;
+    Q_PROPERTY(QString sevaTypeName READ sevaTypeName WRITE setSevaTypeName NOTIFY sevaTypeNameChanged FINAL)
+    Q_PROPERTY(int sevaType READ sevaType WRITE setSevaType NOTIFY sevaTypeChanged FINAL)
 };
 
 #endif // BOOKINGREPORTELEMENT_H

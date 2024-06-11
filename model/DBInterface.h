@@ -26,6 +26,7 @@
 #include "AccountFullreportElement.h"
 #include <QQmlEngine>
 #include "../DataStore/AccountReportsDBInterface.h"
+#include "../DataStore/BookingReportsDBInterface.h"
 
 //#include "voucher/VoucherFilterElements.h"
 #include "IDataWriter.h"
@@ -177,9 +178,6 @@ public slots:
     void gotra_list();
     void Checking_sevacharge(QString);
     void receipt_no_printing();
-    void booking_report_cdate_function(QString,QString,int);
-    void booking_report_dataRange_function(QString,int,QString,QString);
-    void booking_report_cmonth_function(QString,int,int,int);
     void booking_report_eachDateDataRange_function(QString,int,QString,QString);
     void booking_report_eachDateDataRangeForMonth_function(QString,int,int,int);
     void booking_report_eachMonth_function(QString SEVA,int TYPE,int month,int year);
@@ -265,6 +263,7 @@ private:
 
 private  :
     AccountReportsDBInterface *m_accountReportInterface;
+    BookingReportsDBInterface *m_bookingReportInterface;
 
 public slots :
     bool generateSingleDateReport(ReportFilterElements *elm);
@@ -273,6 +272,11 @@ public slots :
     bool generateReportForEachDateOfMonth(ReportFilterElements *elm);
     bool generateReportForEachDateInDateRange(ReportFilterElements *elm);
     bool fullAccounDetailsDateWise(ReportFilterElements *elm);
+
+    // Adding slots for booking report
+    bool generateBookingSingleDateReport(ReportFilterElements *elm);
+    bool generateBookingDateRangeReort(ReportFilterElements *elm);
+    bool generateBookingMonthReport(ReportFilterElements *elm);
 };
 
 #endif // DBFILE_H
