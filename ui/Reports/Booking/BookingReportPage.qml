@@ -94,14 +94,18 @@ Rectangle{
         filterObj.bDatewise = _bookitems.dtWise
         filterObj.iSelectedType = ReportEnums.SINGLE_DATE_REPORT;
         filterObj.reportType = ReportEnums.SUMMARY_REPORT
-        filterObj.iSevaType = _bookitems.iSevType;
-        filterObj.sSevaName = _bookitems.sevNam
+        filterObj.sevaType = accountElement.sevaTypeName;
+        filterObj.iSevaType = accountElement.sevaType;
+        filterObj.sSevaName = accountElement.sevaName;
         filterObj.sSingleDate = accountElement.date
         filterObj.sStartDate = "null"
         filterObj.sEndDate = "null"
         filterObj.sMonth = "null"
         filterObj.sYear = "null"
         filterObj.reportGenerationSource = accountElement.reportGenerationSource
+        console.log(fileName + "Seva Type Name : " + accountElement.sevaTypeName)
+        console.log(fileName + "Seva Name : " + accountElement.sevaName)
+        console.log(fileName + "Seva Type : " + accountElement.sevaType)
         console.log(fileName + "load summary for a month filter object")
         generateReport(filterObj);
     }
@@ -113,14 +117,20 @@ Rectangle{
         filterObj.bDatewise = _bookitems.dtWise
         filterObj.iSelectedType = ReportEnums.MONTH_REPORT;
         filterObj.reportType = ReportEnums.SUMMARY_REPORT
-        filterObj.iSevaType = _bookitems.iSevType
-        filterObj.sSevaName = _bookitems.sevNam
+        filterObj.sevaType = accountElement.sevaTypeName;
+        filterObj.iSevaType = accountElement.sevaType;
+        filterObj.sSevaName = accountElement.sevaName;
         filterObj.sSingleDate = "null"
         filterObj.sStartDate = "null"
         filterObj.sEndDate = "null"
         filterObj.sMonth = accountElement.month
-        filterObj.sYear = _bookitems.yr
+        filterObj.sYear = accountElement.year
         filterObj.reportGenerationSource = accountElement.reportGenerationSource
+        console.log(fileName + "Seva Type Name : " + accountElement.sevaTypeName)
+        console.log(fileName + "Seva Name : " + accountElement.sevaName)
+        console.log(fileName + "Seva Type : " + accountElement.sevaType)
+        console.log(fileName + "Month : " + accountElement.month)
+        console.log(fileName + "Year : " + accountElement.year)
         console.log(fileName + "load summary for a month filter object")
         generateReport(filterObj);
     }

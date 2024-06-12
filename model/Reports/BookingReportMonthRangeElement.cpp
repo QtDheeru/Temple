@@ -46,3 +46,81 @@ void BookingReportMonthRangeElement::setSlNo(int newSlNo)
 {
     m_slNo = newSlNo;
 }
+
+QString BookingReportMonthRangeElement::date() const
+{
+    return m_date;
+}
+
+void BookingReportMonthRangeElement::setDate(const QString &newDate)
+{
+    if (m_date == newDate)
+        return;
+    m_date = newDate;
+    emit dateChanged();
+}
+
+QString BookingReportMonthRangeElement::year() const
+{
+    return m_year;
+}
+
+void BookingReportMonthRangeElement::setYear(const QString &newYear)
+{
+    if (m_year == newYear)
+        return;
+    m_year = newYear;
+    emit yearChanged();
+}
+
+QString BookingReportMonthRangeElement::sevaTypeName() const
+{
+    return m_sevaTypeName;
+}
+
+void BookingReportMonthRangeElement::setSevaTypeName(const QString &newSevaTypeName)
+{
+    if (m_sevaTypeName == newSevaTypeName)
+        return;
+    m_sevaTypeName = newSevaTypeName;
+    emit sevaTypeNameChanged();
+}
+
+QString BookingReportMonthRangeElement::sevaName() const
+{
+    return m_sevaName;
+}
+
+void BookingReportMonthRangeElement::setSevaName(const QString &newSevaName)
+{
+    if (m_sevaName == newSevaName)
+        return;
+    m_sevaName = newSevaName;
+    emit sevaNameChanged();
+}
+
+int BookingReportMonthRangeElement::sevaType() const
+{
+    return m_sevaType;
+}
+
+void BookingReportMonthRangeElement::setSevaType(int newSevaType)
+{
+    if (m_sevaType == newSevaType)
+        return;
+    m_sevaType = newSevaType;
+    emit sevaTypeChanged();
+}
+
+ReportEnums::REPORT_GENERATION_SOURCE BookingReportMonthRangeElement::reportGenerationSource() const
+{
+    return m_reportGenerationSource;
+}
+
+void BookingReportMonthRangeElement::setReportGenerationSource(const ReportEnums::REPORT_GENERATION_SOURCE &newReportGenerationSource)
+{
+    if (m_reportGenerationSource == newReportGenerationSource)
+        return;
+    m_reportGenerationSource = newReportGenerationSource;
+    emit reportGenerationSourceChanged();
+}

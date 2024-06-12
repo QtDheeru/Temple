@@ -85,13 +85,6 @@ Rectangle{
 
                     font.pixelSize: 14
                 }
-
-                //                Rectangle{
-                //                    anchors.right: parent.right
-                //                    width:1
-                //                    color:"black"
-                //                    height:parent.height
-                //                }
             }
         }
         onClicked: {
@@ -111,21 +104,6 @@ Rectangle{
 
             movable: false
             resizable: false
-            //            delegate: Rectangle{
-            //                id:_slNodel
-            //                height:20
-            //                color: styleData.row%2 ? "light gray":"white"
-            //                Text {
-            //                  //  anchors.fill: parent
-            //                      anchors.centerIn: parent
-            //                    text: styleData.value
-            //                    horizontalAlignment:Text.AlignLeft
-            //                    padding: 5
-            //                    verticalAlignment: Qt.AlignVCenter
-
-            //                    font.pixelSize: 14
-            //                }
-            //            }
         }
         TableViewColumn {
             id:_sevaName;title: "Date"; role: "date";
@@ -133,20 +111,6 @@ Rectangle{
 
             movable: false
             resizable: true
-            //            delegate: Rectangle{
-            //                id:_sevaNamedel
-            //                height:20
-            //                color: styleData.row%2 ? "light gray":"white"
-            //                Text {
-            //                    anchors.fill: parent
-            //                    text: styleData.value
-            //                    horizontalAlignment:Text.AlignLeft
-            //                    padding: 5
-            //                    verticalAlignment: Qt.AlignVCenter
-
-            //                    font.pixelSize: 14
-            //                }
-            //            }
         }
         TableViewColumn {
             id:_cost;title: "Total Seva Count"; role: "totalSevaCount";
@@ -154,20 +118,6 @@ Rectangle{
             horizontalAlignment: Text.AlignLeft
             movable: false
             resizable: true
-            //            delegate: Rectangle{
-            //                id:_costdel
-            //                height:20
-            //                color: styleData.row%2 ? "light gray":"white"
-            //                Text {
-            //                    anchors.fill: parent
-            //                    text: styleData.value
-            //                    horizontalAlignment:Text.AlignRight
-            //                    padding: _cost.width/3
-            //                    verticalAlignment: Qt.AlignVCenter
-
-            //                    font.pixelSize: 14
-            //                }
-            //            }
         }
     }
     Button{

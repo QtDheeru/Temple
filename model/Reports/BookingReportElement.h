@@ -79,8 +79,6 @@ private:
     QString m_gothra;
     QString m_nakshatra;
     QString m_sevaName;
-    QString m_sevaTypeName;
-    int m_sevaType;
     int  m_teerthaPrasada;
     QString m_mobileNumber;
     QString m_note;
@@ -91,6 +89,8 @@ private:
     QString m_paymntMode;
     QString m_referenceNo;
     QString m_address;
+    QString m_sevaTypeName;
+    int m_sevaType;
     ReportEnums::REPORT_GENERATION_SOURCE m_reportGenerationSource;
     Q_PROPERTY(QString sevaTypeName READ sevaTypeName WRITE setSevaTypeName NOTIFY sevaTypeNameChanged FINAL)
     Q_PROPERTY(int sevaType READ sevaType WRITE setSevaType NOTIFY sevaTypeChanged FINAL)

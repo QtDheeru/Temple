@@ -143,7 +143,7 @@ void BookingReportMonthWiseModel::generateBookingMonthRangeReport(ReportFilterEl
     if(elm->iSelectedType()==2)
     {
         qDebug()<<Q_FUNC_INFO<<"(elm->iSelectedType()==2)"<<Qt::endl;
-        DBInterface::getInstance()->booking_report_eachMonth_function(elm->sSevaName(),elm->iSevaType(),elm->sMonth().toInt(),elm->sYear().toInt());
+        DBInterface::getInstance()->generateBookingReportForAllMonths(elm);
     }
 }
 

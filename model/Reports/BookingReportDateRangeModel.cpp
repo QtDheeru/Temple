@@ -64,7 +64,7 @@ QHash<int, QByteArray> BookingReportDateRangeModel::roleNames() const
 
 bool BookingReportDateRangeModel::insertSevaRow(BookingReportDateRangeElement *elm)
 {
-    qDebug()<<Q_FUNC_INFO<<"suman insert sevaRow for report"<<Qt::endl;
+    qDebug()<<Q_FUNC_INFO<<"Insert sevaRow for report"<<Qt::endl;
     qDebug()<<Q_FUNC_INFO<<"------------"<<Qt::endl;
     beginInsertRows(QModelIndex(),m_bookingReportDateRangeQryList.size(),m_bookingReportDateRangeQryList.size());
     this->m_bookingReportDateRangeQryList.append(elm);
@@ -105,15 +105,15 @@ void BookingReportDateRangeModel::generateBookingDateRangeReport(ReportFilterEle
     //    }
     if((elm->iSelectedType()==1)&&(elm->sStartDate()=="null")&&(elm->sEndDate()=="null"))
     {
-        qDebug()<<Q_FUNC_INFO<<Qt::endl;
-        DBInterface::getInstance()->booking_report_eachDateDataRangeForMonth_function(elm->sSevaName(),elm->iSevaType(),elm->sMonth().toInt(),elm->sYear().toInt());
+        qDebug()<<Q_FUNC_INFO<<"Generating report of the month"<<Qt::endl;
+        DBInterface::getInstance()->generateBookingReportForEachDateOfMonth(elm);
     }
     else
     {
-        qDebug()<<Q_FUNC_INFO<<Qt::endl;
+        qDebug()<<Q_FUNC_INFO<<"Generating report of the selected dates"<<Qt::endl;
         elm->setSStartDate(FormatDate(elm->sStartDate()));
         elm->setSEndDate(FormatDate(elm->sEndDate()));
-        DBInterface::getInstance()->booking_report_eachDateDataRange_function(elm->sSevaName(),elm->iSevaType(),elm->sStartDate(),elm->sEndDate());
+        DBInterface::getInstance()->generateBookingReportForEachDateInDateRange(elm);
     }
 }
 
@@ -129,7 +129,7 @@ void BookingReportDateRangeModel::generateBookingDateRangeReportForWholeMonth(Re
     qDebug()<<Q_FUNC_INFO<<"elm ddetails"<<elm->sSevaName()<<elm->iSevaType()<<Qt::endl;
     qDebug()<<Q_FUNC_INFO<<"elm ddetailqqqqqqqqqqqqqqqqqs"<<elm->iSelectedType()<<Qt::endl;
 
-    DBInterface::getInstance()->booking_report_eachDateDataRangeForMonth_function(elm->sSevaName(),elm->iSevaType(),elm->sMonth().toInt(),elm->sYear().toInt());
+    DBInterface::getInstance()->generateBookingReportForEachDateOfMonth(elm);
 }
 
 QString BookingReportDateRangeModel::FormatDate(QString unformat)

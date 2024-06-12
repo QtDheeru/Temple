@@ -216,13 +216,16 @@ DBInterface::DBInterface(QObject *parent) : QObject(parent)
             this,&DBInterface::account_report);
     connect(m_accountReportInterface,&AccountReportsDBInterface::account_report_Date_Range,
             this,&DBInterface::account_report_Date_Range);
-
     connect(m_accountReportInterface,&AccountReportsDBInterface::sendFullAccountDataElement,
             this,&DBInterface::sendFullAccountDataElement);
 
     m_bookingReportInterface = new BookingReportsDBInterface(db);
     connect(m_bookingReportInterface,&BookingReportsDBInterface::booking_report,
             this,&DBInterface::booking_report);
+    connect(m_bookingReportInterface,&BookingReportsDBInterface::booking_report_Date_Range,
+            this,&DBInterface::booking_report_Date_Range);
+    connect(m_bookingReportInterface,&BookingReportsDBInterface::booking_report_Month_Range,
+            this,&DBInterface::booking_report_Month_Range);
 }
 
 bool DBInterface::generateSingleDateReport(ReportFilterElements *elm)
@@ -264,6 +267,21 @@ bool DBInterface::generateBookingDateRangeReort(ReportFilterElements *elm)
 bool DBInterface::generateBookingMonthReport(ReportFilterElements *elm)
 {
     return this->m_bookingReportInterface->generateBookingMonthReport(elm);
+}
+
+bool DBInterface::generateBookingReportForEachDateOfMonth(ReportFilterElements *elm)
+{
+    return this->m_bookingReportInterface->generateBookingReportForEachDateOfMonth(elm);
+}
+
+bool DBInterface::generateBookingReportForEachDateInDateRange(ReportFilterElements *elm)
+{
+    return this->m_bookingReportInterface->generateBookingReportForEachDateInDateRange(elm);
+}
+
+bool DBInterface::generateBookingReportForAllMonths(ReportFilterElements *elm)
+{
+    return this->m_bookingReportInterface->generateBookingReportForAllMonths(elm);
 }
 
 QString DBInterface::getError() const
@@ -1513,7 +1531,7 @@ void DBInterface::modifySeva(int sevaId, QString sevaName, int cost, QString Dat
     qDebug()<<Q_FUNC_INFO<<Qt::endl;
     QSqlQuery query;
     QString str;
-    qDebug()<<"suman--ModifysevaId--"<<sevaId<<Qt::endl;
+    qDebug()<< Q_FUNC_INFO <<"--ModifysevaId--"<<sevaId<<Qt::endl;
     str =("UPDATE sevaname SET SEVANAME = '%1',SEVACOST= '%2',SEVADATE='%3' WHERE SNO = '%4' ;");
     str= str.arg(sevaName).arg(cost).arg(Date).arg(sevaId);
     query.prepare(str);
@@ -2536,131 +2554,6 @@ void DBInterface::receipt_no_printing()
     emit get_receiptnumber(r_number);
 }
 
-void DBInterface::booking_report_eachDateDataRangeForMonth_function(QString SEVA,int TYPE ,int S_MONTH,int S_YEAR)
-{
-    qDebug() <<Q_FUNC_INFO<<"The suman monthe"<<S_MONTH<<S_YEAR<<Qt::endl;
-    QList<QString> list_name;
-    QList<int> list_ticket;
-    QList<float> list_cost,list_total;
-    QSqlQuery query_other1;
-    QString readstr;
-    if(TYPE == 0)
-    {
-        readstr = ("select SEVA_DATE,sum(QUANTITY) from sevabooking where sevabooking.S_YEAR ='%1' and sevabooking.S_MONTH ='%2' Group by sevabooking.RECEIPT_DATE;" );
-        readstr  = readstr.arg(S_YEAR).arg(S_MONTH);
-    }
-    else if (SEVA==ALLSEVANAME) {
-        readstr = ("select SEVA_DATE,sum(QUANTITY) from sevabooking where sevabooking.S_YEAR ='%1' and sevabooking.S_MONTH ='%2' and sevabooking.SEVATYPE = '%3' Group by sevabooking.RECEIPT_DATE;" );
-        readstr  = readstr.arg(S_YEAR).arg(S_MONTH).arg(TYPE);
-    }
-    else {
-        readstr = ("select SEVA_DATE,sum(QUANTITY) from sevabooking where sevabooking.S_YEAR ='%1' and sevabooking.S_MONTH ='%2' and sevabooking.SEVATYPE = '%3' and sevabooking.SEVANAME = '%4' Group by sevabooking.RECEIPT_DATE;" );
-        readstr  = readstr.arg(S_YEAR).arg(S_MONTH).arg(TYPE).arg(SEVA);
-    }
-    qDebug() << " Query string =" << readstr <<Qt::endl;
-    query_other1.prepare(readstr);
-    query_other1.exec();
-    while(query_other1.next())
-    {
-        qDebug()<<"Query in while"<<Qt::endl;
-        qDebug() << "In while of db ***************************" << readstr <<Qt::endl;
-        BookingReportDateRangeElement *ele = new   BookingReportDateRangeElement;
-        QQmlEngine::setObjectOwnership(ele, QQmlEngine::CppOwnership);
-        ele->setDate( query_other1.value(0).toString());
-        qDebug() << "In while of db ********query_other1.value(0).toString()*******************" << query_other1.value(0).toString() <<Qt::endl;
-        ele->setTotalSevaCount( query_other1.value(1).toInt());
-        qDebug() << "In while of db **********query_other1.value(1).toInt()*****************" << query_other1.value(1).toInt() <<Qt::endl;
-        emit booking_report_Date_Range(ele);
-    }
-}
-
-void DBInterface::booking_report_eachMonth_function(QString SEVA, int TYPE, int month, int year)
-{
-    qDebug() <<Q_FUNC_INFO<<Qt::endl;
-    //    QList<QString> list_name;
-    //    QList<int> list_ticket;
-    //    QList<float> list_cost,list_total;
-    //  int sum=0;
-    QSqlQuery query_other1;
-    QString que;
-    if(TYPE == 0) {
-        qDebug()<<"+__________________________________1___++++++++++________________"<<month;
-
-        que = ("select S_Month,sum(QUANTITY) from sevabooking where sevabooking.S_YEAR='%2' Group by sevabooking.S_MONTH; ");
-        que = que.arg(year);
-    }
-    else if (SEVA==ALLSEVANAME)
-    {
-
-        que = ("select S_Month,sum(QUANTITY) from sevabooking where sevabooking.S_YEAR ='%2' and sevabooking.SEVATYPE = '%3' Group by sevabooking.S_MONTH; ");
-        que = que.arg(month).arg(year).arg(TYPE);
-        qDebug()<<"+________________________________2_____++++++++++________________"<<month;
-
-    }
-    else {
-        que = ("select S_Month,sum(QUANTITY) from sevabooking where sevabooking.S_YEAR ='%2' and sevabooking.SEVATYPE = '%3' and sevabooking.SEVANAME = '%4'  Group by sevabooking.S_MONTH");
-        qDebug() <<month<<"&&&&&&&&&&&"<<year<<"&&&&&&&&&&&&&&&&&&&"<<TYPE<<"&&&&&&&&&&&&&&&&&&&"<<SEVA<<Qt::endl;
-        que = que.arg(month).arg(year).arg(TYPE).arg(SEVA);
-    }
-    qDebug() << " Query string =" << que <<Qt::endl;
-    query_other1.prepare(que);
-    query_other1.exec();
-    while(query_other1.next())
-    {
-        qDebug() << "In while of db ***************************"  <<Qt::endl;
-        BookingReportMonthRangeElement *ele = new   BookingReportMonthRangeElement;
-        QQmlEngine::setObjectOwnership(ele, QQmlEngine::CppOwnership);
-        ele->setMonth( query_other1.value(0).toString());
-        qDebug() << "In while of db ********query_other1.value(0).toString()*******************" << query_other1.value(0).toString() <<Qt::endl;
-        ele->setTotalSevaCount( query_other1.value(1).toInt());
-        qDebug() << "In while of db **********query_other1.value(1).toInt()*****************" << query_other1.value(1).toInt() <<Qt::endl;
-        //        ele->setTotalAmount(query_other1.value(2).toFloat());
-        //        qDebug() << "In while of db **************query_other1.value(2).toFloat()*************" << query_other1.value(2).toFloat() <<Qt::endl;
-        emit booking_report_Month_Range(ele);
-    }
-    //select S_Month,sum(QUANTITY),sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking wher
-}
-
-void DBInterface::booking_report_eachDateDataRange_function(QString SEVA,int TYPE ,QString seva_Startdate,QString seva_Enddate)
-{
-    qDebug() <<Q_FUNC_INFO<<Qt::endl;
-    QList<QString> list_name;
-    QList<int> list_ticket;
-    QList<float> list_cost,list_total;
-    QSqlQuery query_other1;
-    QString readstr;
-    if(TYPE == 0)
-    {
-        readstr = ("select SEVA_DATE,sum(QUANTITY) from sevabooking where sevabooking.RECEIPT_DATE between '%1' and '%2' Group by sevabooking.RECEIPT_DATE;" );
-        readstr  = readstr.arg(seva_Startdate).arg(seva_Enddate);
-    }
-    else if (SEVA==ALLSEVANAME) {
-        readstr = ("select SEVA_DATE,sum(QUANTITY) from sevabooking where sevabooking.RECEIPT_DATE between '%1' and '%2' and sevabooking.SEVATYPE = '%3' Group by sevabooking.RECEIPT_DATE;" );
-        readstr  = readstr.arg(seva_Startdate).arg(seva_Enddate).arg(TYPE);
-    }
-    else {
-        readstr = ("select SEVA_DATE,sum(QUANTITY) from sevabooking where sevabooking.RECEIPT_DATE between '%1' and '%2' and sevabooking.SEVATYPE = '%3' and sevabooking.SEVANAME = '%4' Group by sevabooking.RECEIPT_DATE;" );
-        readstr  = readstr.arg(seva_Startdate).arg(seva_Enddate).arg(TYPE).arg(SEVA);
-    }
-    qDebug() << " Query string =" << readstr <<Qt::endl;
-    query_other1.prepare(readstr);
-    query_other1.exec();
-    while(query_other1.next())
-    {
-        qDebug() << "In while of db ***************************" << readstr <<Qt::endl;
-        BookingReportDateRangeElement *ele = new   BookingReportDateRangeElement;
-        QQmlEngine::setObjectOwnership(ele, QQmlEngine::CppOwnership);
-
-        ele->setDate( query_other1.value(0).toString());
-        qDebug() << "In while of db ********query_other1.value(0).toString()*******************" << query_other1.value(0).toString() <<Qt::endl;
-        ele->setTotalSevaCount( query_other1.value(1).toInt());
-        qDebug() << "In while of db **********query_other1.value(1).toInt()*****************" << query_other1.value(1).toInt() <<Qt::endl;
-
-        emit booking_report_Date_Range(ele);
-
-    }
-}
-
 DBInterface::~DBInterface()
 {
     qDebug() <<"DBInterface Destructor is called"<<Qt::endl;
@@ -3490,7 +3383,7 @@ bool DBInterface::qrySevabookingBySevaDate(QString formatchangedcalendar_str)
         qDebug() <<Q_FUNC_INFO << query.value(6).toString()<<Qt::endl;
         qDebug() <<Q_FUNC_INFO << query.value(7).toString()<<Qt::endl;
         qDebug() <<Q_FUNC_INFO << query.value(8).toString()<<Qt::endl;
-        qDebug() <<"Suman Status" << query.value(9).toString()<<Qt::endl;
+        qDebug() <<Q_FUNC_INFO << query.value(9).toString()<<Qt::endl;
         qDebug() <<Q_FUNC_INFO << query.value(10).toString()<<Qt::endl;
         qDebug() <<Q_FUNC_INFO << query.value(11).toString()<<Qt::endl;
 
@@ -3556,7 +3449,7 @@ void DBInterface::qrySevabookingByDateRange(QString startDate, QString endDate)
         qDebug() <<Q_FUNC_INFO << query.value(6).toString()<<Qt::endl;
         qDebug() <<Q_FUNC_INFO << query.value(7).toString()<<Qt::endl;
         qDebug() <<Q_FUNC_INFO << query.value(8).toString()<<Qt::endl;
-        qDebug() <<"Suman status" << query.value(9).toString()<<Qt::endl;
+        qDebug() <<Q_FUNC_INFO << query.value(9).toString()<<Qt::endl;
 
 
         que_1 = ("select PERSONNAME,MOBILE from persondetails where persondetails.SNO='%1';");

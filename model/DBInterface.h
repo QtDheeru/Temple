@@ -137,8 +137,8 @@ signals:
     void setGrandTotalToZero();
     void dbError(QString errorMsg);
     void sendRolenumber(int rolenum,QString signInName);
-    void sendVoucheronebyone(VoucherElement*); //Suman N
-    void sendAcoountoneByone(AccountReportElement*); //Suman N
+    void sendVoucheronebyone(VoucherElement*);
+    void sendAcoountoneByone(AccountReportElement*);
     void sendFullAccountDataElement(AccountFullreportElement*);
     void sendChangedDataToSevaBookingTablemodel(QString);
     void insert_Success(QString,QString,QString);
@@ -178,9 +178,6 @@ public slots:
     void gotra_list();
     void Checking_sevacharge(QString);
     void receipt_no_printing();
-    void booking_report_eachDateDataRange_function(QString,int,QString,QString);
-    void booking_report_eachDateDataRangeForMonth_function(QString,int,int,int);
-    void booking_report_eachMonth_function(QString SEVA,int TYPE,int month,int year);
 
     void account_report_cdate_function(QString, int, QString);
     void account_report_dataRange_function(QString,int,QString,QString);
@@ -194,9 +191,9 @@ public slots:
     void voucher_report_cmonth_function(int, int, QString, QString);
     void voucher_report_dataRange_function(QString,QString,QString,QString);
 
-    void fullAccounDetailsDateWise(QString, int, QString);              //Suman
-    void fullAccounDetailsDateRangeWise(QString,int,QString,QString);   //Suman
-    void fullAccounDetailsMonthwise(QString ,int ,int ,int );           //Suman
+    void fullAccounDetailsDateWise(QString, int, QString);
+    void fullAccounDetailsDateRangeWise(QString,int,QString,QString);
+    void fullAccounDetailsMonthwise(QString ,int ,int ,int );
 
     void signin_clicked(QString, QString, int);
     void old_password(QString l_userfirstname, QString l_userlastname);
@@ -235,15 +232,15 @@ public slots:
 
     int getLastReceiptNumber();
     int getLastVoucherNumber();
-    int getLastSevatypeNumber(); //Suman N added
-    int getLastSevaNameNumber(); //suman N added
+    int getLastSevatypeNumber();
+    int getLastSevaNameNumber();
 
-    void getvoucherdata();  //Suman N added
-    void getAccountData();  //Suman N added
-    void deleteWrongData(QString rcptNum); //Suman N Added
-    void recvDeletedRecptNo(QString recptNo); //Suman N added
-    void modifySeva(int sevaId, QString sevaName,int cost,QString Date); //Suman N added
-    void closeSeva(int SevaId);                                          //Suman N added
+    void getvoucherdata();
+    void getAccountData();
+    void deleteWrongData(QString rcptNum);
+    void recvDeletedRecptNo(QString recptNo);
+    void modifySeva(int sevaId, QString sevaName,int cost,QString Date);
+    void closeSeva(int SevaId);
 
 private:
     explicit DBInterface(QObject *parent=nullptr);
@@ -277,6 +274,9 @@ public slots :
     bool generateBookingSingleDateReport(ReportFilterElements *elm);
     bool generateBookingDateRangeReort(ReportFilterElements *elm);
     bool generateBookingMonthReport(ReportFilterElements *elm);
+    bool generateBookingReportForEachDateOfMonth(ReportFilterElements *elm);
+    bool generateBookingReportForEachDateInDateRange(ReportFilterElements *elm);
+    bool generateBookingReportForAllMonths(ReportFilterElements *elm);
 };
 
 #endif // DBFILE_H

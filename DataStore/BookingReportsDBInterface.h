@@ -6,6 +6,8 @@
 #include <QSqlDatabase>
 #include "ReportFilterElements.h"
 #include "BookingReportElement.h"
+#include "BookingReportDateRangeElement.h"
+#include "BookingReportMonthRangeElement.h"
 #include "../Print/common.h"
 #include "../DevotePersnalDetails.h"
 
@@ -19,17 +21,14 @@ public:
     bool generateBookingSingleDateReport(ReportFilterElements *elm);
     bool generateBookingDateRangeReort(ReportFilterElements *elm);
     bool generateBookingMonthReport(ReportFilterElements *elm);
+    bool generateBookingReportForEachDateOfMonth(ReportFilterElements *elm);
+    bool generateBookingReportForEachDateInDateRange(ReportFilterElements *elm);
+    bool generateBookingReportForAllMonths(ReportFilterElements *elm);
 
 signals:
     void booking_report(BookingReportElement *ace);
-    // void persondetails(QString,QString,QString,QString,QString,QString);
-
-public slots:
-    // void to_persondetails_db(QString , QString , QString , QString , QString , QString , QString , QString , QString , QString );
-    // void getpersondetails(QString);
-
-    // DevotePersnalDetails* getPersonDetails(QString person_id);
-    // int insertPersonDetails(QString devoteMobile, QString devoteName, QString devoteNakshatra, QString devoteGotra,QString address);
+    void booking_report_Date_Range(BookingReportDateRangeElement *ace);
+    void booking_report_Month_Range(BookingReportMonthRangeElement *ace);
 
 private:
     int total_prasada=0;
