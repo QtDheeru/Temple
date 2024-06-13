@@ -16,7 +16,7 @@ BookingReportsDBInterface::BookingReportsDBInterface(QSqlDatabase db, QObject *p
 bool BookingReportsDBInterface::generateBookingSingleDateReport(ReportFilterElements *elm)
 {
     elm->print();
-    total_prasada=0;
+    m_totalPrasada=0;
     QString seva_name = elm->sSevaName();
     QString seva_type_string = elm->sevaType();
     int seva_type_int = elm->iSevaType();
@@ -149,7 +149,7 @@ bool BookingReportsDBInterface::generateBookingSingleDateReport(ReportFilterElem
 bool BookingReportsDBInterface::generateBookingDateRangeReort(ReportFilterElements *elm)
 {
     elm->print();
-    total_prasada=0;
+    m_totalPrasada=0;
     QString seva_name = elm->sSevaName();
     QString seva_type_string = elm->sevaType();
     int seva_type_int = elm->iSevaType();
@@ -189,11 +189,11 @@ bool BookingReportsDBInterface::generateBookingDateRangeReort(ReportFilterElemen
     while(query_other1.next())
     {
         BookingReportElement *elm = new BookingReportElement;
-        personid = query_other1.value(0).toString();
+        m_personid = query_other1.value(0).toString();
         elm->setSevaName( query_other1.value(1).toString());
-        list_sevaname.append(p_sevaname);
-        quantity = query_other1.value(2).toInt();
-        list_quantity.append(quantity);
+        list_sevaname.append(m_sevaname);
+        m_quantity = query_other1.value(2).toInt();
+        list_quantity.append(m_quantity);
         query.prepare("SELECT * FROM sevaname");
         query.exec();
         while(query.next())
@@ -202,17 +202,17 @@ bool BookingReportsDBInterface::generateBookingDateRangeReort(ReportFilterElemen
             if(val == elm->sevaName())//regular seva at 1st index in combo
             {
                 elm->setTeerthaPrasada( query.value(6).toInt());
-                list_prasada.append(prasada);
+                list_prasada.append(m_prasada);
             }
         }
 
-        prasada = prasada * quantity;
-        yy_date=QDate::fromString(query_other1.value(3).toString(),"yyyy-MM-dd");//cost
-        qDebug()<< Q_FUNC_INFO <<"DD-MM-YYYY is "<<yy_date<<Qt::endl;
-        sevadate = yy_date.toString("dd-MM-yyyy");
-        list_sevadate.append(sevadate);
+        m_prasada = m_prasada * m_quantity;
+        m_date=QDate::fromString(query_other1.value(3).toString(),"yyyy-MM-dd");//cost
+        qDebug()<< Q_FUNC_INFO <<"DD-MM-YYYY is "<<m_date<<Qt::endl;
+        m_sevadate = m_date.toString("dd-MM-yyyy");
+        list_sevadate.append(m_sevadate);
         elm->setNote(query_other1.value(5).toString());//total
-        list_note.append(note);
+        list_note.append(m_note);
 
         QSqlQuery query_other2;//person details
         query_other2.prepare("SELECT * FROM  persondetails");
@@ -220,18 +220,18 @@ bool BookingReportsDBInterface::generateBookingDateRangeReort(ReportFilterElemen
         while(query_other2.next())
         {
             QString p_id = query_other2.value(0).toString();
-            if(personid==p_id){
+            if(m_personid==p_id){
                 elm->setName(query_other2.value(1).toString());
                 elm->setGothra(query_other2.value(2).toString());
                 elm->setNakshatra(query_other2.value(3).toString());
                 elm->setMobileNumber(query_other2.value(5).toString());
-                list_pname.append(p_name);
+                list_pname.append(m_name);
                 list_gotra.append(p_gotra);
-                list_nakshatra.append(p_nakshtra);
-                list_mobile.append(p_mobile);
+                list_nakshatra.append(m_nakshtra);
+                list_mobile.append(m_mobile);
             }
         }
-        total_prasada=total_prasada+prasada;
+        m_totalPrasada= m_totalPrasada + m_prasada;
         emit booking_report(elm);
     }
 }
@@ -250,7 +250,7 @@ bool BookingReportsDBInterface::generateBookingMonthReport(ReportFilterElements 
     }
 
     qDebug()<<Q_FUNC_INFO<<"booking report month wise"<<seva_name<<seva_type_int<<month<<year<<Qt::endl;
-    total_prasada=0;
+    m_totalPrasada=0;
     QList<QString> list_sevaname,list_sevadate,list_pname,list_gotra,list_nakshatra,list_mobile,list_note;
     QList<int> list_prasada,list_quantity;
     QSqlQuery query_other1;
@@ -277,11 +277,11 @@ bool BookingReportsDBInterface::generateBookingMonthReport(ReportFilterElements 
     while(query_other1.next())
     {
         BookingReportElement *elm = new BookingReportElement;
-        personid = query_other1.value(0).toString();
+        m_personid = query_other1.value(0).toString();
         elm->setSevaName( query_other1.value(1).toString());
-        list_sevaname.append(p_sevaname);
-        quantity = query_other1.value(2).toInt();
-        list_quantity.append(quantity);
+        list_sevaname.append(m_sevaname);
+        m_quantity = query_other1.value(2).toInt();
+        list_quantity.append(m_quantity);
         query.prepare("SELECT * FROM sevaname");
         query.exec();
         while(query.next())
@@ -290,16 +290,16 @@ bool BookingReportsDBInterface::generateBookingMonthReport(ReportFilterElements 
             if(val == elm->sevaName())//regular seva at 1st index in combo
             {
                 elm->setTeerthaPrasada( query.value(6).toInt());
-                list_prasada.append(prasada);
+                list_prasada.append(m_prasada);
             }
         }
-        prasada =prasada*quantity;
-        yy_date=QDate::fromString(query_other1.value(3).toString(),"yyyy-MM-dd");//cost
-        qDebug()<< Q_FUNC_INFO <<"DD-MM-YYYY is "<<yy_date<<Qt::endl;
-        sevadate = yy_date.toString("dd-MM-yyyy") ;
-        list_sevadate.append(sevadate);
+        m_prasada = m_prasada * m_quantity;
+        m_date=QDate::fromString(query_other1.value(3).toString(),"yyyy-MM-dd");//cost
+        qDebug()<< Q_FUNC_INFO <<"DD-MM-YYYY is "<<m_date<<Qt::endl;
+        m_sevadate = m_date.toString("dd-MM-yyyy") ;
+        list_sevadate.append(m_sevadate);
         elm->setNote(query_other1.value(5).toString());//total
-        list_note.append(note);
+        list_note.append(m_note);
 
         QSqlQuery query_other2;//person details
         query_other2.prepare("SELECT * FROM  persondetails");
@@ -307,19 +307,19 @@ bool BookingReportsDBInterface::generateBookingMonthReport(ReportFilterElements 
         while(query_other2.next())
         {
             QString p_id = query_other2.value(0).toString();
-            if(personid==p_id){
+            if(m_personid==p_id){
                 elm->setName(query_other2.value(1).toString());
                 elm->setGothra(query_other2.value(2).toString());
                 elm->setNakshatra(query_other2.value(3).toString());
                 elm->setMobileNumber(query_other2.value(5).toString());
-                list_pname.append(p_name);
+                list_pname.append(m_name);
                 list_gotra.append(p_gotra);
-                list_nakshatra.append(p_nakshtra);
-                list_mobile.append(p_mobile);
+                list_nakshatra.append(m_nakshtra);
+                list_mobile.append(m_mobile);
             }
         }
 
-        total_prasada=total_prasada+prasada;
+        m_totalPrasada= m_totalPrasada + m_prasada;
         emit booking_report(elm);
     }
 }

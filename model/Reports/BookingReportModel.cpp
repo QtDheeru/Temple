@@ -94,11 +94,11 @@ void BookingReportModel::generateBookReport(ReportFilterElements *elm)
     endResetModel();
     qDebug()<<Q_FUNC_INFO<<m_bookingReportQryList.size()<<Qt::endl;
     qDebug()<<Q_FUNC_INFO<<Qt::endl;
-    qDebug()<<"Selected Type "<< elm->iSelectedType()<<Qt::endl;
-    qDebug()<<"Selected Month "<< elm->sMonth().toInt()<<Qt::endl;
-    qDebug()<<"Selected Year "<< elm->sYear().toInt()<<Qt::endl;
-    qDebug()<<"Selected date "<< elm->sSingleDate()<<Qt::endl;
-    qDebug()<<"Seva selected type"<< elm->sevaType()<<Qt::endl;
+    qDebug()<<Q_FUNC_INFO<<"Selected Type "<< elm->iSelectedType()<<Qt::endl;
+    qDebug()<<Q_FUNC_INFO<<"Selected Month "<< elm->sMonth().toInt()<<Qt::endl;
+    qDebug()<<Q_FUNC_INFO<<"Selected Year "<< elm->sYear().toInt()<<Qt::endl;
+    qDebug()<<Q_FUNC_INFO<<"Selected date "<< elm->sSingleDate()<<Qt::endl;
+    qDebug()<<Q_FUNC_INFO<<"Seva selected type"<< elm->sevaType()<<Qt::endl;
 
     switch(elm->iSelectedType()){
     case  ReportEnums::SINGLE_DATE_REPORT:{

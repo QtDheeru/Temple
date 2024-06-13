@@ -31,14 +31,13 @@ signals:
     void booking_report_Month_Range(BookingReportMonthRangeElement *ace);
 
 private:
-    int total_prasada=0;
     QSqlDatabase m_db;
-    PersonDetails *m_person;
+    int m_totalPrasada=0;
+    int m_quantity , m_prasada;
+    QString m_name, p_gotra, m_nakshtra, m_mobile, m_personid, m_sevaname, m_sevadate, m_note ;
+    QDate m_date;
+
     int  getSevaTypeID(QString seva_type_string);
-    QList<QString> l_sno,l_person_id,l_sevatype,l_sevaname,l_quantity,l_s_date,l_s_month,l_s_year ,l_sevadate,l_r_date,l_r_month,l_r_year,l_receiptdate,l_seva_cost,l_add_cost,l_total_cost,l_note;
-    QString p_name,p_gotra, p_nakshtra, p_mobile,personid,p_sevaname,sevadate,note,que ;
-    int  quantity,prasada;
-    QDate yy_date;
 };
 
 #endif // BOOKINGREPORTSDBINTERFACE_H

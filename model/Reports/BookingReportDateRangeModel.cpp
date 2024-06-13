@@ -65,7 +65,6 @@ QHash<int, QByteArray> BookingReportDateRangeModel::roleNames() const
 bool BookingReportDateRangeModel::insertSevaRow(BookingReportDateRangeElement *elm)
 {
     qDebug()<<Q_FUNC_INFO<<"Insert sevaRow for report"<<Qt::endl;
-    qDebug()<<Q_FUNC_INFO<<"------------"<<Qt::endl;
     beginInsertRows(QModelIndex(),m_bookingReportDateRangeQryList.size(),m_bookingReportDateRangeQryList.size());
     this->m_bookingReportDateRangeQryList.append(elm);
     endInsertRows();

@@ -12,6 +12,9 @@ class BookingReportDateRangeElement : public QObject
     Q_PROPERTY(QString date READ date WRITE setDate NOTIFY dateChanged)
     Q_PROPERTY(int totalSevaCount READ totalSevaCount WRITE setTotalSevaCount NOTIFY totalSevaCountChanged)
     Q_PROPERTY(QString sevaTypeName READ sevaTypeName WRITE setSevaTypeName NOTIFY sevaTypeNameChanged FINAL)
+    Q_PROPERTY(ReportEnums::REPORT_GENERATION_SOURCE reportGenerationSource READ reportGenerationSource WRITE setReportGenerationSource NOTIFY reportGenerationSourceChanged FINAL)
+    Q_PROPERTY(int sevaType READ sevaType WRITE setSevaType NOTIFY sevaTypeChanged FINAL)
+    Q_PROPERTY(QString sevaName READ sevaName WRITE setSevaName NOTIFY sevaNameChanged FINAL)
 
 public:
     explicit BookingReportDateRangeElement(QObject *parent = nullptr);
@@ -44,11 +47,8 @@ signals:
     void totalSevaCountChanged();
     void totalAmountChanged();
     void sevaTypeNameChanged();
-
     void reportGenerationSourceChanged();
-
     void sevaTypeChanged();
-
     void sevaNameChanged();
 
 private:
@@ -59,9 +59,6 @@ private:
     int m_sevaType;
     QString m_sevaName;
     ReportEnums::REPORT_GENERATION_SOURCE m_reportGenerationSource;
-    Q_PROPERTY(ReportEnums::REPORT_GENERATION_SOURCE reportGenerationSource READ reportGenerationSource WRITE setReportGenerationSource NOTIFY reportGenerationSourceChanged FINAL)
-    Q_PROPERTY(int sevaType READ sevaType WRITE setSevaType NOTIFY sevaTypeChanged FINAL)
-    Q_PROPERTY(QString sevaName READ sevaName WRITE setSevaName NOTIFY sevaNameChanged FINAL)
 };
 
 #endif // BOOKINGREPORTDATERANGEELEMENT_H
