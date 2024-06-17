@@ -94,29 +94,30 @@ void BookingReportModel::generateBookReport(ReportFilterElements *elm)
     endResetModel();
     qDebug()<<Q_FUNC_INFO<<m_bookingReportQryList.size()<<Qt::endl;
     qDebug()<<Q_FUNC_INFO<<Qt::endl;
-    qDebug()<<"Selected Type "<< elm->iSelectedType()<<Qt::endl;
-    qDebug()<<"Selected Month "<< elm->sMonth().toInt()<<Qt::endl;
-    qDebug()<<"Selected Year "<< elm->sYear().toInt()<<Qt::endl;
-    qDebug()<<"Selected date "<< elm->sSingleDate()<<Qt::endl;
+    qDebug()<<Q_FUNC_INFO<<"Selected Type "<< elm->iSelectedType()<<Qt::endl;
+    qDebug()<<Q_FUNC_INFO<<"Selected Month "<< elm->sMonth().toInt()<<Qt::endl;
+    qDebug()<<Q_FUNC_INFO<<"Selected Year "<< elm->sYear().toInt()<<Qt::endl;
+    qDebug()<<Q_FUNC_INFO<<"Selected date "<< elm->sSingleDate()<<Qt::endl;
+    qDebug()<<Q_FUNC_INFO<<"Seva selected type"<< elm->sevaType()<<Qt::endl;
 
     switch(elm->iSelectedType()){
     case  ReportEnums::SINGLE_DATE_REPORT:{
         qDebug()<<Q_FUNC_INFO<<"Inside c date book rep 0"<<Qt::endl;
         elm->setSSingleDate(formatDate(elm->sSingleDate()));
         qDebug()<<Q_FUNC_INFO<<"elm->setSSingleDate(formatDate(elm->sSingleDate()))"<<elm->sSingleDate()<<Qt::endl;
-        DBInterface::getInstance()->booking_report_cdate_function(elm->sSingleDate(),elm->sSevaName(),elm->iSevaType());
+        DBInterface::getInstance()->generateBookingSingleDateReport(elm);
         break;
     }
     case  ReportEnums::DATE_RANGE_REPORT : {
         qDebug()<<Q_FUNC_INFO<<"Inside c date book rep 1"<<Qt::endl;
         elm->setSStartDate(formatDate(elm->sStartDate()));
         elm->setSEndDate(formatDate(elm->sEndDate()));
-        DBInterface::getInstance()->booking_report_dataRange_function(elm->sSevaName(),elm->iSevaType(),elm->sStartDate(),elm->sEndDate());
+        DBInterface::getInstance()->generateBookingDateRangeReort(elm);
         break;
     }
     case  ReportEnums::MONTH_REPORT : {
         qDebug()<<Q_FUNC_INFO<<"Inside c date book rep 2"<<Qt::endl;
-        DBInterface::getInstance()->booking_report_cmonth_function(elm->sSevaName(),elm->iSevaType(),elm->sMonth().toInt(),elm->sYear().toInt());
+        DBInterface::getInstance()->generateBookingMonthReport(elm);
         break;
     }
     default : {qDebug() << Q_FUNC_INFO << " Wrong selection type. No reports" << Qt::endl; break;}

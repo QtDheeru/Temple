@@ -210,15 +210,7 @@ Rectangle {
                         else{
                             _rowSelectDate.enabled = true
                             _rip.iSelectedType = 0
-
                         }
-                        //                        if(sevaProxy.sevaReport.accReportModel.getAccountReportQryListSize()===0)
-                        //                        {
-                        //                            tot = sevaProxy.sevaReport.accReportModel.grandTotal + ".00 ₹"
-                        //                        }
-                        //                        else{
-                        //                            tot = sevaProxy.sevaReport.accReportModel.grandTotal + ".00 ₹"
-                        //                        }
                     }
                 }
                 MyDateEntry{
@@ -311,20 +303,6 @@ Rectangle {
                             _month.enabled = true
                             _year.enabled = true
                             _rip.iSelectedType = 2
-                            //                            _rip.sMonth = 1
-                            //                            _rip.sYear = "2015"
-                            //                            _rip.sMonth = _month.currentIndex+1
-                            //                            _rip.sYear = _year._data
-
-                            //                            _rip.sMonth = _month.currentIndex+1
-                            //                            _rip.sYear = _year._data
-
-
-                            //                            _rip.bSevawise = _sevawise.checked
-                            //                            _rip.bDatewise = _datewise.checked
-                            //                            _rip.sSingleDate =  "null"
-                            //                            _rip.sStartDate =  "null"
-                            //                            _rip.sEndDate = "null"
                             console.log(fileName + " _month.currentIndex+1 "+_month.currentIndex+1)
                             console.log(fileName + " _year._data "+_year._data)
                         }
@@ -362,40 +340,89 @@ Rectangle {
             Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
             onClicked: {
                 root.collectCurrentFilterOptions(sUMMARY_REPORT);
-                // if((_rip.sMonth==="13")&&(_monthYearRadio.checked))
-                // {
-                //     console.log("rip.sMonth===All")
+                if((_rip.sMonth==="13")&&(_monthYearRadio.checked))
+                {
+                    console.log("rip.sMonth===All")
 
-                //     sendBookingReportMonthRangeInput(_rip)
-                //     bookingMonthWiseSelected();
-                //     if(sevaProxy.sevaReport.bookingReportMonthWiseModel.getBookingReportMonthWiseQryListSize()===0)
-                //     {
-                //         console.log("sevaProxy.sevaReport.bookingReportMonthWiseModel.getBookingReportMonthWiseQryListSize()===0")
-                //         sendError("No Reports for this Year");
-                //     }
-                // }
+                    sendBookingReportMonthRangeInput(_rip)
+                    bookingMonthWiseSelected();
+                    if(sevaProxy.sevaReport.bookingReportMonthWiseModel.getBookingReportMonthWiseQryListSize()===0)
+                    {
+                        console.log("sevaProxy.sevaReport.bookingReportMonthWiseModel.getBookingReportMonthWiseQryListSize()===0")
+                        sendError("No Reports for this Year");
+                    }
+                }
+                if(_rangeSelectedRadio.checked == true)
+                {
+                    console.log("---------a----------------")
+                    var date1 = Date.fromLocaleString(Qt.locale(), _rowStartDate.selecteddate, "dd-MM-yyyy")
+                    var date2 = Date.fromLocaleString(Qt.locale(), _rowEndDate.selecteddate, "dd-MM-yyyy")
+                    console.log("comparing dates : " +date1 +" "+date2)
+                    if(date1 > date2)
+                        _errorDialog.showError("Date Range Invalid")
+                    else
+                    {
+                        console.log("---------b----------------")
+                        _rip.bSevawise = _sevawise.checked
+                        _rip.bDatewise = _datewise.checked
+                        _rip.sSingleDate =  "null"
+                        _rip.sStartDate =  _rowStartDate.selecteddate
+                        _rip.sEndDate = _rowEndDate.selecteddate
+                        sendBookingReportDateRangeInput(_rip)
+                        if((sevaProxy.sevaReport.bookingReportDateRangeModel.getBookingReportDateRangeQryList()===0))
+                        {
+                            console.log("---------b2----------------")
+                            console.log(" sevaProxy.sevaReport.bookingReportDateRangeModel.getBookingReportDateRangeQryList()===0)")
+                            sendError("No Reports for this Date Range");
+                        }
+                    }
+                    //  _load.source = "SevaAccountReportOnDateRange.qml"
+                    //dateRangeSelected();
+                    bookingDateRangeSelected();
+                }
+                //else
+                if( _selectDateRadio.checked)
+                {
+                    console.log("---------c----------------")
+                    _rip.bSevawise = _sevawise.checked
+                    _rip.bDatewise = _datewise.checked
+                    _rip.sSingleDate = _rowSelectDate.selecteddate
+                    _rip.sStartDate =  "null"
+                    _rip.sEndDate = "null"
+                    console.log("  _rip.sSingleDate 1 "+ _rip.sSingleDate)
+                    console.log("-------------------------------------")
+                    console.log("-------------------------------------")
+                    sendBookReportInput(_rip)
+                    // loadSingleDatePage();
+                    if(sevaProxy.sevaReport.bookReportModel.getBookingReportQryListSize()===0)
+                    {
+                        console.log("sevaProxy.sevaReport.bookReportModel.getBookingReportQryListSize()===0")
+                        sendError("No Reports for this Date");
+                    }
+                    console.log("-------------------------------------")
+                }
+                if(( _rip.sMonth!="13")&&(_monthYearRadio.checked))
+                {
+                    console.log("I am hereeee")
+                    _rip.bSevawise = _sevawise.checked
+                    _rip.bDatewise = _datewise.checked
+                    _rip.sSingleDate = _rowSelectDate.selecteddate
+                    _rip.sStartDate =  "null"
+                    _rip.sEndDate = "null"
+                    // sendReportInput(_rip)
+                    //loadDateWisePage();
+                    console.log("---------11----------------")
+                    loadDateWiseBookingPage();
+                    console.log("---------12----------------")
+                    // sendReportDateRangeInputForWholeMonth(_rip)
+                    sendBookingReportDateRangeInputForWholeMonth(_rip)
+                    if((sevaProxy.sevaReport.bookingReportDateRangeModel.getBookingReportDateRangeQryList()===0))
+                    {
+                        console.log("sevaProxy.sevaReport.bookingReportDateRangeModel.getBookingReportDateRangeQryList()===0)")
+                        sendError("No Reports for this Month & Year");
+                    }
+                }
             }
-        }
-    }
-    function clearData(){
-        console.log(fileName + " Clear all the selection")
-        // r4.clearData()
-    }
-    Component.onCompleted: {
-        console.log(fileName + " Trying to get the list category ")
-
-        if( sevaProxy.getSevaTypeModel()===null)
-        {
-            errorOccur(fileName + "seva type model not found");
-        }
-        else{
-          console.log(fileName + " get list from sevaType model ")
-            _sevaType._dataModel = sevaProxy.getSevaTypeModel()
-            _sevaType._dataModelRole = "sevaTypeName"
-
-            _sevaName._dataModel = sevaProxy.getSevaModel(0);
-            _sevaName._dataModelRole = "SevaName"
-            collectCurrentFilterOptions(ReportEnums.SUMMARY_REPORT);
         }
     }
     DisplayDialog {
@@ -419,9 +446,9 @@ Rectangle {
     Connections{
         target:_sevaType
         function onIndexChanged(i){
-
             _rip.iSevaType=  i.model.sevaTypeId
             currentSevaType =  _rip.iSevaType
+            checkSevaNameAndTypeStatus();
             _sevaName._dataModel = sevaProxy.getSevaModel(i.model.sevaTypeId);
             console.log(fileName + " Seva type selected in report filter : "+_rip.iSevaType)
         }
@@ -434,6 +461,7 @@ Rectangle {
             _rip.sSevaName=  i.model.SevaName
             currentSevaName = _rip.sSevaName
             console.log(fileName + " Seva name selected : "+_rip.sSevaName)
+            checkSevaNameAndTypeStatus()
         }
     }
     Connections{
@@ -466,6 +494,29 @@ Rectangle {
         }
     }
     ButtonGroup { id: radioGroup }
+
+    function fillDefaultFilterValue(){
+        _rip.bSevawise = root.seWise
+        _rip.bDatewise = root.dtWise
+        _rip.sSingleDate = Qt.formatDate(new Date(), "dd-MM-yyyy");
+        _rip.sStartDate = "null"
+        _rip.sEndDate = "null"
+        _rip.iSelectedType = 0
+        _rip.iSevaType = root.defaultSevaType
+        _rip.sSevaName = root.defaultSevaName
+    }
+
+    function setReportFilters(date1){
+        _rip.bSevawise = root.seWise
+        _rip.bDatewise = root.dtWise
+        _rip.sSingleDate = date1;
+        _rip.sStartDate =  "null"
+        _rip.sEndDate = "null"
+        _rip.iSelectedType = 0
+        _rip.iSevaType = root.defaultSevaType
+        _rip.sSevaName = root.defaultSevaName
+        sendReportInput(_rip);
+    }
 
     function collectCurrentFilterOptions(typeOfReport) {
         _rip.reset();
@@ -521,4 +572,32 @@ Rectangle {
         reportFilterChanged(_rip);
     }
 
+    function checkSevaNameAndTypeStatus() {
+        if (_sevatypeCheck.checked == true){
+             _rip.iSevaType = 0;
+        }
+        if (_sevanameCheck.checked == true ){
+            _rip.sSevaName = defaultSevaName;
+        }
+    }
+
+    function clearData(){
+        console.log(fileName + " Clear all the selection")
+        // r4.clearData()
+    }
+
+    Component.onCompleted: {
+        console.log(fileName + " Trying to get the list category ")
+        if( sevaProxy.getSevaTypeModel()===null) {
+            errorOccur(fileName + "seva type model not found");
+        } else {
+          console.log(fileName + " get list from sevaType model ")
+            _sevaType._dataModel = sevaProxy.getSevaTypeModel()
+            _sevaType._dataModelRole = "sevaTypeName"
+
+            _sevaName._dataModel = sevaProxy.getSevaModel(0);
+            _sevaName._dataModelRole = "SevaName"
+            collectCurrentFilterOptions(ReportEnums.SUMMARY_REPORT);
+        }
+    }
 }

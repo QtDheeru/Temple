@@ -44,3 +44,55 @@ void BookingReportDateRangeElement::setTotalSevaCount(int newTotalSevaCount)
     m_totalSevaCount = newTotalSevaCount;
     emit totalSevaCountChanged();
 }
+
+QString BookingReportDateRangeElement::sevaTypeName() const
+{
+    return m_sevaTypeName;
+}
+
+void BookingReportDateRangeElement::setSevaTypeName(const QString &newSevaTypeName)
+{
+    if (m_sevaTypeName == newSevaTypeName)
+        return;
+    m_sevaTypeName = newSevaTypeName;
+    emit sevaTypeNameChanged();
+}
+
+ReportEnums::REPORT_GENERATION_SOURCE BookingReportDateRangeElement::reportGenerationSource() const
+{
+    return m_reportGenerationSource;
+}
+
+void BookingReportDateRangeElement::setReportGenerationSource(const ReportEnums::REPORT_GENERATION_SOURCE &newReportGenerationSource)
+{
+    if (m_reportGenerationSource == newReportGenerationSource)
+        return;
+    m_reportGenerationSource = newReportGenerationSource;
+    emit reportGenerationSourceChanged();
+}
+
+int BookingReportDateRangeElement::sevaType() const
+{
+    return m_sevaType;
+}
+
+void BookingReportDateRangeElement::setSevaType(int newSevaType)
+{
+    if (m_sevaType == newSevaType)
+        return;
+    m_sevaType = newSevaType;
+    emit sevaTypeChanged();
+}
+
+QString BookingReportDateRangeElement::sevaName() const
+{
+    return m_sevaName;
+}
+
+void BookingReportDateRangeElement::setSevaName(const QString &newSevaName)
+{
+    if (m_sevaName == newSevaName)
+        return;
+    m_sevaName = newSevaName;
+    emit sevaNameChanged();
+}

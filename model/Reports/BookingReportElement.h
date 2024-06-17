@@ -8,6 +8,8 @@ class BookingReportElement : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(ReportEnums::REPORT_GENERATION_SOURCE reportGenerationSource READ reportGenerationSource WRITE setReportGenerationSource NOTIFY reportGenerationSourceChanged FINAL)
+    Q_PROPERTY(QString sevaTypeName READ sevaTypeName WRITE setSevaTypeName NOTIFY sevaTypeNameChanged FINAL)
+    Q_PROPERTY(int sevaType READ sevaType WRITE setSevaType NOTIFY sevaTypeChanged FINAL)
 
 public:
     explicit BookingReportElement(QObject *parent = nullptr);
@@ -60,8 +62,18 @@ public:
     ReportEnums::REPORT_GENERATION_SOURCE reportGenerationSource() const;
     void setReportGenerationSource(const ReportEnums::REPORT_GENERATION_SOURCE &newReportGenerationSource);
 
+    QString sevaTypeName() const;
+    void setSevaTypeName(const QString &newSevaTypeName);
+
+    int sevaType() const;
+    void setSevaType(int newSevaType);
+
 signals:
     void reportGenerationSourceChanged();
+
+    void sevaTypeNameChanged();
+
+    void sevaTypeChanged();
 
 private:
     int m_sNO;
@@ -79,6 +91,8 @@ private:
     QString m_paymntMode;
     QString m_referenceNo;
     QString m_address;
+    QString m_sevaTypeName;
+    int m_sevaType;
     ReportEnums::REPORT_GENERATION_SOURCE m_reportGenerationSource;
 };
 
