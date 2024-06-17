@@ -341,17 +341,17 @@ bool BookingReportsDBInterface::generateBookingReportForEachDateOfMonth(ReportFi
     if(seva_type_string.isEmpty())
     {
         qDebug()<< Q_FUNC_INFO <<"When the sevaType is checked and sevaName is checked"<<Qt::endl;
-        que = ("select SEVA_DATE,sum(QUANTITY) from sevabooking where sevabooking.S_YEAR ='%1' and sevabooking.S_MONTH ='%2' Group by sevabooking.RECEIPT_DATE;" );
+        que = ("select SEVA_DATE,sum(QUANTITY) from sevabooking where sevabooking.S_YEAR ='%1' and sevabooking.S_MONTH ='%2' Group by sevabooking.SEVA_DATE;" );
         que  = que.arg(year).arg(month);
     }
     if (seva_type_int!=0 & seva_name.compare(ALLSEVANAME)==0) {
         qDebug()<< Q_FUNC_INFO <<"When the sevaType is unchecked and sevaName is checked"<<Qt::endl;
-        que = ("select SEVA_DATE,sum(QUANTITY) from sevabooking where sevabooking.S_YEAR ='%1' and sevabooking.S_MONTH ='%2' and sevabooking.SEVATYPE = '%3' Group by sevabooking.RECEIPT_DATE;" );
+        que = ("select SEVA_DATE,sum(QUANTITY) from sevabooking where sevabooking.S_YEAR ='%1' and sevabooking.S_MONTH ='%2' and sevabooking.SEVATYPE = '%3' Group by sevabooking.SEVA_DATE;" );
         que  = que.arg(year).arg(month).arg(seva_type_int);
     }
     if (seva_type_int!=0 & seva_name.compare(ALLSEVANAME)!=0) {
         qDebug()<< Q_FUNC_INFO <<"When the sevaType is unchecked and sevaName is unchecked"<<Qt::endl;
-        que = ("select SEVA_DATE,sum(QUANTITY) from sevabooking where sevabooking.S_YEAR ='%1' and sevabooking.S_MONTH ='%2' and sevabooking.SEVATYPE = '%3' and sevabooking.SEVANAME = '%4' Group by sevabooking.RECEIPT_DATE;" );
+        que = ("select SEVA_DATE,sum(QUANTITY) from sevabooking where sevabooking.S_YEAR ='%1' and sevabooking.S_MONTH ='%2' and sevabooking.SEVATYPE = '%3' and sevabooking.SEVANAME = '%4' Group by sevabooking.SEVA_DATE;" );
         que  = que.arg(year).arg(month).arg(seva_type_int).arg(seva_name);
     }
     qDebug() << " Query string =" << que <<Qt::endl;
@@ -392,17 +392,17 @@ bool BookingReportsDBInterface::generateBookingReportForEachDateInDateRange(Repo
     if(seva_type_string.isEmpty())
     {
         qDebug()<< Q_FUNC_INFO <<"When the sevaType is checked and sevaName is checked"<<Qt::endl;
-        readstr = ("select SEVA_DATE,sum(QUANTITY) from sevabooking where sevabooking.RECEIPT_DATE between '%1' and '%2' Group by sevabooking.RECEIPT_DATE;" );
+        readstr = ("select SEVA_DATE,sum(QUANTITY) from sevabooking where sevabooking.SEVA_DATE between '%1' and '%2' Group by sevabooking.SEVA_DATE;" );
         readstr  = readstr.arg(startDate2Query).arg(endDate2Query);
     }
     if (seva_type_int !=0 & seva_name.compare(ALL_SEVA_REPORT)==0) {
         qDebug()<< Q_FUNC_INFO <<"When the sevaType is unchecked and sevaName is checked"<<Qt::endl;
-        readstr = ("select SEVA_DATE,sum(QUANTITY) from sevabooking where sevabooking.RECEIPT_DATE between '%1' and '%2' and sevabooking.SEVATYPE = '%3' Group by sevabooking.RECEIPT_DATE;" );
+        readstr = ("select SEVA_DATE,sum(QUANTITY) from sevabooking where sevabooking.SEVA_DATE between '%1' and '%2' and sevabooking.SEVATYPE = '%3' Group by sevabooking.SEVA_DATE;" );
         readstr  = readstr.arg(startDate2Query).arg(endDate2Query).arg(seva_type_int);
     }
     if (seva_type_int !=0 & seva_name.compare(ALL_SEVA_REPORT)!=0) {
         qDebug()<< Q_FUNC_INFO <<"When the sevaType is unchecked and sevaName is unchecked"<<Qt::endl;
-        readstr = ("select SEVA_DATE,sum(QUANTITY) from sevabooking where sevabooking.RECEIPT_DATE between '%1' and '%2' and sevabooking.SEVATYPE = '%3' and sevabooking.SEVANAME = '%4' Group by sevabooking.RECEIPT_DATE;" );
+        readstr = ("select SEVA_DATE,sum(QUANTITY) from sevabooking where sevabooking.SEVA_DATE between '%1' and '%2' and sevabooking.SEVATYPE = '%3' and sevabooking.SEVANAME = '%4' Group by sevabooking.SEVA_DATE;" );
         readstr  = readstr.arg(startDate2Query).arg(endDate2Query).arg(seva_type_int).arg(seva_name);
     }
     qDebug()<< Q_FUNC_INFO  << " Query string =" << readstr <<Qt::endl;
