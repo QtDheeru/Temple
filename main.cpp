@@ -27,6 +27,8 @@
 #include "model/BankRegistration_m/cheque_entryModel.h"
 #include "model/BankRegistration_m/cashtransaction.h"
 #include "VoucherProxy.h"
+#include "ProcessMgr/ProcessExplorer.h"
+#include <QMessageBox>
 
 
 
@@ -39,8 +41,18 @@ int main(int argc, char *argv[])
 {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
-
     QApplication app(argc, argv);
+
+    ProcessExplorer proc;
+    QString procName = ("SmartTempleApp");
+    if(proc.isProcessRunning(procName)){
+       qWarning() << Q_FUNC_INFO << " Application is already running" << Qt::endl;
+       QMessageBox::critical(nullptr,"Process Status","Application with same name Already Running");
+       return 1;
+    } else {
+        qDebug() << Q_FUNC_INFO << " Application stated now..." << Qt::endl;
+    }
+
     m_logFile.reset(new QFile("Data/MyLogger.txt"));
 
     QQmlApplicationEngine engine;

@@ -1,5 +1,6 @@
 QT += quick widgets sql printsupport xml
 
+TARGET = SmartTempleApp
 CONFIG += c++14
 #CONFIG += plugin c++11
 # The following define makes your compiler emit warnings if you use
@@ -61,7 +62,6 @@ QML_DESIGNER_IMPORT_PATH =
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
-
 HEADERS += \
     ConfigureApp.h \
     DBChecker.h \
@@ -100,6 +100,7 @@ include(model/DataSave/DataSave.pri)
 include(model/voucher/voucher.pri)
 include(model/DevoteeManager/Devotee.pri)
 include(DataStore/DataStore.pri)
+include(ProcessMgr/ProcessManager.pri)
 #Reports integrated for all views
 #
 
