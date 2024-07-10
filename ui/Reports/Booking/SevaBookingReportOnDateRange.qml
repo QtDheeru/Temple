@@ -120,29 +120,29 @@ Rectangle{
             resizable: true
         }
     }
-    Button{
-        id:_exportCsv
-        height:60
-        width: 200
-        anchors.top: _modelTableView.bottom
-        anchors.horizontalCenter: _modelTableView.horizontalCenter
-        style: ButtonStyle{
-            background: Rectangle{
-                id: bg
-                border.width: 1
-                radius: 3
-                color: "cornflowerblue"
-                Label{
-                    text: "Export Data"
-                    anchors.centerIn: parent
-                }
-            }
-        }
-        onClicked: {
-            console.log(fileName + " export data clicked")
-            sevaProxy.sevaReport.bookReportModel.generateBookingReportCSV()
-        }
-    }
+    // Button{
+    //     id:_exportCsv
+    //     height:60
+    //     width: 200
+    //     anchors.top: _modelTableView.bottom
+    //     anchors.horizontalCenter: _modelTableView.horizontalCenter
+    //     style: ButtonStyle{
+    //         background: Rectangle{
+    //             id: bg
+    //             border.width: 1
+    //             radius: 3
+    //             color: "cornflowerblue"
+    //             Label{
+    //                 text: "Export Data"
+    //                 anchors.centerIn: parent
+    //             }
+    //         }
+    //     }
+    //     onClicked: {
+    //         console.log(fileName + " export data clicked")
+    //         sevaProxy.sevaReport.bookReportModel.generateBookingReportCSV()
+    //     }
+    // }
 
     Component.onCompleted:  {
         console.log(fileName + " Component.completed: of SevaBookingReportOnDateRange.qml")
