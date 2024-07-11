@@ -1372,6 +1372,11 @@ int DBInterface::getLastSevatypeNumber()
     return sevalastNo+1;
 }
 
+int DBInterface::getLastSevaNameNumber()
+{
+    qDebug() << Q_FUNC_INFO <<Qt::endl;
+}
+
 void DBInterface::getvoucherdata()
 {
     qDebug()<<Q_FUNC_INFO<<"^^^^^^^^^^^^^^^1111111^^^^^^^^^^^^^^^^^^"<<Qt::endl;
