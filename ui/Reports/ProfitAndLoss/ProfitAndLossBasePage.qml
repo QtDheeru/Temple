@@ -38,6 +38,7 @@ Rectangle{
                 border.color: "black"
                 border.width: 2
                 color: "#576F72"
+                allDetailButtonVisibility : false
             }
             Component.onCompleted: {
                 console.log(fileName + "The month and year initial",_myreportFilter.mnt," ",_myreportFilter.yr)
@@ -73,11 +74,11 @@ Rectangle{
                     }
                     function onLoadDateWisePage(){
                         console.log(fileName + "In onLoadDateWisePage")
-                        _load.source = "SevaAccountReportOnDateRange.qml"
+                        _load.source = "ProfitAndLossForSingleDate.qml"
                     }
                     function onLoadMonthWisePage(){
                         console.log(fileName + "In onLoadMonthWisePage")
-                        _load.source = "SevaAccountReportMonthWise.qml"
+                        _load.source = "ProfitAndLossForSingleDate.qml"
                     }
                     function onLoadDateWiseForSlectedMonthPage(obj)
                     {
@@ -180,6 +181,7 @@ Rectangle{
 
     function generateReport(filterObject){
         console.log(fileName + " Start Generating the report ")
+
         filterObject.print();
         sevaProxy.sevaReport.profitAndLossDataModel.resetModel()
         if (filterObject.reportGenerationSource === ReportEnums.CLICK_ON_LEFT_SELECTION){
@@ -188,6 +190,7 @@ Rectangle{
         switch(filterObject.reportType)
         {
         case ReportEnums.DETAIL_REPORT :
+            break;
             root.generateDetailsReport(filterObject)
             break;
         case ReportEnums.SUMMARY_REPORT:
@@ -207,19 +210,19 @@ Rectangle{
              break;
         }
         case ReportEnums.DATE_RANGE_REPORT:
-            sevaProxy.sevaReport.accountFullReportModel.generateFullAccountReportEachdate(filterObject)
+            sevaProxy.sevaReport.profitAndLossDataModel.generateProfitAndLossForADay(filterObject)
             var item = _reportStackView.push("qrc:/ui/Reports/Account/AllAccountDetails.qml");
             item.back.connect(root.adjustStackView);
             break;
         case ReportEnums.MONTH_REPORT:
-            sevaProxy.sevaReport.accountFullReportModel.generateFullAccountReportEachdate(filterObject)
+            sevaProxy.sevaReport.profitAndLossDataModel.generateProfitAndLossForADay(filterObject)
             var item = _reportStackView.push("qrc:/ui/Reports/Account/AllAccountDetails.qml");
             item.back.connect(root.adjustStackView);
             break;
         }
 
-        sevaProxy.sevaReport.accountFullReportModel.generateFullAccountReportEachdate(filterObject)
-        _load.source = "AllAccountDetails.qml";
+        // sevaProxy.sevaReport.accountFullReportModel.generateFullAccountReportEachdate(filterObject)
+        // _load.source = "AllAccountDetails.qml";
     }
 
     function generateSummaryReport(filterObject){
@@ -234,8 +237,8 @@ Rectangle{
              break;
         }
         case ReportEnums.DATE_RANGE_REPORT: {
-            sevaProxy.sevaReport.generateAccReportForEachDate(filterObject);
-            var item1 = _reportStackView.push("qrc:/ui/Reports/Account/ProfitAndLossForSingleDate.qml");
+            sevaProxy.sevaReport.profitAndLossDataModel.generateProfitAndLossForADay(filterObject)
+            var item1 = _reportStackView.push("qrc:/ui/Reports/ProfitAndLoss/ProfitAndLossForSingleDate.qml");
             //item1.generateReportForDate.connect(root.loadDaySummary)
             item1.back.connect(root.adjustStackView);
             break;
@@ -243,14 +246,14 @@ Rectangle{
         case ReportEnums.MONTH_REPORT:{
             // Report for all the months. month=All is 13 Selection all in ComboBox
             if (filterObject.sMonth === "13"){
-                sevaProxy.sevaReport.generateAccReportForEachMonth(filterObject)
-                var item3 = _reportStackView.push("qrc:/ui/Reports/Account/SevaAccountReportMonthWise.qml");
+                sevaProxy.sevaReport.profitAndLossDataModel.generateProfitAndLossForADay(filterObject)
+                var item3 = _reportStackView.push("qrc:/ui/Reports/ProfitAndLoss/ProfitAndLossForSingleDate.qml");
                 item3.generateReportForOneMonth.connect(root.loadDaySummaryForMonth)
                 item3.back.connect(root.adjustStackView);
             } else {
-                sevaProxy.sevaReport.generateAccReportForEachDateForWholeMonth(filterObject)
-                var item2 = _reportStackView.push("qrc:/ui/Reports/Account/SevaAccountReportOnDateRange.qml");
-                item2.generateReportForDate.connect(root.loadDaySummary)
+                sevaProxy.sevaReport.profitAndLossDataModel.generateProfitAndLossForADay(filterObject)
+                var item2 = _reportStackView.push("qrc:/ui/Reports/ProfitAndLoss/ProfitAndLossForSingleDate.qml");
+                // item2.generateReportForDate.connect(root.loadDaySummary)
                 item2.back.connect(root.adjustStackView);
             }
             break;

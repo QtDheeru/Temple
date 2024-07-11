@@ -28,8 +28,10 @@ public:
     QString receiptNo() const;
     void setReceiptNo(const QString &newReceiptNo);
 
+    long balance() const;
+    void setBalance(long newBalance);
+
 signals:
-    void balanceChanged();
 
 private:
     QString m_date;
@@ -37,6 +39,7 @@ private:
     long m_expenditure;
     int m_slNo;
     QString m_receiptNo;
+    long m_balance;
 
 };
 

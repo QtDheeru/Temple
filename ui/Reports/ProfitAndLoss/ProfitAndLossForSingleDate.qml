@@ -93,7 +93,7 @@ Rectangle{
             movable: false
             resizable: false
             delegate: Rectangle {
-                width: _loss.width;height: _loss.height;
+                width: _balance.width;height: _balance.height;
                 color: styleData.row%2 ? "light gray" : "white"
                 Text{
                     anchors.fill: parent;
@@ -111,7 +111,7 @@ Rectangle{
             resizable: false
             horizontalAlignment: Text.AlignRight
             delegate: Rectangle {
-                width: _loss.width;height: _loss.height;
+                width: _balance.width;height: _balance.height;
                 color: styleData.row%2 ? "light gray" : "white"
                 Text{
                     id: _sevaTotal
@@ -130,7 +130,7 @@ Rectangle{
             movable: false
             resizable: false
             delegate: Rectangle {
-                width: _loss.width;height: _loss.height;
+                width: _balance.width;height: _balance.height;
                 color: styleData.row%2 ? "light gray" : "white"
                 Text{
                     anchors.fill: parent;
@@ -142,13 +142,13 @@ Rectangle{
         }
 
         TableViewColumn {
-            id: _profit;title: "Profit"; role: "Profit";
+            id: _balance;title: "Balance"; role: "Balance";
             width: _root.width/6
             movable: false
             resizable: false
             horizontalAlignment: Text.AlignVCenter
             delegate: Rectangle {
-                width: _loss.width;height: _loss.height;
+                width: _balance.width;height: _balance.height;
                 color: styleData.row%2 ? "light gray" : "white"
                 Text{
                     anchors.fill: parent;
@@ -158,22 +158,12 @@ Rectangle{
                 }
             }
         }
-        TableViewColumn {
-            id: _loss;title: "Loss"; role: "Loss";
-            width: _root.width/6
-            movable: false
-            resizable: false
-            horizontalAlignment: Text.AlignVCenter
-            delegate: Rectangle {
-                width: _loss.width;height: _loss.height;
-                color: styleData.row%2 ? "light gray" : "white"
-                Text{
-                    anchors.fill: parent;
-                    text : styleData.value;
-                    color: "black"
-                    horizontalAlignment: Text.AlignHCenter
-                }
-            }
-        }
+    }
+    Component.onCompleted: {
+        console.log(fileName + "created")
+    }
+    Component.onDestruction:  {
+        console.log(fileName + "destroyed")
+
     }
 }

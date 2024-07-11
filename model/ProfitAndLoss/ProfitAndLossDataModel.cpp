@@ -3,23 +3,23 @@
 ProfitAndLossDataModel::ProfitAndLossDataModel(QObject *parent)
     : QAbstractTableModel{parent},m_balance(0)
 {
+    qDebug() << Q_FUNC_INFO ;
     connect(DBInterface::getInstance(),&DBInterface::profitAndLoss_SevaBooked_report,this,&ProfitAndLossDataModel::insertSevaBookedRow);
     connect(DBInterface::getInstance(),&DBInterface::profitAndLoss_Voucher_report,this,&ProfitAndLossDataModel::insertVoucherBookedRow);
 
     connect(DBInterface::getInstance(),&DBInterface::profitNLoss_DateRange_SevaBooked_report,this,&ProfitAndLossDataModel::insertSevaBookedRow);
     connect(DBInterface::getInstance(),&DBInterface::profitNLoss_DateRange_Voucher_report,this,&ProfitAndLossDataModel::insertVoucherBookedRow);
-
 }
 
 ProfitAndLossDataModel::~ProfitAndLossDataModel()
 {
-
+    qDebug() << Q_FUNC_INFO;
 }
 
 int ProfitAndLossDataModel::rowCount(const QModelIndex &parent) const
 {
-    qDebug() << Q_FUNC_INFO << m_accReportDateRangeList.size() << Qt::endl;
-    return m_accReportDateRangeList.size();
+    qDebug() << Q_FUNC_INFO << m_DateWiseProfitNloss.size() << Qt::endl;
+    return m_DateWiseProfitNloss.size();
 }
 
 int ProfitAndLossDataModel::columnCount(const QModelIndex &parent) const
@@ -31,7 +31,7 @@ QVariant ProfitAndLossDataModel::data(const QModelIndex &index, int role) const
 {
     int r = index.row();
     qDebug() << Q_FUNC_INFO << " Row =" << r << " Total Elements for Date =" << m_profitNLossElementList.size() << Qt::endl;
-    ProfitAndLossReportElement *_da = m_profitNLossElementList.at(r);
+    ProfitAndLossReportElement *_da = m_DateWiseProfitNloss.values().at(r);
     _da->setSlNo(r);
     switch (role) {
     case 1:{
@@ -50,7 +50,7 @@ QVariant ProfitAndLossDataModel::data(const QModelIndex &index, int role) const
         return QVariant(QString::number(_da->expenditure()));break;
     }
     case 5:{
-        return QVariant(QString::number(m_balance < 0 ? 0 : m_balance));break;
+        return QVariant(QString::number(_da->balance()));break;
     }
     }
     return "done";
@@ -90,24 +90,52 @@ void ProfitAndLossDataModel::updateProfitLossElement(AccountReportElement *accEl
 {
     qDebug() << Q_FUNC_INFO << Qt::endl;
     this->beginInsertRows(QModelIndex(),0,0);
-    ProfitAndLossReportElement *_da = new ProfitAndLossReportElement;
+    ProfitAndLossReportElement *_da;
     if(accElement != nullptr){
-        _da->setDate(formatDate(accElement->date()));
-        _da->setSevaBookedAmount(accElement->getSeva_total());
-        _da->setReceiptNo(QString::number(accElement->slNo()));
-        m_balance += accElement->getSeva_total();
+        if(m_DateWiseProfitNloss.contains(formatDate(accElement->date()))){
+            qDebug() << Q_FUNC_INFO << "update acc element"  << formatDate(accElement->date()) << Qt::endl;
+            _da = m_DateWiseProfitNloss.value(formatDate(accElement->date()));
+            _da->setSevaBookedAmount(_da->sevaBookedAmount() + accElement->getSeva_total());
+            // _da->setReceiptNo(QString::number(accElement->slNo()));
+            _da->setBalance(_da->balance() + accElement->getSeva_total());
+        }else{
+            qDebug() << Q_FUNC_INFO << "new acc element" << formatDate(accElement->date()) << Qt::endl;
+            _da = new ProfitAndLossReportElement;
+            _da->setDate(formatDate(accElement->date()));
+            _da->setSevaBookedAmount(accElement->getSeva_total());
+            // _da->setReceiptNo(QString::number(accElement->slNo()));
+            _da->setBalance(accElement->getSeva_total());
+            m_DateWiseProfitNloss.insert(formatDate(accElement->date()),_da);
+        }
     }else{
-        _da->setDate(formatDate(voucherElement->voucherDate()));
-        _da->setExpenditure(voucherElement->voucherCost().toLong());
-        _da->setReceiptNo(QString::number(voucherElement->voucherNo()));
-        m_balance -= voucherElement->voucherCost().toLong();
+        qDebug() << Q_FUNC_INFO << "list size =" << m_DateWiseProfitNloss.size();
+        if(m_DateWiseProfitNloss.contains(formatDate(voucherElement->voucherDate()))){
+            qDebug() << Q_FUNC_INFO << "update voucher element11" << formatDate(voucherElement->voucherDate()) << Qt::endl;
+            _da = m_DateWiseProfitNloss.value(formatDate(voucherElement->voucherDate()));
+            qDebug() << Q_FUNC_INFO << "update voucher element22" << formatDate(voucherElement->voucherDate()) << Qt::endl;
+            _da->setExpenditure(_da->expenditure() + voucherElement->voucherCost().toLong());
+            // _da->setReceiptNo(QString::number(voucherElement->voucherNo()));
+            _da->setBalance(_da->balance() - voucherElement->voucherCost().toLong());
+            qDebug() << Q_FUNC_INFO << "update voucher element33" << formatDate(voucherElement->voucherDate()) << Qt::endl;
+        }else{
+            qDebug() << Q_FUNC_INFO << "new voucher element1" << formatDate(voucherElement->voucherDate()) << Qt::endl;
+            _da = new ProfitAndLossReportElement;
+            _da->setDate(formatDate(voucherElement->voucherDate()));
+            qDebug() << Q_FUNC_INFO << "new voucher element2" << Qt::endl;
+            _da->setExpenditure(voucherElement->voucherCost().toLong());
+            // _da->setReceiptNo(QString::number(voucherElement->voucherNo()));
+            _da->setBalance(-voucherElement->voucherCost().toLong());
+            qDebug() << Q_FUNC_INFO << "new voucher element3" << Qt::endl;
+            m_DateWiseProfitNloss.insert(formatDate(voucherElement->voucherDate()),_da);
+            qDebug() << Q_FUNC_INFO << "new voucher element4" << Qt::endl;
+        }
     }
-    m_profitNLossElementList.append(_da);
     this->endInsertRows();
 }
 
 void ProfitAndLossDataModel::generateProfitAndLossForADay(ReportFilterElements *filterElement)
 {
+    resetModel();
     switch(filterElement->iSelectedType()) {
     case ReportEnums::SINGLE_DATE_REPORT: {
         qDebug() << Q_FUNC_INFO << " Generate the Single Date Full Report " << Qt::endl;
@@ -122,7 +150,7 @@ void ProfitAndLossDataModel::generateProfitAndLossForADay(ReportFilterElements *
         break;
     }
     case ReportEnums::MONTH_REPORT : {
-        DBInterface::getInstance()->fullAccounDetailsMonthwise(filterElement->sSevaName(),filterElement->iSevaType(),filterElement->sMonth().toInt(),filterElement->sYear().toInt());
+        DBInterface::getInstance()->generateDateRangeReportForProfitNLoss(filterElement);
         break;
     }
     default : {
@@ -134,13 +162,16 @@ void ProfitAndLossDataModel::generateProfitAndLossForADay(ReportFilterElements *
 
 void ProfitAndLossDataModel::resetModel()
 {
-    for(int i = 0; i < m_profitNLossElementList.size(); i++)
+    qDebug() << Q_FUNC_INFO << " size of P & L element list :" << m_profitNLossElementList.size();
+    for(int i = 0; i < m_accReportDateRangeList.size(); i++)
     {
         m_accReportDateRangeList.clear();
-        m_voucherReportDateRangeList.clear();
-        m_profitNLossElementList.at(i)->reset();
-        delete m_profitNLossElementList.at(i);
     }
+    for(int i = 0; i < m_voucherReportDateRangeList.size(); i++)
+    {
+        m_voucherReportDateRangeList.clear();
+    }
+    m_DateWiseProfitNloss.clear();
 }
 
 QString ProfitAndLossDataModel::formatDate(QString unformat)

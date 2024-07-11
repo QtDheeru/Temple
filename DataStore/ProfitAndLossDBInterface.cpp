@@ -105,6 +105,7 @@ bool ProfitAndLossDBInterface::generateSingleDateReportForVoucher(ReportFilterEl
         velement->setVoucherPaymentMode(vpaymntmode);
         velement->setMobileNo(vphone);
         velement->setVoucherCost(vcost);
+        velement->setVoucherDate(date2Query);
 
         qDebug() << Q_FUNC_INFO << query_other1.value(1).toString() << Qt::endl;
         emit profitAndLossVoucherReport(velement);
@@ -212,8 +213,8 @@ bool ProfitAndLossDBInterface::generateDateRangeReportForVoucher(ReportFilterEle
 
     QSqlQuery query_other1;
     QString readstr;
-    if(seva_type_string.isEmpty()) {
-        readstr = ("select V_NO,NAME,PAYMENT_MODE, PHONE,COST,REFERENCE_NO from VOUCHER_DETAILS where VOUCHER_DETAILS.DATES between '%1' and '%2' and  Group by VOUCHER_DETAILS.DATES;");
+    if(seva_type_string.isEmpty()) { 
+        readstr = ("select V_NO,NAME,PAYMENT_MODE, PHONE,COST,DATES,REFERENCE_NO from VOUCHER_DETAILS where VOUCHER_DETAILS.DATES between '%1' and '%2';");
         readstr  = readstr.arg(startDate2Query).arg(endDate2Query);
     } else if (seva_type_int !=0 & seva_name.compare(ALL_SEVA_REPORT)==0) {
         readstr = ("select V_NO,NAME,PAYMENT_MODE, PHONE,COST,REFERENCE_NO from VOUCHER_DETAILS where VOUCHER_DETAILS.DATES between '%1' and '%2' and  Group by VOUCHER_DETAILS.DATES;");
@@ -223,9 +224,8 @@ bool ProfitAndLossDBInterface::generateDateRangeReportForVoucher(ReportFilterEle
         readstr  = readstr.arg(startDate2Query).arg(endDate2Query).arg(seva_type_int).arg(seva_name);
     }
 
-    QString str = ("select V_NO,NAME,PAYMENT_MODE, PHONE,COST,REFERENCE_NO from VOUCHER_DETAILS where VOUCHER_DETAILS.DATES LIKE '%1'");
-    str = str.arg(startDate2Query).arg(endDate2Query);
-    query_other1.prepare(str);
+    readstr = readstr.arg(startDate2Query).arg(endDate2Query);
+    query_other1.prepare(readstr);
     if(!query_other1.exec())
     {
         qWarning() << Q_FUNC_INFO << query_other1.lastError().text() << Qt::endl;
@@ -241,13 +241,16 @@ bool ProfitAndLossDBInterface::generateDateRangeReportForVoucher(ReportFilterEle
         QString vpaymntmode = query_other1.value(2).toString();
         QString vphone = query_other1.value(3).toString();
         QString vcost = query_other1.value(4).toString();
-        QString v_referenceNo = query_other1.value(5).toString();
+        QString vDate = query_other1.value(5).toString();
+        QString v_referenceNo = query_other1.value(6).toString();
+        qDebug() << Q_FUNC_INFO << vDate << endl;
 
         velement->setVoucherNo(vno.toInt());
         velement->setVoucherName(vname);
         velement->setVoucherPaymentMode(vpaymntmode);
         velement->setMobileNo(vphone);
         velement->setVoucherCost(vcost);
+        velement->setVoucherDate(vDate);
 
         qDebug() << Q_FUNC_INFO << query_other1.value(1).toString() << Qt::endl;
         emit profitNLoss_DateRange_Voucher_report(velement);

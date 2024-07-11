@@ -2079,14 +2079,14 @@ void DBInterface::getDbData()
         elem->setQuantity(quantity);
 
         QString s_date = query_other1.value(5).toString();
-        QString  s_month = query_other1.value(6).toString();
+        QString s_month = query_other1.value(6).toString();
         QString s_year =query_other1.value(7).toString();
         QString realformatsevadate =query_other1.value(8).toString();
         QDate sevadateDate = QDate::fromString(realformatsevadate,"yyyy-MM-dd");
         QString sevadate = sevadateDate.toString("dd-MM-yyyy");
 
         QString r_date = query_other1.value(9).toString();
-        QString  r_month = query_other1.value(10).toString();
+        QString r_month = query_other1.value(10).toString();
         QString r_year =query_other1.value(11).toString();
         QString realformatreceiptdate =query_other1.value(12).toString();
         QDate receiptdateDate = QDate::fromString(realformatreceiptdate,"yyyy-MM-dd");

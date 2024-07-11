@@ -4,7 +4,6 @@
 #include <QAbstractTableModel>
 #include <QObject>
 #include "../DBInterface.h"
-#include "VoucherReportElement.h"
 #include "ProfitAndLossReportElement.h"
 
 
@@ -34,6 +33,7 @@ private:
     QList<AccountReportElement*> m_accReportDateRangeList;
     QList<VoucherReportElement*> m_voucherReportDateRangeList;
     QList<ProfitAndLossReportElement*> m_profitNLossElementList;
+    QMap<QString,ProfitAndLossReportElement*> m_DateWiseProfitNloss;
     long m_balance;
 };
 

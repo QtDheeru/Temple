@@ -19,6 +19,7 @@ Rectangle {
     property alias  yr: _rip.sYear
     property alias  isRangeDateSelected: _rangeSelectedRadio.checked
     property alias  isSingleDateSelected: _selectDateRadio.checked
+    property alias allDetailButtonVisibility: _allDetails.visible
 
     property string defaultSevaName : "All";
     property int defaultSevaType : 0
@@ -338,17 +339,17 @@ Rectangle {
             Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
             onClicked: {
                 root.collectCurrentFilterOptions(sUMMARY_REPORT);
-                if((_rip.sMonth === "13") && (_monthYearRadio.checked))
-                {
-                    console.log("rip.sMonth === All")
-                    sendReportMonthRangeInput(_rip)
-                    monthWiseSelected();
-                    if(sevaProxy.sevaReport.accountReportMonthRangeModel.getAccountReportMonthWiseQryListSize() === 0)
-                    {
-                        console.log("if of sevaProxy.sevaReport.accountReportMonthRangeModel.getAccountReportMonthWiseQryListSize()===0 ")
-                        sendError("No Reports for this Year");
-                    }
-                }
+                // if((_rip.sMonth === "13") && (_monthYearRadio.checked))
+                // {
+                //     console.log("rip.sMonth === All")
+                //     sendReportMonthRangeInput(_rip)
+                //     monthWiseSelected();
+                //     if(sevaProxy.sevaReport.accountReportMonthRangeModel.getAccountReportMonthWiseQryListSize() === 0)
+                //     {
+                //         console.log("if of sevaProxy.sevaReport.accountReportMonthRangeModel.getAccountReportMonthWiseQryListSize()===0 ")
+                //         sendError("No Reports for this Year");
+                //     }
+                // }
             }
         }
         Button{

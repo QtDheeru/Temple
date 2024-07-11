@@ -44,6 +44,7 @@ void ProfitAndLossReportElement::reset()
     m_date = "";
     m_sevaBookedAmount = 0;
     m_expenditure = 0;
+    m_balance = 0;
 }
 
 int ProfitAndLossReportElement::slNo() const
@@ -65,4 +66,14 @@ void ProfitAndLossReportElement::setReceiptNo(const QString &newReceiptNo)
 {
     qDebug() << Q_FUNC_INFO << Qt::endl;
     m_receiptNo = newReceiptNo;
+}
+
+long ProfitAndLossReportElement::balance() const
+{
+    return m_balance;
+}
+
+void ProfitAndLossReportElement::setBalance(long newBalance)
+{
+    m_balance = newBalance;
 }
