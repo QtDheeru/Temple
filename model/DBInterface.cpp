@@ -212,6 +212,7 @@ DBInterface::DBInterface(QObject *parent) : QObject(parent)
     readSevaNamesFromJson();
 
     m_accountReportInterface = new AccountReportsDBInterface(db);
+    m_profitAndLossInterface = new ProfitAndLossDBInterface(db);
     connect(m_accountReportInterface,&AccountReportsDBInterface::account_report,
             this,&DBInterface::account_report);
     connect(m_accountReportInterface,&AccountReportsDBInterface::account_report_Date_Range,
@@ -226,6 +227,20 @@ DBInterface::DBInterface(QObject *parent) : QObject(parent)
             this,&DBInterface::booking_report_Date_Range);
     connect(m_bookingReportInterface,&BookingReportsDBInterface::booking_report_Month_Range,
             this,&DBInterface::booking_report_Month_Range);
+
+    connect(m_profitAndLossInterface,&ProfitAndLossDBInterface::profitAndLossSevaBookingReport,
+            this,&DBInterface::profitAndLoss_SevaBooked_report);
+    connect(m_profitAndLossInterface,&ProfitAndLossDBInterface::profitAndLossVoucherReport,
+            this,&DBInterface::profitAndLoss_Voucher_report);
+    connect(m_profitAndLossInterface,&ProfitAndLossDBInterface::profitNLoss_DateRange_SevaBooked_report,
+            this,&DBInterface::profitNLoss_DateRange_SevaBooked_report);
+    connect(m_profitAndLossInterface,&ProfitAndLossDBInterface::profitNLoss_DateRange_Voucher_report,
+            this,&DBInterface::profitNLoss_DateRange_Voucher_report);
+    connect(m_profitAndLossInterface,&ProfitAndLossDBInterface::profitNLoss_Month_SevaBooked_report,
+            this,&DBInterface::profitNLoss_Month_SevaBooked_report);
+    connect(m_profitAndLossInterface,&ProfitAndLossDBInterface::profitNLoss_Month_Voucher_report,
+            this,&DBInterface::profitNLoss_Month_Voucher_report);
+
 }
 
 bool DBInterface::generateSingleDateReport(ReportFilterElements *elm)
@@ -282,6 +297,12 @@ bool DBInterface::generateBookingReportForEachDateInDateRange(ReportFilterElemen
 bool DBInterface::generateBookingReportForAllMonths(ReportFilterElements *elm)
 {
     return this->m_bookingReportInterface->generateBookingReportForAllMonths(elm);
+}
+
+bool DBInterface::generateSingleDateReportForProfitNLoss(ReportFilterElements *elm)
+{
+    qDebug() << Q_FUNC_INFO << " Generate the Single Date Report " << Qt::endl;
+    return this->m_profitAndLossInterface->generateSingleDateReport(elm);
 }
 
 QString DBInterface::getError() const
@@ -2063,14 +2084,14 @@ void DBInterface::getDbData()
         elem->setQuantity(quantity);
 
         QString s_date = query_other1.value(5).toString();
-        QString  s_month = query_other1.value(6).toString();
+        QString s_month = query_other1.value(6).toString();
         QString s_year =query_other1.value(7).toString();
         QString realformatsevadate =query_other1.value(8).toString();
         QDate sevadateDate = QDate::fromString(realformatsevadate,"yyyy-MM-dd");
         QString sevadate = sevadateDate.toString("dd-MM-yyyy");
 
         QString r_date = query_other1.value(9).toString();
-        QString  r_month = query_other1.value(10).toString();
+        QString r_month = query_other1.value(10).toString();
         QString r_year =query_other1.value(11).toString();
         QString realformatreceiptdate =query_other1.value(12).toString();
         QDate receiptdateDate = QDate::fromString(realformatreceiptdate,"yyyy-MM-dd");
@@ -2882,7 +2903,6 @@ void DBInterface::account_report_eachDateDataRange_function(QString sevaName,int
     else {
         readstr = ("select RECEIPT_DATE,sum(QUANTITY),SEVACOST,sum(ADDITIONALCOST+(QUANTITY*SEVACOST)) from sevabooking where sevabooking.RECEIPT_DATE between '%1' and '%2' and sevabooking.SEVATYPE = '%3' and sevabooking.SEVANAME = '%4' and  Group by sevabooking.RECEIPT_DATE;" );
         readstr  = readstr.arg(seva_Startdate).arg(seva_Enddate).arg(sevaType).arg(sevaName);
-
     }
     qDebug() << " Query string =" << readstr <<Qt::endl;
     query_other1.prepare(readstr);
@@ -3590,4 +3610,14 @@ QStringList DBInterface::qryBankList()
 
 
 
+bool DBInterface::generateDateRangeReportForProfitNLoss(ReportFilterElements *elm)
+{
+    qDebug() << Q_FUNC_INFO << Qt::endl;
+    return m_profitAndLossInterface->generateDateRangeReport(elm);
+}
 
+bool DBInterface::generateMonthReportForProfitNLoss(ReportFilterElements *elm)
+{
+    qDebug() << Q_FUNC_INFO << Qt::endl;
+    return m_profitAndLossInterface->generateMonthReport(elm);
+}

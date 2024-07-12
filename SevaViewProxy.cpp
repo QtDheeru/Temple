@@ -22,7 +22,6 @@ SevaViewProxy::SevaViewProxy(QObject *parent) : QObject(parent)
     m_voucherReportCSv = nullptr;
     m_sevaBookingTV = new SevaBookingTableModel;
     m_sevaBSearchModel = new SevaBookingSearchModel;
-
     m_sevacancelmodel = new SevaCancelModel;
 
 

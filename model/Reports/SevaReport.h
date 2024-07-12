@@ -14,8 +14,9 @@
 #include "AccountReportDateRangeModel.h"
 #include "AccountReportMonthWiseModel.h"
 #include "BookingReportDateRangeModel.h"
-#include"BookingReportMonthWiseModel.h"
+#include "BookingReportMonthWiseModel.h"
 #include "AccountFullReportModel.h"
+#include "ProfitAndLossDataModel.h"
 
 class SevaReport : public QObject
 {
@@ -29,10 +30,9 @@ public:
     Q_PROPERTY(AccountReportMonthWiseModel* accountReportMonthRangeModel READ accountReportMonthRangeModel NOTIFY AccReportMonthRangeModelChanged)
     Q_PROPERTY(ReportFilterElements* reportElements READ getReportElements  NOTIFY reportElementsChanged)
     Q_PROPERTY(AccountFullReportModel *accountFullReportModel READ accountFullReportModel WRITE setAccountFullReportModel NOTIFY accountFullReportModelChanged)
-
     Q_PROPERTY(BookingReportDateRangeModel* bookingReportDateRangeModel READ bookingReportDateRangeModel NOTIFY BookingReportDateRangeModelChanged)
-
     Q_PROPERTY(BookingReportMonthWiseModel* bookingReportMonthWiseModel READ bookingReportMonthWiseModel NOTIFY BookingReportMonthRangeModelChanged)
+    Q_PROPERTY(ProfitAndLossDataModel *profitAndLossDataModel READ profitAndLossDataModel WRITE setProfitAndLossDataModel RESET resetProfitAndLossDataModel NOTIFY profitAndLossDataModelChanged FINAL)
 
     void setSevaOnDateModel(SevaDetailsOnDateModel *newSevaOnDateModel);
     SevaDetailsOnDateModel *sevaOnDateModel() const;
@@ -61,6 +61,10 @@ public:
     AccountFullReportModel *accountFullReportModel() const;
     void setAccountFullReportModel(AccountFullReportModel *newAccountFullReportModel);
 
+    ProfitAndLossDataModel *profitAndLossDataModel() const;
+    void setProfitAndLossDataModel(ProfitAndLossDataModel *newProfitAndLossDataModel);
+    void resetProfitAndLossDataModel();
+
 private:
     SevaDetailsOnDateModel *m_sevaOnDateModel;
     AccountReportModel *m_accountreportModel;
@@ -70,8 +74,8 @@ private:
     AccountReportMonthWiseModel* m_accountReportMonthRangeModel;
     BookingReportDateRangeModel* m_bookingReportDateRangeModel;
     BookingReportMonthWiseModel* m_bookingReportMonthWiseModel;
-    AccountFullReportModel* m_accountFullReportModel=nullptr;
-
+    AccountFullReportModel* m_accountFullReportModel = nullptr;
+    ProfitAndLossDataModel* m_profitAndLossDataModel;
     // QList<SevaBookingElement*> m_sevaDetailsOnDate;
 
 public slots:
@@ -111,6 +115,7 @@ signals:
     void BookingReportMonthRangeModelChanged();
 
     void accountFullReportModelChanged();
+    void profitAndLossDataModelChanged();
 };
 
 #endif // SEVAREPORT_H

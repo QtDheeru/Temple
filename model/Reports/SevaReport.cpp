@@ -12,6 +12,7 @@ SevaReport::SevaReport(QObject *parent)
     m_bookingReportDateRangeModel = new BookingReportDateRangeModel;
     m_bookingReportMonthWiseModel = new BookingReportMonthWiseModel;
     m_accountFullReportModel = new AccountFullReportModel;
+    m_profitAndLossDataModel = new ProfitAndLossDataModel;
 }
 
 void SevaReport::setSevaOnDateModel(SevaDetailsOnDateModel *newSevaOnDateModel)
@@ -99,6 +100,23 @@ void SevaReport::setAccountFullReportModel(AccountFullReportModel *newAccountFul
     emit accountFullReportModelChanged();
 }
 
+ProfitAndLossDataModel *SevaReport::profitAndLossDataModel() const
+{
+    return m_profitAndLossDataModel;
+}
+
+void SevaReport::setProfitAndLossDataModel(ProfitAndLossDataModel *newProfitAndLossDataModel)
+{
+    if (m_profitAndLossDataModel == newProfitAndLossDataModel)
+        return;
+    m_profitAndLossDataModel = newProfitAndLossDataModel;
+    emit profitAndLossDataModelChanged();
+}
+
+void SevaReport::resetProfitAndLossDataModel()
+{
+    setProfitAndLossDataModel({}); // TODO: Adapt to use your actual default value
+}
 
 void SevaReport::onDateSelected(QString date)
 {
@@ -134,7 +152,7 @@ void SevaReport::generateAccReportForEachDate(ReportFilterElements *ele)
 
 void SevaReport::generateAccReportForEachDateForWholeMonth(ReportFilterElements *ele)
 {
-  m_accountReportDateRangeModel->generateAccDateRangeReportForWholeMonth(ele);
+    m_accountReportDateRangeModel->generateAccDateRangeReportForWholeMonth(ele);
 }
 
 void SevaReport::generateAccReportForEachMonth(ReportFilterElements *ele)
@@ -154,14 +172,14 @@ void SevaReport::generateBookReport(ReportFilterElements *ele)
 
 void SevaReport::generateBookingReportForEachDate(ReportFilterElements *ele)
 {
-     qDebug()<<Q_FUNC_INFO<<Qt::endl;
-     m_bookingReportDateRangeModel->generateBookingDateRangeReport(ele);
+    qDebug()<<Q_FUNC_INFO<<Qt::endl;
+    m_bookingReportDateRangeModel->generateBookingDateRangeReport(ele);
 }
 
 void SevaReport::generateBookingReportForEachDateForWholeMonth(ReportFilterElements *ele)
 {
-      qDebug()<<Q_FUNC_INFO<<Qt::endl;
-      m_bookingReportDateRangeModel->generateBookingDateRangeReportForWholeMonth(ele);
+    qDebug()<<Q_FUNC_INFO<<Qt::endl;
+    m_bookingReportDateRangeModel->generateBookingDateRangeReportForWholeMonth(ele);
 }
 
 void SevaReport::generateBookingReportForEachMonth(ReportFilterElements *ele)
@@ -202,5 +220,5 @@ void SevaReport::resetBookingDateRangeModel()
 
 void SevaReport::resetBookingMonthRangeModel()
 {
- m_bookingReportMonthWiseModel->resetBookingMonthRangeModel();
+    m_bookingReportMonthWiseModel->resetBookingMonthRangeModel();
 }

@@ -80,11 +80,9 @@ signals:
     void monthChanged();
     void yearChanged();
     void reportGenerationSourceChanged();
-
     void sevaTypeNameChanged();
 
 private:
-
     QString m_date;
     int m_slNo;
     QString seva_name;
