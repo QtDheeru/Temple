@@ -29,6 +29,8 @@ Rectangle{
     property alias dgothra: _personal.gothra
     property alias dNakshtra: _personal.nakshatra
 
+    property string filename: "SevaBookingView.qml"
+
     signal loadMenuPage()
     signal loadDevoteeSelection()
 
@@ -136,7 +138,9 @@ Rectangle{
             loadDevoteeSelection();
         }
         onCloseClicked: {
-            console.log("SevaPaymenConfirmationDialog :: on close clicked ")
+            console.log(filename + "SevaPaymenConfirmationDialog :: on close clicked ")
+            console.log(filename + "Deleting seva: onCloseClicked")
+            sevaProxy.deletedata(sevaProxy.receiptNumber);
             resetBaseScreen()
         }
         onRejected: {
