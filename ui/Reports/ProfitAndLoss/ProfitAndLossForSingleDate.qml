@@ -72,32 +72,32 @@ Rectangle{
             }
         }
         TableViewColumn {
-            id: _idx;title: "   No"; role: "SlNo";
+            id: _idx;title: "   No"; role: "SlNo"
             width: _root.width/6
             movable: false
             resizable: false
             delegate: Rectangle {
-                width: _idx.width;height: _idx.height;
-                color: styleData.row%2 ? "light gray" : "white"
+                width: _idx.width;height: _idx.height
+                color: styleData.row % 2 ? "light gray" : "white"
                 Text{
-                    anchors.fill: parent;
-                    text : (styleData.value + 1);
+                    anchors.fill: parent
+                    text : (styleData.value + 1)
                     color: "black"
                     horizontalAlignment: Text.AlignHCenter
                 }
             }
         }
         TableViewColumn {
-            id: _receiptDate;title: "Date "; role: "Date";
+            id: _receiptDate;title: "Date "; role: "Date"
             width: _root.width/6
             movable: false
             resizable: false
             delegate: Rectangle {
-                width: _balance.width;height: _balance.height;
-                color: styleData.row%2 ? "light gray" : "white"
+                width: _balance.width;height: _balance.height
+                color: styleData.row % 2 ? "light gray" : "white"
                 Text{
-                    anchors.fill: parent;
-                    text : styleData.value;
+                    anchors.fill: parent
+                    text : styleData.value
                     color: "black"
                     horizontalAlignment: Text.AlignHCenter
                 }
@@ -111,12 +111,12 @@ Rectangle{
             resizable: false
             horizontalAlignment: Text.AlignRight
             delegate: Rectangle {
-                width: _balance.width;height: _balance.height;
-                color: styleData.row%2 ? "light gray" : "white"
+                width: _balance.width;height: _balance.height
+                color: styleData.row % 2 ? "light gray" : "white"
                 Text{
                     id: _sevaTotal
-                    anchors.fill: parent;
-                    text : styleData.value;
+                    anchors.fill: parent
+                    text : styleData.value
                     color: "black"
                     horizontalAlignment: Text.AlignHCenter
                 }
@@ -124,17 +124,17 @@ Rectangle{
         }
 
         TableViewColumn {
-            id: _Expenditure;title: "Expenditure"; role: "TotalExpenditure";
+            id: _Expenditure;title: "Expenditure"; role: "TotalExpenditure"
             width: _root.width/6
             horizontalAlignment: Text.AlignVCenter
             movable: false
             resizable: false
             delegate: Rectangle {
-                width: _balance.width;height: _balance.height;
-                color: styleData.row%2 ? "light gray" : "white"
+                width: _balance.width;height: _balance.height
+                color: styleData.row % 2 ? "light gray" : "white"
                 Text{
-                    anchors.fill: parent;
-                    text : styleData.value;
+                    anchors.fill: parent
+                    text : styleData.value
                     color: "black"
                     horizontalAlignment: Text.AlignHCenter
                 }
@@ -142,17 +142,17 @@ Rectangle{
         }
 
         TableViewColumn {
-            id: _balance;title: "Balance"; role: "Balance";
+            id: _balance;title: "Balance"; role: "Balance"
             width: _root.width/6
             movable: false
             resizable: false
             horizontalAlignment: Text.AlignVCenter
             delegate: Rectangle {
-                width: _balance.width;height: _balance.height;
+                width: _balance.width;height: _balance.height
                 color: styleData.row%2 ? "light gray" : "white"
                 Text{
-                    anchors.fill: parent;
-                    text : styleData.value;
+                    anchors.fill: parent
+                    text : styleData.value
                     color: "black"
                     horizontalAlignment: Text.AlignHCenter
                 }

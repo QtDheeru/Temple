@@ -29,7 +29,7 @@ Rectangle{
     property alias dgothra: _personal.gothra
     property alias dNakshtra: _personal.nakshatra
 
-    property string filename: "SevaBookingView.qml"
+    property string filename: "SevaBookingView.qml "
 
     signal loadMenuPage()
     signal loadDevoteeSelection()

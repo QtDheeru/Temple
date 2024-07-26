@@ -192,6 +192,7 @@ Item {
                 }
             }
             Rectangle{
+                id: error
                 width: mainRectangle.width/3
                 height: mainRectangle.height/30
                 Text {
@@ -203,8 +204,16 @@ Item {
                     anchors.horizontalCenter: parent.horizontalCenter
                 }
             }
+            Text {
+                id: version
+                text: qsTr("Version 1.0")
+                font.pixelSize: Math.min(parent.height,parent.width) * 0.02
+                z:5
+                anchors.horizontalCenter: parent.horizontalCenter
+            }
         }
     }
+
     Connections{
         target: dbchecker
         function onCorrectCredentials()
