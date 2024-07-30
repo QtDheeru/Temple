@@ -144,6 +144,7 @@ bool BookingReportsDBInterface::generateBookingSingleDateReport(ReportFilterElem
         //        i++;
         qDebug()<<"after increment"<<i<<Qt::endl;
     }
+    return true;
 }
 
 bool BookingReportsDBInterface::generateBookingDateRangeReort(ReportFilterElements *elm)
@@ -234,6 +235,7 @@ bool BookingReportsDBInterface::generateBookingDateRangeReort(ReportFilterElemen
         m_totalPrasada= m_totalPrasada + m_prasada;
         emit booking_report(elm);
     }
+    return true;
 }
 
 bool BookingReportsDBInterface::generateBookingMonthReport(ReportFilterElements *elm)
@@ -321,7 +323,8 @@ bool BookingReportsDBInterface::generateBookingMonthReport(ReportFilterElements 
 
         m_totalPrasada= m_totalPrasada + m_prasada;
         emit booking_report(elm);
-    }
+    }    
+    return true;
 }
 
 bool BookingReportsDBInterface::generateBookingReportForEachDateOfMonth(ReportFilterElements *elm)
@@ -371,7 +374,8 @@ bool BookingReportsDBInterface::generateBookingReportForEachDateOfMonth(ReportFi
         ele->setSevaName(seva_name);
         qDebug()<< Q_FUNC_INFO  << "In while of db **********query_other1.value(1).toInt()*****************" << query_other1.value(1).toInt() <<Qt::endl;
         emit booking_report_Date_Range(ele);
-    }
+    }    
+    return true;
 }
 
 bool BookingReportsDBInterface::generateBookingReportForEachDateInDateRange(ReportFilterElements *elm)
@@ -423,7 +427,8 @@ bool BookingReportsDBInterface::generateBookingReportForEachDateInDateRange(Repo
         qDebug()<< Q_FUNC_INFO  << "In while of db **********query_other1.value(1).toInt()*****************" << query_other1.value(1).toInt() <<Qt::endl;
 
         emit booking_report_Date_Range(ele);
-    }
+    }    
+    return true;
 }
 
 bool BookingReportsDBInterface::generateBookingReportForAllMonths(ReportFilterElements *elm)
@@ -475,6 +480,7 @@ bool BookingReportsDBInterface::generateBookingReportForAllMonths(ReportFilterEl
         qDebug()<< Q_FUNC_INFO  << "In while of db **********query_other1.value(1).toInt()*****************" << query_other1.value(1).toInt() <<Qt::endl;
         emit booking_report_Month_Range(ele);
     }
+    return true;
 }
 
 int BookingReportsDBInterface::getSevaTypeID(QString seva_type_string)
