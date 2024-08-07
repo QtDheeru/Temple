@@ -19,6 +19,7 @@ Rectangle {
     signal loadMenuPage();
     signal loadDevoteeSelection()
     signal voucher();
+    signal receiptBookOpen();
     signal errorOccur(string errorMsg);
     property int countIfSevaNamesPresentInSevaTypes:0;
     Grid{
@@ -118,6 +119,20 @@ Rectangle {
                 _errorPopup.open()
             }
         }
+        TempleButton {
+            id: button7
+            width:_menupage.width/4
+            height: _menupage.height/5
+            color: "aqua"
+            buttonText: "Receipt Book"
+            border.width: _menupage.width/300
+            onButtonClikcked: {
+                console.log("Voucher button clicked");
+                receiptBookOpen();
+                _errorPopup.open();
+            }
+        }
+
         DisplayDialog{
             id:_errorPopup
             visible: false

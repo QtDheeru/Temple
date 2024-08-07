@@ -27,8 +27,8 @@
 #include "model/BankRegistration_m/cheque_entryModel.h"
 #include "model/BankRegistration_m/cashtransaction.h"
 #include "VoucherProxy.h"
-
-
+#include "../../ReceiptBook/ReceiptBook.h"
+#include "../../ReceiptBook/ReceiptBookManager.h"
 
 QScopedPointer<QFile>   m_logFile;
 QMutex   mlock;
@@ -90,6 +90,7 @@ int main(int argc, char *argv[])
     saveVoucher *vou;
     VoucherProxy voucherProxy;
     VoucherReportModel *vouRepModel;
+    ReceiptBook receiptBook;
 
     TrustListModel* trustListModel = TrustListModel::getTrustListModelInstance();
     engine.rootContext()->setContextProperty("trustListModel",trustListModel);
@@ -102,7 +103,9 @@ int main(int argc, char *argv[])
     });
 
     QObject::connect(trustListModel,&TrustListModel::currentDataLocationChanged,
-                     [&](){qDebug()<<"Inside lamda"<<Qt::endl;
+                     [&](){
+        qDebug()<<"Inside lamda"<<Qt::endl;
+        SmartTemple::ReceiptBookManagement::ReceiptBookManager *receiptBookManager = new SmartTemple::ReceiptBookManagement::ReceiptBookManager;
         //Raj //configure app
         confApp->setAppPath(trustListModel->getConfigLocation());
         confApp->loadXMLFile();
@@ -126,9 +129,12 @@ int main(int argc, char *argv[])
         //engine.rootContext()->setContextProperty("sevaListModel",sevaModel);
         engine.rootContext()->setContextProperty("saveVoucher",vou);
         engine.rootContext()->setContextProperty("voucherReportModel",vouRepModel);
+        // ReceiptBook expose
+        engine.rootContext()->setContextProperty("receiptBook", &receiptBook);
+        engine.rootContext()->setContextProperty("receiptBookManager", receiptBookManager);
 
-
-        engine.rootContext()->setContextProperty("dbchecker",dbchecker);});
+        engine.rootContext()->setContextProperty("dbchecker",dbchecker);
+    });
     const QUrl url(QStringLiteral("qrc:/ui/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
                      &app, [url](QObject *obj, const QUrl &objUrl) {

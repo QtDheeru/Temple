@@ -24,10 +24,12 @@
 #include "BookingReportDateRangeElement.h"
 #include "BookingReportMonthRangeElement.h"
 #include "AccountFullreportElement.h"
+#include "../../ReceiptBook/ReceiptBook.h"
 #include <QQmlEngine>
 #include "../DataStore/AccountReportsDBInterface.h"
 #include "../DataStore/BookingReportsDBInterface.h"
 #include "../DataStore/ProfitAndLossDBInterface.h"
+#include "../DataStore/ReceiptBookDBInterface.h"
 
 //#include "voucher/VoucherFilterElements.h"
 #include "IDataWriter.h"
@@ -107,6 +109,9 @@ signals:
     void profitNLoss_DateRange_Voucher_report(VoucherReportElement *);
     void profitNLoss_Month_SevaBooked_report(AccountReportElement *);
     void profitNLoss_Month_Voucher_report(VoucherReportElement *);
+
+    void receiptBook_addBook(ReceiptBook *book);
+    void receiptBook_updateBook(ReceiptBook *book);
 
     void correct_password(QString);
     void success();
@@ -269,6 +274,7 @@ private  :
     AccountReportsDBInterface *m_accountReportInterface;
     BookingReportsDBInterface *m_bookingReportInterface;
     ProfitAndLossDBInterface *m_profitAndLossInterface;
+    ReceiptBookDBInterface *m_receiptBookInterface;
 
 public slots :
     bool generateSingleDateReport(ReportFilterElements *elm);
@@ -290,6 +296,11 @@ public slots :
     bool generateSingleDateReportForProfitNLoss(ReportFilterElements *elm);
     bool generateDateRangeReportForProfitNLoss(ReportFilterElements *elm);
     bool generateMonthReportForProfitNLoss(ReportFilterElements *elm);
+
+    // Adding slots for ReceiptBooks
+    bool addReceiptBook(ReceiptBook *elm);
+    bool updateReceiptBook(ReceiptBook *elm);
+    bool readAllReceiptBooks();
 };
 
 #endif // DBFILE_H

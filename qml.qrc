@@ -115,5 +115,6 @@
         <file>ui/Reports/Booking/BookingReportPage.qml</file>
         <file>ui/Reports/ProfitAndLoss/ProfitAndLossBasePage.qml</file>
         <file>ui/Reports/ProfitAndLoss/ProfitAndLossForSingleDate.qml</file>
+        <file>ui/components/ReceiptBookOperation.qml</file>
     </qresource>
 </RCC>
