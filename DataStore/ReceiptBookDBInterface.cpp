@@ -104,11 +104,10 @@ bool ReceiptBookDBInterface::readAllReceiptBooks()
     query.prepare("select * from ReceiptBook");
     query.exec();
 
+    int count = 0;
     while(query.next())
     {
         int bookStatus = query.value(8).toInt();
-        if (bookStatus == ReceiptBook::CLOSE)
-            continue;
         ReceiptBook *book = new ReceiptBook;
         QString bookId = query.value(0).toString();
         qint64 bookStartNo = query.value(1).toInt();
@@ -130,5 +129,7 @@ bool ReceiptBookDBInterface::readAllReceiptBooks()
         book->setBookStatus(static_cast<ReceiptBook::RECEIPT_BOOK_STATUS>(bookStatus));
         book->print();
         emit receiptBook_addBook(book);
+        count++;
     }
+    emit totalReceiptBooks(count);
 }

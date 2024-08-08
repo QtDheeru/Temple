@@ -249,6 +249,9 @@ DBInterface::DBInterface(QObject *parent) : QObject(parent)
             this,&DBInterface::receiptBook_addBook);
     connect(m_receiptBookInterface,&ReceiptBookDBInterface::receiptBook_updateBook,
             this,&DBInterface::receiptBook_updateBook);
+
+    connect(m_receiptBookInterface,&ReceiptBookDBInterface::totalReceiptBooks,
+            this,&DBInterface::totalReceiptBooks);
 }
 
 bool DBInterface::generateSingleDateReport(ReportFilterElements *elm)

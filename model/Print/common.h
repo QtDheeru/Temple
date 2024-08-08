@@ -226,4 +226,6 @@ const QString TRUST_SEAL = "For SMSR&C Trust";
 }
 
 
+constexpr int RECEIPT_BOOK_LOT=100;
+
 #endif // COMMON_H

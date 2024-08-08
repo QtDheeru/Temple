@@ -15,6 +15,11 @@ ReceiptBook::ReceiptBook(QObject *parent)
 {
 }
 
+ReceiptBook::~ReceiptBook()
+{
+    qDebug() << Q_FUNC_INFO << " Object is destroyed =" << this->objectName() << Qt::endl;
+}
+
 QString ReceiptBook::bookId() const
 {
     return m_bookId;

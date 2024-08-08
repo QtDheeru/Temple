@@ -19,7 +19,9 @@
 #include "./model/UserManagement.h"
 #include "VoucherReportCSVProcessor.h"
 #include "model/SevaCancelModel.h"
+#include "ReceiptBookManager.h"
 
+using namespace SmartTemple::ReceiptBookManagement;
 class SevaTypeNamesDataModel;
 
 class SevaViewProxy : public QObject
@@ -33,6 +35,7 @@ class SevaViewProxy : public QObject
     Q_PROPERTY(UserManagement* userManagement READ userMngmnt CONSTANT)
     Q_PROPERTY(SevaTypeNamesDataModel *sevaBookingModelData READ sevaBookingModelData CONSTANT)
     Q_PROPERTY(SevaCancelModel *mysevacancelmodel READ sevacancelmodel WRITE setSevacancelmodel NOTIFY mydataChanged )
+    Q_PROPERTY(ReceiptBookManager *receiptBooksProxy READ receiptBooksProxy WRITE setReceiptBooksProxy NOTIFY receiptBooksProxyChanged FINAL)
 
 public:
     explicit SevaViewProxy(QObject *parent = nullptr);
@@ -113,6 +116,9 @@ public:
 
     void getDataReceipt(QString);
 
+    ReceiptBookManager *receiptBooksProxy() const;
+    void setReceiptBooksProxy(ReceiptBookManager *newReceiptBooksProxy);
+
 public slots:
     void generateCSVSevaBookingReport();
     void getAllAccountDetails();
@@ -139,6 +145,8 @@ signals:
     void mydataChanged();
     void statusAlreadyCancelled();
 
+    void receiptBooksProxyChanged();
+
 private :
     SevaTypeNamesDataModel *m_sevaBookingModelData;
     SevaListViewModel *m_currentSevaModel;
@@ -154,7 +162,7 @@ private :
     UserManagement* m_userMngmnt;
 
     QList<SevaBookingElement*> m_recpt_details;
-
-};
+    ReceiptBookManager *m_receiptBooksProxy;
+ };
 
 #endif // SEVAVIEWPROXY_H

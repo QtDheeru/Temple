@@ -26,6 +26,7 @@ private :
 signals:
     void receiptBook_addBook(ReceiptBook *book);
     void receiptBook_updateBook(ReceiptBook *book);
+    void totalReceiptBooks(int count);
 
 private:
     QSqlDatabase m_db;

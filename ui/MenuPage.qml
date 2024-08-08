@@ -2,6 +2,7 @@ import QtQuick 2.0
 import QtQuick.Controls 2.5
 import "./components"
 
+
 Rectangle {
     id:_menupage
     property var styles : MyStyles{}
@@ -26,7 +27,7 @@ Rectangle {
         id:grid
         columns: 3
         rows: 3
-        spacing: parent.width/20
+        spacing: parent.width/50
         anchors.top: parent.top
         anchors.topMargin: parent.height/4
         anchors.left: parent.left

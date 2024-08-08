@@ -112,6 +112,7 @@ signals:
 
     void receiptBook_addBook(ReceiptBook *book);
     void receiptBook_updateBook(ReceiptBook *book);
+    void totalReceiptBooks(int count);
 
     void correct_password(QString);
     void success();

@@ -3,14 +3,27 @@
 
 #include <QAbstractTableModel>
 #include <QDebug>
-#include "ReceiptBookManager.h"
+#include "ReceiptDataModel.h"
 
 using namespace std;
-using namespace SmartTemple::ReceiptBookManagement;
 
+namespace SmartTemple {
+namespace ReceiptBookManagement {
 class ReceiptBookModel : public QAbstractTableModel
 {
     Q_OBJECT
+
+    enum ROLES {
+        BOOK_ID = 0,
+        BOOK_START_NO,
+        BOOK_END_NO,
+        BOOK_CURRENT_RECEIPT_NO,
+        BOOK_CREATED_BY,
+        BOOK_CREATION_DATE,
+        BOOK_ACTIVE_DATE,
+        BOOK_CLOSING_DATE,
+        BOOK_STATUS
+    };
 
 public:
     explicit ReceiptBookModel(QObject *parent = nullptr);
@@ -27,8 +40,13 @@ public:
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
 private:
-
-    std::unique_ptr<ReceiptBookManager> m_receiptBookManager;
+    ReceiptDataModel *m_receiptDataModel;
+    // QAbstractItemModel interface
+public:
+    QHash<int, QByteArray> roleNames() const;
+    void setReceiptDataModel(ReceiptDataModel *newReceiptDataModel);
 };
+}
+}
 
 #endif // RECEIPTBOOKMODEL_H

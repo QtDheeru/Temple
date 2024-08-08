@@ -31,6 +31,7 @@ public:
     using BOOK_ID = QString;
 
     explicit ReceiptBook(QObject *parent = nullptr);
+    ~ReceiptBook();
 
     QString bookId() const;
     void setBookId(const QString &newBookId);

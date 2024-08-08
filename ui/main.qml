@@ -206,7 +206,7 @@ ApplicationWindow {
         }
         function onReceiptBookOpen() {
             console.log(fileName + "Clicked on ReceiptBook")
-            loader.source = "qrc:/ui/components/ReceiptBookOperation.qml"
+            loader.source = "qrc:/ui/ReceiptBooks/ReceiptBookOperation.qml"
         }
 
         function onSendVoucherReportInput(obj)

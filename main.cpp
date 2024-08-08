@@ -105,12 +105,10 @@ int main(int argc, char *argv[])
     QObject::connect(trustListModel,&TrustListModel::currentDataLocationChanged,
                      [&](){
         qDebug()<<"Inside lamda"<<Qt::endl;
-        SmartTemple::ReceiptBookManagement::ReceiptBookManager *receiptBookManager = new SmartTemple::ReceiptBookManagement::ReceiptBookManager;
-        //Raj //configure app
+         //Raj //configure app
         confApp->setAppPath(trustListModel->getConfigLocation());
         confApp->loadXMLFile();
 
-        //
         dbchecker = new DBChecker;
         proxy = new SevaViewProxy;
         qDebug() << Q_FUNC_INFO << "Seva ListViewMooodel is creating" << Qt::endl;
@@ -131,7 +129,6 @@ int main(int argc, char *argv[])
         engine.rootContext()->setContextProperty("voucherReportModel",vouRepModel);
         // ReceiptBook expose
         engine.rootContext()->setContextProperty("receiptBook", &receiptBook);
-        engine.rootContext()->setContextProperty("receiptBookManager", receiptBookManager);
 
         engine.rootContext()->setContextProperty("dbchecker",dbchecker);
     });

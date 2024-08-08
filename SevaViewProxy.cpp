@@ -24,6 +24,7 @@ SevaViewProxy::SevaViewProxy(QObject *parent) : QObject(parent)
     m_sevaBSearchModel = new SevaBookingSearchModel;
     m_sevacancelmodel = new SevaCancelModel;
 
+    this->m_receiptBooksProxy = SmartTemple::ReceiptBookManagement::ReceiptBookManager::getInstance();
 
     m_sevaBSearchModel->setSourceModel(m_sevaBookingTV);
     this->getNextReceiptNumber();
@@ -211,6 +212,19 @@ void SevaViewProxy::cleanBookingTableModel()
                      m_sevaBookingTV,&SevaBookingTableModel::reset);
     QObject::connect(DBInterface::getInstance(),&DBInterface::refreshModel,
                      m_sevaBookingTV,&SevaBookingTableModel::referseshTheModel);
+}
+
+ReceiptBookManager *SevaViewProxy::receiptBooksProxy() const
+{
+    return m_receiptBooksProxy;
+}
+
+void SevaViewProxy::setReceiptBooksProxy(ReceiptBookManager *newReceiptBooksProxy)
+{
+    if (m_receiptBooksProxy == newReceiptBooksProxy)
+        return;
+    m_receiptBooksProxy = newReceiptBooksProxy;
+    emit receiptBooksProxyChanged();
 }
 
 void SevaViewProxy::setStatusToCancel(QString rcptNo){
