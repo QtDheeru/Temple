@@ -39,7 +39,7 @@ public:
     int rowCount(const QModelIndex &index)const override;
     QVariant data(const QModelIndex &index,int role)const override;
     virtual QHash<int,QByteArray> roleNames() const override;
-   Q_INVOKABLE void init();
+    Q_INVOKABLE void init();
 
     Q_INVOKABLE void addData(
                              int receiptNumber,QString date,QString sevatime,QString mobile,QString name,QString Nakshatra,
@@ -112,6 +112,8 @@ public:
 signals:
     void sevatimeChanged();
     void modelChanged(int cost);
+    void receiptSavingSuccessful(QString num);
+
 private:
     int m_receiptNumber;
     QString m_receiptNo;

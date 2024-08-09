@@ -34,6 +34,7 @@ class ReceiptBookManager : public QObject
     Q_PROPERTY(bool isFreshBook READ isFreshBookAllowed CONSTANT)
     Q_PROPERTY(qint64 currentReceiptNo READ currentReceiptNo WRITE setCurrentReceiptNo NOTIFY currentReceiptNoChanged FINAL)
     Q_PROPERTY(ReceiptBookModel *receiptBookModel READ receiptBookModel)
+    Q_PROPERTY(QString generatedRecNumber READ generatedRecNumber WRITE setGeneratedRecNumber NOTIFY generatedRecNumberChanged FINAL)
 
     explicit ReceiptBookManager(QObject *parent = nullptr);
 
@@ -72,6 +73,11 @@ public:
 
     ReceiptBookModel *receiptBookModel() const;
 
+    QString generatedRecNumber() const;
+    void setGeneratedRecNumber(const QString &newGeneratedRecNumber);
+
+    bool updateReceiptNumber(QString recNo);
+
 public slots:
     bool updateCurrentValues();
     bool updateCurrentReceiptBook(int count);
@@ -85,8 +91,13 @@ signals:
     void currentReceiptNoChanged();
     void generateNewReceiptBook();
 
+    void generatedRecNumberChanged();
+
 private :
     void addBook2Map(ReceiptBook *bookAddedInDb);
+    QString generateReceiptNumber();
+    QString adjustCurrentReceiptBook();
+
 
 private :
     QMap<BOOKID, ReceiptBook*> m_receiptBooks;
@@ -102,6 +113,9 @@ private :
     qint64 m_startReceiptNumber;
     qint64 m_endReceiptNumber;
     qint64 m_currentReceiptNo;
+
+    QString m_generatedRecNumber;
+
 };
 }
 }

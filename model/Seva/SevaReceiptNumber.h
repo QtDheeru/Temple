@@ -26,6 +26,7 @@ private :
 public:
     virtual QString getNextSevaTypeCode() override;
     virtual QString getNextSevanameID() override;
+    bool updateReceiptNumber(QString recNo) override;
 };
 
 #endif // SEVARECEIPTNUMBER_H

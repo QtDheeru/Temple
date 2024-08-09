@@ -2251,22 +2251,22 @@ bool DBInterface::saveData(QObject *obj)
     }
     QStringList recieptNumber=rec->receiptNo().split("_");
     QString rcptNo=rec->receiptNo();
-    int sno=recieptNumber[2].toInt();
+    int sno = getLastReceiptNumber();
 
     // to Test ---------
-    QSqlQuery qry;
-    QString que = ("select * from sevabooking where sevabooking.SNO LIKE '%1';");
-    que = que.arg(sno);
-    qry.prepare(que);
-    if (!qry.exec()){
-        qWarning() << Q_FUNC_INFO << " Query Failied " << qry.lastError().text() << Qt::endl;
-        return false;
-    }
+    // QSqlQuery qry;
+    // QString que = ("select * from sevabooking where sevabooking.SNO LIKE '%1';");
+    // que = que.arg(sno);
+    // qry.prepare(que);
+    // if (!qry.exec()){
+    //     qWarning() << Q_FUNC_INFO << " Query Failied " << qry.lastError().text() << Qt::endl;
+    //     return false;
+    // }
 
-    if(qry.next()) {
-        qDebug() << Q_FUNC_INFO <<  "Warning - Receipt = " << rcptNo << " SNO=" << sno << "Exist already" << Qt::endl;
-       return false;
-    }
+    // if(qry.next()) {
+    //     qDebug() << Q_FUNC_INFO <<  "Warning - Receipt = " << rcptNo << " SNO=" << sno << "Exist already" << Qt::endl;
+    //    return false;
+    // }
     // to Test --------
     QList<SevaName*> sevas = sevaData->sevabookinglist();
     Q_ASSERT(sevaData != nullptr);

@@ -224,7 +224,16 @@ void SevaTypeNamesDataModel::connectSignals() {
     connect(DBInterface::getInstance(),&DBInterface::sendSevaType,this,&SevaTypeNamesDataModel::processSevaTypes);
     connect(DBInterface::getInstance(),&DBInterface::sendSevaName ,this,&SevaTypeNamesDataModel::processSevaNames);
     connect(DBInterface::getInstance(),&DBInterface::dbError,this,&SevaTypeNamesDataModel::error);
+    connect(m_sevaBookingModel,&SevaBookingConformationDataModel::receiptSavingSuccessful,
+            this, &SevaTypeNamesDataModel::receiptSavingSuccessful);
 }
+
+bool SevaTypeNamesDataModel::receiptSavingSuccessful(QString recNo){
+
+    m_receiptGenerator->updateReceiptNumber(recNo);
+    return true;
+}
+
 
 MySevaBookingProgressViewModel *SevaTypeNamesDataModel::getSevaBookingProgress() const
 {

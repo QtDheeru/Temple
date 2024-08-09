@@ -25,15 +25,17 @@ QVariant ReceiptDataModel::getData(int row, int role)
         qWarning() << Q_FUNC_INFO << " Receipt book is null"  << Qt::endl;
         return QVariant();
     }
+    qDebug() << Q_FUNC_INFO;
     switch(role){
     case BOOK_ID: return book->bookId();break;
     case BOOK_START_NO : return book->bookStartNo();break;
     case BOOK_END_NO : return book->receiptEndNo();break;
     case BOOK_CURRENT_RECEIPT_NO : return book->currentReceiptNo(); break;
-    case BOOK_CREATED_BY : return book->bookCreatedBy(); break;
+    case BOOK_CREATED_BY : if(book->bookCreatedBy().isEmpty()) return "Default"; else return book->bookCreatedBy(); break;
     case BOOK_CREATION_DATE : return book->creationDate().toString("dd-MMM-yyyy"); break;
     case BOOK_CLOSING_DATE : return book->closingDate().toString("dd-MMM-yyyy");break;
     case BOOK_ACTIVE_DATE : return book->openDate().toString("dd-MMM-yyyy"); break;
     case BOOK_STATUS : return book->bookStatus();break;
     }
+    qDebug() << Q_FUNC_INFO;
 }

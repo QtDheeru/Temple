@@ -60,6 +60,7 @@ public:
 public slots:
     bool processSevaTypes(SevaType *);
     int  getSevaListSizeForType(int sevaType);
+    bool receiptSavingSuccessful(QString recNo);
 
 signals:
     void error(QString);

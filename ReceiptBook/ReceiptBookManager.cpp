@@ -100,21 +100,32 @@ bool ReceiptBookManager::updateBook(ReceiptBook *book)
 
 QString ReceiptBookManager::getNextReceiptNumber()
 {
-    int currentBookId = this->m_currentReceiptBook->bookId().toInt();
-    qDebug() << Q_FUNC_INFO << " Current Book =" << this->m_currentReceiptBook->bookId().toInt();
     if (m_currentReceiptBook == nullptr) {
         qWarning() << Q_FUNC_INFO << " Current object is null ptr" << Qt::endl;
         return "nothing";
     } else {
         qDebug() << Q_FUNC_INFO << " Current Book is good. = " << this->m_currentReceiptBook->bookId().toInt();
     }
+    int currentBookId = this->m_currentReceiptBook->bookId().toInt();
+    qDebug() << Q_FUNC_INFO << " Current Book =" << currentBookId;
+    QString recNumber = generateReceiptNumber();
+    return recNumber;
+}
+
+bool ReceiptBookManager::updateReceiptNumber(QString recNo)
+{
+    qDebug() << Q_FUNC_INFO << " Current receipt number is used =" << recNo  << Qt::endl;
+    adjustCurrentReceiptBook();
+    return true;
+}
+
+QString ReceiptBookManager::adjustCurrentReceiptBook() {
+    int currentBookId = this->m_currentReceiptBook->bookId().toInt();
     qint64 recno = m_currentReceiptBook->currentReceiptNo();
     qDebug() << Q_FUNC_INFO << " Print all the details of current receipt book ="<<this->m_currentReceiptBook->bookId();
     m_currentReceiptBook->print();
-    qDebug() << Q_FUNC_INFO << " Details of current receipt book "<<this->m_currentReceiptBook->bookId();
     if (m_currentReceiptBook->receiptEndNo() == recno){
         qDebug() << Q_FUNC_INFO << " Close the current receipt book =" << this->m_currentReceiptBook->bookId();
-        m_currentReceiptBook->print();
         m_currentReceiptBook->setBookStatus(ReceiptBook::CLOSE);
         this->m_receiptBooks.remove(m_currentReceiptBook->bookId().toInt());
         if (this->updateBook(m_currentReceiptBook.get())){
@@ -138,23 +149,64 @@ QString ReceiptBookManager::getNextReceiptNumber()
         } else {
             qDebug() << "Status update for book =" << m_currentReceiptBook->bookId() << " in the database failed";
         }
-
-
-        QString objName = m_currentReceiptBook->bookId() + "_" + m_currentReceiptBook->bookStartNo()+"_" + m_currentReceiptBook->receiptEndNo();
-        this->m_currentReceiptBook->setObjectName(objName);
-        qDebug() << "Current Receipt Book for book =" << m_currentReceiptBook->bookId();
-        m_currentReceiptBook->print();
-    }
-    qDebug() << Q_FUNC_INFO << " Before increment, current receipt number: " << recno;
-    m_currentReceiptBook->setCurrentReceiptNo(++recno);
-    if (this->updateBook(m_currentReceiptBook.get())){
-        qDebug() << "Current Receipt Update  Book =" << currentBookId << " CurrentRecNo=" << recno <<  " in the database is successful";
-        this->setCurrentReceiptNo(recno);
+        m_currentReceiptBook->currentReceiptNo();
     } else {
-        qDebug() << "Current Receipt Update  Book =" << currentBookId << " CurrentRecNo=" << recno <<  " in the database failed";
+        qDebug() << Q_FUNC_INFO << " Before increment, current receipt number: " << recno;
+        m_currentReceiptBook->setCurrentReceiptNo(++recno);
+        if (this->updateBook(m_currentReceiptBook.get())){
+            qDebug() << "Current Receipt Update  Book =" << currentBookId << " CurrentRecNo=" << recno <<  " in the database is successful";
+            this->setCurrentReceiptNo(recno);
+        } else {
+            qDebug() << "Current Receipt Update  Book =" << currentBookId << " CurrentRecNo=" << recno <<  " in the database failed";
+        }
     }
     qDebug() << Q_FUNC_INFO << " After increment, current receipt number: " << recno;
-    return QString::number(currentReceiptNo());
+    return generatedRecNumber();
+}
+
+QString ReceiptBookManager::generatedRecNumber() const
+{
+    return m_generatedRecNumber;
+}
+
+void ReceiptBookManager::setGeneratedRecNumber(const QString &newGeneratedRecNumber)
+{
+    if (m_generatedRecNumber == newGeneratedRecNumber)
+        return;
+    m_generatedRecNumber = newGeneratedRecNumber;
+    emit generatedRecNumberChanged();
+}
+
+
+
+QString ReceiptBookManager::generateReceiptNumber() {
+
+    QDate dt = QDate::currentDate();
+    qDebug() << Q_FUNC_INFO << " Date ="<< dt.day() << " Mon ="<<dt.month() << " Year =" << dt.year();
+
+    QString datePart =  QString::number(dt.year())+"_"+QString::number(dt.month()) +"_";
+
+    long rcNo = this->m_currentReceiptBook->currentReceiptNo();
+
+    if (rcNo <= 0) rcNo = 0;
+
+    QString zero2prepend;
+    if (rcNo >0 && rcNo <10) {
+        zero2prepend = "000";
+    }
+    if (rcNo >=10 && rcNo <100) {
+        zero2prepend = "00";
+    }
+    if (rcNo >=100 && rcNo <1000) {
+        zero2prepend = "0";
+    }
+
+    QString rc = datePart  + m_currentReceiptBook->bookId() + "_"+ zero2prepend + QString("%1").arg(rcNo);
+
+    this->setGeneratedRecNumber(rc);
+    qDebug() << Q_FUNC_INFO << " Receipt Number =" << rcNo << " Generated =" << rc  << Qt::endl;
+
+    return rc;
 }
 
 bool ReceiptBookManager::reset()

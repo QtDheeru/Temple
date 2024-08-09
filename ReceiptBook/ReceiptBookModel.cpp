@@ -17,8 +17,7 @@ QVariant ReceiptBookModel::headerData(int section, Qt::Orientation orientation, 
 
 int ReceiptBookModel::rowCount(const QModelIndex &parent) const
 {
-    int rowC = ReceiptBookManager::getInstance()->count();
-    qDebug()<<Q_FUNC_INFO<<" Row Count =" << rowC << Qt::endl;
+    qDebug()<<Q_FUNC_INFO<<" Row Count =" << m_receiptDataModel->count() << Qt::endl;
     return m_receiptDataModel->count();
     //return ReceiptBookManager::getInstance()->count();
 }

@@ -10,7 +10,7 @@ Rectangle{
     anchors.fill: parent
     property alias model : lv1.model
     property var styles : MyStyles{}
-    property string fileName: "ReceiptBookView.qml";
+    property string fileName: "ReceiptBookView.qml ";
 
     TableView{
         id: lv1
