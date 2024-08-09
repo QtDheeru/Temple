@@ -161,6 +161,8 @@ bool ReceiptBookManager::reset()
 {
     m_dbInterface->readAllReceiptBooks();
     this->updateCurrentValues();
+
+    return true;
 }
 
 bool ReceiptBookManager::updateCurrentValues()
@@ -210,6 +212,8 @@ bool ReceiptBookManager::connectSignal()
 
     connect(m_dbInterface, &DBInterface::receiptBook_addBook,
             m_receiptDataModel, &ReceiptDataModel::addBook);
+
+    return true;
 }
 
 // If no receipt books OR all the receipt books are closed

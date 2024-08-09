@@ -132,4 +132,5 @@ bool ReceiptBookDBInterface::readAllReceiptBooks()
         count++;
     }
     emit totalReceiptBooks(count);
+    return true;
 }

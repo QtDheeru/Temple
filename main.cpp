@@ -104,7 +104,7 @@ int main(int argc, char *argv[])
 
     QObject::connect(trustListModel,&TrustListModel::currentDataLocationChanged,
                      [&](){
-        qDebug()<<"Inside lamda"<<Qt::endl;
+        qDebug()<< Q_FUNC_INFO <<"Inside lamda"<<Qt::endl;
          //Raj //configure app
         confApp->setAppPath(trustListModel->getConfigLocation());
         confApp->loadXMLFile();
