@@ -29,6 +29,9 @@ DBInterface::DBInterface(QObject *parent) : QObject(parent)
     db = QSqlDatabase::addDatabase("QSQLITE");
     //QString currentPath=qApp->applicationDirPath()+"/Data/nseva.db";
     QString currentPath = TrustListModel::getTrustListModelInstance()->getDataLocation()+"/nseva.db";
+    qDebug()<<Q_FUNC_INFO<< TrustListModel::getTrustListModelInstance()->getDataLocation();
+    // QString currentPath = "/home/pranavanrao/Desktop/Pthinks-Projects/Temple/bins/Data/Hubablli/nseva.db";
+
     QFileInfo info(currentPath);
     if (!info.exists()){
         qDebug()<<Q_FUNC_INFO<<"**************** DB path doesn't exist as a file = "<< currentPath <<Qt::endl;
@@ -241,6 +244,14 @@ DBInterface::DBInterface(QObject *parent) : QObject(parent)
     connect(m_profitAndLossInterface,&ProfitAndLossDBInterface::profitNLoss_Month_Voucher_report,
             this,&DBInterface::profitNLoss_Month_Voucher_report);
 
+    m_receiptBookInterface = new ReceiptBookDBInterface(db);
+    connect(m_receiptBookInterface,&ReceiptBookDBInterface::receiptBook_addBook,
+            this,&DBInterface::receiptBook_addBook);
+    connect(m_receiptBookInterface,&ReceiptBookDBInterface::receiptBook_updateBook,
+            this,&DBInterface::receiptBook_updateBook);
+
+    connect(m_receiptBookInterface,&ReceiptBookDBInterface::totalReceiptBooks,
+            this,&DBInterface::totalReceiptBooks);
 }
 
 bool DBInterface::generateSingleDateReport(ReportFilterElements *elm)
@@ -3620,4 +3631,21 @@ bool DBInterface::generateMonthReportForProfitNLoss(ReportFilterElements *elm)
 {
     qDebug() << Q_FUNC_INFO << Qt::endl;
     return m_profitAndLossInterface->generateMonthReport(elm);
+}
+
+bool DBInterface::addReceiptBook(ReceiptBook *elm)
+{
+    qDebug() << Q_FUNC_INFO << Qt::endl;
+    return m_receiptBookInterface->addReceiptBook(elm);
+}
+
+bool DBInterface::updateReceiptBook(ReceiptBook *elm)
+{
+    qDebug() << Q_FUNC_INFO << Qt::endl;
+    return m_receiptBookInterface->updateReceiptBook(elm);
+}
+
+bool DBInterface::readAllReceiptBooks()
+{
+    return m_receiptBookInterface->readAllReceiptBooks();
 }

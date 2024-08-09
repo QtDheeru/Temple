@@ -34,9 +34,9 @@ void TrustConfiguration::readTrustsFromJsonToList()
     }
     if(file.open(QIODevice::ReadOnly))
     {
-        qDebug()<<"file opened"<<Qt::endl;
+        qDebug() <<Q_FUNC_INFO <<" File opened ="<< file.fileName() <<Qt::endl;
         QByteArray bytes = file.readAll();
-        qDebug()<<"read all"<<Qt::endl;
+        qDebug() << Q_FUNC_INFO <<" Read all the contents of file = "<<  file.fileName() <<Qt::endl;
         QJsonParseError jsonError;
         QJsonDocument document = QJsonDocument::fromJson(bytes,&jsonError);
         if(jsonError.error!=QJsonParseError::NoError)
@@ -50,7 +50,7 @@ void TrustConfiguration::readTrustsFromJsonToList()
         QJsonObject jsonObject ;
         if(document.isObject())
         {
-            qDebug()<<Q_FUNC_INFO<<"dddddddoooooooooooocccccccc"<<Qt::endl;
+            qDebug()<<Q_FUNC_INFO<<""<<Qt::endl;
             jsonObject = document.object();
         }
         QList<QString> sl = jsonObject.keys();

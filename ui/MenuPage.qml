@@ -2,6 +2,7 @@ import QtQuick 2.0
 import QtQuick.Controls 2.5
 import "./components"
 
+
 Rectangle {
     id:_menupage
     property var styles : MyStyles{}
@@ -19,13 +20,14 @@ Rectangle {
     signal loadMenuPage();
     signal loadDevoteeSelection()
     signal voucher();
+    signal receiptBookOpen();
     signal errorOccur(string errorMsg);
     property int countIfSevaNamesPresentInSevaTypes:0;
     Grid{
         id:grid
         columns: 3
         rows: 3
-        spacing: parent.width/20
+        spacing: parent.width/50
         anchors.top: parent.top
         anchors.topMargin: parent.height/4
         anchors.left: parent.left
@@ -118,6 +120,20 @@ Rectangle {
                 _errorPopup.open()
             }
         }
+        TempleButton {
+            id: button7
+            width:_menupage.width/4
+            height: _menupage.height/5
+            color: "aqua"
+            buttonText: "Receipt Book"
+            border.width: _menupage.width/300
+            onButtonClikcked: {
+                console.log("Voucher button clicked");
+                receiptBookOpen();
+                _errorPopup.open();
+            }
+        }
+
         DisplayDialog{
             id:_errorPopup
             visible: false
